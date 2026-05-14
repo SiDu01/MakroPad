@@ -1,10 +1,12 @@
 using System.Collections.ObjectModel;
 using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using MakroPad.Core.Configuration;
 using MakroPad.Device;
 
 namespace MakroPad.App.ViewModels;
@@ -15,7 +17,9 @@ public partial class MainWindowViewModel : ViewModelBase
 
     private readonly SimulatedMakroPadConnection simulatedConnection = new();
     private readonly SerialMakroPadConnection serialConnection = new();
+    private readonly MakroPadConfigStore configStore;
     private IMakroPadConnection? activeConnection;
+    private MakroPadConfig currentConfig = MakroPadConfig.CreateDefault();
 
     [ObservableProperty]
     private string connectionStatus = "Disconnected";
@@ -29,13 +33,29 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty]
     private int lastSliderValue;
 
+    [ObservableProperty]
+    private string activeProfileName = "Default";
+
+    [ObservableProperty]
+    private string configPath = "";
+
+    partial void OnActiveProfileNameChanged(string value)
+    {
+        currentConfig = currentConfig with { ActiveProfile = value };
+    }
+
     public ObservableCollection<string> AvailablePorts { get; } = [];
 
     public ObservableCollection<string> EventLog { get; } = [];
 
+    public ObservableCollection<string> ProfileNames { get; } = [];
+
     public MainWindowViewModel()
     {
+        ConfigPath = GetDefaultConfigPath();
+        configStore = new MakroPadConfigStore(ConfigPath);
         RefreshPorts();
+        _ = LoadConfigAsync();
     }
 
     [RelayCommand]
@@ -115,6 +135,43 @@ public partial class MainWindowViewModel : ViewModelBase
     }
 
     [RelayCommand]
+    private async Task LoadConfigAsync()
+    {
+        try
+        {
+            currentConfig = await configStore.LoadOrCreateDefaultAsync();
+            ActiveProfileName = currentConfig.ActiveProfile;
+
+            ProfileNames.Clear();
+            foreach (var profile in currentConfig.Profiles)
+            {
+                ProfileNames.Add(profile.Name);
+            }
+
+            AddLog($"Config loaded: {ConfigPath}");
+        }
+        catch (Exception ex)
+        {
+            AddLog($"Config load failed: {ex.Message}");
+        }
+    }
+
+    [RelayCommand]
+    private async Task SaveConfigAsync()
+    {
+        try
+        {
+            currentConfig = currentConfig with { ActiveProfile = ActiveProfileName };
+            await configStore.SaveAsync(currentConfig);
+            AddLog($"Config saved: {ConfigPath}");
+        }
+        catch (Exception ex)
+        {
+            AddLog($"Config save failed: {ex.Message}");
+        }
+    }
+
+    [RelayCommand]
     private void SimulateButton()
     {
         if (activeConnection == simulatedConnection)
@@ -175,5 +232,11 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             EventLog.RemoveAt(EventLog.Count - 1);
         }
+    }
+
+    private static string GetDefaultConfigPath()
+    {
+        var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+        return Path.Combine(appData, "MakroPad", "config.json");
     }
 }

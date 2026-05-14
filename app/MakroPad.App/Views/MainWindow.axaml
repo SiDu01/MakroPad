@@ -44,7 +44,7 @@
         <Grid Grid.Row="1"
               Margin="20"
               ColumnDefinitions="320,*"
-              RowDefinitions="Auto,*"
+              RowDefinitions="Auto,Auto,*"
               ColumnSpacing="16"
               RowSpacing="16">
             <Border Grid.Column="0"
@@ -107,8 +107,40 @@
                 </StackPanel>
             </Border>
 
+            <Border Grid.Column="0"
+                    Grid.Row="2"
+                    Padding="16"
+                    BorderThickness="1"
+                    CornerRadius="6">
+                <StackPanel Spacing="12">
+                    <TextBlock Text="Profile"
+                               FontSize="16"
+                               FontWeight="SemiBold" />
+
+                    <ComboBox ItemsSource="{Binding ProfileNames}"
+                              SelectedItem="{Binding ActiveProfileName}"
+                              HorizontalAlignment="Stretch" />
+
+                    <TextBlock Text="{Binding ConfigPath}"
+                               FontSize="11"
+                               TextWrapping="Wrap"
+                               Opacity="0.72" />
+
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                        <Button Grid.Column="0"
+                                Content="Load"
+                                Command="{Binding LoadConfigCommand}"
+                                HorizontalAlignment="Stretch" />
+                        <Button Grid.Column="1"
+                                Content="Save"
+                                Command="{Binding SaveConfigCommand}"
+                                HorizontalAlignment="Stretch" />
+                    </Grid>
+                </StackPanel>
+            </Border>
+
             <Border Grid.Column="1"
-                    Grid.RowSpan="2"
+                    Grid.RowSpan="3"
                     Padding="16"
                     BorderThickness="1"
                     CornerRadius="6">

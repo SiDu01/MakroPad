@@ -24,9 +24,16 @@ Implemented:
 - Protocol parser/formatter in `MakroPad.Core`.
 - Serial connection implementation using `System.IO.Ports`.
 - Tray icon with open and exit commands.
+- JSON configuration model with a default profile.
 
 Closing the main window hides it to the tray. Use the tray menu's `Exit` command
 to terminate the app.
+
+On first run, the app creates a default config at:
+
+```text
+%APPDATA%\MakroPad\config.json
+```
 
 When a real device sends `hello;proto=1;...`, the app automatically responds
 with:
