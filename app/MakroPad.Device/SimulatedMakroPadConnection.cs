@@ -4,9 +4,26 @@ namespace MakroPad.Device;
 
 public sealed class SimulatedMakroPadConnection : IMakroPadConnection
 {
-    public DeviceConnectionState State { get; private set; } = DeviceConnectionState.Disconnected;
+    private DeviceConnectionState state = DeviceConnectionState.Disconnected;
+
+    public DeviceConnectionState State
+    {
+        get => state;
+        private set
+        {
+            if (state == value)
+            {
+                return;
+            }
+
+            state = value;
+            StateChanged?.Invoke(this, state);
+        }
+    }
 
     public event EventHandler<DeviceEvent>? EventReceived;
+
+    public event EventHandler<DeviceConnectionState>? StateChanged;
 
     public IReadOnlyList<string> GetAvailablePorts()
     {

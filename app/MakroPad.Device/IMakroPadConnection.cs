@@ -6,6 +6,8 @@ public interface IMakroPadConnection
 
     event EventHandler<DeviceEvent>? EventReceived;
 
+    event EventHandler<DeviceConnectionState>? StateChanged;
+
     IReadOnlyList<string> GetAvailablePorts();
 
     Task ConnectAsync(string portName, CancellationToken cancellationToken = default);

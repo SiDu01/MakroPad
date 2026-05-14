@@ -95,10 +95,11 @@ public partial class MainWindowViewModel : ViewModelBase
 
             activeConnection = SelectedPort == SimulatorPort ? simulatedConnection : serialConnection;
             activeConnection.EventReceived += OnDeviceEventReceived;
+            activeConnection.StateChanged += OnDeviceStateChanged;
 
             ConnectionStatus = "Connecting";
             await activeConnection.ConnectAsync(SelectedPort);
-            ConnectionStatus = "Connected";
+            ConnectionStatus = activeConnection.State.ToString();
         }
         catch (Exception ex)
         {
@@ -205,14 +206,31 @@ public partial class MainWindowViewModel : ViewModelBase
         Dispatcher.UIThread.Post(() => HandleDeviceEvent(deviceEvent));
     }
 
+    private void OnDeviceStateChanged(object? sender, DeviceConnectionState state)
+    {
+        Dispatcher.UIThread.Post(() => ConnectionStatus = state.ToString());
+    }
+
     private void HandleDeviceEvent(DeviceEvent deviceEvent)
     {
         if (deviceEvent.Message is { } message)
         {
-            _ = HandleProtocolMessageAsync(message);
+            _ = HandleProtocolMessageSafelyAsync(message);
         }
 
         AddLog($"{deviceEvent.Timestamp:HH:mm:ss}  {deviceEvent.Direction}  {deviceEvent.Line}");
+    }
+
+    private async Task HandleProtocolMessageSafelyAsync(MakroPad.Core.Protocol.ProtocolMessage message)
+    {
+        try
+        {
+            await HandleProtocolMessageAsync(message);
+        }
+        catch (Exception ex)
+        {
+            AddLog($"Protocol handling failed: {ex.Message}");
+        }
     }
 
     private async Task HandleProtocolMessageAsync(MakroPad.Core.Protocol.ProtocolMessage message)
@@ -297,6 +315,7 @@ public partial class MainWindowViewModel : ViewModelBase
         }
 
         activeConnection.EventReceived -= OnDeviceEventReceived;
+        activeConnection.StateChanged -= OnDeviceStateChanged;
         await activeConnection.DisconnectAsync();
         activeConnection = null;
     }

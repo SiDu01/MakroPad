@@ -1,4 +1,5 @@
 using System.IO.Ports;
+using System.Text;
 using MakroPad.Core.Protocol;
 
 namespace MakroPad.Device;
@@ -7,13 +8,30 @@ public sealed class SerialMakroPadConnection : IMakroPadConnection, IDisposable
 {
     private const int DefaultBaudRate = 115200;
 
+    private readonly object syncRoot = new();
     private SerialPort? serialPort;
     private CancellationTokenSource? readLoopCancellation;
     private Task? readLoopTask;
+    private DeviceConnectionState state = DeviceConnectionState.Disconnected;
 
-    public DeviceConnectionState State { get; private set; } = DeviceConnectionState.Disconnected;
+    public DeviceConnectionState State
+    {
+        get => state;
+        private set
+        {
+            if (state == value)
+            {
+                return;
+            }
+
+            state = value;
+            StateChanged?.Invoke(this, state);
+        }
+    }
 
     public event EventHandler<DeviceEvent>? EventReceived;
+
+    public event EventHandler<DeviceConnectionState>? StateChanged;
 
     public IReadOnlyList<string> GetAvailablePorts()
     {
@@ -36,6 +54,7 @@ public sealed class SerialMakroPadConnection : IMakroPadConnection, IDisposable
         {
             serialPort = new SerialPort(portName, DefaultBaudRate)
             {
+                Encoding = Encoding.UTF8,
                 NewLine = "\n",
                 ReadTimeout = 250,
                 WriteTimeout = 1000,
@@ -112,12 +131,16 @@ public sealed class SerialMakroPadConnection : IMakroPadConnection, IDisposable
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        if (serialPort is not { IsOpen: true })
+        lock (syncRoot)
         {
-            throw new InvalidOperationException("Serial port is not open.");
+            if (serialPort is not { IsOpen: true })
+            {
+                throw new InvalidOperationException("Serial port is not open.");
+            }
+
+            serialPort.WriteLine(line);
         }
 
-        serialPort.WriteLine(line);
         RaiseEvent("App -> ESP", line);
         return Task.CompletedTask;
     }
@@ -159,9 +182,22 @@ public sealed class SerialMakroPadConnection : IMakroPadConnection, IDisposable
             catch (Exception ex) when (ex is IOException or InvalidOperationException)
             {
                 RaiseEvent("Connection", $"Serial read failed: {ex.Message}");
+                CloseAfterReadFailure();
                 break;
             }
         }
+    }
+
+    private void CloseAfterReadFailure()
+    {
+        lock (syncRoot)
+        {
+            serialPort?.Close();
+            serialPort?.Dispose();
+            serialPort = null;
+        }
+
+        State = DeviceConnectionState.Disconnected;
     }
 
     private void RaiseEvent(string direction, string line)

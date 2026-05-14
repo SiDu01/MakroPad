@@ -54,3 +54,9 @@ dotnet run --project app\MakroPad.App\MakroPad.App.csproj
 ```powershell
 dotnet build app\MakroPad.sln
 ```
+
+## Test
+
+```powershell
+dotnet test app\MakroPad.sln
+```
