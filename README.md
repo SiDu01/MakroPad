@@ -16,4 +16,29 @@ architecture, and proposed project structure.
 The first Arduino firmware prototype lives in
 [firmware/MakroPadFirmware](firmware/MakroPadFirmware).
 
-The first desktop app prototype lives in [app](app).
+The desktop companion app lives in [app](app). It already includes a simulator,
+real serial-port support, tray/background behavior, JSON configuration, a first
+action pipeline, Windows media play/pause, and Windows master-volume control.
+
+## Current Status
+
+Implemented:
+
+- Arduino firmware prototype for 1 button, 1 slider, OLED, and USB Serial.
+- Avalonia desktop app prototype.
+- Simulator connection for app development without electronics.
+- Real COM-port connection using the documented serial protocol.
+- Tray icon with open and exit commands.
+- JSON config at `%APPDATA%\MakroPad\config.json`.
+- Read-only profile binding overview in the UI.
+- Windows `media.playPause` action.
+- Windows `system.volume` action.
+- Unit tests for protocol and action behavior.
+
+Useful commands:
+
+```powershell
+dotnet build app\MakroPad.sln
+dotnet test app\MakroPad.sln
+dotnet run --project app\MakroPad.App\MakroPad.App.csproj
+```

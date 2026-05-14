@@ -8,6 +8,8 @@ Desktop companion app for MakroPad.
 - `MakroPad.Core`: shared protocol and configuration logic.
 - `MakroPad.Device`: device communication abstractions.
 - `MakroPad.Actions`: action execution abstractions.
+- `MakroPad.Core.Tests`: protocol and core tests.
+- `MakroPad.Actions.Tests`: action pipeline and executor tests.
 
 ## Current Prototype
 
@@ -32,6 +34,11 @@ Implemented:
 - Windows `system.volume` action via CoreAudio.
 - Read-only profile binding overview in the main UI.
 
+Default bindings:
+
+- `button:1` -> `media.playPause`
+- `slider:1` -> `system.volume`
+
 Closing the main window hides it to the tray. Use the tray menu's `Exit` command
 to terminate the app.
 
@@ -47,6 +54,17 @@ with:
 ```text
 hello-ack;proto=1;app=0.1.0
 ```
+
+Incoming slider values are expected as `0..4095`. `system.volume` maps them to
+Windows master volume `0..100%`.
+
+## Next Work
+
+- Editable profile and binding UI.
+- Auto-connect to the last known MakroPad serial port.
+- Device identification using the `hello` payload.
+- Spotify or Windows Media Session metadata for OLED display updates.
+- Linux implementations for media and volume actions.
 
 ## Run
 

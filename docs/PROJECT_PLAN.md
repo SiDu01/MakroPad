@@ -82,6 +82,28 @@ Aufgaben:
 - Im Tray weiterlaufen, auch wenn das Hauptfenster geschlossen oder minimiert
   ist.
 
+Aktueller Stand:
+
+- Avalonia-App unter `app/MakroPad.App`.
+- Simulator-Verbindung fuer Entwicklung ohne Hardware.
+- Echte Serial-Verbindung ueber `System.IO.Ports`.
+- Automatischer `hello` / `hello-ack` Handshake.
+- Tray-Icon mit Oeffnen und Beenden.
+- JSON-Konfiguration unter `%APPDATA%\MakroPad\config.json`.
+- Read-only Anzeige der Bindings des aktiven Profils.
+- Action-Pipeline mit Config-Matching und Slider-Throttling.
+- Windows `media.playPause` via System-Media-Key.
+- Windows `system.volume` via CoreAudio / NAudio.
+- Tests fuer ProtocolCodec und Action-Pipeline.
+
+Noch nicht umgesetzt:
+
+- Bearbeiten von Profilen und Bindings in der UI.
+- Auto-Connect zum zuletzt genutzten Geraet.
+- Komfortable Geraeteerkennung anhand `hello;device=makropad-s3`.
+- Spotify-/Media-Session-Informationen fuer OLED.
+- Linux-Implementierungen fuer Media Keys und Lautstaerke.
+
 ## Hardware-Einschaetzung
 
 20 Buttons, 3 Slider und ein I2C Display sind mit einem ESP32-S3-DevKitC-1
@@ -110,8 +132,8 @@ weil sie Firmware und Fehlersuche einfacher macht.
 
 ## Kommunikationsmodell
 
-Die Kommunikation zwischen Desktop-App und ESP sollte als kleines, versioniertes
-Protokoll geplant werden.
+Die Kommunikation zwischen Desktop-App und ESP ist als kleines, versioniertes
+USB-Serial-Protokoll geplant und in [PROTOCOL.md](PROTOCOL.md) beschrieben.
 
 Beispielhafte Nachrichten vom ESP zur App:
 
@@ -132,9 +154,9 @@ config;profile=default
 ping;id=42
 ```
 
-Das genaue Format ist noch offen. Fuer den Anfang ist ein einfaches
-zeilenbasiertes Textprotokoll gut testbar. Spaeter kann auf JSON Lines oder ein
-binaeres Protokoll gewechselt werden, falls noetig.
+Das aktuelle Format ist ein zeilenbasiertes `type;key=value` Protokoll. Die App
+enthaelt einen Parser/Formatter in `MakroPad.Core.Protocol` und Tests in
+`MakroPad.Core.Tests`.
 
 ## Konfigurationsmodell
 
@@ -179,6 +201,12 @@ Beispiel:
 }
 ```
 
+Aktueller Default:
+
+- `button:1` ist an `media.playPause` gebunden.
+- `slider:1` ist an `system.volume` gebunden.
+- Sliderwerte werden appseitig von `0..4095` auf `0..100%` gemappt.
+
 ## Vorgeschlagene Projektstruktur
 
 ```text
@@ -207,6 +235,10 @@ MakroPad/
       MakroPad.Device.csproj
     MakroPad.Actions/
       MakroPad.Actions.csproj
+    MakroPad.Core.Tests/
+      MakroPad.Core.Tests.csproj
+    MakroPad.Actions.Tests/
+      MakroPad.Actions.Tests.csproj
   shared/
     schemas/
       config.schema.json
@@ -220,6 +252,8 @@ Geplante Rollen:
 - `app/MakroPad.Core/`: Profile, Konfigurationen und gemeinsame Logik.
 - `app/MakroPad.Device/`: Serial/HID-Kommunikation und Geraeteerkennung.
 - `app/MakroPad.Actions/`: Ausfuehrung komplexer Aktionen.
+- `app/MakroPad.Core.Tests/`: Tests fuer Protokoll und Core-Logik.
+- `app/MakroPad.Actions.Tests/`: Tests fuer Action-Ausfuehrung und Pipeline.
 - `shared/schemas/`: versionierte JSON-Schemas fuer Konfigurationen.
 - `docs/`: technische Dokumentation.
 
@@ -228,19 +262,20 @@ Das erste USB-Serial-Protokoll steht in [PROTOCOL.md](PROTOCOL.md).
 
 ## Empfohlener erster Meilenstein
 
-Ein kleiner vertikaler Prototyp sollte zuerst gebaut werden:
+Der erste vertikale App-Prototyp ist weitgehend umgesetzt:
 
-1. ESP liest 1 Button.
-2. ESP liest 1 Slider.
-3. ESP schreibt Text auf das OLED.
-4. ESP sendet Button- und Slider-Events per USB Serial an den PC.
-5. Desktop-App erkennt den ESP.
-6. Desktop-App zeigt Live-Events an.
-7. Desktop-App sendet einen Displaytext zurueck an den ESP.
-8. App kann in den Tray minimiert werden und weiterlaufen.
+1. ESP-Firmware-Prototyp liest 1 Button und 1 Slider.
+2. ESP-Firmware-Prototyp kann Text auf das OLED schreiben.
+3. ESP sendet Button- und Slider-Events per USB Serial an den PC.
+4. Desktop-App kann Simulator oder echte COM-Ports verwenden.
+5. Desktop-App zeigt Live-Events an.
+6. Desktop-App sendet Displaytext und Action-Feedback an den ESP.
+7. App kann in den Tray minimiert werden und weiterlaufen.
+8. Button 1 kann Windows Media Play/Pause ausloesen.
+9. Slider 1 kann Windows Master-Volume setzen.
 
-Danach koennen HID-Aktionen, Profile, Medienintegration und das volle
-Hardware-Layout ausgebaut werden.
+Als naechstes koennen Profilbearbeitung, Auto-Connect, Medieninformationen fuer
+das OLED und das volle Hardware-Layout ausgebaut werden.
 
 Der erste Firmware-Prototyp befindet sich in
 `firmware/MakroPadFirmware/MakroPadFirmware.ino`.
@@ -252,10 +287,10 @@ Das erste Avalonia-App-Grundgeruest befindet sich in `app/MakroPad.sln`.
 - Finales Pinout nach Pruefung der konkreten Board-Revision.
 - Ob die Firmware das Hardware-Layout fest einkompiliert oder von der App
   empfangen und gespeichert bekommt.
-- Details des Serial-Protokolls nach erstem Firmware-/App-Prototyp pruefen.
+- Details des Serial-Protokolls nach echtem Hardware-Test pruefen.
 - Welche Library fuer USB HID unter Arduino verwendet wird.
-- Welche Library fuer OLED verwendet wird, z. B. Adafruit SSD1306 oder U8g2.
+- Ob Adafruit SSD1306 fuer das OLED bleibt oder U8g2 besser passt.
 - Wie Medieninformationen unter Windows zuerst ausgelesen werden:
   Windows Media Session API oder Spotify Web API.
-- Ob Linux-Tray und Linux-Medienintegration direkt im ersten App-Design
-  beruecksichtigt oder spaeter nachgezogen werden.
+- Ob Linux-Media-Keys und Linux-Lautstaerke direkt nachgezogen werden.
+- Wie Profil-/Binding-Bearbeitung in der UI konkret aussehen soll.

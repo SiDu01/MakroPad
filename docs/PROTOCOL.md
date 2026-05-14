@@ -95,6 +95,14 @@ hello-ack;proto=1;app=0.1.0
 Danach kann die App optional Konfigurationsdaten senden oder direkt in den
 Live-Betrieb wechseln.
 
+Aktueller App-Stand:
+
+- Die Desktop-App antwortet automatisch auf `hello` mit
+  `hello-ack;proto=1;app=0.1.0`.
+- Serial wird explizit mit UTF-8-Encoding betrieben.
+- Bei Serial-Lesefehlern setzt die App den Verbindungsstatus auf
+  `Disconnected`.
+
 ## Heartbeat
 
 Beide Seiten duerfen Heartbeats senden.
@@ -255,6 +263,13 @@ action-result;input=button:2;status=failed;message=OBS%20not%20connected
 
 Damit kann der ESP kurze Rueckmeldungen auf dem OLED anzeigen.
 
+Aktuell sendet die App `action-result` nach ausgefuehrten Actions. Beispiele:
+
+```text
+action-result;input=button:1;status=ok;message=Play%2FPause
+action-result;input=slider:1;status=ok;message=Volume%2050%25
+```
+
 ## Fehlerbehandlung
 
 Allgemeine Regeln:
@@ -296,9 +311,9 @@ JSON Lines wechseln oder JSON als Value in ausgewaehlten Nachrichten erlauben.
 
 ## Offene Entscheidungen
 
-- Exakter Timeout fuer Verbindungsabbruch.
-- Ob Sliderwerte als 0 bis 4095 oder normalisiert als 0 bis 1000 an die App
-  gehen sollen.
+- Exakter Timeout fuer Heartbeat-basierten Verbindungsabbruch.
+- Sliderwerte bleiben in Version 1 als 0 bis 4095 erhalten und werden appseitig
+  fuer Actions gemappt.
 - Ob App-seitige Konfiguration spaeter vollstaendig an den ESP uebertragen und
   dort persistent gespeichert wird.
 - Wie HID-Aktionen mit dem Serial-Protokoll koordiniert werden.
