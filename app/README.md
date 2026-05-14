@@ -23,6 +23,10 @@ Implemented:
 - Simulated button and slider events.
 - Protocol parser/formatter in `MakroPad.Core`.
 - Serial connection implementation using `System.IO.Ports`.
+- Tray icon with open and exit commands.
+
+Closing the main window hides it to the tray. Use the tray menu's `Exit` command
+to terminate the app.
 
 When a real device sends `hello;proto=1;...`, the app automatically responds
 with:
