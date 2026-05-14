@@ -16,12 +16,20 @@ before the electronics are ready.
 
 Implemented:
 
-- Device panel with a simulator port.
+- Device panel with a simulator port and real serial ports.
 - Connect and disconnect flow.
 - Protocol log.
 - Display message command using the serial protocol format.
 - Simulated button and slider events.
 - Protocol parser/formatter in `MakroPad.Core`.
+- Serial connection implementation using `System.IO.Ports`.
+
+When a real device sends `hello;proto=1;...`, the app automatically responds
+with:
+
+```text
+hello-ack;proto=1;app=0.1.0
+```
 
 ## Run
 

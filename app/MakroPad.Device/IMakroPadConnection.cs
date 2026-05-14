@@ -13,4 +13,6 @@ public interface IMakroPadConnection
     Task DisconnectAsync(CancellationToken cancellationToken = default);
 
     Task SendDisplayMessageAsync(string text, CancellationToken cancellationToken = default);
+
+    Task SendLineAsync(string line, CancellationToken cancellationToken = default);
 }

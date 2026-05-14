@@ -44,6 +44,12 @@ public sealed class SimulatedMakroPadConnection : IMakroPadConnection
         return Task.CompletedTask;
     }
 
+    public Task SendLineAsync(string line, CancellationToken cancellationToken = default)
+    {
+        Send(line);
+        return Task.CompletedTask;
+    }
+
     public void SimulateButtonPress(int id)
     {
         Receive($"button;id={id};state=down");
