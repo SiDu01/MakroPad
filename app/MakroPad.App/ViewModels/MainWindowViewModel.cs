@@ -30,6 +30,12 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty]
     private string? selectedPort;
 
+    partial void OnSelectedPortChanged(string? value)
+    {
+        OnPropertyChanged(nameof(SelectedPortDisplay));
+        OnPropertyChanged(nameof(IsSimulatorSelected));
+    }
+
     [ObservableProperty]
     private string displayText = "Hello MakroPad";
 
@@ -46,6 +52,24 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         currentConfig = currentConfig with { ActiveProfile = value };
         RefreshProfileBindings();
+    }
+
+    public string SelectedPortDisplay => string.IsNullOrWhiteSpace(SelectedPort)
+        ? "No port selected"
+        : SelectedPort;
+
+    public bool IsSimulatorSelected => SelectedPort == SimulatorPort;
+
+    public string ConnectionStatusBrush => ConnectionStatus switch
+    {
+        "Connected" => "Green",
+        "Connecting" => "DarkOrange",
+        _ => "Gray"
+    };
+
+    partial void OnConnectionStatusChanged(string value)
+    {
+        OnPropertyChanged(nameof(ConnectionStatusBrush));
     }
 
     public ObservableCollection<string> AvailablePorts { get; } = [];

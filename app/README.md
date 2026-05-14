@@ -33,6 +33,8 @@ Implemented:
 - Windows `media.playPause` action via the system media key.
 - Windows `system.volume` action via CoreAudio.
 - Read-only profile binding overview in the main UI.
+- Structured main window with device, profile, simulator, bindings, and log
+  sections.
 
 Default bindings:
 
