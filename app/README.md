@@ -29,6 +29,7 @@ Implemented:
 - Slider action throttling to reduce noisy repeated execution.
 - Unit tests for protocol encoding and action pipeline behavior.
 - Windows `media.playPause` action via the system media key.
+- Windows `system.volume` action via CoreAudio.
 
 Closing the main window hides it to the tray. Use the tray menu's `Exit` command
 to terminate the app.

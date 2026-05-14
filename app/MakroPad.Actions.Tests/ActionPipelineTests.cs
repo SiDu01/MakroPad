@@ -41,7 +41,9 @@ public sealed class ActionPipelineTests
 
     private static ActionPipeline CreatePipeline()
     {
-        return new ActionPipeline(new ActionResolver(), new ActionExecutor(new FakeMediaController()));
+        return new ActionPipeline(
+            new ActionResolver(),
+            new ActionExecutor(new FakeMediaController(), new FakeVolumeController()));
     }
 
     private sealed class FakeMediaController : ISystemMediaController
@@ -51,6 +53,21 @@ public sealed class ActionPipelineTests
             cancellationToken.ThrowIfCancellationRequested();
 
             return Task.FromResult(ActionExecutionResult.Ok("Play/Pause"));
+        }
+    }
+
+    private sealed class FakeVolumeController : ISystemVolumeController
+    {
+        public List<int> SetVolumes { get; } = [];
+
+        public Task<ActionExecutionResult> SetMasterVolumeAsync(
+            int percent,
+            CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            SetVolumes.Add(percent);
+
+            return Task.FromResult(ActionExecutionResult.Ok($"Volume {percent}%"));
         }
     }
 }
