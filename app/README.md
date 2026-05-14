@@ -30,6 +30,7 @@ Implemented:
 - Unit tests for protocol encoding and action pipeline behavior.
 - Windows `media.playPause` action via the system media key.
 - Windows `system.volume` action via CoreAudio.
+- Read-only profile binding overview in the main UI.
 
 Closing the main window hides it to the tray. Use the tray menu's `Exit` command
 to terminate the app.

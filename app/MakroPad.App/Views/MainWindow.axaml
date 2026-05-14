@@ -144,11 +144,57 @@
                     Padding="16"
                     BorderThickness="1"
                     CornerRadius="6">
-                <Grid RowDefinitions="Auto,*" RowSpacing="12">
-                    <TextBlock Text="Protocol Log"
+                <Grid RowDefinitions="Auto,180,Auto,*" RowSpacing="12">
+                    <TextBlock Text="Profile Bindings"
                                FontSize="16"
                                FontWeight="SemiBold" />
-                    <ListBox Grid.Row="1"
+
+                    <Grid Grid.Row="1"
+                          RowDefinitions="Auto,*"
+                          RowSpacing="6">
+                        <Grid ColumnDefinitions="140,180,*"
+                              ColumnSpacing="12">
+                            <TextBlock Text="Input"
+                                       FontWeight="SemiBold"
+                                       Opacity="0.72" />
+                            <TextBlock Grid.Column="1"
+                                       Text="Action"
+                                       FontWeight="SemiBold"
+                                       Opacity="0.72" />
+                            <TextBlock Grid.Column="2"
+                                       Text="Parameters"
+                                       FontWeight="SemiBold"
+                                       Opacity="0.72" />
+                        </Grid>
+
+                        <ListBox Grid.Row="1"
+                                 ItemsSource="{Binding ProfileBindings}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid ColumnDefinitions="140,180,*"
+                                          ColumnSpacing="12">
+                                        <TextBlock Text="{Binding Input}"
+                                                   FontFamily="Consolas"
+                                                   TextTrimming="CharacterEllipsis" />
+                                        <TextBlock Grid.Column="1"
+                                                   Text="{Binding Action}"
+                                                   FontFamily="Consolas"
+                                                   TextTrimming="CharacterEllipsis" />
+                                        <TextBlock Grid.Column="2"
+                                                   Text="{Binding Parameters}"
+                                                   FontFamily="Consolas"
+                                                   TextTrimming="CharacterEllipsis" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Grid>
+
+                    <TextBlock Grid.Row="2"
+                               Text="Protocol Log"
+                               FontSize="16"
+                               FontWeight="SemiBold" />
+                    <ListBox Grid.Row="3"
                              ItemsSource="{Binding EventLog}">
                         <ListBox.ItemTemplate>
                             <DataTemplate>

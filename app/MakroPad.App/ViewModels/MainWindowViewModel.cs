@@ -45,6 +45,7 @@ public partial class MainWindowViewModel : ViewModelBase
     partial void OnActiveProfileNameChanged(string value)
     {
         currentConfig = currentConfig with { ActiveProfile = value };
+        RefreshProfileBindings();
     }
 
     public ObservableCollection<string> AvailablePorts { get; } = [];
@@ -52,6 +53,8 @@ public partial class MainWindowViewModel : ViewModelBase
     public ObservableCollection<string> EventLog { get; } = [];
 
     public ObservableCollection<string> ProfileNames { get; } = [];
+
+    public ObservableCollection<BindingViewModel> ProfileBindings { get; } = [];
 
     public MainWindowViewModel()
     {
@@ -151,6 +154,8 @@ public partial class MainWindowViewModel : ViewModelBase
             {
                 ProfileNames.Add(profile.Name);
             }
+
+            RefreshProfileBindings();
 
             AddLog($"Config loaded: {ConfigPath}");
         }
@@ -340,6 +345,28 @@ public partial class MainWindowViewModel : ViewModelBase
         while (EventLog.Count > 200)
         {
             EventLog.RemoveAt(EventLog.Count - 1);
+        }
+    }
+
+    private void RefreshProfileBindings()
+    {
+        ProfileBindings.Clear();
+
+        var profile = currentConfig.Profiles.FirstOrDefault(
+            candidate => candidate.Name.Equals(currentConfig.ActiveProfile, StringComparison.OrdinalIgnoreCase));
+
+        if (profile is null)
+        {
+            return;
+        }
+
+        foreach (var binding in profile.Bindings)
+        {
+            var parameters = binding.Parameters.Count == 0
+                ? ""
+                : string.Join(", ", binding.Parameters.Select(pair => $"{pair.Key}={pair.Value}"));
+
+            ProfileBindings.Add(new BindingViewModel(binding.Input, binding.Action, parameters));
         }
     }
 
