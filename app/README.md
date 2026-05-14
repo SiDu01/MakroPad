@@ -26,6 +26,8 @@ Implemented:
 - Tray icon with open and exit commands.
 - JSON configuration model with a default profile.
 - First action pipeline that matches device inputs to profile bindings.
+- Slider action throttling to reduce noisy repeated execution.
+- Unit tests for protocol encoding and action pipeline behavior.
 
 Closing the main window hides it to the tray. Use the tray menu's `Exit` command
 to terminate the app.

@@ -20,8 +20,7 @@ public partial class MainWindowViewModel : ViewModelBase
     private readonly SimulatedMakroPadConnection simulatedConnection = new();
     private readonly SerialMakroPadConnection serialConnection = new();
     private readonly MakroPadConfigStore configStore;
-    private readonly ActionResolver actionResolver = new();
-    private readonly ActionExecutor actionExecutor = new();
+    private readonly ActionPipeline actionPipeline = new(new ActionResolver(), new ActionExecutor());
     private IMakroPadConnection? activeConnection;
     private MakroPadConfig currentConfig = MakroPadConfig.CreateDefault();
 
@@ -249,7 +248,7 @@ public partial class MainWindowViewModel : ViewModelBase
                 return;
             }
 
-            await ExecuteConfiguredActionAsync($"button:{id}");
+            await HandleConfiguredInputAsync($"button:{id}");
             return;
         }
 
@@ -265,35 +264,32 @@ public partial class MainWindowViewModel : ViewModelBase
 
             if (id is not null)
             {
-                await ExecuteConfiguredActionAsync($"slider:{id}", value);
+                await HandleConfiguredInputAsync($"slider:{id}", value);
             }
         }
     }
 
-    private async Task ExecuteConfiguredActionAsync(string input, string? value = null)
+    private async Task HandleConfiguredInputAsync(string input, string? value = null)
     {
-        var binding = actionResolver.Resolve(currentConfig, input);
-        if (binding is null)
+        var result = await actionPipeline.HandleInputAsync(currentConfig, input, value);
+
+        if (result.Kind == ActionPipelineResultKind.Throttled)
         {
-            AddLog($"No action binding for {input} in profile {currentConfig.ActiveProfile}.");
             return;
         }
 
-        var result = await actionExecutor.ExecuteAsync(new ActionExecutionContext(input, binding, value));
-        AddLog(result.Succeeded
-            ? $"Action matched: {input} -> {binding.Action} ({result.Message})"
-            : $"Action failed: {input} -> {binding.Action} ({result.Message})");
+        AddLog(FormatActionResult(result));
 
-        if (activeConnection is not null)
+        if (activeConnection is not null && result.ShouldSendFeedback && result.ExecutionResult is not null)
         {
-            var status = result.Succeeded ? "ok" : "failed";
+            var status = result.ExecutionResult.Succeeded ? "ok" : "failed";
             var line = MakroPad.Core.Protocol.ProtocolCodec.Format(
                 "action-result",
                 new Dictionary<string, string?>
                 {
                     ["input"] = input,
                     ["status"] = status,
-                    ["message"] = result.Message
+                    ["message"] = result.ExecutionResult.Message
                 });
 
             try
@@ -305,6 +301,23 @@ public partial class MainWindowViewModel : ViewModelBase
                 AddLog($"Action feedback failed: {ex.Message}");
             }
         }
+    }
+
+    private static string FormatActionResult(ActionPipelineResult result)
+    {
+        if (result.Kind == ActionPipelineResultKind.Unbound)
+        {
+            return result.Message;
+        }
+
+        if (result.Binding is null || result.ExecutionResult is null)
+        {
+            return result.Message;
+        }
+
+        return result.ExecutionResult.Succeeded
+            ? $"Action matched: {result.Input} -> {result.Binding.Action} ({result.ExecutionResult.Message})"
+            : $"Action failed: {result.Input} -> {result.Binding.Action} ({result.ExecutionResult.Message})";
     }
 
     private async Task DisconnectActiveConnectionAsync()

@@ -1,0 +1,46 @@
+using MakroPad.Core.Configuration;
+
+namespace MakroPad.Actions.Tests;
+
+public sealed class ActionPipelineTests
+{
+    [Fact]
+    public async Task HandleInputAsyncExecutesBoundButton()
+    {
+        var pipeline = CreatePipeline();
+
+        var result = await pipeline.HandleInputAsync(MakroPadConfig.CreateDefault(), "button:1");
+
+        Assert.Equal(ActionPipelineResultKind.Executed, result.Kind);
+        Assert.Equal("media.playPause", result.Binding?.Action);
+        Assert.True(result.ExecutionResult?.Succeeded);
+    }
+
+    [Fact]
+    public async Task HandleInputAsyncReturnsUnboundForMissingInput()
+    {
+        var pipeline = CreatePipeline();
+
+        var result = await pipeline.HandleInputAsync(MakroPadConfig.CreateDefault(), "button:99");
+
+        Assert.Equal(ActionPipelineResultKind.Unbound, result.Kind);
+    }
+
+    [Fact]
+    public async Task HandleInputAsyncThrottlesRepeatedSliderInput()
+    {
+        var pipeline = CreatePipeline();
+        var config = MakroPadConfig.CreateDefault();
+
+        var first = await pipeline.HandleInputAsync(config, "slider:1", "1000");
+        var second = await pipeline.HandleInputAsync(config, "slider:1", "1001");
+
+        Assert.Equal(ActionPipelineResultKind.Executed, first.Kind);
+        Assert.Equal(ActionPipelineResultKind.Throttled, second.Kind);
+    }
+
+    private static ActionPipeline CreatePipeline()
+    {
+        return new ActionPipeline(new ActionResolver(), new ActionExecutor());
+    }
+}
