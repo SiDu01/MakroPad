@@ -41,6 +41,16 @@ public sealed class ActionPipelineTests
 
     private static ActionPipeline CreatePipeline()
     {
-        return new ActionPipeline(new ActionResolver(), new ActionExecutor());
+        return new ActionPipeline(new ActionResolver(), new ActionExecutor(new FakeMediaController()));
+    }
+
+    private sealed class FakeMediaController : ISystemMediaController
+    {
+        public Task<ActionExecutionResult> PlayPauseAsync(CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            return Task.FromResult(ActionExecutionResult.Ok("Play/Pause"));
+        }
     }
 }
