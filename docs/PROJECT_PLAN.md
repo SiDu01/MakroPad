@@ -88,6 +88,8 @@ Aktueller Stand:
 - Simulator-Verbindung fuer Entwicklung ohne Hardware.
 - Echte Serial-Verbindung ueber `System.IO.Ports`.
 - Automatischer `hello` / `hello-ack` Handshake.
+- Auto-Connect anhand `hello;device=makropad-s3`, inklusive gespeichertem
+  letztem Port.
 - Tray-Icon mit Oeffnen und Beenden.
 - JSON-Konfiguration unter `%APPDATA%\MakroPad\config.json`.
 - Read-only Anzeige der Bindings des aktiven Profils.
@@ -99,8 +101,6 @@ Aktueller Stand:
 Noch nicht umgesetzt:
 
 - Bearbeiten von Profilen und Bindings in der UI.
-- Auto-Connect zum zuletzt genutzten Geraet.
-- Komfortable Geraeteerkennung anhand `hello;device=makropad-s3`.
 - Spotify-/Media-Session-Informationen fuer OLED.
 - Linux-Implementierungen fuer Media Keys und Lautstaerke.
 

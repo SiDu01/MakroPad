@@ -8,6 +8,8 @@ public sealed record MakroPadConfig
 
     public string ActiveProfile { get; init; } = "Default";
 
+    public AppSettingsConfig AppSettings { get; init; } = new();
+
     public List<ProfileConfig> Profiles { get; init; } = [];
 
     public static MakroPadConfig CreateDefault()

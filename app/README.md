@@ -35,6 +35,7 @@ Implemented:
 - Read-only profile binding overview in the main UI.
 - Structured main window with device, profile, simulator, bindings, and log
   sections.
+- Auto-connect scanning for `hello;device=makropad-s3`.
 
 Default bindings:
 
@@ -64,7 +65,6 @@ Windows master volume `0..100%`.
 
 - Editable profile and binding UI.
 - Auto-connect to the last known MakroPad serial port.
-- Device identification using the `hello` payload.
 - Spotify or Windows Media Session metadata for OLED display updates.
 - Linux implementations for media and volume actions.
 

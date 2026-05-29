@@ -19,6 +19,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
     private readonly SimulatedMakroPadConnection simulatedConnection = new();
     private readonly SerialMakroPadConnection serialConnection = new();
+    private readonly MakroPadDeviceProbe deviceProbe = new();
     private readonly MakroPadConfigStore configStore;
     private readonly ActionPipeline actionPipeline = new(new ActionResolver(), new ActionExecutor());
     private IMakroPadConnection? activeConnection;
@@ -47,6 +48,9 @@ public partial class MainWindowViewModel : ViewModelBase
 
     [ObservableProperty]
     private string configPath = "";
+
+    [ObservableProperty]
+    private bool autoConnect = true;
 
     partial void OnActiveProfileNameChanged(string value)
     {
@@ -172,6 +176,7 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             currentConfig = await configStore.LoadOrCreateDefaultAsync();
             ActiveProfileName = currentConfig.ActiveProfile;
+            AutoConnect = currentConfig.AppSettings.AutoConnect;
 
             ProfileNames.Clear();
             foreach (var profile in currentConfig.Profiles)
@@ -180,8 +185,14 @@ public partial class MainWindowViewModel : ViewModelBase
             }
 
             RefreshProfileBindings();
+            RefreshPorts();
 
             AddLog($"Config loaded: {ConfigPath}");
+
+            if (AutoConnect)
+            {
+                await AutoConnectAsync();
+            }
         }
         catch (Exception ex)
         {
@@ -194,13 +205,60 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         try
         {
-            currentConfig = currentConfig with { ActiveProfile = ActiveProfileName };
+            currentConfig = currentConfig with
+            {
+                ActiveProfile = ActiveProfileName,
+                AppSettings = currentConfig.AppSettings with
+                {
+                    AutoConnect = AutoConnect,
+                    LastPort = SelectedPort == SimulatorPort ? currentConfig.AppSettings.LastPort : SelectedPort
+                }
+            };
             await configStore.SaveAsync(currentConfig);
             AddLog($"Config saved: {ConfigPath}");
         }
         catch (Exception ex)
         {
             AddLog($"Config save failed: {ex.Message}");
+        }
+    }
+
+    [RelayCommand]
+    private async Task AutoConnectAsync()
+    {
+        if (activeConnection is not null)
+        {
+            AddLog("Already connected.");
+            return;
+        }
+
+        var ports = serialConnection.GetAvailablePorts();
+        RefreshPorts();
+
+        AddLog("Scanning for MakroPad...");
+        var detectedPort = await deviceProbe.FindMakroPadPortAsync(
+            ports,
+            currentConfig.AppSettings.LastPort);
+
+        if (detectedPort is null)
+        {
+            AddLog("No MakroPad device found.");
+            return;
+        }
+
+        SelectedPort = detectedPort;
+        AddLog($"MakroPad detected on {detectedPort}.");
+        await Task.Delay(250);
+        await ConnectAsync();
+
+        if (activeConnection?.State == DeviceConnectionState.Connected)
+        {
+            currentConfig = currentConfig with
+            {
+                AppSettings = currentConfig.AppSettings with { LastPort = detectedPort }
+            };
+
+            await configStore.SaveAsync(currentConfig);
         }
     }
 

@@ -82,9 +82,16 @@
                                         HorizontalAlignment="Stretch" />
                             </Grid>
 
+                            <Button Content="Auto Connect"
+                                    Command="{Binding AutoConnectCommand}"
+                                    HorizontalAlignment="Stretch" />
+
                             <Button Content="Disconnect"
                                     Command="{Binding DisconnectCommand}"
                                     HorizontalAlignment="Stretch" />
+
+                            <CheckBox Content="Auto-connect on startup"
+                                      IsChecked="{Binding AutoConnect}" />
                         </StackPanel>
                     </Border>
 
