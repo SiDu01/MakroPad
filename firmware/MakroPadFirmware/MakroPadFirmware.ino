@@ -3,9 +3,18 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 
-// First prototype pinout from docs/HARDWARE.md.
-constexpr uint8_t Button1Pin = 4;
-constexpr uint8_t Slider1Pin = 1;
+// Pinout from docs/HARDWARE.md.
+constexpr uint8_t ButtonPins[] = {
+  4, 5, 6, 7, 10,
+  11, 12, 13, 14, 15,
+  16, 17, 18, 21, 39,
+  40, 41, 42, 47, 48
+};
+
+constexpr uint8_t SliderPins[] = {
+  1, 2, 3
+};
+
 constexpr uint8_t OledSdaPin = 8;
 constexpr uint8_t OledSclPin = 9;
 
@@ -14,6 +23,10 @@ constexpr uint32_t HelloIntervalMs = 1000;
 constexpr uint32_t DebounceMs = 25;
 constexpr int SliderDeadband = 16;
 constexpr size_t MaxLineLength = 256;
+constexpr size_t ActiveButtonCount = sizeof(ButtonPins) / sizeof(ButtonPins[0]);
+constexpr size_t ActiveSliderCount = 1;
+
+static_assert(ActiveSliderCount <= sizeof(SliderPins) / sizeof(SliderPins[0]), "Too many active sliders configured");
 
 constexpr int ScreenWidth = 128;
 constexpr int ScreenHeight = 64;
@@ -36,8 +49,8 @@ struct SliderState {
   int lastSentValue;
 };
 
-ButtonState button1 = {1, Button1Pin, false, false, 0};
-SliderState slider1 = {1, Slider1Pin, -1, -1};
+ButtonState buttons[ActiveButtonCount];
+SliderState sliders[ActiveSliderCount];
 
 String usbSerialLine;
 String uartSerialLine;
@@ -103,7 +116,12 @@ void sendLine(const String& line) {
 }
 
 void sendHello() {
-  sendLine("hello;proto=1;fw=0.1.0;device=makropad-s3;buttons=1;sliders=1;display=ssd1306-128x64");
+  String line = "hello;proto=1;fw=0.2.0;device=makropad-s3;buttons=";
+  line += String(ActiveButtonCount);
+  line += ";sliders=";
+  line += String(ActiveSliderCount);
+  line += ";display=ssd1306-128x64";
+  sendLine(line);
 }
 
 void sendReady() {
@@ -307,11 +325,37 @@ void initDisplay() {
   }
 }
 
+void initButtons() {
+  for (size_t index = 0; index < ActiveButtonCount; index++) {
+    buttons[index] = {
+      static_cast<uint8_t>(index + 1),
+      ButtonPins[index],
+      false,
+      false,
+      0
+    };
+
+    pinMode(buttons[index].pin, INPUT_PULLUP);
+  }
+}
+
+void initSliders() {
+  for (size_t index = 0; index < ActiveSliderCount; index++) {
+    sliders[index] = {
+      static_cast<uint8_t>(index + 1),
+      SliderPins[index],
+      -1,
+      -1
+    };
+  }
+}
+
 void setup() {
   Serial.begin(SerialBaud);
   Serial0.begin(SerialBaud);
 
-  pinMode(button1.pin, INPUT_PULLUP);
+  initButtons();
+  initSliders();
   analogReadResolution(12);
 
   initDisplay();
@@ -328,8 +372,13 @@ void loop() {
     sendHello();
   }
 
-  pollButton(button1);
-  pollSlider(slider1);
+  for (size_t index = 0; index < ActiveButtonCount; index++) {
+    pollButton(buttons[index]);
+  }
+
+  for (size_t index = 0; index < ActiveSliderCount; index++) {
+    pollSlider(sliders[index]);
+  }
 
   delay(5);
 }
