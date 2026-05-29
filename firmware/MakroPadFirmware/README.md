@@ -38,6 +38,11 @@ the intended settings:
 
 After flashing, open the Serial Monitor at `115200`.
 
+The firmware writes protocol output to both Arduino `Serial` and `Serial0`.
+This makes the first hardware tests easier on ESP32-S3 boards that expose both
+native USB CDC and a USB-to-UART bridge. If one COM port only shows ESP-ROM boot
+messages and no `hello` lines, try the other COM port.
+
 Expected output:
 
 ```text

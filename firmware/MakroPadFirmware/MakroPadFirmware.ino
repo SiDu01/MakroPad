@@ -39,7 +39,8 @@ struct SliderState {
 ButtonState button1 = {1, Button1Pin, false, false, 0};
 SliderState slider1 = {1, Slider1Pin, -1, -1};
 
-String serialLine;
+String usbSerialLine;
+String uartSerialLine;
 bool hostAcknowledged = false;
 bool displayAvailable = false;
 uint32_t lastHelloMs = 0;
@@ -98,6 +99,7 @@ String protocolType(const String& line) {
 
 void sendLine(const String& line) {
   Serial.println(line);
+  Serial0.println(line);
 }
 
 void sendHello() {
@@ -224,13 +226,13 @@ void handleProtocolLine(String line) {
   }
 }
 
-void readSerialInput() {
-  while (Serial.available() > 0) {
-    const char c = static_cast<char>(Serial.read());
+void readSerialInputFrom(Stream& port, String& lineBuffer) {
+  while (port.available() > 0) {
+    const char c = static_cast<char>(port.read());
 
     if (c == '\n') {
-      handleProtocolLine(serialLine);
-      serialLine = "";
+      handleProtocolLine(lineBuffer);
+      lineBuffer = "";
       continue;
     }
 
@@ -238,13 +240,18 @@ void readSerialInput() {
       continue;
     }
 
-    if (serialLine.length() < MaxLineLength) {
-      serialLine += c;
+    if (lineBuffer.length() < MaxLineLength) {
+      lineBuffer += c;
     } else {
-      serialLine = "";
+      lineBuffer = "";
       sendError("line_too_long", "Max%20line%20length%20exceeded");
     }
   }
+}
+
+void readSerialInput() {
+  readSerialInputFrom(Serial, usbSerialLine);
+  readSerialInputFrom(Serial0, uartSerialLine);
 }
 
 void pollButton(ButtonState& button) {
@@ -302,6 +309,7 @@ void initDisplay() {
 
 void setup() {
   Serial.begin(SerialBaud);
+  Serial0.begin(SerialBaud);
 
   pinMode(button1.pin, INPUT_PULLUP);
   analogReadResolution(12);
