@@ -2,12 +2,15 @@ namespace MakroPad.App.ViewModels;
 
 public sealed class BindingViewModel
 {
-    public BindingViewModel(string input, string action, string parameters)
+    public BindingViewModel(int index, string input, string action, string parameters)
     {
+        Index = index;
         Input = input;
         Action = action;
         Parameters = parameters;
     }
+
+    public int Index { get; }
 
     public string Input { get; }
 

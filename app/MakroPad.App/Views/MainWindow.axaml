@@ -164,13 +164,13 @@
             </ScrollViewer>
 
             <Grid Grid.Column="1"
-                  RowDefinitions="220,*"
+                  RowDefinitions="340,*"
                   RowSpacing="18">
                 <Border Grid.Row="0"
                         Padding="16"
                         BorderThickness="1"
                         CornerRadius="6">
-                    <Grid RowDefinitions="Auto,*" RowSpacing="12">
+                    <Grid RowDefinitions="Auto,*,Auto" RowSpacing="12">
                         <TextBlock Text="Profile Bindings"
                                    FontSize="16"
                                    FontWeight="SemiBold" />
@@ -194,7 +194,8 @@
                             </Grid>
 
                             <ListBox Grid.Row="1"
-                                     ItemsSource="{Binding ProfileBindings}">
+                                     ItemsSource="{Binding ProfileBindings}"
+                                     SelectedItem="{Binding SelectedBinding}">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
                                         <Grid ColumnDefinitions="150,220,*"
@@ -214,6 +215,41 @@
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>
                             </ListBox>
+                        </Grid>
+
+                        <Grid Grid.Row="2"
+                              RowDefinitions="Auto,Auto"
+                              ColumnDefinitions="150,220,*"
+                              RowSpacing="8"
+                              ColumnSpacing="12">
+                            <TextBox Grid.Column="0"
+                                     PlaceholderText="button:1"
+                                     Text="{Binding BindingEditorInput}" />
+                            <ComboBox Grid.Column="1"
+                                      ItemsSource="{Binding AvailableActions}"
+                                      SelectedItem="{Binding BindingEditorAction}"
+                                      HorizontalAlignment="Stretch" />
+                            <TextBox Grid.Column="2"
+                                     PlaceholderText="message=Hello"
+                                     Text="{Binding BindingEditorParameters}" />
+
+                            <Grid Grid.Row="1"
+                                  Grid.ColumnSpan="3"
+                                  ColumnDefinitions="*,*,*"
+                                  ColumnSpacing="8">
+                                <Button Grid.Column="0"
+                                        Content="Apply"
+                                        Command="{Binding ApplyBindingCommand}"
+                                        HorizontalAlignment="Stretch" />
+                                <Button Grid.Column="1"
+                                        Content="Add"
+                                        Command="{Binding AddBindingCommand}"
+                                        HorizontalAlignment="Stretch" />
+                                <Button Grid.Column="2"
+                                        Content="Remove"
+                                        Command="{Binding RemoveBindingCommand}"
+                                        HorizontalAlignment="Stretch" />
+                            </Grid>
                         </Grid>
                     </Grid>
                 </Border>

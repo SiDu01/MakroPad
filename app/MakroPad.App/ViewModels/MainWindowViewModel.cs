@@ -24,6 +24,7 @@ public partial class MainWindowViewModel : ViewModelBase
     private readonly ActionPipeline actionPipeline = new(new ActionResolver(), new ActionExecutor());
     private IMakroPadConnection? activeConnection;
     private MakroPadConfig currentConfig = MakroPadConfig.CreateDefault();
+    private bool isRefreshingEditor;
 
     [ObservableProperty]
     private string connectionStatus = "Disconnected";
@@ -51,6 +52,30 @@ public partial class MainWindowViewModel : ViewModelBase
 
     [ObservableProperty]
     private bool autoConnect = true;
+
+    [ObservableProperty]
+    private BindingViewModel? selectedBinding;
+
+    partial void OnSelectedBindingChanged(BindingViewModel? value)
+    {
+        if (isRefreshingEditor)
+        {
+            return;
+        }
+
+        BindingEditorInput = value?.Input ?? "";
+        BindingEditorAction = value?.Action ?? AvailableActions.FirstOrDefault() ?? "";
+        BindingEditorParameters = value?.Parameters ?? "";
+    }
+
+    [ObservableProperty]
+    private string bindingEditorInput = "";
+
+    [ObservableProperty]
+    private string bindingEditorAction = "media.playPause";
+
+    [ObservableProperty]
+    private string bindingEditorParameters = "";
 
     partial void OnActiveProfileNameChanged(string value)
     {
@@ -83,6 +108,13 @@ public partial class MainWindowViewModel : ViewModelBase
     public ObservableCollection<string> ProfileNames { get; } = [];
 
     public ObservableCollection<BindingViewModel> ProfileBindings { get; } = [];
+
+    public IReadOnlyList<string> AvailableActions { get; } =
+    [
+        "media.playPause",
+        "system.volume",
+        "log"
+    ];
 
     public MainWindowViewModel()
     {
@@ -287,6 +319,89 @@ public partial class MainWindowViewModel : ViewModelBase
         AddLog("Slider simulation is only available on the simulator connection.");
     }
 
+    [RelayCommand]
+    private void ApplyBinding()
+    {
+        if (SelectedBinding is null)
+        {
+            AddLog("No binding selected.");
+            return;
+        }
+
+        if (!TryCreateEditorBinding(out var binding))
+        {
+            return;
+        }
+
+        var profile = GetActiveProfile();
+        if (profile is null || SelectedBinding.Index < 0 || SelectedBinding.Index >= profile.Bindings.Count)
+        {
+            AddLog("Selected binding no longer exists.");
+            RefreshProfileBindings();
+            return;
+        }
+
+        var updatedBindings = profile.Bindings.ToList();
+        updatedBindings[SelectedBinding.Index] = binding;
+
+        UpdateActiveProfile(profile with { Bindings = updatedBindings });
+        RefreshProfileBindings(SelectedBinding.Index);
+        AddLog($"Binding updated: {binding.Input} -> {binding.Action}");
+    }
+
+    [RelayCommand]
+    private void AddBinding()
+    {
+        if (!TryCreateEditorBinding(out var binding))
+        {
+            return;
+        }
+
+        var profile = GetActiveProfile();
+        if (profile is null)
+        {
+            AddLog("Active profile not found.");
+            return;
+        }
+
+        var updatedBindings = profile.Bindings.ToList();
+        updatedBindings.Add(binding);
+
+        UpdateActiveProfile(profile with { Bindings = updatedBindings });
+        RefreshProfileBindings(updatedBindings.Count - 1);
+        AddLog($"Binding added: {binding.Input} -> {binding.Action}");
+    }
+
+    [RelayCommand]
+    private void RemoveBinding()
+    {
+        if (SelectedBinding is null)
+        {
+            AddLog("No binding selected.");
+            return;
+        }
+
+        var profile = GetActiveProfile();
+        if (profile is null || SelectedBinding.Index < 0 || SelectedBinding.Index >= profile.Bindings.Count)
+        {
+            AddLog("Selected binding no longer exists.");
+            RefreshProfileBindings();
+            return;
+        }
+
+        var removed = profile.Bindings[SelectedBinding.Index];
+        var updatedBindings = profile.Bindings.ToList();
+        updatedBindings.RemoveAt(SelectedBinding.Index);
+
+        var nextIndex = updatedBindings.Count == 0
+            ? -1
+            : Math.Min(SelectedBinding.Index, updatedBindings.Count - 1);
+
+        UpdateActiveProfile(profile with { Bindings = updatedBindings });
+        RefreshProfileBindings(nextIndex);
+        AddLog($"Binding removed: {removed.Input} -> {removed.Action}");
+    }
+
     private void OnDeviceEventReceived(object? sender, DeviceEvent deviceEvent)
     {
         Dispatcher.UIThread.Post(() => HandleDeviceEvent(deviceEvent));
@@ -430,26 +545,117 @@ public partial class MainWindowViewModel : ViewModelBase
         }
     }
 
-    private void RefreshProfileBindings()
+    private void RefreshProfileBindings(int selectedIndex = 0)
     {
         ProfileBindings.Clear();
 
-        var profile = currentConfig.Profiles.FirstOrDefault(
-            candidate => candidate.Name.Equals(currentConfig.ActiveProfile, StringComparison.OrdinalIgnoreCase));
+        var profile = GetActiveProfile();
 
         if (profile is null)
         {
+            SelectedBinding = null;
             return;
         }
 
-        foreach (var binding in profile.Bindings)
+        for (var index = 0; index < profile.Bindings.Count; index++)
         {
+            var binding = profile.Bindings[index];
             var parameters = binding.Parameters.Count == 0
                 ? ""
                 : string.Join(", ", binding.Parameters.Select(pair => $"{pair.Key}={pair.Value}"));
 
-            ProfileBindings.Add(new BindingViewModel(binding.Input, binding.Action, parameters));
+            ProfileBindings.Add(new BindingViewModel(index, binding.Input, binding.Action, parameters));
         }
+
+        isRefreshingEditor = true;
+        SelectedBinding = selectedIndex >= 0 && selectedIndex < ProfileBindings.Count
+            ? ProfileBindings[selectedIndex]
+            : null;
+        isRefreshingEditor = false;
+
+        OnSelectedBindingChanged(SelectedBinding);
+    }
+
+    private ProfileConfig? GetActiveProfile()
+    {
+        return currentConfig.Profiles.FirstOrDefault(
+            candidate => candidate.Name.Equals(currentConfig.ActiveProfile, StringComparison.OrdinalIgnoreCase));
+    }
+
+    private void UpdateActiveProfile(ProfileConfig updatedProfile)
+    {
+        currentConfig = currentConfig with
+        {
+            Profiles = currentConfig.Profiles
+                .Select(profile => profile.Name.Equals(currentConfig.ActiveProfile, StringComparison.OrdinalIgnoreCase)
+                    ? updatedProfile
+                    : profile)
+                .ToList()
+        };
+    }
+
+    private bool TryCreateEditorBinding(out ActionBinding binding)
+    {
+        binding = new ActionBinding();
+
+        var input = BindingEditorInput.Trim();
+        var action = BindingEditorAction.Trim();
+
+        if (string.IsNullOrWhiteSpace(input))
+        {
+            AddLog("Binding input is required.");
+            return false;
+        }
+
+        if (string.IsNullOrWhiteSpace(action))
+        {
+            AddLog("Binding action is required.");
+            return false;
+        }
+
+        binding = new ActionBinding
+        {
+            Input = input,
+            Action = action,
+            Parameters = ParseParameters(BindingEditorParameters, action)
+        };
+
+        return true;
+    }
+
+    private static Dictionary<string, string> ParseParameters(string parameters, string action)
+    {
+        var result = new Dictionary<string, string>();
+
+        if (string.IsNullOrWhiteSpace(parameters))
+        {
+            return result;
+        }
+
+        if (!parameters.Contains('=') && action.Equals("log", StringComparison.OrdinalIgnoreCase))
+        {
+            result["message"] = parameters.Trim();
+            return result;
+        }
+
+        foreach (var part in parameters.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+        {
+            var separatorIndex = part.IndexOf('=');
+            if (separatorIndex <= 0)
+            {
+                continue;
+            }
+
+            var key = part[..separatorIndex].Trim();
+            var value = part[(separatorIndex + 1)..].Trim();
+
+            if (!string.IsNullOrWhiteSpace(key))
+            {
+                result[key] = value;
+            }
+        }
+
+        return result;
     }
 
     private static string GetDefaultConfigPath()
