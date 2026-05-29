@@ -8,6 +8,7 @@ internal sealed class WindowsSystemMediaController : ISystemMediaController
     private const ushort VirtualKeyMediaPlayPause = 0xB3;
     private const uint InputKeyboard = 1;
     private const uint KeyEventKeyUp = 0x0002;
+    private const uint KeyEventExtendedKey = 0x0001;
 
     public Task<ActionExecutionResult> PlayPauseAsync(CancellationToken cancellationToken = default)
     {
@@ -32,7 +33,8 @@ internal sealed class WindowsSystemMediaController : ISystemMediaController
                 {
                     Keyboard = new KeyboardInput
                     {
-                        VirtualKey = virtualKey
+                        VirtualKey = virtualKey,
+                        Flags = KeyEventExtendedKey
                     }
                 }
             },
@@ -44,7 +46,7 @@ internal sealed class WindowsSystemMediaController : ISystemMediaController
                     Keyboard = new KeyboardInput
                     {
                         VirtualKey = virtualKey,
-                        Flags = KeyEventKeyUp
+                        Flags = KeyEventExtendedKey | KeyEventKeyUp
                     }
                 }
             }
@@ -57,7 +59,7 @@ internal sealed class WindowsSystemMediaController : ISystemMediaController
             return true;
         }
 
-        var error = Marshal.GetLastPInvokeError();
+        var error = Marshal.GetLastWin32Error();
         errorMessage = error == 0
             ? "SendInput failed"
             : new Win32Exception(error).Message;
@@ -79,7 +81,29 @@ internal sealed class WindowsSystemMediaController : ISystemMediaController
     private struct InputUnion
     {
         [FieldOffset(0)]
+        public MouseInput Mouse;
+
+        [FieldOffset(0)]
         public KeyboardInput Keyboard;
+
+        [FieldOffset(0)]
+        public HardwareInput Hardware;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    private struct MouseInput
+    {
+        public int X;
+
+        public int Y;
+
+        public uint MouseData;
+
+        public uint Flags;
+
+        public uint Time;
+
+        public nint ExtraInfo;
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -94,5 +118,15 @@ internal sealed class WindowsSystemMediaController : ISystemMediaController
         public uint Time;
 
         public nint ExtraInfo;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    private struct HardwareInput
+    {
+        public uint Message;
+
+        public ushort LowParam;
+
+        public ushort HighParam;
     }
 }
