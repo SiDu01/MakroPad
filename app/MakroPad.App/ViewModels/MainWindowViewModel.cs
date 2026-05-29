@@ -54,6 +54,9 @@ public partial class MainWindowViewModel : ViewModelBase
     private bool autoConnect = true;
 
     [ObservableProperty]
+    private int actionResultTimeoutMs = 3000;
+
+    [ObservableProperty]
     private BindingViewModel? selectedBinding;
 
     partial void OnSelectedBindingChanged(BindingViewModel? value)
@@ -81,6 +84,7 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         currentConfig = currentConfig with { ActiveProfile = value };
         RefreshProfileBindings();
+        _ = SendDeviceConfigAsync();
     }
 
     public string SelectedPortDisplay => string.IsNullOrWhiteSpace(SelectedPort)
@@ -171,6 +175,11 @@ public partial class MainWindowViewModel : ViewModelBase
             ConnectionStatus = "Connecting";
             await activeConnection.ConnectAsync(SelectedPort);
             ConnectionStatus = activeConnection.State.ToString();
+
+            if (activeConnection.State == DeviceConnectionState.Connected)
+            {
+                await SendDeviceConfigAsync();
+            }
         }
         catch (Exception ex)
         {
@@ -218,6 +227,7 @@ public partial class MainWindowViewModel : ViewModelBase
             currentConfig = await configStore.LoadOrCreateDefaultAsync();
             ActiveProfileName = currentConfig.ActiveProfile;
             AutoConnect = currentConfig.AppSettings.AutoConnect;
+            ActionResultTimeoutMs = currentConfig.Hardware.Display.ActionResultTimeoutMs;
 
             ProfileNames.Clear();
             foreach (var profile in currentConfig.Profiles)
@@ -227,6 +237,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
             RefreshProfileBindings();
             RefreshPorts();
+            await SendDeviceConfigAsync();
 
             AddLog($"Config loaded: {ConfigPath}");
 
@@ -249,6 +260,13 @@ public partial class MainWindowViewModel : ViewModelBase
             currentConfig = currentConfig with
             {
                 ActiveProfile = ActiveProfileName,
+                Hardware = currentConfig.Hardware with
+                {
+                    Display = currentConfig.Hardware.Display with
+                    {
+                        ActionResultTimeoutMs = Math.Max(0, ActionResultTimeoutMs)
+                    }
+                },
                 AppSettings = currentConfig.AppSettings with
                 {
                     AutoConnect = AutoConnect,
@@ -256,6 +274,7 @@ public partial class MainWindowViewModel : ViewModelBase
                 }
             };
             await configStore.SaveAsync(currentConfig);
+            await SendDeviceConfigAsync();
             AddLog($"Config saved: {ConfigPath}");
         }
         catch (Exception ex)
@@ -511,6 +530,31 @@ public partial class MainWindowViewModel : ViewModelBase
             {
                 AddLog($"Action feedback failed: {ex.Message}");
             }
+        }
+    }
+
+    private async Task SendDeviceConfigAsync()
+    {
+        if (activeConnection is null || activeConnection.State != DeviceConnectionState.Connected)
+        {
+            return;
+        }
+
+        var line = MakroPad.Core.Protocol.ProtocolCodec.Format(
+            "config",
+            new Dictionary<string, string?>
+            {
+                ["profile"] = ActiveProfileName,
+                ["actionResultTimeoutMs"] = Math.Max(0, ActionResultTimeoutMs).ToString()
+            });
+
+        try
+        {
+            await activeConnection.SendLineAsync(line);
+        }
+        catch (Exception ex)
+        {
+            AddLog($"Device config send failed: {ex.Message}");
         }
     }
 

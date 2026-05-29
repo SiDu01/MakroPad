@@ -36,6 +36,7 @@ Implemented:
 - Structured main window with device, profile, simulator, bindings, and log
   sections.
 - Auto-connect scanning for `hello;device=makropad-s3`.
+- Configurable OLED action-result timeout.
 
 Supported actions:
 
@@ -75,6 +76,10 @@ hello-ack;proto=1;app=0.1.0
 
 Incoming slider values are expected as `0..4095`. `system.volume` maps them to
 Windows master volume `0..100%`.
+
+The app sends `config;profile=...;actionResultTimeoutMs=...` to the device after
+connecting and when saving the config. `0` disables the automatic OLED reset for
+action results.
 
 ## Next Work
 

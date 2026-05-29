@@ -105,6 +105,16 @@ display;mode=media;artist=Daft%20Punk;title=Digital%20Love
 display;mode=clear
 ```
 
+You can manually configure the OLED action-result timeout:
+
+```text
+config;profile=Default;actionResultTimeoutMs=3000
+```
+
+`action-result` messages are shown temporarily and then return to the idle
+profile screen. `actionResultTimeoutMs=0` keeps action results on the display
+until another display/config/action message arrives.
+
 Button and slider events should appear as:
 
 ```text

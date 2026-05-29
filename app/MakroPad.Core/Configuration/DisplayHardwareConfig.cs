@@ -13,4 +13,6 @@ public sealed record DisplayHardwareConfig
     public int SdaPin { get; init; } = 8;
 
     public int SclPin { get; init; } = 9;
+
+    public int ActionResultTimeoutMs { get; init; } = 3000;
 }

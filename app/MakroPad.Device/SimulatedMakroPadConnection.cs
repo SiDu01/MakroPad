@@ -36,7 +36,7 @@ public sealed class SimulatedMakroPadConnection : IMakroPadConnection
         await Task.Delay(150, cancellationToken);
 
         State = DeviceConnectionState.Connected;
-        Receive("hello;proto=1;fw=0.1.0;device=makropad-s3;buttons=1;sliders=1;display=ssd1306-128x64");
+        Receive("hello;proto=1;fw=0.2.0;device=makropad-s3;buttons=20;sliders=1;display=ssd1306-128x64");
         Send("hello-ack;proto=1;app=0.1.0");
         Receive("ready;uptime=812");
     }

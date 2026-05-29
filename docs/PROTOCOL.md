@@ -246,11 +246,18 @@ Firmware-Hinweis:
 Sendet einfache Laufzeitkonfiguration.
 
 ```text
-config;profile=Default
+config;profile=Default;actionResultTimeoutMs=3000
 ```
 
 Fuer Version 1 bleibt `config` bewusst klein. Vollstaendige Hardware- und
 Profilkonfigurationen bleiben zuerst in der Desktop-App.
+
+Felder:
+
+| Key | Pflicht | Bedeutung |
+| --- | --- | --- |
+| `profile` | nein | Aktives Profil fuer den Idle-Screen |
+| `actionResultTimeoutMs` | nein | Dauer fuer `action-result` OLED-Meldungen in Millisekunden; `0` bedeutet ohne automatisches Zuruecksetzen |
 
 ### action-result
 
@@ -262,6 +269,8 @@ action-result;input=button:2;status=failed;message=OBS%20not%20connected
 ```
 
 Damit kann der ESP kurze Rueckmeldungen auf dem OLED anzeigen.
+Die Firmware zeigt diese Meldungen temporaer an und kehrt danach zum
+Idle-/Profil-Screen zurueck, wenn `actionResultTimeoutMs` groesser als `0` ist.
 
 Aktuell sendet die App `action-result` nach ausgefuehrten Actions. Beispiele:
 
@@ -291,7 +300,7 @@ error;code=unsupported_protocol;message=Expected%20proto%3D1
 ESP -> App: hello;proto=1;fw=0.1.0;device=makropad-s3;buttons=20;sliders=3;display=ssd1306-128x64
 App -> ESP: hello-ack;proto=1;app=0.1.0
 ESP -> App: ready;uptime=812
-App -> ESP: display;mode=profile;name=Default
+App -> ESP: config;profile=Default;actionResultTimeoutMs=3000
 ESP -> App: button;id=1;state=down
 ESP -> App: button;id=1;state=up
 App -> ESP: action-result;input=button:1;status=ok;message=Play%2FPause

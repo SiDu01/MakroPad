@@ -20,6 +20,7 @@ constexpr uint8_t OledSclPin = 9;
 
 constexpr uint32_t SerialBaud = 115200;
 constexpr uint32_t HelloIntervalMs = 1000;
+constexpr uint32_t DefaultActionResultTimeoutMs = 3000;
 constexpr uint32_t DebounceMs = 25;
 constexpr int SliderDeadband = 16;
 constexpr size_t MaxLineLength = 256;
@@ -57,6 +58,9 @@ String uartSerialLine;
 bool hostAcknowledged = false;
 bool displayAvailable = false;
 uint32_t lastHelloMs = 0;
+uint32_t actionResultTimeoutMs = DefaultActionResultTimeoutMs;
+uint32_t temporaryDisplayUntilMs = 0;
+String currentProfileName = "Default";
 
 String percentDecode(const String& value) {
   String decoded;
@@ -154,6 +158,10 @@ void drawStatusMessage(const String& line1, const String& line2 = "", const Stri
   display.display();
 }
 
+void drawIdleStatus() {
+  drawStatusMessage("MakroPad", currentProfileName, hostAcknowledged ? "Connected" : "Waiting for app");
+}
+
 void drawMedia(const String& artist, const String& title) {
   if (!displayAvailable) {
     return;
@@ -172,6 +180,7 @@ void drawMedia(const String& artist, const String& title) {
 
 void handleDisplayCommand(const String& line) {
   const String mode = protocolValue(line, "mode");
+  temporaryDisplayUntilMs = 0;
 
   if (mode == "clear") {
     if (displayAvailable) {
@@ -182,7 +191,11 @@ void handleDisplayCommand(const String& line) {
   }
 
   if (mode == "profile") {
-    drawStatusMessage("Profile", protocolValue(line, "name"));
+    const String profile = protocolValue(line, "name");
+    if (profile.length() > 0) {
+      currentProfileName = profile;
+    }
+    drawIdleStatus();
     return;
   }
 
@@ -208,7 +221,7 @@ void handleProtocolLine(String line) {
   if (type == "hello-ack") {
     if (protocolValue(line, "proto") == "1") {
       hostAcknowledged = true;
-      drawStatusMessage("MakroPad", "Connected");
+      drawIdleStatus();
     }
     return;
   }
@@ -231,8 +244,16 @@ void handleProtocolLine(String line) {
   if (type == "config") {
     const String profile = protocolValue(line, "profile");
     if (profile.length() > 0) {
-      drawStatusMessage("Profile", profile);
+      currentProfileName = profile;
     }
+
+    const String timeout = protocolValue(line, "actionResultTimeoutMs");
+    if (timeout.length() > 0) {
+      actionResultTimeoutMs = static_cast<uint32_t>(max(0L, timeout.toInt()));
+    }
+
+    temporaryDisplayUntilMs = 0;
+    drawIdleStatus();
     return;
   }
 
@@ -240,6 +261,9 @@ void handleProtocolLine(String line) {
     const String status = protocolValue(line, "status");
     const String message = protocolValue(line, "message");
     drawStatusMessage(status == "failed" ? "Action failed" : "Action", message);
+    temporaryDisplayUntilMs = actionResultTimeoutMs > 0
+      ? millis() + actionResultTimeoutMs
+      : 0;
     return;
   }
 }
@@ -350,6 +374,17 @@ void initSliders() {
   }
 }
 
+void updateDisplayTimeout() {
+  if (temporaryDisplayUntilMs == 0) {
+    return;
+  }
+
+  if (static_cast<int32_t>(millis() - temporaryDisplayUntilMs) >= 0) {
+    temporaryDisplayUntilMs = 0;
+    drawIdleStatus();
+  }
+}
+
 void setup() {
   Serial.begin(SerialBaud);
   Serial0.begin(SerialBaud);
@@ -371,6 +406,8 @@ void loop() {
     lastHelloMs = now;
     sendHello();
   }
+
+  updateDisplayTimeout();
 
   for (size_t index = 0; index < ActiveButtonCount; index++) {
     pollButton(buttons[index]);
