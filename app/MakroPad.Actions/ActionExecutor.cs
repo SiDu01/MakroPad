@@ -4,16 +4,37 @@ public sealed class ActionExecutor
 {
     private readonly ISystemMediaController mediaController;
     private readonly ISystemVolumeController volumeController;
+    private readonly IKeyboardController keyboardController;
+    private readonly ISystemLauncher systemLauncher;
 
     public ActionExecutor()
-        : this(SystemMediaControllerFactory.Create(), SystemVolumeControllerFactory.Create())
+        : this(
+            SystemMediaControllerFactory.Create(),
+            SystemVolumeControllerFactory.Create(),
+            KeyboardControllerFactory.Create(),
+            SystemLauncherFactory.Create())
     {
     }
 
     public ActionExecutor(ISystemMediaController mediaController, ISystemVolumeController volumeController)
+        : this(
+            mediaController,
+            volumeController,
+            KeyboardControllerFactory.Create(),
+            SystemLauncherFactory.Create())
+    {
+    }
+
+    public ActionExecutor(
+        ISystemMediaController mediaController,
+        ISystemVolumeController volumeController,
+        IKeyboardController keyboardController,
+        ISystemLauncher systemLauncher)
     {
         this.mediaController = mediaController;
         this.volumeController = volumeController;
+        this.keyboardController = keyboardController;
+        this.systemLauncher = systemLauncher;
     }
 
     public Task<ActionExecutionResult> ExecuteAsync(
@@ -25,7 +46,16 @@ public sealed class ActionExecutor
         return context.Binding.Action switch
         {
             "media.playPause" => mediaController.PlayPauseAsync(cancellationToken),
+            "media.nextTrack" => mediaController.NextTrackAsync(cancellationToken),
+            "media.previousTrack" => mediaController.PreviousTrackAsync(cancellationToken),
+            "media.stop" => mediaController.StopAsync(cancellationToken),
+            "media.volumeUp" => mediaController.VolumeUpAsync(cancellationToken),
+            "media.volumeDown" => mediaController.VolumeDownAsync(cancellationToken),
+            "media.mute" => mediaController.MuteAsync(cancellationToken),
             "system.volume" => SetSystemVolumeAsync(context.Value, cancellationToken),
+            "system.openUrl" => OpenUrlAsync(context.Binding.Parameters, cancellationToken),
+            "system.openApp" => OpenAppAsync(context.Binding.Parameters, cancellationToken),
+            "keyboard.shortcut" => SendShortcutAsync(context.Binding.Parameters, cancellationToken),
             "log" => Task.FromResult(ActionExecutionResult.Ok(context.Binding.Parameters.GetValueOrDefault("message", "Log action matched"))),
             "" => Task.FromResult(ActionExecutionResult.Failed("Action is empty")),
             _ => Task.FromResult(ActionExecutionResult.Failed($"Unsupported action: {context.Binding.Action}"))
@@ -44,5 +74,50 @@ public sealed class ActionExecutor
         var clampedRawValue = Math.Clamp(rawValue, 0, 4095);
         var percent = (int)Math.Round(clampedRawValue / 4095.0 * 100);
         return volumeController.SetMasterVolumeAsync(percent, cancellationToken);
+    }
+
+    private Task<ActionExecutionResult> SendShortcutAsync(
+        IReadOnlyDictionary<string, string> parameters,
+        CancellationToken cancellationToken)
+    {
+        var shortcut = GetFirstParameter(parameters, "keys", "shortcut");
+        return string.IsNullOrWhiteSpace(shortcut)
+            ? Task.FromResult(ActionExecutionResult.Failed("Shortcut parameter is required"))
+            : keyboardController.SendShortcutAsync(shortcut, cancellationToken);
+    }
+
+    private Task<ActionExecutionResult> OpenUrlAsync(
+        IReadOnlyDictionary<string, string> parameters,
+        CancellationToken cancellationToken)
+    {
+        var url = GetFirstParameter(parameters, "url", "target");
+        return string.IsNullOrWhiteSpace(url)
+            ? Task.FromResult(ActionExecutionResult.Failed("URL parameter is required"))
+            : systemLauncher.OpenUrlAsync(url, cancellationToken);
+    }
+
+    private Task<ActionExecutionResult> OpenAppAsync(
+        IReadOnlyDictionary<string, string> parameters,
+        CancellationToken cancellationToken)
+    {
+        var target = GetFirstParameter(parameters, "path", "target", "app");
+        return string.IsNullOrWhiteSpace(target)
+            ? Task.FromResult(ActionExecutionResult.Failed("App target parameter is required"))
+            : systemLauncher.OpenAppAsync(target, cancellationToken);
+    }
+
+    private static string? GetFirstParameter(
+        IReadOnlyDictionary<string, string> parameters,
+        params string[] keys)
+    {
+        foreach (var key in keys)
+        {
+            if (parameters.TryGetValue(key, out var value))
+            {
+                return value;
+            }
+        }
+
+        return null;
     }
 }

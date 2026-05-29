@@ -30,12 +30,27 @@ Implemented:
 - First action pipeline that matches device inputs to profile bindings.
 - Slider action throttling to reduce noisy repeated execution.
 - Unit tests for protocol encoding and action pipeline behavior.
-- Windows `media.playPause` action via the system media key.
+- Windows media key actions.
 - Windows `system.volume` action via CoreAudio.
-- Read-only profile binding overview in the main UI.
+- Basic editable profile binding overview in the main UI.
 - Structured main window with device, profile, simulator, bindings, and log
   sections.
 - Auto-connect scanning for `hello;device=makropad-s3`.
+
+Supported actions:
+
+- `media.playPause`
+- `media.nextTrack`
+- `media.previousTrack`
+- `media.stop`
+- `media.volumeUp`
+- `media.volumeDown`
+- `media.mute`
+- `system.volume`
+- `system.openUrl` with `url=https://example.com`
+- `system.openApp` with `path=notepad.exe`
+- `keyboard.shortcut` with `keys=Ctrl+Alt+T`
+- `log` with `message=Hello`
 
 Default bindings:
 
@@ -63,10 +78,9 @@ Windows master volume `0..100%`.
 
 ## Next Work
 
-- Editable profile and binding UI.
-- Auto-connect to the last known MakroPad serial port.
 - Spotify or Windows Media Session metadata for OLED display updates.
 - Linux implementations for media and volume actions.
+- Richer config editor controls for action-specific parameters.
 
 ## Run
 

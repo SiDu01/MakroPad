@@ -13,7 +13,11 @@ public sealed class ActionExecutorTests
     public async Task ExecuteAsyncMapsSliderValueToVolumePercent(string rawValue, int expectedPercent)
     {
         var volumeController = new FakeVolumeController();
-        var executor = new ActionExecutor(new FakeMediaController(), volumeController);
+        var executor = new ActionExecutor(
+            new FakeMediaController(),
+            volumeController,
+            new FakeKeyboardController(),
+            new FakeSystemLauncher());
 
         var result = await executor.ExecuteAsync(new ActionExecutionContext(
             "slider:1",
@@ -28,7 +32,11 @@ public sealed class ActionExecutorTests
     public async Task ExecuteAsyncFailsVolumeActionWhenValueIsInvalid()
     {
         var volumeController = new FakeVolumeController();
-        var executor = new ActionExecutor(new FakeMediaController(), volumeController);
+        var executor = new ActionExecutor(
+            new FakeMediaController(),
+            volumeController,
+            new FakeKeyboardController(),
+            new FakeSystemLauncher());
 
         var result = await executor.ExecuteAsync(new ActionExecutionContext(
             "slider:1",
@@ -39,13 +47,132 @@ public sealed class ActionExecutorTests
         Assert.Empty(volumeController.SetVolumes);
     }
 
+    [Theory]
+    [InlineData("media.playPause", "playPause")]
+    [InlineData("media.nextTrack", "nextTrack")]
+    [InlineData("media.previousTrack", "previousTrack")]
+    [InlineData("media.stop", "stop")]
+    [InlineData("media.volumeUp", "volumeUp")]
+    [InlineData("media.volumeDown", "volumeDown")]
+    [InlineData("media.mute", "mute")]
+    public async Task ExecuteAsyncRunsMediaActions(string action, string expectedCall)
+    {
+        var mediaController = new FakeMediaController();
+        var executor = new ActionExecutor(
+            mediaController,
+            new FakeVolumeController(),
+            new FakeKeyboardController(),
+            new FakeSystemLauncher());
+
+        var result = await executor.ExecuteAsync(new ActionExecutionContext(
+            "button:1",
+            new ActionBinding { Action = action },
+            null));
+
+        Assert.True(result.Succeeded);
+        Assert.Equal(expectedCall, mediaController.Calls.Single());
+    }
+
+    [Fact]
+    public async Task ExecuteAsyncRunsKeyboardShortcutAction()
+    {
+        var keyboardController = new FakeKeyboardController();
+        var executor = new ActionExecutor(
+            new FakeMediaController(),
+            new FakeVolumeController(),
+            keyboardController,
+            new FakeSystemLauncher());
+
+        var result = await executor.ExecuteAsync(new ActionExecutionContext(
+            "button:1",
+            new ActionBinding
+            {
+                Action = "keyboard.shortcut",
+                Parameters = new Dictionary<string, string> { ["keys"] = "Ctrl+Alt+T" }
+            },
+            null));
+
+        Assert.True(result.Succeeded);
+        Assert.Equal("Ctrl+Alt+T", keyboardController.Shortcuts.Single());
+    }
+
+    [Fact]
+    public async Task ExecuteAsyncRunsOpenUrlAction()
+    {
+        var launcher = new FakeSystemLauncher();
+        var executor = new ActionExecutor(
+            new FakeMediaController(),
+            new FakeVolumeController(),
+            new FakeKeyboardController(),
+            launcher);
+
+        var result = await executor.ExecuteAsync(new ActionExecutionContext(
+            "button:1",
+            new ActionBinding
+            {
+                Action = "system.openUrl",
+                Parameters = new Dictionary<string, string> { ["url"] = "https://example.com" }
+            },
+            null));
+
+        Assert.True(result.Succeeded);
+        Assert.Equal("https://example.com", launcher.Urls.Single());
+    }
+
+    [Fact]
+    public async Task ExecuteAsyncRunsOpenAppAction()
+    {
+        var launcher = new FakeSystemLauncher();
+        var executor = new ActionExecutor(
+            new FakeMediaController(),
+            new FakeVolumeController(),
+            new FakeKeyboardController(),
+            launcher);
+
+        var result = await executor.ExecuteAsync(new ActionExecutionContext(
+            "button:1",
+            new ActionBinding
+            {
+                Action = "system.openApp",
+                Parameters = new Dictionary<string, string> { ["path"] = "notepad.exe" }
+            },
+            null));
+
+        Assert.True(result.Succeeded);
+        Assert.Equal("notepad.exe", launcher.Apps.Single());
+    }
+
     private sealed class FakeMediaController : ISystemMediaController
     {
+        public List<string> Calls { get; } = [];
+
         public Task<ActionExecutionResult> PlayPauseAsync(CancellationToken cancellationToken = default)
+            => RecordAsync("playPause", cancellationToken);
+
+        public Task<ActionExecutionResult> NextTrackAsync(CancellationToken cancellationToken = default)
+            => RecordAsync("nextTrack", cancellationToken);
+
+        public Task<ActionExecutionResult> PreviousTrackAsync(CancellationToken cancellationToken = default)
+            => RecordAsync("previousTrack", cancellationToken);
+
+        public Task<ActionExecutionResult> StopAsync(CancellationToken cancellationToken = default)
+            => RecordAsync("stop", cancellationToken);
+
+        public Task<ActionExecutionResult> VolumeUpAsync(CancellationToken cancellationToken = default)
+            => RecordAsync("volumeUp", cancellationToken);
+
+        public Task<ActionExecutionResult> VolumeDownAsync(CancellationToken cancellationToken = default)
+            => RecordAsync("volumeDown", cancellationToken);
+
+        public Task<ActionExecutionResult> MuteAsync(CancellationToken cancellationToken = default)
+            => RecordAsync("mute", cancellationToken);
+
+        private Task<ActionExecutionResult> RecordAsync(string call, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
+            Calls.Add(call);
 
-            return Task.FromResult(ActionExecutionResult.Ok("Play/Pause"));
+            return Task.FromResult(ActionExecutionResult.Ok(call));
         }
     }
 
@@ -61,6 +188,48 @@ public sealed class ActionExecutorTests
             SetVolumes.Add(percent);
 
             return Task.FromResult(ActionExecutionResult.Ok($"Volume {percent}%"));
+        }
+    }
+
+    private sealed class FakeKeyboardController : IKeyboardController
+    {
+        public List<string> Shortcuts { get; } = [];
+
+        public Task<ActionExecutionResult> SendShortcutAsync(
+            string shortcut,
+            CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            Shortcuts.Add(shortcut);
+
+            return Task.FromResult(ActionExecutionResult.Ok($"Shortcut {shortcut}"));
+        }
+    }
+
+    private sealed class FakeSystemLauncher : ISystemLauncher
+    {
+        public List<string> Urls { get; } = [];
+
+        public List<string> Apps { get; } = [];
+
+        public Task<ActionExecutionResult> OpenUrlAsync(
+            string url,
+            CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            Urls.Add(url);
+
+            return Task.FromResult(ActionExecutionResult.Ok($"URL {url}"));
+        }
+
+        public Task<ActionExecutionResult> OpenAppAsync(
+            string target,
+            CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            Apps.Add(target);
+
+            return Task.FromResult(ActionExecutionResult.Ok($"App {target}"));
         }
     }
 }

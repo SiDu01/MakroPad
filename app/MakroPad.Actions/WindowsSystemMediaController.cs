@@ -6,20 +6,50 @@ namespace MakroPad.Actions;
 internal sealed class WindowsSystemMediaController : ISystemMediaController
 {
     private const ushort VirtualKeyMediaPlayPause = 0xB3;
+    private const ushort VirtualKeyMediaNextTrack = 0xB0;
+    private const ushort VirtualKeyMediaPreviousTrack = 0xB1;
+    private const ushort VirtualKeyMediaStop = 0xB2;
+    private const ushort VirtualKeyVolumeMute = 0xAD;
+    private const ushort VirtualKeyVolumeDown = 0xAE;
+    private const ushort VirtualKeyVolumeUp = 0xAF;
     private const uint InputKeyboard = 1;
     private const uint KeyEventKeyUp = 0x0002;
     private const uint KeyEventExtendedKey = 0x0001;
 
     public Task<ActionExecutionResult> PlayPauseAsync(CancellationToken cancellationToken = default)
+        => SendMediaKeyAsync(VirtualKeyMediaPlayPause, "Play/Pause", cancellationToken);
+
+    public Task<ActionExecutionResult> NextTrackAsync(CancellationToken cancellationToken = default)
+        => SendMediaKeyAsync(VirtualKeyMediaNextTrack, "Next track", cancellationToken);
+
+    public Task<ActionExecutionResult> PreviousTrackAsync(CancellationToken cancellationToken = default)
+        => SendMediaKeyAsync(VirtualKeyMediaPreviousTrack, "Previous track", cancellationToken);
+
+    public Task<ActionExecutionResult> StopAsync(CancellationToken cancellationToken = default)
+        => SendMediaKeyAsync(VirtualKeyMediaStop, "Stop", cancellationToken);
+
+    public Task<ActionExecutionResult> VolumeUpAsync(CancellationToken cancellationToken = default)
+        => SendMediaKeyAsync(VirtualKeyVolumeUp, "Volume up", cancellationToken);
+
+    public Task<ActionExecutionResult> VolumeDownAsync(CancellationToken cancellationToken = default)
+        => SendMediaKeyAsync(VirtualKeyVolumeDown, "Volume down", cancellationToken);
+
+    public Task<ActionExecutionResult> MuteAsync(CancellationToken cancellationToken = default)
+        => SendMediaKeyAsync(VirtualKeyVolumeMute, "Mute", cancellationToken);
+
+    private static Task<ActionExecutionResult> SendMediaKeyAsync(
+        ushort virtualKey,
+        string actionName,
+        CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        if (!TrySendMediaKey(VirtualKeyMediaPlayPause, out var errorMessage))
+        if (!TrySendMediaKey(virtualKey, out var errorMessage))
         {
             return Task.FromResult(ActionExecutionResult.Failed(errorMessage));
         }
 
-        return Task.FromResult(ActionExecutionResult.Ok("Play/Pause"));
+        return Task.FromResult(ActionExecutionResult.Ok(actionName));
     }
 
     private static bool TrySendMediaKey(ushort virtualKey, out string errorMessage)

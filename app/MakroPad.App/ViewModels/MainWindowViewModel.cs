@@ -112,7 +112,16 @@ public partial class MainWindowViewModel : ViewModelBase
     public IReadOnlyList<string> AvailableActions { get; } =
     [
         "media.playPause",
+        "media.nextTrack",
+        "media.previousTrack",
+        "media.stop",
+        "media.volumeUp",
+        "media.volumeDown",
+        "media.mute",
         "system.volume",
+        "system.openUrl",
+        "system.openApp",
+        "keyboard.shortcut",
         "log"
     ];
 

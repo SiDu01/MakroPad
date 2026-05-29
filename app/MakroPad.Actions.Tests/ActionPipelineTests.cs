@@ -54,6 +54,24 @@ public sealed class ActionPipelineTests
 
             return Task.FromResult(ActionExecutionResult.Ok("Play/Pause"));
         }
+
+        public Task<ActionExecutionResult> NextTrackAsync(CancellationToken cancellationToken = default)
+            => PlayPauseAsync(cancellationToken);
+
+        public Task<ActionExecutionResult> PreviousTrackAsync(CancellationToken cancellationToken = default)
+            => PlayPauseAsync(cancellationToken);
+
+        public Task<ActionExecutionResult> StopAsync(CancellationToken cancellationToken = default)
+            => PlayPauseAsync(cancellationToken);
+
+        public Task<ActionExecutionResult> VolumeUpAsync(CancellationToken cancellationToken = default)
+            => PlayPauseAsync(cancellationToken);
+
+        public Task<ActionExecutionResult> VolumeDownAsync(CancellationToken cancellationToken = default)
+            => PlayPauseAsync(cancellationToken);
+
+        public Task<ActionExecutionResult> MuteAsync(CancellationToken cancellationToken = default)
+            => PlayPauseAsync(cancellationToken);
     }
 
     private sealed class FakeVolumeController : ISystemVolumeController
