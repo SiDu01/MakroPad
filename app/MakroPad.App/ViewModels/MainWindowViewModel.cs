@@ -42,6 +42,7 @@ public partial class MainWindowViewModel : ViewModelBase
     private readonly MakroPadDeviceProbe deviceProbe = new();
     private readonly MakroPadConfigStore configStore;
     private readonly ISystemVolumeController systemVolumeController = SystemVolumeControllerFactory.Create();
+    private readonly IApplicationVolumeController applicationVolumeController = ApplicationVolumeControllerFactory.Create();
     private readonly ActionPipeline actionPipeline = new(new ActionResolver(), new ActionExecutor());
     private readonly INowPlayingProvider nowPlayingProvider = new ProcessWindowNowPlayingProvider();
     private readonly CancellationTokenSource nowPlayingCancellation = new();
@@ -136,6 +137,31 @@ public partial class MainWindowViewModel : ViewModelBase
     }
 
     [ObservableProperty]
+    private string defaultScreenLine3 = "";
+
+    partial void OnDefaultScreenLine3Changed(string value)
+    {
+        RefreshOledPreview();
+    }
+
+    [ObservableProperty]
+    private string defaultScreenLine4 = "";
+
+    partial void OnDefaultScreenLine4Changed(string value)
+    {
+        RefreshOledPreview();
+    }
+
+    [ObservableProperty]
+    private int defaultScreenRows = 3;
+
+    partial void OnDefaultScreenRowsChanged(int value)
+    {
+        RefreshOledPreview();
+        OnPropertyChanged(nameof(UsesFiveLineOledLayout));
+    }
+
+    [ObservableProperty]
     private BindingViewModel? selectedBinding;
 
     partial void OnSelectedBindingChanged(BindingViewModel? value)
@@ -159,10 +185,38 @@ public partial class MainWindowViewModel : ViewModelBase
     partial void OnBindingEditorActionChanged(string value)
     {
         RefreshActionEditorHints();
+        RefreshStructuredParameterFromRaw();
+        OnPropertyChanged(nameof(HasStructuredParameter));
+        OnPropertyChanged(nameof(IsAppVolumeAction));
+        OnPropertyChanged(nameof(ShowsStructuredTextInput));
+        OnPropertyChanged(nameof(StructuredParameterLabel));
     }
 
     [ObservableProperty]
     private string bindingEditorParameters = "";
+
+    partial void OnBindingEditorParametersChanged(string value)
+    {
+        if (isRefreshingEditor)
+        {
+            return;
+        }
+
+        RefreshStructuredParameterFromRaw();
+    }
+
+    [ObservableProperty]
+    private string structuredParameterValue = "";
+
+    partial void OnStructuredParameterValueChanged(string value)
+    {
+        if (isRefreshingEditor)
+        {
+            return;
+        }
+
+        UpdateRawParametersFromStructuredValue();
+    }
 
     [ObservableProperty]
     private string bindingParameterPlaceholder = "";
@@ -217,9 +271,21 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public string OledPreviewLine2 => FitOledPreviewLine(RenderDefaultScreenTemplate(DefaultScreenLine2));
 
+    public string OledPreviewLine3 => FitOledPreviewLine(RenderDefaultScreenTemplate(DefaultScreenLine3));
+
+    public string OledPreviewLine4 => FitOledPreviewLine(RenderDefaultScreenTemplate(DefaultScreenLine4));
+
+    public bool UsesFiveLineOledLayout => DefaultScreenRows == 5;
+
+    public IReadOnlyList<int> AvailableOledLayoutRows { get; } = [3, 5];
+
     public ObservableCollection<string> AvailablePorts { get; } = [];
 
     public ObservableCollection<string> EventLog { get; } = [];
+
+    public ObservableCollection<ApplicationAudioSession> AudioSessions { get; } = [];
+
+    public ObservableCollection<string> AvailableAudioProcessNames { get; } = [];
 
     public ObservableCollection<string> ProfileNames { get; } = [];
 
@@ -246,6 +312,7 @@ public partial class MainWindowViewModel : ViewModelBase
         configStore = new MakroPadConfigStore(ConfigPath);
         RefreshActionEditorHints();
         RefreshPorts();
+        _ = RefreshAudioSessionsAsync();
         _ = RunNowPlayingLoopAsync(nowPlayingCancellation.Token);
         _ = LoadConfigAsync();
     }
@@ -342,9 +409,12 @@ public partial class MainWindowViewModel : ViewModelBase
             AutoConnect = currentConfig.AppSettings.AutoConnect;
             EnableNowPlayingDisplay = currentConfig.AppSettings.EnableNowPlayingDisplay;
             ActionResultTimeoutMs = currentConfig.Hardware.Display.ActionResultTimeoutMs;
+            DefaultScreenRows = NormalizeDefaultScreenRows(currentConfig.Hardware.Display.DefaultLayoutRows);
             DefaultScreenTitle = currentConfig.Hardware.Display.DefaultTitle;
             DefaultScreenLine1 = currentConfig.Hardware.Display.DefaultLine1;
             DefaultScreenLine2 = currentConfig.Hardware.Display.DefaultLine2;
+            DefaultScreenLine3 = currentConfig.Hardware.Display.DefaultLine3;
+            DefaultScreenLine4 = currentConfig.Hardware.Display.DefaultLine4;
 
             RefreshProfileNames();
 
@@ -378,9 +448,12 @@ public partial class MainWindowViewModel : ViewModelBase
                     Display = currentConfig.Hardware.Display with
                     {
                         ActionResultTimeoutMs = Math.Max(0, ActionResultTimeoutMs),
+                        DefaultLayoutRows = NormalizeDefaultScreenRows(DefaultScreenRows),
                         DefaultTitle = NormalizeDisplayLine(DefaultScreenTitle, "MakroPad"),
                         DefaultLine1 = NormalizeDisplayLine(DefaultScreenLine1, "{profile}"),
-                        DefaultLine2 = NormalizeDisplayLine(DefaultScreenLine2, "{status}")
+                        DefaultLine2 = NormalizeDisplayLine(DefaultScreenLine2, "{status}"),
+                        DefaultLine3 = DefaultScreenLine3.Trim(),
+                        DefaultLine4 = DefaultScreenLine4.Trim()
                     }
                 },
                 AppSettings = currentConfig.AppSettings with
@@ -623,6 +696,28 @@ public partial class MainWindowViewModel : ViewModelBase
     }
 
     [RelayCommand]
+    private async Task RefreshAudioSessionsAsync()
+    {
+        var sessions = await applicationVolumeController.GetAudioSessionsAsync();
+
+        AudioSessions.Clear();
+        AvailableAudioProcessNames.Clear();
+
+        foreach (var session in sessions)
+        {
+            AudioSessions.Add(session);
+        }
+
+        foreach (var processName in sessions
+            .Select(session => session.ProcessName)
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .OrderBy(name => name, StringComparer.OrdinalIgnoreCase))
+        {
+            AvailableAudioProcessNames.Add(processName);
+        }
+    }
+
+    [RelayCommand]
     private void ApplyBinding()
     {
         if (SelectedBinding is null)
@@ -825,9 +920,12 @@ public partial class MainWindowViewModel : ViewModelBase
             {
                 ["profile"] = ActiveProfileName,
                 ["actionResultTimeoutMs"] = Math.Max(0, ActionResultTimeoutMs).ToString(),
+                ["defaultRows"] = NormalizeDefaultScreenRows(DefaultScreenRows).ToString(),
                 ["defaultTitle"] = NormalizeDisplayLine(DefaultScreenTitle, "MakroPad"),
                 ["defaultLine1"] = NormalizeDisplayLine(DefaultScreenLine1, "{profile}"),
                 ["defaultLine2"] = NormalizeDisplayLine(DefaultScreenLine2, "{status}"),
+                ["defaultLine3"] = DefaultScreenLine3.Trim(),
+                ["defaultLine4"] = DefaultScreenLine4.Trim(),
                 ["time"] = now.ToString("HH:mm"),
                 ["date"] = now.ToString("dd.MM.yyyy"),
                 ["volumeSystem"] = systemVolume is null ? null : $"{systemVolume}%",
@@ -1198,7 +1296,9 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         return DefaultScreenTitle.Contains("{media.", StringComparison.OrdinalIgnoreCase)
             || DefaultScreenLine1.Contains("{media.", StringComparison.OrdinalIgnoreCase)
-            || DefaultScreenLine2.Contains("{media.", StringComparison.OrdinalIgnoreCase);
+            || DefaultScreenLine2.Contains("{media.", StringComparison.OrdinalIgnoreCase)
+            || DefaultScreenLine3.Contains("{media.", StringComparison.OrdinalIgnoreCase)
+            || DefaultScreenLine4.Contains("{media.", StringComparison.OrdinalIgnoreCase);
     }
 
     private void RefreshOledPreview()
@@ -1206,6 +1306,8 @@ public partial class MainWindowViewModel : ViewModelBase
         OnPropertyChanged(nameof(OledPreviewTitle));
         OnPropertyChanged(nameof(OledPreviewLine1));
         OnPropertyChanged(nameof(OledPreviewLine2));
+        OnPropertyChanged(nameof(OledPreviewLine3));
+        OnPropertyChanged(nameof(OledPreviewLine4));
     }
 
     private string RenderDefaultScreenTemplate(string template)
@@ -1236,6 +1338,65 @@ public partial class MainWindowViewModel : ViewModelBase
         return trimmed.Length <= maxCharacters
             ? trimmed
             : trimmed[..(maxCharacters - 2)] + "..";
+    }
+
+    private void RefreshStructuredParameterFromRaw()
+    {
+        var key = GetStructuredParameterKey(BindingEditorAction);
+        isRefreshingEditor = true;
+        StructuredParameterValue = key is null
+            ? ""
+            : ParseParameters(BindingEditorParameters, BindingEditorAction).GetValueOrDefault(key, "");
+        isRefreshingEditor = false;
+    }
+
+    private void UpdateRawParametersFromStructuredValue()
+    {
+        var key = GetStructuredParameterKey(BindingEditorAction);
+        if (key is null)
+        {
+            return;
+        }
+
+        isRefreshingEditor = true;
+        BindingEditorParameters = string.IsNullOrWhiteSpace(StructuredParameterValue)
+            ? ""
+            : $"{key}={StructuredParameterValue.Trim()}";
+        isRefreshingEditor = false;
+    }
+
+    private static string? GetStructuredParameterKey(string action)
+    {
+        return action switch
+        {
+            "app.volume" => "process",
+            "system.openUrl" => "url",
+            "system.openApp" => "path",
+            "keyboard.shortcut" => "keys",
+            "log" => "message",
+            _ => null
+        };
+    }
+
+    public bool HasStructuredParameter => GetStructuredParameterKey(BindingEditorAction) is not null;
+
+    public bool IsAppVolumeAction => BindingEditorAction.Equals("app.volume", StringComparison.OrdinalIgnoreCase);
+
+    public bool ShowsStructuredTextInput => HasStructuredParameter && !IsAppVolumeAction;
+
+    public string StructuredParameterLabel => BindingEditorAction switch
+    {
+        "app.volume" => "Process",
+        "system.openUrl" => "URL",
+        "system.openApp" => "App or file",
+        "keyboard.shortcut" => "Shortcut",
+        "log" => "Message",
+        _ => "Parameter"
+    };
+
+    private static int NormalizeDefaultScreenRows(int rows)
+    {
+        return rows == 5 ? 5 : 3;
     }
 
     private sealed record ActionDefinition(

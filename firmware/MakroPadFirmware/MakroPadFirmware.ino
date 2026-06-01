@@ -66,9 +66,12 @@ String currentProfileName = "Default";
 String preferredDisplayMode = "profile";
 String currentMediaArtist;
 String currentMediaTitle;
+uint8_t defaultScreenRows = 3;
 String defaultScreenTitle = "MakroPad";
 String defaultScreenLine1 = "{profile}";
 String defaultScreenLine2 = "{status}";
+String defaultScreenLine3;
+String defaultScreenLine4;
 String currentTime;
 String currentDate;
 String currentSystemVolume;
@@ -149,7 +152,12 @@ void sendError(const char* code, const char* message) {
 
 String fitDisplayLine(const String& line);
 
-void drawStatusMessage(const String& line1, const String& line2 = "", const String& line3 = "") {
+void drawStatusMessage(
+  const String& line1,
+  const String& line2 = "",
+  const String& line3 = "",
+  const String& line4 = "",
+  const String& line5 = "") {
   if (!displayAvailable) {
     return;
   }
@@ -166,6 +174,14 @@ void drawStatusMessage(const String& line1, const String& line2 = "", const Stri
 
   if (line3.length() > 0) {
     display.println(fitDisplayLine(line3));
+  }
+
+  if (line4.length() > 0) {
+    display.println(fitDisplayLine(line4));
+  }
+
+  if (line5.length() > 0) {
+    display.println(fitDisplayLine(line5));
   }
 
   display.display();
@@ -216,6 +232,16 @@ String renderDefaultScreenLine(String line, const String& status) {
 
 void drawIdleStatus() {
   const String status = hostAcknowledged ? "Connected" : "Waiting for app";
+  if (defaultScreenRows == 5) {
+    drawStatusMessage(
+      renderDefaultScreenLine(defaultScreenTitle, status),
+      renderDefaultScreenLine(defaultScreenLine1, status),
+      renderDefaultScreenLine(defaultScreenLine2, status),
+      renderDefaultScreenLine(defaultScreenLine3, status),
+      renderDefaultScreenLine(defaultScreenLine4, status));
+    return;
+  }
+
   drawStatusMessage(
     renderDefaultScreenLine(defaultScreenTitle, status),
     renderDefaultScreenLine(defaultScreenLine1, status),
@@ -345,6 +371,13 @@ void handleProtocolLine(String line) {
       preferredDisplayMode = displayMode;
     }
 
+    const String configuredDefaultRows = protocolValue(line, "defaultRows");
+    if (configuredDefaultRows == "5") {
+      defaultScreenRows = 5;
+    } else if (configuredDefaultRows == "3") {
+      defaultScreenRows = 3;
+    }
+
     const String configuredDefaultTitle = protocolValue(line, "defaultTitle");
     if (configuredDefaultTitle.length() > 0) {
       defaultScreenTitle = configuredDefaultTitle;
@@ -359,6 +392,9 @@ void handleProtocolLine(String line) {
     if (configuredDefaultLine2.length() > 0) {
       defaultScreenLine2 = configuredDefaultLine2;
     }
+
+    defaultScreenLine3 = protocolValue(line, "defaultLine3");
+    defaultScreenLine4 = protocolValue(line, "defaultLine4");
 
     currentTime = protocolValue(line, "time");
     currentDate = protocolValue(line, "date");

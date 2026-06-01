@@ -191,7 +191,18 @@
 
                                 <StackPanel Grid.Row="1"
                                             Grid.ColumnSpan="3"
-                                            Spacing="3">
+                                            Spacing="8">
+                                    <StackPanel IsVisible="{Binding HasStructuredParameter}"
+                                                Spacing="6">
+                                        <TextBlock Classes="label"
+                                                   Text="{Binding StructuredParameterLabel}" />
+                                        <TextBox IsVisible="{Binding ShowsStructuredTextInput}"
+                                                 Text="{Binding StructuredParameterValue}" />
+                                        <ComboBox IsVisible="{Binding IsAppVolumeAction}"
+                                                  ItemsSource="{Binding AvailableAudioProcessNames}"
+                                                  SelectedItem="{Binding StructuredParameterValue}"
+                                                  HorizontalAlignment="Stretch" />
+                                    </StackPanel>
                                     <TextBlock Text="{Binding BindingActionDescription}"
                                                TextWrapping="Wrap" />
                                     <TextBlock Text="{Binding BindingParameterHint}"
@@ -444,12 +455,26 @@
                                                FontSize="16"
                                                FontWeight="SemiBold"
                                                Margin="0,8,0,0" />
+                                    <TextBlock Classes="label" Text="Layout rows" />
+                                    <ComboBox ItemsSource="{Binding AvailableOledLayoutRows}"
+                                              SelectedItem="{Binding DefaultScreenRows}"
+                                              HorizontalAlignment="Stretch" />
                                     <TextBlock Classes="label" Text="Title" />
                                     <TextBox Text="{Binding DefaultScreenTitle}" />
                                     <TextBlock Classes="label" Text="Line 1" />
                                     <TextBox Text="{Binding DefaultScreenLine1}" />
                                     <TextBlock Classes="label" Text="Line 2" />
                                     <TextBox Text="{Binding DefaultScreenLine2}" />
+                                    <TextBlock IsVisible="{Binding UsesFiveLineOledLayout}"
+                                               Classes="label"
+                                               Text="Line 3" />
+                                    <TextBox IsVisible="{Binding UsesFiveLineOledLayout}"
+                                             Text="{Binding DefaultScreenLine3}" />
+                                    <TextBlock IsVisible="{Binding UsesFiveLineOledLayout}"
+                                               Classes="label"
+                                               Text="Line 4" />
+                                    <TextBox IsVisible="{Binding UsesFiveLineOledLayout}"
+                                             Text="{Binding DefaultScreenLine4}" />
                                     <TextBlock Classes="muted"
                                                FontSize="12"
                                                TextWrapping="Wrap"
@@ -473,6 +498,16 @@
                                                        FontSize="16"
                                                        TextWrapping="NoWrap" />
                                             <TextBlock Text="{Binding OledPreviewLine2}"
+                                                       FontFamily="Consolas"
+                                                       FontSize="16"
+                                                       TextWrapping="NoWrap" />
+                                            <TextBlock IsVisible="{Binding UsesFiveLineOledLayout}"
+                                                       Text="{Binding OledPreviewLine3}"
+                                                       FontFamily="Consolas"
+                                                       FontSize="16"
+                                                       TextWrapping="NoWrap" />
+                                            <TextBlock IsVisible="{Binding UsesFiveLineOledLayout}"
+                                                       Text="{Binding OledPreviewLine4}"
                                                        FontFamily="Consolas"
                                                        FontSize="16"
                                                        TextWrapping="NoWrap" />
@@ -507,26 +542,70 @@
                                    Text="Serielles Protokoll und interne Meldungen." />
                     </StackPanel>
 
-                    <Border Grid.Row="1"
-                            Classes="panel">
-                        <Grid RowDefinitions="Auto,*"
-                              RowSpacing="12">
-                            <TextBlock Text="Protocol Log"
-                                       FontSize="16"
-                                       FontWeight="SemiBold" />
-                            <ListBox Grid.Row="1"
-                                     ItemsSource="{Binding EventLog}">
-                                <ListBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding}"
-                                                   FontFamily="Consolas"
-                                                   FontSize="12"
-                                                   TextWrapping="NoWrap" />
-                                    </DataTemplate>
-                                </ListBox.ItemTemplate>
-                            </ListBox>
-                        </Grid>
-                    </Border>
+                    <Grid Grid.Row="1"
+                          ColumnDefinitions="*,*"
+                          ColumnSpacing="16">
+                        <Border Classes="panel">
+                            <Grid RowDefinitions="Auto,*"
+                                  RowSpacing="12">
+                                <TextBlock Text="Protocol Log"
+                                           FontSize="16"
+                                           FontWeight="SemiBold" />
+                                <ListBox Grid.Row="1"
+                                         ItemsSource="{Binding EventLog}">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding}"
+                                                       FontFamily="Consolas"
+                                                       FontSize="12"
+                                                       TextWrapping="NoWrap" />
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </Grid>
+                        </Border>
+
+                        <Border Grid.Column="1"
+                                Classes="panel">
+                            <Grid RowDefinitions="Auto,Auto,*"
+                                  RowSpacing="12">
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <TextBlock Text="Audio Sessions"
+                                               FontSize="16"
+                                               FontWeight="SemiBold" />
+                                    <Button Grid.Column="1"
+                                            Content="Refresh"
+                                            Command="{Binding RefreshAudioSessionsCommand}" />
+                                </Grid>
+                                <Grid Grid.Row="1"
+                                      ColumnDefinitions="*,70,70"
+                                      ColumnSpacing="8">
+                                    <TextBlock Classes="label" Text="Process" />
+                                    <TextBlock Grid.Column="1" Classes="label" Text="Volume" />
+                                    <TextBlock Grid.Column="2" Classes="label" Text="PID" />
+                                </Grid>
+                                <ListBox Grid.Row="2"
+                                         ItemsSource="{Binding AudioSessions}">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid ColumnDefinitions="*,70,70"
+                                                  ColumnSpacing="8">
+                                                <TextBlock Text="{Binding ProcessName}"
+                                                           FontFamily="Consolas"
+                                                           TextTrimming="CharacterEllipsis" />
+                                                <TextBlock Grid.Column="1"
+                                                           Text="{Binding VolumePercent, StringFormat='{}{0}%'}"
+                                                           FontFamily="Consolas" />
+                                                <TextBlock Grid.Column="2"
+                                                           Text="{Binding ProcessId}"
+                                                           FontFamily="Consolas" />
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </Grid>
+                        </Border>
+                    </Grid>
                 </Grid>
             </TabItem>
         </TabControl>

@@ -55,6 +55,56 @@ internal sealed class WindowsApplicationVolumeController : IApplicationVolumeCon
         }
     }
 
+    public Task<IReadOnlyList<ApplicationAudioSession>> GetAudioSessionsAsync(
+        CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+
+        var result = new List<ApplicationAudioSession>();
+
+        try
+        {
+            using var deviceEnumerator = new MMDeviceEnumerator();
+            using var device = deviceEnumerator.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia);
+            var sessions = device.AudioSessionManager.Sessions;
+
+            for (var index = 0; index < sessions.Count; index++)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                using var session = sessions[index];
+                var processId = (int)session.GetProcessID;
+                if (processId <= 0)
+                {
+                    continue;
+                }
+
+                var processName = TryGetProcessName(processId);
+                if (string.IsNullOrWhiteSpace(processName))
+                {
+                    continue;
+                }
+
+                var volume = session.SimpleAudioVolume;
+                result.Add(new ApplicationAudioSession(
+                    processName,
+                    processId,
+                    string.IsNullOrWhiteSpace(session.DisplayName) ? processName : session.DisplayName,
+                    (int)Math.Round(volume.Volume * 100),
+                    volume.Mute));
+            }
+        }
+        catch (Exception ex) when (ex is InvalidOperationException or COMException)
+        {
+            return Task.FromResult<IReadOnlyList<ApplicationAudioSession>>([]);
+        }
+
+        return Task.FromResult<IReadOnlyList<ApplicationAudioSession>>(
+            result
+                .OrderBy(session => session.ProcessName, StringComparer.OrdinalIgnoreCase)
+                .ThenBy(session => session.ProcessId)
+                .ToArray());
+    }
+
     private static bool SessionMatchesProcess(AudioSessionControl session, string normalizedProcessName)
     {
         try
@@ -65,8 +115,8 @@ internal sealed class WindowsApplicationVolumeController : IApplicationVolumeCon
                 return false;
             }
 
-            using var process = Process.GetProcessById(processId);
-            return NormalizeProcessName(process.ProcessName)
+            var processName = TryGetProcessName(processId);
+            return NormalizeProcessName(processName)
                 .Equals(normalizedProcessName, StringComparison.OrdinalIgnoreCase);
         }
         catch (Exception ex) when (ex is ArgumentException or InvalidOperationException or Win32Exception)
@@ -81,5 +131,18 @@ internal sealed class WindowsApplicationVolumeController : IApplicationVolumeCon
         return trimmed.EndsWith(".exe", StringComparison.OrdinalIgnoreCase)
             ? trimmed[..^4]
             : trimmed;
+    }
+
+    private static string TryGetProcessName(int processId)
+    {
+        try
+        {
+            using var process = Process.GetProcessById(processId);
+            return process.ProcessName;
+        }
+        catch (Exception ex) when (ex is ArgumentException or InvalidOperationException or Win32Exception)
+        {
+            return "";
+        }
     }
 }

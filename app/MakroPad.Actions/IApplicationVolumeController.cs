@@ -6,4 +6,7 @@ public interface IApplicationVolumeController
         string processName,
         int percent,
         CancellationToken cancellationToken = default);
+
+    Task<IReadOnlyList<ApplicationAudioSession>> GetAudioSessionsAsync(
+        CancellationToken cancellationToken = default);
 }

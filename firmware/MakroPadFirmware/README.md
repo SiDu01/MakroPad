@@ -124,7 +124,8 @@ You can manually configure the OLED action-result timeout:
 
 ```text
 config;profile=Default;actionResultTimeoutMs=3000;preferredDisplay=profile
-config;profile=Default;defaultTitle=MakroPad;defaultLine1=%7Bprofile%7D;defaultLine2=%7Bstatus%7D;time=18:42;date=01.06.2026;volumeSystem=40%25
+config;profile=Default;defaultRows=3;defaultTitle=MakroPad;defaultLine1=%7Bprofile%7D;defaultLine2=%7Bstatus%7D;time=18:42;date=01.06.2026;volumeSystem=40%25
+config;profile=Default;defaultRows=5;defaultTitle=%7Btime%7D;defaultLine1=%7Bmedia.track%7D;defaultLine2=Vol%20%7Bvolume.system%7D;defaultLine3=%7Bdate%7D;defaultLine4=Up%20%7Bdevice.uptime%7D
 ```
 
 `action-result` messages are shown temporarily and then return to the idle
@@ -132,8 +133,10 @@ profile screen. `actionResultTimeoutMs=0` keeps action results on the display
 until another display/config/action message arrives.
 When `preferredDisplay=media` and a media screen has been received, action
 results return to the last media screen instead.
-The default profile screen can be customized with `defaultTitle`,
-`defaultLine1`, and `defaultLine2`. The firmware supports these placeholders:
+The default profile screen can be customized with `defaultRows`, `defaultTitle`,
+`defaultLine1`, `defaultLine2`, `defaultLine3`, and `defaultLine4`.
+`defaultRows=3` uses title plus two lines. `defaultRows=5` uses all five
+configured lines. The firmware supports these placeholders:
 `{profile}`, `{status}`, `{time}`, `{date}`, `{media.artist}`, `{media.title}`,
 `{media.track}`, `{volume.system}`, and `{device.uptime}`.
 Use `preferred=false` on `display;mode=media` to update media placeholder

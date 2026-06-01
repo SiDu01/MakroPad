@@ -12,4 +12,12 @@ public sealed class NoopApplicationVolumeController : IApplicationVolumeControll
         return Task.FromResult(ActionExecutionResult.Failed(
             "Application volume is only implemented on Windows for now"));
     }
+
+    public Task<IReadOnlyList<ApplicationAudioSession>> GetAudioSessionsAsync(
+        CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+
+        return Task.FromResult<IReadOnlyList<ApplicationAudioSession>>([]);
+    }
 }

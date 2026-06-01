@@ -291,6 +291,14 @@ public sealed class ActionExecutorTests
 
             return Task.FromResult(ActionExecutionResult.Ok($"Volume {percent}% for {processName}"));
         }
+
+        public Task<IReadOnlyList<ApplicationAudioSession>> GetAudioSessionsAsync(
+            CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            return Task.FromResult<IReadOnlyList<ApplicationAudioSession>>([]);
+        }
     }
 
     private sealed class FakeKeyboardController : IKeyboardController

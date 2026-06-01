@@ -51,6 +51,11 @@ Implemented:
 - Configurable OLED default screen with profile, status, time, date, media,
   volume, and uptime placeholders.
 - OLED default screen preview in the settings UI.
+- OLED default screen layout can use either 3 or 5 lines.
+- Debug view lists active Windows audio sessions for `app.volume` process
+  discovery.
+- Config editor shows structured parameter fields for common actions while
+  keeping the raw parameter field available.
 - Serial heartbeat with `ping`/`pong` and `Unresponsive` connection state.
 
 Supported actions:
@@ -96,10 +101,11 @@ Windows audio sessions for the configured process name, for example
 `process=Spotify`.
 
 The OLED default screen editor shows a small 128x64-style preview. Long lines
-are clipped to match the firmware's current text fitting behavior.
+are clipped to match the firmware's current text fitting behavior. The editor
+supports 3-line and 5-line layouts.
 
 The app sends
-`config;profile=...;actionResultTimeoutMs=...;defaultTitle=...;defaultLine1=...;defaultLine2=...;time=...;date=...;volumeSystem=...;preferredDisplay=...`
+`config;profile=...;actionResultTimeoutMs=...;defaultRows=...;defaultTitle=...;defaultLine1=...;defaultLine2=...;defaultLine3=...;defaultLine4=...;time=...;date=...;volumeSystem=...;preferredDisplay=...`
 to the device after connecting and when saving the config. `0` disables the
 automatic OLED reset for action results. The default screen supports
 `{profile}`, `{status}`, `{time}`, `{date}`, `{media.artist}`, `{media.title}`,

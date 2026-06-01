@@ -16,9 +16,15 @@ public sealed record DisplayHardwareConfig
 
     public int ActionResultTimeoutMs { get; init; } = 3000;
 
+    public int DefaultLayoutRows { get; init; } = 3;
+
     public string DefaultTitle { get; init; } = "MakroPad";
 
     public string DefaultLine1 { get; init; } = "{profile}";
 
     public string DefaultLine2 { get; init; } = "{status}";
+
+    public string DefaultLine3 { get; init; } = "";
+
+    public string DefaultLine4 { get; init; } = "";
 }
