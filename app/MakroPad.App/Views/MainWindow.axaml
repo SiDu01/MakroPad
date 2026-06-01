@@ -109,6 +109,26 @@
                                       SelectedItem="{Binding ActiveProfileName}"
                                       HorizontalAlignment="Stretch" />
 
+                            <TextBlock Text="Profile name"
+                                       Opacity="0.72" />
+                            <TextBox Text="{Binding ProfileEditorName}" />
+
+                            <Grid ColumnDefinitions="*,*,*"
+                                  ColumnSpacing="8">
+                                <Button Grid.Column="0"
+                                        Content="Add"
+                                        Command="{Binding AddProfileCommand}"
+                                        HorizontalAlignment="Stretch" />
+                                <Button Grid.Column="1"
+                                        Content="Rename"
+                                        Command="{Binding RenameProfileCommand}"
+                                        HorizontalAlignment="Stretch" />
+                                <Button Grid.Column="2"
+                                        Content="Delete"
+                                        Command="{Binding DeleteProfileCommand}"
+                                        HorizontalAlignment="Stretch" />
+                            </Grid>
+
                             <TextBlock Text="{Binding ConfigPath}"
                                        FontSize="11"
                                        TextWrapping="Wrap"
@@ -157,12 +177,28 @@
 
                             <Separator />
 
-                            <Button Content="Simulate Button 1"
-                                    Command="{Binding SimulateButtonCommand}"
-                                    HorizontalAlignment="Stretch" />
-                            <Button Content="Simulate Slider 1"
-                                    Command="{Binding SimulateSliderCommand}"
-                                    HorizontalAlignment="Stretch" />
+                            <Grid ColumnDefinitions="*,Auto"
+                                  ColumnSpacing="8">
+                                <ComboBox Grid.Column="0"
+                                          ItemsSource="{Binding AvailableButtonIds}"
+                                          SelectedItem="{Binding SimulatorButtonId}"
+                                          HorizontalAlignment="Stretch" />
+                                <Button Grid.Column="1"
+                                        Content="Simulate Button"
+                                        Command="{Binding SimulateButtonCommand}" />
+                            </Grid>
+
+                            <Grid ColumnDefinitions="*,Auto"
+                                  ColumnSpacing="8">
+                                <ComboBox Grid.Column="0"
+                                          ItemsSource="{Binding AvailableSliderIds}"
+                                          SelectedItem="{Binding SimulatorSliderId}"
+                                          HorizontalAlignment="Stretch" />
+                                <Button Grid.Column="1"
+                                        Content="Simulate Slider"
+                                        Command="{Binding SimulateSliderCommand}" />
+                            </Grid>
+
                             <TextBlock Text="{Binding LastSliderValue, StringFormat='Last slider value: {0}'}"
                                        Opacity="0.82" />
                         </StackPanel>
@@ -229,9 +265,10 @@
                               ColumnDefinitions="150,220,*"
                               RowSpacing="8"
                               ColumnSpacing="12">
-                            <TextBox Grid.Column="0"
-                                     PlaceholderText="button:1"
-                                     Text="{Binding BindingEditorInput}" />
+                            <ComboBox Grid.Column="0"
+                                      ItemsSource="{Binding AvailableInputs}"
+                                      SelectedItem="{Binding BindingEditorInput}"
+                                      HorizontalAlignment="Stretch" />
                             <ComboBox Grid.Column="1"
                                       ItemsSource="{Binding AvailableActions}"
                                       SelectedItem="{Binding BindingEditorAction}"
@@ -259,7 +296,7 @@
 
                             <Grid Grid.Row="3"
                                   Grid.ColumnSpan="3"
-                                  ColumnDefinitions="*,*,*"
+                                  ColumnDefinitions="*,*,*,*"
                                   ColumnSpacing="8">
                                 <Button Grid.Column="0"
                                         Content="Apply"
@@ -272,6 +309,10 @@
                                 <Button Grid.Column="2"
                                         Content="Remove"
                                         Command="{Binding RemoveBindingCommand}"
+                                        HorizontalAlignment="Stretch" />
+                                <Button Grid.Column="3"
+                                        Content="Example"
+                                        Command="{Binding UseParameterExampleCommand}"
                                         HorizontalAlignment="Stretch" />
                             </Grid>
                         </Grid>

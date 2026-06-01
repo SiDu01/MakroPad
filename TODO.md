@@ -11,6 +11,9 @@ Goals:
   basic editor.
 - Prefer structured controls over raw text where possible.
 - Keep raw parameter editing available for advanced or unsupported cases.
+- Select known inputs from `button:1` to `button:20` and `slider:1` to
+  `slider:3`. Done in the basic editor.
+- Manage profiles from the UI. Add, rename, and delete are available.
 
 Initial action hints:
 
@@ -36,10 +39,12 @@ Possible UI improvements:
 - Change the parameter field placeholder based on the selected action. Done in
   the basic editor.
 - Add validation before saving or applying a binding. Basic validation is done
-  for input format, known actions, and required parameters.
+  for input format, known actions, required parameters, and URL format.
+- Add a quick way to fill the selected action's example parameters. Done with
+  the `Example` button.
 - Add action-specific editors:
   - Shortcut recorder for `keyboard.shortcut`.
-  - URL textbox with validation for `system.openUrl`.
+  - URL textbox for `system.openUrl`.
   - File/app picker for `system.openApp`.
 - Document supported shortcut keys in the UI.
 - Show a warning when parameters are ignored for actions that do not need them.

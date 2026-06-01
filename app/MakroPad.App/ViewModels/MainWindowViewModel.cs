@@ -62,10 +62,19 @@ public partial class MainWindowViewModel : ViewModelBase
     private int lastSliderValue;
 
     [ObservableProperty]
+    private int simulatorButtonId = 1;
+
+    [ObservableProperty]
+    private int simulatorSliderId = 1;
+
+    [ObservableProperty]
     private string activeProfileName = "Default";
 
     [ObservableProperty]
     private string configPath = "";
+
+    [ObservableProperty]
+    private string profileEditorName = "Default";
 
     [ObservableProperty]
     private bool autoConnect = true;
@@ -116,6 +125,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
     partial void OnActiveProfileNameChanged(string value)
     {
+        ProfileEditorName = value;
         currentConfig = currentConfig with { ActiveProfile = value };
         RefreshProfileBindings();
         _ = SendDeviceConfigAsync();
@@ -150,6 +160,18 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public IReadOnlyList<string> AvailableActions { get; } =
         ActionDefinitions.Select(definition => definition.Id).ToArray();
+
+    public IReadOnlyList<string> AvailableInputs { get; } =
+    [
+        ..Enumerable.Range(1, 20).Select(id => $"button:{id}"),
+        ..Enumerable.Range(1, 3).Select(id => $"slider:{id}")
+    ];
+
+    public IReadOnlyList<int> AvailableButtonIds { get; } =
+        Enumerable.Range(1, 20).ToArray();
+
+    public IReadOnlyList<int> AvailableSliderIds { get; } =
+        Enumerable.Range(1, 3).ToArray();
 
     public MainWindowViewModel()
     {
@@ -252,11 +274,7 @@ public partial class MainWindowViewModel : ViewModelBase
             AutoConnect = currentConfig.AppSettings.AutoConnect;
             ActionResultTimeoutMs = currentConfig.Hardware.Display.ActionResultTimeoutMs;
 
-            ProfileNames.Clear();
-            foreach (var profile in currentConfig.Profiles)
-            {
-                ProfileNames.Add(profile.Name);
-            }
+            RefreshProfileNames();
 
             RefreshProfileBindings();
             RefreshPorts();
@@ -350,7 +368,7 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         if (activeConnection == simulatedConnection)
         {
-            simulatedConnection.SimulateButtonPress(1);
+            simulatedConnection.SimulateButtonPress(SimulatorButtonId);
             return;
         }
 
@@ -363,11 +381,127 @@ public partial class MainWindowViewModel : ViewModelBase
         LastSliderValue = LastSliderValue >= 4000 ? 0 : LastSliderValue + 512;
         if (activeConnection == simulatedConnection)
         {
-            simulatedConnection.SimulateSliderChange(1, LastSliderValue);
+            simulatedConnection.SimulateSliderChange(SimulatorSliderId, LastSliderValue);
             return;
         }
 
         AddLog("Slider simulation is only available on the simulator connection.");
+    }
+
+    [RelayCommand]
+    private void AddProfile()
+    {
+        var name = ProfileEditorName.Trim();
+        if (!TryValidateProfileName(name, out var error))
+        {
+            AddLog(error);
+            return;
+        }
+
+        if (currentConfig.Profiles.Any(profile => profile.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
+        {
+            AddLog($"Profile already exists: {name}");
+            return;
+        }
+
+        currentConfig = currentConfig with
+        {
+            Profiles = [..currentConfig.Profiles, new ProfileConfig { Name = name }],
+            ActiveProfile = name
+        };
+
+        RefreshProfileNames();
+        ActiveProfileName = name;
+        AddLog($"Profile added: {name}");
+    }
+
+    [RelayCommand]
+    private void RenameProfile()
+    {
+        var name = ProfileEditorName.Trim();
+        if (!TryValidateProfileName(name, out var error))
+        {
+            AddLog(error);
+            return;
+        }
+
+        var activeProfile = GetActiveProfile();
+        if (activeProfile is null)
+        {
+            AddLog("Active profile not found.");
+            return;
+        }
+
+        if (activeProfile.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
+        {
+            return;
+        }
+
+        if (currentConfig.Profiles.Any(profile => profile.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
+        {
+            AddLog($"Profile already exists: {name}");
+            return;
+        }
+
+        var oldName = activeProfile.Name;
+        currentConfig = currentConfig with
+        {
+            ActiveProfile = name,
+            Profiles = currentConfig.Profiles
+                .Select(profile => profile.Name.Equals(oldName, StringComparison.OrdinalIgnoreCase)
+                    ? profile with { Name = name }
+                    : profile)
+                .ToList()
+        };
+
+        RefreshProfileNames();
+        ActiveProfileName = name;
+        AddLog($"Profile renamed: {oldName} -> {name}");
+    }
+
+    [RelayCommand]
+    private void DeleteProfile()
+    {
+        if (currentConfig.Profiles.Count <= 1)
+        {
+            AddLog("At least one profile is required.");
+            return;
+        }
+
+        var activeProfile = GetActiveProfile();
+        if (activeProfile is null)
+        {
+            AddLog("Active profile not found.");
+            return;
+        }
+
+        var remainingProfiles = currentConfig.Profiles
+            .Where(profile => !profile.Name.Equals(activeProfile.Name, StringComparison.OrdinalIgnoreCase))
+            .ToList();
+        var nextProfileName = remainingProfiles.First().Name;
+
+        currentConfig = currentConfig with
+        {
+            ActiveProfile = nextProfileName,
+            Profiles = remainingProfiles
+        };
+
+        RefreshProfileNames();
+        ActiveProfileName = nextProfileName;
+        AddLog($"Profile deleted: {activeProfile.Name}");
+    }
+
+    [RelayCommand]
+    private void UseParameterExample()
+    {
+        if (string.IsNullOrWhiteSpace(BindingParameterPlaceholder))
+        {
+            BindingEditorParameters = "";
+            return;
+        }
+
+        BindingEditorParameters = BindingParameterPlaceholder;
+        BindingEditorValidationMessage = "";
     }
 
     [RelayCommand]
@@ -621,6 +755,15 @@ public partial class MainWindowViewModel : ViewModelBase
         }
     }
 
+    private void RefreshProfileNames()
+    {
+        ProfileNames.Clear();
+        foreach (var profile in currentConfig.Profiles)
+        {
+            ProfileNames.Add(profile.Name);
+        }
+    }
+
     private void RefreshProfileBindings(int selectedIndex = 0)
     {
         ProfileBindings.Clear();
@@ -712,6 +855,15 @@ public partial class MainWindowViewModel : ViewModelBase
             }
         }
 
+        if (action.Equals("system.openUrl", StringComparison.OrdinalIgnoreCase)
+            && parameters.TryGetValue("url", out var url)
+            && (!Uri.TryCreate(url, UriKind.Absolute, out var uri)
+                || (uri.Scheme != Uri.UriSchemeHttp && uri.Scheme != Uri.UriSchemeHttps)))
+        {
+            SetBindingEditorError("URL must start with http:// or https://.");
+            return false;
+        }
+
         if (actionDefinition.RequiredParameters.Count == 0
             && !action.Equals("log", StringComparison.OrdinalIgnoreCase)
             && parameters.Count > 0)
@@ -766,6 +918,24 @@ public partial class MainWindowViewModel : ViewModelBase
                 || inputType.Equals("slider", StringComparison.OrdinalIgnoreCase))
             && int.TryParse(id, out var numericId)
             && numericId > 0;
+    }
+
+    private static bool TryValidateProfileName(string name, out string error)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            error = "Profile name is required.";
+            return false;
+        }
+
+        if (name.Contains(';') || name.Contains('='))
+        {
+            error = "Profile name cannot contain ';' or '='.";
+            return false;
+        }
+
+        error = "";
+        return true;
     }
 
     private static Dictionary<string, string> ParseParameters(string parameters, string action)
