@@ -147,6 +147,8 @@ void sendError(const char* code, const char* message) {
   sendLine("error;code=" + String(code) + ";message=" + String(message));
 }
 
+String fitDisplayLine(const String& line);
+
 void drawStatusMessage(const String& line1, const String& line2 = "", const String& line3 = "") {
   if (!displayAvailable) {
     return;
@@ -156,20 +158,30 @@ void drawStatusMessage(const String& line1, const String& line2 = "", const Stri
   display.setTextSize(1);
   display.setTextColor(SSD1306_WHITE);
   display.setCursor(0, 0);
-  display.println(line1);
+  display.println(fitDisplayLine(line1));
 
   if (line2.length() > 0) {
-    display.println(line2);
+    display.println(fitDisplayLine(line2));
   }
 
   if (line3.length() > 0) {
-    display.println(line3);
+    display.println(fitDisplayLine(line3));
   }
 
   display.display();
 }
 
 void drawMedia(const String& artist, const String& title);
+
+String fitDisplayLine(const String& line) {
+  constexpr int MaxTextSizeOneCharacters = 21;
+
+  if (line.length() <= MaxTextSizeOneCharacters) {
+    return line;
+  }
+
+  return line.substring(0, MaxTextSizeOneCharacters - 2) + "..";
+}
 
 String formatUptime() {
   const uint32_t totalSeconds = millis() / 1000;
@@ -241,8 +253,8 @@ void drawMedia(const String& artist, const String& title) {
   display.setCursor(0, 0);
   display.println("Media");
   display.println();
-  display.println(artist);
-  display.println(title);
+  display.println(fitDisplayLine(artist));
+  display.println(fitDisplayLine(title));
   display.display();
 }
 

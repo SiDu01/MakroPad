@@ -50,6 +50,7 @@ Implemented:
 - Configurable OLED action-result timeout.
 - Configurable OLED default screen with profile, status, time, date, media,
   volume, and uptime placeholders.
+- OLED default screen preview in the settings UI.
 - Serial heartbeat with `ping`/`pong` and `Unresponsive` connection state.
 
 Supported actions:
@@ -93,6 +94,9 @@ Incoming slider values are expected as `0..4095`. `system.volume` maps them to
 Windows master volume `0..100%`. `app.volume` maps them to the volume of active
 Windows audio sessions for the configured process name, for example
 `process=Spotify`.
+
+The OLED default screen editor shows a small 128x64-style preview. Long lines
+are clipped to match the firmware's current text fitting behavior.
 
 The app sends
 `config;profile=...;actionResultTimeoutMs=...;defaultTitle=...;defaultLine1=...;defaultLine2=...;time=...;date=...;volumeSystem=...;preferredDisplay=...`

@@ -454,6 +454,30 @@
                                                FontSize="12"
                                                TextWrapping="Wrap"
                                                Text="{}Placeholders: {profile}, {status}, {time}, {date}, {media.artist}, {media.title}, {media.track}, {volume.system}, {device.uptime}" />
+                                    <Border Background="#02060C"
+                                            BorderBrush="#2D5C88"
+                                            BorderThickness="1"
+                                            CornerRadius="4"
+                                            Width="256"
+                                            Height="128"
+                                            Padding="12"
+                                            HorizontalAlignment="Left">
+                                        <StackPanel Spacing="6"
+                                                    VerticalAlignment="Top">
+                                            <TextBlock Text="{Binding OledPreviewTitle}"
+                                                       FontFamily="Consolas"
+                                                       FontSize="16"
+                                                       TextWrapping="NoWrap" />
+                                            <TextBlock Text="{Binding OledPreviewLine1}"
+                                                       FontFamily="Consolas"
+                                                       FontSize="16"
+                                                       TextWrapping="NoWrap" />
+                                            <TextBlock Text="{Binding OledPreviewLine2}"
+                                                       FontFamily="Consolas"
+                                                       FontSize="16"
+                                                       TextWrapping="NoWrap" />
+                                        </StackPanel>
+                                    </Border>
 
                                     <Grid ColumnDefinitions="*,*"
                                           ColumnSpacing="8">

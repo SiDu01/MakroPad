@@ -138,6 +138,7 @@ The default profile screen can be customized with `defaultTitle`,
 `{media.track}`, `{volume.system}`, and `{device.uptime}`.
 Use `preferred=false` on `display;mode=media` to update media placeholder
 values without switching the idle screen to the dedicated media display.
+Long display lines are clipped to 21 characters for the current text size.
 
 Button and slider events should appear as:
 

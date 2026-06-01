@@ -48,6 +48,7 @@ public partial class MainWindowViewModel : ViewModelBase
     private IMakroPadConnection? activeConnection;
     private MakroPadConfig currentConfig = MakroPadConfig.CreateDefault();
     private NowPlayingTrack? lastSentNowPlayingTrack;
+    private int? lastKnownSystemVolumePercent;
     private bool isRefreshingEditor;
 
     [ObservableProperty]
@@ -102,17 +103,37 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty]
     private string nowPlayingStatus = "Now Playing idle";
 
+    partial void OnNowPlayingStatusChanged(string value)
+    {
+        RefreshOledPreview();
+    }
+
     [ObservableProperty]
     private int actionResultTimeoutMs = 3000;
 
     [ObservableProperty]
     private string defaultScreenTitle = "MakroPad";
 
+    partial void OnDefaultScreenTitleChanged(string value)
+    {
+        RefreshOledPreview();
+    }
+
     [ObservableProperty]
     private string defaultScreenLine1 = "{profile}";
 
+    partial void OnDefaultScreenLine1Changed(string value)
+    {
+        RefreshOledPreview();
+    }
+
     [ObservableProperty]
     private string defaultScreenLine2 = "{status}";
+
+    partial void OnDefaultScreenLine2Changed(string value)
+    {
+        RefreshOledPreview();
+    }
 
     [ObservableProperty]
     private BindingViewModel? selectedBinding;
@@ -166,6 +187,7 @@ public partial class MainWindowViewModel : ViewModelBase
         ProfileEditorName = value;
         currentConfig = currentConfig with { ActiveProfile = value };
         RefreshProfileBindings();
+        RefreshOledPreview();
         _ = SendDeviceConfigAsync();
     }
 
@@ -186,7 +208,14 @@ public partial class MainWindowViewModel : ViewModelBase
     partial void OnConnectionStatusChanged(string value)
     {
         OnPropertyChanged(nameof(ConnectionStatusBrush));
+        RefreshOledPreview();
     }
+
+    public string OledPreviewTitle => FitOledPreviewLine(RenderDefaultScreenTemplate(DefaultScreenTitle));
+
+    public string OledPreviewLine1 => FitOledPreviewLine(RenderDefaultScreenTemplate(DefaultScreenLine1));
+
+    public string OledPreviewLine2 => FitOledPreviewLine(RenderDefaultScreenTemplate(DefaultScreenLine2));
 
     public ObservableCollection<string> AvailablePorts { get; } = [];
 
@@ -788,6 +817,8 @@ public partial class MainWindowViewModel : ViewModelBase
 
         var now = DateTime.Now;
         var systemVolume = await systemVolumeController.GetMasterVolumePercentAsync();
+        lastKnownSystemVolumePercent = systemVolume;
+        RefreshOledPreview();
         var line = MakroPad.Core.Protocol.ProtocolCodec.Format(
             "config",
             new Dictionary<string, string?>
@@ -1168,6 +1199,43 @@ public partial class MainWindowViewModel : ViewModelBase
         return DefaultScreenTitle.Contains("{media.", StringComparison.OrdinalIgnoreCase)
             || DefaultScreenLine1.Contains("{media.", StringComparison.OrdinalIgnoreCase)
             || DefaultScreenLine2.Contains("{media.", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private void RefreshOledPreview()
+    {
+        OnPropertyChanged(nameof(OledPreviewTitle));
+        OnPropertyChanged(nameof(OledPreviewLine1));
+        OnPropertyChanged(nameof(OledPreviewLine2));
+    }
+
+    private string RenderDefaultScreenTemplate(string template)
+    {
+        var now = DateTime.Now;
+        var artist = lastSentNowPlayingTrack?.Artist ?? "";
+        var title = lastSentNowPlayingTrack?.Title ?? "";
+        var mediaTrack = string.IsNullOrWhiteSpace(artist) || string.IsNullOrWhiteSpace(title)
+            ? title
+            : $"{artist} - {title}";
+
+        return NormalizeDisplayLine(template, "")
+            .Replace("{profile}", ActiveProfileName, StringComparison.OrdinalIgnoreCase)
+            .Replace("{status}", ConnectionStatus, StringComparison.OrdinalIgnoreCase)
+            .Replace("{time}", now.ToString("HH:mm"), StringComparison.OrdinalIgnoreCase)
+            .Replace("{date}", now.ToString("dd.MM.yyyy"), StringComparison.OrdinalIgnoreCase)
+            .Replace("{media.artist}", artist, StringComparison.OrdinalIgnoreCase)
+            .Replace("{media.title}", title, StringComparison.OrdinalIgnoreCase)
+            .Replace("{media.track}", mediaTrack, StringComparison.OrdinalIgnoreCase)
+            .Replace("{volume.system}", lastKnownSystemVolumePercent is null ? "" : $"{lastKnownSystemVolumePercent}%", StringComparison.OrdinalIgnoreCase)
+            .Replace("{device.uptime}", "00:00:00", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static string FitOledPreviewLine(string line)
+    {
+        const int maxCharacters = 21;
+        var trimmed = line.Trim();
+        return trimmed.Length <= maxCharacters
+            ? trimmed
+            : trimmed[..(maxCharacters - 2)] + "..";
     }
 
     private sealed record ActionDefinition(
