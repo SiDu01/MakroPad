@@ -37,6 +37,7 @@ Implemented:
   sections.
 - Auto-connect scanning for `hello;device=makropad-s3`.
 - Configurable OLED action-result timeout.
+- Serial heartbeat with `ping`/`pong` and `Unresponsive` connection state.
 
 Supported actions:
 

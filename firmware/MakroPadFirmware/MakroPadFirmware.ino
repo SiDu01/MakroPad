@@ -20,6 +20,7 @@ constexpr uint8_t OledSclPin = 9;
 
 constexpr uint32_t SerialBaud = 115200;
 constexpr uint32_t HelloIntervalMs = 1000;
+constexpr uint32_t HostTimeoutMs = 6000;
 constexpr uint32_t DefaultActionResultTimeoutMs = 3000;
 constexpr uint32_t DebounceMs = 25;
 constexpr int SliderDeadband = 16;
@@ -58,6 +59,7 @@ String uartSerialLine;
 bool hostAcknowledged = false;
 bool displayAvailable = false;
 uint32_t lastHelloMs = 0;
+uint32_t lastHostSeenMs = 0;
 uint32_t actionResultTimeoutMs = DefaultActionResultTimeoutMs;
 uint32_t temporaryDisplayUntilMs = 0;
 String currentProfileName = "Default";
@@ -162,6 +164,17 @@ void drawIdleStatus() {
   drawStatusMessage("MakroPad", currentProfileName, hostAcknowledged ? "Connected" : "Waiting for app");
 }
 
+void markHostSeen() {
+  const bool wasAcknowledged = hostAcknowledged;
+  hostAcknowledged = true;
+  lastHostSeenMs = millis();
+
+  if (!wasAcknowledged) {
+    temporaryDisplayUntilMs = 0;
+    drawIdleStatus();
+  }
+}
+
 void drawMedia(const String& artist, const String& title) {
   if (!displayAvailable) {
     return;
@@ -220,13 +233,13 @@ void handleProtocolLine(String line) {
 
   if (type == "hello-ack") {
     if (protocolValue(line, "proto") == "1") {
-      hostAcknowledged = true;
-      drawIdleStatus();
+      markHostSeen();
     }
     return;
   }
 
   if (type == "ping") {
+    markHostSeen();
     const String id = protocolValue(line, "id");
     if (id.length() > 0) {
       sendLine("pong;id=" + id);
@@ -237,11 +250,13 @@ void handleProtocolLine(String line) {
   }
 
   if (type == "display") {
+    markHostSeen();
     handleDisplayCommand(line);
     return;
   }
 
   if (type == "config") {
+    markHostSeen();
     const String profile = protocolValue(line, "profile");
     if (profile.length() > 0) {
       currentProfileName = profile;
@@ -258,6 +273,7 @@ void handleProtocolLine(String line) {
   }
 
   if (type == "action-result") {
+    markHostSeen();
     const String status = protocolValue(line, "status");
     const String message = protocolValue(line, "message");
     drawStatusMessage(status == "failed" ? "Action failed" : "Action", message);
@@ -385,6 +401,18 @@ void updateDisplayTimeout() {
   }
 }
 
+void updateHostTimeout() {
+  if (!hostAcknowledged) {
+    return;
+  }
+
+  if (static_cast<uint32_t>(millis() - lastHostSeenMs) >= HostTimeoutMs) {
+    hostAcknowledged = false;
+    temporaryDisplayUntilMs = 0;
+    drawIdleStatus();
+  }
+}
+
 void setup() {
   Serial.begin(SerialBaud);
   Serial0.begin(SerialBaud);
@@ -407,6 +435,7 @@ void loop() {
     sendHello();
   }
 
+  updateHostTimeout();
   updateDisplayTimeout();
 
   for (size_t index = 0; index < ActiveButtonCount; index++) {

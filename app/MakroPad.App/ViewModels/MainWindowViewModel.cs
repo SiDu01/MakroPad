@@ -97,6 +97,7 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         "Connected" => "Green",
         "Connecting" => "DarkOrange",
+        "Unresponsive" => "Firebrick",
         _ => "Gray"
     };
 

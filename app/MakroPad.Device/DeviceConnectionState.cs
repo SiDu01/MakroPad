@@ -4,5 +4,6 @@ public enum DeviceConnectionState
 {
     Disconnected,
     Connecting,
-    Connected
+    Connected,
+    Unresponsive
 }

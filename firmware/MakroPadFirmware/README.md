@@ -96,6 +96,20 @@ You can manually acknowledge the device:
 hello-ack;proto=1;app=manual
 ```
 
+The firmware treats every known app message as a host heartbeat. If no app
+message arrives for about 6 seconds, the OLED returns to `Waiting for app` and
+the firmware starts sending `hello` again. Manual heartbeat test:
+
+```text
+ping;id=1
+```
+
+Expected response:
+
+```text
+pong;id=1
+```
+
 You can manually test the display:
 
 ```text

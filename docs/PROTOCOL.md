@@ -99,13 +99,18 @@ Aktueller App-Stand:
 
 - Die Desktop-App antwortet automatisch auf `hello` mit
   `hello-ack;proto=1;app=0.1.0`.
+- Die Desktop-App antwortet auf `ping` mit `pong`.
+- Bei Funkstille sendet die Desktop-App `ping` und setzt den Status nach einem
+  Timeout auf `Unresponsive`.
 - Serial wird explizit mit UTF-8-Encoding betrieben.
 - Bei Serial-Lesefehlern setzt die App den Verbindungsstatus auf
   `Disconnected`.
 
 ## Heartbeat
 
-Beide Seiten duerfen Heartbeats senden.
+Beide Seiten duerfen Heartbeats senden. Heartbeats sind nur ein Fallback fuer
+ruhige Phasen: Jede gueltige Nachricht der Gegenseite gilt ebenfalls als
+Lebenszeichen.
 
 ```text
 ping;id=42
@@ -116,8 +121,14 @@ Regeln:
 
 - Der Empfaenger beantwortet `ping` mit `pong` und gleicher `id`.
 - `id` ist optional, aber empfohlen.
-- Wenn keine Nachricht innerhalb eines spaeter definierten Timeouts empfangen
-  wurde, darf die App die Verbindung als getrennt markieren.
+- Die App sendet einen `ping`, wenn laenger als ca. 2 Sekunden keine Nachricht
+  vom ESP empfangen wurde.
+- Wenn die App ca. 6 Sekunden keine gueltige ESP-Nachricht empfaengt, markiert
+  sie die Verbindung als `Unresponsive`.
+- Wenn die Firmware ca. 6 Sekunden keine gueltige App-Nachricht empfaengt, setzt
+  sie den Host-Status zurueck und zeigt wieder `Waiting for app`.
+- Sobald danach wieder eine gueltige Nachricht ankommt, gilt die Verbindung
+  wieder als lebendig.
 
 ## ESP -> App Nachrichten
 
@@ -320,7 +331,6 @@ JSON Lines wechseln oder JSON als Value in ausgewaehlten Nachrichten erlauben.
 
 ## Offene Entscheidungen
 
-- Exakter Timeout fuer Heartbeat-basierten Verbindungsabbruch.
 - Sliderwerte bleiben in Version 1 als 0 bis 4095 erhalten und werden appseitig
   fuer Actions gemappt.
 - Ob App-seitige Konfiguration spaeter vollstaendig an den ESP uebertragen und

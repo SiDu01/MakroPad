@@ -7,11 +7,16 @@ namespace MakroPad.Device;
 public sealed class SerialMakroPadConnection : IMakroPadConnection, IDisposable
 {
     private const int DefaultBaudRate = 115200;
+    private static readonly TimeSpan HeartbeatInterval = TimeSpan.FromSeconds(2);
+    private static readonly TimeSpan HeartbeatTimeout = TimeSpan.FromSeconds(6);
 
     private readonly object syncRoot = new();
     private SerialPort? serialPort;
     private CancellationTokenSource? readLoopCancellation;
     private Task? readLoopTask;
+    private Task? heartbeatTask;
+    private DateTimeOffset lastDeviceSeenAt = DateTimeOffset.MinValue;
+    private int nextPingId;
     private DeviceConnectionState state = DeviceConnectionState.Disconnected;
 
     public DeviceConnectionState State
@@ -64,9 +69,11 @@ public sealed class SerialMakroPadConnection : IMakroPadConnection, IDisposable
 
             serialPort.Open();
             State = DeviceConnectionState.Connected;
+            lastDeviceSeenAt = DateTimeOffset.Now;
 
             readLoopCancellation = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
             readLoopTask = Task.Run(() => ReadLoopAsync(readLoopCancellation.Token), CancellationToken.None);
+            heartbeatTask = Task.Run(() => HeartbeatLoopAsync(readLoopCancellation.Token), CancellationToken.None);
 
             RaiseEvent("Connection", $"Opened {portName}");
             return Task.CompletedTask;
@@ -104,10 +111,25 @@ public sealed class SerialMakroPadConnection : IMakroPadConnection, IDisposable
             }
         }
 
+        if (heartbeatTask is not null)
+        {
+            try
+            {
+                await heartbeatTask.WaitAsync(TimeSpan.FromSeconds(1), cancellationToken);
+            }
+            catch (OperationCanceledException)
+            {
+            }
+            catch (TimeoutException)
+            {
+            }
+        }
+
         serialPort?.Close();
         serialPort?.Dispose();
         serialPort = null;
         readLoopTask = null;
+        heartbeatTask = null;
         readLoopCancellation?.Dispose();
         readLoopCancellation = null;
         State = DeviceConnectionState.Disconnected;
@@ -167,9 +189,21 @@ public sealed class SerialMakroPadConnection : IMakroPadConnection, IDisposable
                 RaiseEvent("ESP -> App", line);
 
                 var message = TryParse(line);
+                if (message is not null)
+                {
+                    MarkDeviceSeen();
+                }
+
                 if (message?.Type.Equals("hello", StringComparison.OrdinalIgnoreCase) == true)
                 {
                     await SendLineAsync("hello-ack;proto=1;app=0.1.0", cancellationToken);
+                    continue;
+                }
+
+                if (message?.Type.Equals("ping", StringComparison.OrdinalIgnoreCase) == true)
+                {
+                    var id = message.GetValue("id");
+                    await SendLineAsync(string.IsNullOrWhiteSpace(id) ? "pong" : $"pong;id={id}", cancellationToken);
                 }
             }
             catch (TimeoutException)
@@ -185,6 +219,54 @@ public sealed class SerialMakroPadConnection : IMakroPadConnection, IDisposable
                 CloseAfterReadFailure();
                 break;
             }
+        }
+    }
+
+    private async Task HeartbeatLoopAsync(CancellationToken cancellationToken)
+    {
+        while (!cancellationToken.IsCancellationRequested && serialPort is { IsOpen: true })
+        {
+            try
+            {
+                await Task.Delay(HeartbeatInterval, cancellationToken);
+
+                var elapsed = DateTimeOffset.Now - lastDeviceSeenAt;
+                if (elapsed >= HeartbeatTimeout)
+                {
+                    if (State == DeviceConnectionState.Connected)
+                    {
+                        State = DeviceConnectionState.Unresponsive;
+                        RaiseEvent("Connection", "Device heartbeat timed out");
+                    }
+                }
+
+                if (elapsed >= HeartbeatInterval)
+                {
+                    var id = Interlocked.Increment(ref nextPingId);
+                    await SendLineAsync($"ping;id={id}", cancellationToken);
+                }
+            }
+            catch (OperationCanceledException)
+            {
+                break;
+            }
+            catch (Exception ex) when (ex is IOException or InvalidOperationException)
+            {
+                RaiseEvent("Connection", $"Heartbeat failed: {ex.Message}");
+                CloseAfterReadFailure();
+                break;
+            }
+        }
+    }
+
+    private void MarkDeviceSeen()
+    {
+        lastDeviceSeenAt = DateTimeOffset.Now;
+
+        if (State == DeviceConnectionState.Unresponsive)
+        {
+            State = DeviceConnectionState.Connected;
+            RaiseEvent("Connection", "Device heartbeat restored");
         }
     }
 
