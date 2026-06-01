@@ -39,6 +39,8 @@ Implemented:
 - Simulator input selection for button and slider IDs.
 - Focused-window shortcut recorder for `keyboard.shortcut`.
 - App/file picker for `system.openApp`.
+- OLED Now Playing display for Spotify track changes using the Spotify window
+  title.
 - Structured main window with device, profile, simulator, bindings, and log
   sections.
 - Auto-connect scanning for `hello;device=makropad-s3`.
@@ -88,9 +90,14 @@ The app sends `config;profile=...;actionResultTimeoutMs=...` to the device after
 connecting and when saving the config. `0` disables the automatic OLED reset for
 action results.
 
+Now Playing is an initial implementation: it polls the Spotify desktop window
+title on Windows and sends `display;mode=media;artist=...;title=...` when the
+track changes. A later implementation should use Windows Media Session metadata
+directly.
+
 ## Next Work
 
-- Spotify or Windows Media Session metadata for OLED display updates.
+- Windows Media Session metadata for richer OLED media display updates.
 - Linux implementations for media and volume actions.
 - Richer config editor controls for action-specific parameters.
 

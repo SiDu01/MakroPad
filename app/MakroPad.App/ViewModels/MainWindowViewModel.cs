@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using MakroPad.App.Services;
 using MakroPad.Actions;
 using MakroPad.Core.Configuration;
 using MakroPad.Device;
@@ -39,8 +41,11 @@ public partial class MainWindowViewModel : ViewModelBase
     private readonly MakroPadDeviceProbe deviceProbe = new();
     private readonly MakroPadConfigStore configStore;
     private readonly ActionPipeline actionPipeline = new(new ActionResolver(), new ActionExecutor());
+    private readonly INowPlayingProvider nowPlayingProvider = new ProcessWindowNowPlayingProvider();
+    private readonly CancellationTokenSource nowPlayingCancellation = new();
     private IMakroPadConnection? activeConnection;
     private MakroPadConfig currentConfig = MakroPadConfig.CreateDefault();
+    private NowPlayingTrack? lastSentNowPlayingTrack;
     private bool isRefreshingEditor;
 
     [ObservableProperty]
@@ -78,6 +83,12 @@ public partial class MainWindowViewModel : ViewModelBase
 
     [ObservableProperty]
     private bool autoConnect = true;
+
+    [ObservableProperty]
+    private bool enableNowPlayingDisplay = true;
+
+    [ObservableProperty]
+    private string nowPlayingStatus = "Now Playing idle";
 
     [ObservableProperty]
     private int actionResultTimeoutMs = 3000;
@@ -185,6 +196,7 @@ public partial class MainWindowViewModel : ViewModelBase
         configStore = new MakroPadConfigStore(ConfigPath);
         RefreshActionEditorHints();
         RefreshPorts();
+        _ = RunNowPlayingLoopAsync(nowPlayingCancellation.Token);
         _ = LoadConfigAsync();
     }
 
@@ -278,6 +290,7 @@ public partial class MainWindowViewModel : ViewModelBase
             currentConfig = await configStore.LoadOrCreateDefaultAsync();
             ActiveProfileName = currentConfig.ActiveProfile;
             AutoConnect = currentConfig.AppSettings.AutoConnect;
+            EnableNowPlayingDisplay = currentConfig.AppSettings.EnableNowPlayingDisplay;
             ActionResultTimeoutMs = currentConfig.Hardware.Display.ActionResultTimeoutMs;
 
             RefreshProfileNames();
@@ -317,6 +330,7 @@ public partial class MainWindowViewModel : ViewModelBase
                 AppSettings = currentConfig.AppSettings with
                 {
                     AutoConnect = AutoConnect,
+                    EnableNowPlayingDisplay = EnableNowPlayingDisplay,
                     LastPort = SelectedPort == SimulatorPort ? currentConfig.AppSettings.LastPort : SelectedPort
                 }
             };
@@ -760,6 +774,78 @@ public partial class MainWindowViewModel : ViewModelBase
         catch (Exception ex)
         {
             AddLog($"Device config send failed: {ex.Message}");
+        }
+    }
+
+    private async Task RunNowPlayingLoopAsync(CancellationToken cancellationToken)
+    {
+        using var timer = new PeriodicTimer(TimeSpan.FromSeconds(3));
+
+        while (!cancellationToken.IsCancellationRequested)
+        {
+            try
+            {
+                await timer.WaitForNextTickAsync(cancellationToken);
+                await UpdateNowPlayingAsync(cancellationToken);
+            }
+            catch (OperationCanceledException)
+            {
+                break;
+            }
+            catch (Exception ex)
+            {
+                Dispatcher.UIThread.Post(() => NowPlayingStatus = $"Now Playing failed: {ex.Message}");
+            }
+        }
+    }
+
+    private async Task UpdateNowPlayingAsync(CancellationToken cancellationToken)
+    {
+        if (!EnableNowPlayingDisplay)
+        {
+            lastSentNowPlayingTrack = null;
+            Dispatcher.UIThread.Post(() => NowPlayingStatus = "Now Playing disabled");
+            return;
+        }
+
+        if (activeConnection is null || activeConnection.State != DeviceConnectionState.Connected)
+        {
+            Dispatcher.UIThread.Post(() => NowPlayingStatus = "Now Playing waiting for device");
+            return;
+        }
+
+        var track = await nowPlayingProvider.GetCurrentTrackAsync(cancellationToken);
+        if (track is null)
+        {
+            lastSentNowPlayingTrack = null;
+            Dispatcher.UIThread.Post(() => NowPlayingStatus = "No Spotify track detected");
+            return;
+        }
+
+        Dispatcher.UIThread.Post(() => NowPlayingStatus = $"{track.Artist} - {track.Title}");
+
+        if (track == lastSentNowPlayingTrack)
+        {
+            return;
+        }
+
+        var line = MakroPad.Core.Protocol.ProtocolCodec.Format(
+            "display",
+            new Dictionary<string, string?>
+            {
+                ["mode"] = "media",
+                ["artist"] = track.Artist,
+                ["title"] = track.Title
+            });
+
+        try
+        {
+            await activeConnection.SendLineAsync(line, cancellationToken);
+            lastSentNowPlayingTrack = track;
+        }
+        catch (Exception ex)
+        {
+            Dispatcher.UIThread.Post(() => AddLog($"Now Playing display failed: {ex.Message}"));
         }
     }
 

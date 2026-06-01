@@ -141,6 +141,13 @@
                                            Maximum="60000"
                                            Increment="500" />
 
+                            <CheckBox Content="Show Now Playing on OLED"
+                                      IsChecked="{Binding EnableNowPlayingDisplay}" />
+                            <TextBlock Text="{Binding NowPlayingStatus}"
+                                       FontSize="12"
+                                       TextWrapping="Wrap"
+                                       Opacity="0.72" />
+
                             <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
                                 <Button Grid.Column="0"
                                         Content="Load"

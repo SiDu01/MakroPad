@@ -61,3 +61,12 @@ Implementation notes:
   - Future documentation generation.
 - Keep metadata near the action layer if it describes execution behavior, or in
   the app layer if it only describes UI presentation.
+
+## Now Playing
+
+- Initial Spotify Now Playing support is implemented through the Spotify window
+  title on Windows.
+- Replace or augment this with Windows Media Session metadata once the app has a
+  Windows-specific media-session integration.
+- Consider re-sending Now Playing after temporary OLED action-result messages if
+  the media display should be sticky.
