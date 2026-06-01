@@ -3,40 +3,88 @@
         xmlns:vm="using:MakroPad.App.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="1120" d:DesignHeight="720"
+        mc:Ignorable="d" d:DesignWidth="1180" d:DesignHeight="760"
         x:Class="MakroPad.App.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
         Title="MakroPad"
-        Width="1120"
-        Height="720"
-        MinWidth="900"
-        MinHeight="600">
+        Width="1180"
+        Height="760"
+        MinWidth="980"
+        MinHeight="640"
+        FontFamily="Outfit, Segoe UI"
+        Foreground="#F7FBFF"
+        Background="#061121">
 
     <Design.DataContext>
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
+    <Window.Styles>
+        <Style Selector="TextBlock">
+            <Setter Property="Foreground" Value="#F7FBFF" />
+        </Style>
+        <Style Selector="TextBlock.muted">
+            <Setter Property="Foreground" Value="#9FB2C8" />
+        </Style>
+        <Style Selector="TextBlock.sectionTitle">
+            <Setter Property="FontSize" Value="20" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+        </Style>
+        <Style Selector="TextBlock.label">
+            <Setter Property="Foreground" Value="#9FB2C8" />
+            <Setter Property="FontSize" Value="12" />
+        </Style>
+        <Style Selector="Border.panel">
+            <Setter Property="Background" Value="#0B1A2D" />
+            <Setter Property="BorderBrush" Value="#183655" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="6" />
+            <Setter Property="Padding" Value="16" />
+        </Style>
+        <Style Selector="Border.topBar">
+            <Setter Property="Background" Value="#071528" />
+            <Setter Property="BorderBrush" Value="#183655" />
+            <Setter Property="BorderThickness" Value="0,0,0,1" />
+        </Style>
+        <Style Selector="TabControl">
+            <Setter Property="Background" Value="#061121" />
+        </Style>
+        <Style Selector="TabItem">
+            <Setter Property="Foreground" Value="#DCE8F7" />
+            <Setter Property="Background" Value="#071528" />
+            <Setter Property="Padding" Value="16,12" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="MinWidth" Value="190" />
+        </Style>
+        <Style Selector="TabItem:selected">
+            <Setter Property="Foreground" Value="#FFFFFF" />
+            <Setter Property="Background" Value="#102844" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+        </Style>
+    </Window.Styles>
+
     <Grid RowDefinitions="Auto,*">
         <Border Grid.Row="0"
-                Padding="22,16"
-                BorderThickness="0,0,0,1">
+                Classes="topBar"
+                Padding="22,16">
             <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
                 <TextBlock Text="MakroPad"
                            FontSize="24"
                            FontWeight="SemiBold" />
                 <TextBlock Grid.Row="1"
-                           Text="{Binding SelectedPortDisplay, StringFormat='Port: {0}'}"
-                           Opacity="0.72" />
+                           Classes="muted"
+                           Text="{Binding SelectedPortDisplay, StringFormat='Port: {0}'}" />
 
                 <Border Grid.Column="1"
                         Grid.RowSpan="2"
-                        Padding="12,6"
+                        Background="#0B1A2D"
+                        BorderBrush="#183655"
                         BorderThickness="1"
                         CornerRadius="6"
+                        Padding="12,6"
                         VerticalAlignment="Center">
-                    <StackPanel Orientation="Horizontal"
-                                Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
                         <Ellipse Width="8"
                                  Height="8"
                                  Fill="{Binding ConnectionStatusBrush}"
@@ -49,322 +97,400 @@
             </Grid>
         </Border>
 
-        <Grid Grid.Row="1"
-              Margin="20"
-              ColumnDefinitions="340,*"
-              RowDefinitions="*"
-              ColumnSpacing="18">
-            <ScrollViewer Grid.Column="0"
-                          VerticalScrollBarVisibility="Auto">
-                <StackPanel Spacing="16">
-                    <Border Padding="16"
-                            BorderThickness="1"
-                            CornerRadius="6">
-                        <StackPanel Spacing="12">
-                            <TextBlock Text="Device"
-                                       FontSize="16"
-                                       FontWeight="SemiBold" />
-
-                            <TextBlock Text="Port"
-                                       Opacity="0.72" />
-                            <ComboBox ItemsSource="{Binding AvailablePorts}"
-                                      SelectedItem="{Binding SelectedPort}"
-                                      HorizontalAlignment="Stretch" />
-
-                            <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
-                                <Button Grid.Column="0"
-                                        Content="Refresh"
-                                        Command="{Binding RefreshPortsCommand}"
-                                        HorizontalAlignment="Stretch" />
-                                <Button Grid.Column="1"
-                                        Content="Connect"
-                                        Command="{Binding ConnectCommand}"
-                                        HorizontalAlignment="Stretch" />
-                            </Grid>
-
-                            <Button Content="Auto Connect"
-                                    Command="{Binding AutoConnectCommand}"
-                                    HorizontalAlignment="Stretch" />
-
-                            <Button Content="Disconnect"
-                                    Command="{Binding DisconnectCommand}"
-                                    HorizontalAlignment="Stretch" />
-
-                            <CheckBox Content="Auto-connect on startup"
-                                      IsChecked="{Binding AutoConnect}" />
+        <TabControl Grid.Row="1"
+                    TabStripPlacement="Left"
+                    Margin="18">
+            <TabItem Header="Makros">
+                <Grid RowDefinitions="Auto,*"
+                      RowSpacing="16"
+                      Margin="18,0,0,0">
+                    <Grid ColumnDefinitions="*,Auto"
+                          ColumnSpacing="16">
+                        <StackPanel>
+                            <TextBlock Classes="sectionTitle" Text="Makros" />
+                            <TextBlock Classes="muted"
+                                       Text="Bindings fuer Buttons und Slider bearbeiten." />
                         </StackPanel>
-                    </Border>
-
-                    <Border Padding="16"
-                            BorderThickness="1"
-                            CornerRadius="6">
-                        <StackPanel Spacing="12">
-                            <TextBlock Text="Profile"
-                                       FontSize="16"
-                                       FontWeight="SemiBold" />
-
-                            <TextBlock Text="Active profile"
-                                       Opacity="0.72" />
-                            <ComboBox ItemsSource="{Binding ProfileNames}"
-                                      SelectedItem="{Binding ActiveProfileName}"
-                                      HorizontalAlignment="Stretch" />
-
-                            <TextBlock Text="Profile name"
-                                       Opacity="0.72" />
-                            <TextBox Text="{Binding ProfileEditorName}" />
-
-                            <Grid ColumnDefinitions="*,*,*"
-                                  ColumnSpacing="8">
-                                <Button Grid.Column="0"
-                                        Content="Add"
-                                        Command="{Binding AddProfileCommand}"
-                                        HorizontalAlignment="Stretch" />
-                                <Button Grid.Column="1"
-                                        Content="Rename"
-                                        Command="{Binding RenameProfileCommand}"
-                                        HorizontalAlignment="Stretch" />
-                                <Button Grid.Column="2"
-                                        Content="Delete"
-                                        Command="{Binding DeleteProfileCommand}"
-                                        HorizontalAlignment="Stretch" />
-                            </Grid>
-
-                            <TextBlock Text="{Binding ConfigPath}"
-                                       FontSize="11"
-                                       TextWrapping="Wrap"
-                                       Opacity="0.72" />
-
-                            <TextBlock Text="Action result timeout (ms)"
-                                       Opacity="0.72" />
-                            <NumericUpDown Value="{Binding ActionResultTimeoutMs}"
-                                           Minimum="0"
-                                           Maximum="60000"
-                                           Increment="500" />
-
-                            <CheckBox Content="Show Now Playing on OLED"
-                                      IsChecked="{Binding EnableNowPlayingDisplay}" />
-                            <TextBlock Text="{Binding NowPlayingStatus}"
-                                       FontSize="12"
-                                       TextWrapping="Wrap"
-                                       Opacity="0.72" />
-
-                            <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
-                                <Button Grid.Column="0"
-                                        Content="Load"
-                                        Command="{Binding LoadConfigCommand}"
-                                        HorizontalAlignment="Stretch" />
-                                <Button Grid.Column="1"
-                                        Content="Save"
-                                        Command="{Binding SaveConfigCommand}"
-                                        HorizontalAlignment="Stretch" />
-                            </Grid>
+                        <StackPanel Grid.Column="1"
+                                    Orientation="Horizontal"
+                                    Spacing="8"
+                                    VerticalAlignment="Center">
+                            <TextBlock Classes="muted"
+                                       Text="{Binding ActiveProfileName, StringFormat='Profil: {0}'}"
+                                       VerticalAlignment="Center" />
+                            <Button Content="Load"
+                                    Command="{Binding LoadConfigCommand}" />
+                            <Button Content="Save"
+                                    Command="{Binding SaveConfigCommand}" />
                         </StackPanel>
-                    </Border>
+                    </Grid>
 
-                    <Border Padding="16"
-                            BorderThickness="1"
-                            CornerRadius="6">
-                        <StackPanel Spacing="12">
-                            <Grid ColumnDefinitions="*,Auto">
-                                <TextBlock Text="Simulator"
-                                           FontSize="16"
-                                           FontWeight="SemiBold" />
-                                <TextBlock Grid.Column="1"
-                                           Text="{Binding IsSimulatorSelected, StringFormat='Selected: {0}'}"
-                                           Opacity="0.72"
-                                           VerticalAlignment="Center" />
+                    <Grid Grid.Row="1"
+                          RowDefinitions="*,Auto"
+                          RowSpacing="16">
+                        <Border Classes="panel">
+                            <Grid RowDefinitions="Auto,*"
+                                  RowSpacing="10">
+                                <Grid ColumnDefinitions="150,220,*"
+                                      ColumnSpacing="12">
+                                    <TextBlock Text="Input"
+                                               FontWeight="SemiBold"
+                                               Classes="label" />
+                                    <TextBlock Grid.Column="1"
+                                               Text="Action"
+                                               FontWeight="SemiBold"
+                                               Classes="label" />
+                                    <TextBlock Grid.Column="2"
+                                               Text="Parameters"
+                                               FontWeight="SemiBold"
+                                               Classes="label" />
+                                </Grid>
+
+                                <ListBox Grid.Row="1"
+                                         ItemsSource="{Binding ProfileBindings}"
+                                         SelectedItem="{Binding SelectedBinding}">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid ColumnDefinitions="150,220,*"
+                                                  ColumnSpacing="12">
+                                                <TextBlock Text="{Binding Input}"
+                                                           FontFamily="Consolas"
+                                                           TextTrimming="CharacterEllipsis" />
+                                                <TextBlock Grid.Column="1"
+                                                           Text="{Binding Action}"
+                                                           FontFamily="Consolas"
+                                                           TextTrimming="CharacterEllipsis" />
+                                                <TextBlock Grid.Column="2"
+                                                           Text="{Binding Parameters}"
+                                                           FontFamily="Consolas"
+                                                           TextTrimming="CharacterEllipsis" />
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
                             </Grid>
+                        </Border>
 
-                            <TextBlock Text="OLED message"
-                                       Opacity="0.72" />
-                            <TextBox Text="{Binding DisplayText}" />
-                            <Button Content="Send to Display"
-                                    Command="{Binding SendDisplayMessageCommand}"
-                                    HorizontalAlignment="Stretch" />
-
-                            <Separator />
-
-                            <Grid ColumnDefinitions="*,Auto"
-                                  ColumnSpacing="8">
+                        <Border Grid.Row="1"
+                                Classes="panel">
+                            <Grid RowDefinitions="Auto,Auto,Auto,Auto"
+                                  ColumnDefinitions="150,220,*"
+                                  RowSpacing="10"
+                                  ColumnSpacing="12">
                                 <ComboBox Grid.Column="0"
-                                          ItemsSource="{Binding AvailableButtonIds}"
-                                          SelectedItem="{Binding SimulatorButtonId}"
+                                          ItemsSource="{Binding AvailableInputs}"
+                                          SelectedItem="{Binding BindingEditorInput}"
                                           HorizontalAlignment="Stretch" />
-                                <Button Grid.Column="1"
-                                        Content="Simulate Button"
-                                        Command="{Binding SimulateButtonCommand}" />
-                            </Grid>
-
-                            <Grid ColumnDefinitions="*,Auto"
-                                  ColumnSpacing="8">
-                                <ComboBox Grid.Column="0"
-                                          ItemsSource="{Binding AvailableSliderIds}"
-                                          SelectedItem="{Binding SimulatorSliderId}"
+                                <ComboBox Grid.Column="1"
+                                          ItemsSource="{Binding AvailableActions}"
+                                          SelectedItem="{Binding BindingEditorAction}"
                                           HorizontalAlignment="Stretch" />
-                                <Button Grid.Column="1"
-                                        Content="Simulate Slider"
-                                        Command="{Binding SimulateSliderCommand}" />
-                            </Grid>
+                                <TextBox Grid.Column="2"
+                                         PlaceholderText="{Binding BindingParameterPlaceholder}"
+                                         Text="{Binding BindingEditorParameters}" />
 
-                            <TextBlock Text="{Binding LastSliderValue, StringFormat='Last slider value: {0}'}"
-                                       Opacity="0.82" />
+                                <StackPanel Grid.Row="1"
+                                            Grid.ColumnSpan="3"
+                                            Spacing="3">
+                                    <TextBlock Text="{Binding BindingActionDescription}"
+                                               TextWrapping="Wrap" />
+                                    <TextBlock Text="{Binding BindingParameterHint}"
+                                               FontFamily="Consolas"
+                                               FontSize="12"
+                                               Classes="muted"
+                                               TextWrapping="Wrap" />
+                                    <TextBlock Text="{Binding BindingEditorValidationMessage}"
+                                               Foreground="#FF7A90"
+                                               FontSize="12"
+                                               TextWrapping="Wrap" />
+                                    <TextBlock Text="{Binding ShortcutRecordingStatus}"
+                                               FontSize="12"
+                                               Classes="muted"
+                                               TextWrapping="Wrap" />
+                                </StackPanel>
+
+                                <Grid Grid.Row="2"
+                                      Grid.ColumnSpan="3"
+                                      ColumnDefinitions="*,*"
+                                      ColumnSpacing="8">
+                                    <Button Grid.Column="0"
+                                            Content="Record Shortcut"
+                                            Command="{Binding StartShortcutRecordingCommand}"
+                                            HorizontalAlignment="Stretch" />
+                                    <Button Grid.Column="1"
+                                            Content="Browse App/File"
+                                            Click="BrowseOpenApp_Click"
+                                            HorizontalAlignment="Stretch" />
+                                </Grid>
+
+                                <Grid Grid.Row="3"
+                                      Grid.ColumnSpan="3"
+                                      ColumnDefinitions="*,*,*,*"
+                                      ColumnSpacing="8">
+                                    <Button Grid.Column="0"
+                                            Content="Apply"
+                                            Command="{Binding ApplyBindingCommand}"
+                                            HorizontalAlignment="Stretch" />
+                                    <Button Grid.Column="1"
+                                            Content="Add"
+                                            Command="{Binding AddBindingCommand}"
+                                            HorizontalAlignment="Stretch" />
+                                    <Button Grid.Column="2"
+                                            Content="Remove"
+                                            Command="{Binding RemoveBindingCommand}"
+                                            HorizontalAlignment="Stretch" />
+                                    <Button Grid.Column="3"
+                                            Content="Example"
+                                            Command="{Binding UseParameterExampleCommand}"
+                                            HorizontalAlignment="Stretch" />
+                                </Grid>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Geraet">
+                <ScrollViewer Margin="18,0,0,0"
+                              VerticalScrollBarVisibility="Auto">
+                    <Grid RowDefinitions="Auto,Auto"
+                          RowSpacing="16">
+                        <StackPanel>
+                            <TextBlock Classes="sectionTitle" Text="Geraet" />
+                            <TextBlock Classes="muted"
+                                       Text="Serielle Verbindung und MakroPad-Status." />
                         </StackPanel>
-                    </Border>
-                </StackPanel>
-            </ScrollViewer>
-
-            <Grid Grid.Column="1"
-                  RowDefinitions="410,*"
-                  RowSpacing="18">
-                <Border Grid.Row="0"
-                        Padding="16"
-                        BorderThickness="1"
-                        CornerRadius="6">
-                    <Grid RowDefinitions="Auto,*,Auto" RowSpacing="12">
-                        <TextBlock Text="Profile Bindings"
-                                   FontSize="16"
-                                   FontWeight="SemiBold" />
 
                         <Grid Grid.Row="1"
-                              RowDefinitions="Auto,*"
-                              RowSpacing="6">
-                            <Grid ColumnDefinitions="150,220,*"
-                                  ColumnSpacing="12">
-                                <TextBlock Text="Input"
-                                           FontWeight="SemiBold"
-                                           Opacity="0.72" />
-                                <TextBlock Grid.Column="1"
-                                           Text="Action"
-                                           FontWeight="SemiBold"
-                                           Opacity="0.72" />
-                                <TextBlock Grid.Column="2"
-                                           Text="Parameters"
-                                           FontWeight="SemiBold"
-                                           Opacity="0.72" />
-                            </Grid>
+                              ColumnDefinitions="*,*"
+                              ColumnSpacing="16">
+                            <Border Classes="panel">
+                                <StackPanel Spacing="12">
+                                    <TextBlock Text="Connection"
+                                               FontSize="16"
+                                               FontWeight="SemiBold" />
+                                    <TextBlock Classes="label" Text="Port" />
+                                    <ComboBox ItemsSource="{Binding AvailablePorts}"
+                                              SelectedItem="{Binding SelectedPort}"
+                                              HorizontalAlignment="Stretch" />
 
+                                    <Grid ColumnDefinitions="*,*"
+                                          ColumnSpacing="8">
+                                        <Button Grid.Column="0"
+                                                Content="Refresh"
+                                                Command="{Binding RefreshPortsCommand}"
+                                                HorizontalAlignment="Stretch" />
+                                        <Button Grid.Column="1"
+                                                Content="Connect"
+                                                Command="{Binding ConnectCommand}"
+                                                HorizontalAlignment="Stretch" />
+                                    </Grid>
+
+                                    <Button Content="Auto Connect"
+                                            Command="{Binding AutoConnectCommand}"
+                                            HorizontalAlignment="Stretch" />
+                                    <Button Content="Disconnect"
+                                            Command="{Binding DisconnectCommand}"
+                                            HorizontalAlignment="Stretch" />
+                                    <CheckBox Content="Auto-connect on startup"
+                                              IsChecked="{Binding AutoConnect}" />
+                                </StackPanel>
+                            </Border>
+
+                            <Border Grid.Column="1"
+                                    Classes="panel">
+                                <StackPanel Spacing="12">
+                                    <TextBlock Text="OLED Media"
+                                               FontSize="16"
+                                               FontWeight="SemiBold" />
+                                    <CheckBox Content="Show Now Playing on OLED"
+                                              IsChecked="{Binding EnableNowPlayingDisplay}" />
+                                    <TextBlock Text="{Binding NowPlayingStatus}"
+                                               TextWrapping="Wrap"
+                                               Classes="muted" />
+                                    <TextBlock Classes="label"
+                                               Text="OLED message" />
+                                    <TextBox Text="{Binding DisplayText}" />
+                                    <Button Content="Send to Display"
+                                            Command="{Binding SendDisplayMessageCommand}"
+                                            HorizontalAlignment="Stretch" />
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                    </Grid>
+                </ScrollViewer>
+            </TabItem>
+
+            <TabItem Header="Simulation">
+                <ScrollViewer Margin="18,0,0,0"
+                              VerticalScrollBarVisibility="Auto">
+                    <Grid RowDefinitions="Auto,Auto"
+                          RowSpacing="16">
+                        <StackPanel>
+                            <TextBlock Classes="sectionTitle" Text="Simulation" />
+                            <TextBlock Classes="muted"
+                                       Text="Inputs ohne Hardware ausloesen." />
+                        </StackPanel>
+
+                        <Border Grid.Row="1"
+                                Classes="panel"
+                                MaxWidth="520"
+                                HorizontalAlignment="Left">
+                            <StackPanel Spacing="12">
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <TextBlock Text="Simulator"
+                                               FontSize="16"
+                                               FontWeight="SemiBold" />
+                                    <TextBlock Grid.Column="1"
+                                               Text="{Binding IsSimulatorSelected, StringFormat='Selected: {0}'}"
+                                               Classes="muted"
+                                               VerticalAlignment="Center" />
+                                </Grid>
+
+                                <TextBlock Classes="label" Text="Button ID" />
+                                <Grid ColumnDefinitions="*,Auto"
+                                      ColumnSpacing="8">
+                                    <ComboBox Grid.Column="0"
+                                              ItemsSource="{Binding AvailableButtonIds}"
+                                              SelectedItem="{Binding SimulatorButtonId}"
+                                              HorizontalAlignment="Stretch" />
+                                    <Button Grid.Column="1"
+                                            Content="Simulate Button"
+                                            Command="{Binding SimulateButtonCommand}" />
+                                </Grid>
+
+                                <TextBlock Classes="label" Text="Slider ID" />
+                                <Grid ColumnDefinitions="*,Auto"
+                                      ColumnSpacing="8">
+                                    <ComboBox Grid.Column="0"
+                                              ItemsSource="{Binding AvailableSliderIds}"
+                                              SelectedItem="{Binding SimulatorSliderId}"
+                                              HorizontalAlignment="Stretch" />
+                                    <Button Grid.Column="1"
+                                            Content="Simulate Slider"
+                                            Command="{Binding SimulateSliderCommand}" />
+                                </Grid>
+
+                                <TextBlock Text="{Binding LastSliderValue, StringFormat='Last slider value: {0}'}"
+                                           Classes="muted" />
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </ScrollViewer>
+            </TabItem>
+
+            <TabItem Header="Einstellungen">
+                <ScrollViewer Margin="18,0,0,0"
+                              VerticalScrollBarVisibility="Auto">
+                    <Grid RowDefinitions="Auto,Auto"
+                          RowSpacing="16">
+                        <StackPanel>
+                            <TextBlock Classes="sectionTitle" Text="Einstellungen" />
+                            <TextBlock Classes="muted"
+                                       Text="Profile und App-Verhalten konfigurieren." />
+                        </StackPanel>
+
+                        <Grid Grid.Row="1"
+                              ColumnDefinitions="*,*"
+                              ColumnSpacing="16">
+                            <Border Classes="panel">
+                                <StackPanel Spacing="12">
+                                    <TextBlock Text="Profiles"
+                                               FontSize="16"
+                                               FontWeight="SemiBold" />
+                                    <TextBlock Classes="label" Text="Active profile" />
+                                    <ComboBox ItemsSource="{Binding ProfileNames}"
+                                              SelectedItem="{Binding ActiveProfileName}"
+                                              HorizontalAlignment="Stretch" />
+
+                                    <TextBlock Classes="label" Text="Profile name" />
+                                    <TextBox Text="{Binding ProfileEditorName}" />
+
+                                    <Grid ColumnDefinitions="*,*,*"
+                                          ColumnSpacing="8">
+                                        <Button Grid.Column="0"
+                                                Content="Add"
+                                                Command="{Binding AddProfileCommand}"
+                                                HorizontalAlignment="Stretch" />
+                                        <Button Grid.Column="1"
+                                                Content="Rename"
+                                                Command="{Binding RenameProfileCommand}"
+                                                HorizontalAlignment="Stretch" />
+                                        <Button Grid.Column="2"
+                                                Content="Delete"
+                                                Command="{Binding DeleteProfileCommand}"
+                                                HorizontalAlignment="Stretch" />
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+
+                            <Border Grid.Column="1"
+                                    Classes="panel">
+                                <StackPanel Spacing="12">
+                                    <TextBlock Text="Application"
+                                               FontSize="16"
+                                               FontWeight="SemiBold" />
+                                    <TextBlock Text="{Binding ConfigPath}"
+                                               FontSize="11"
+                                               TextWrapping="Wrap"
+                                               Classes="muted" />
+                                    <TextBlock Classes="label"
+                                               Text="Action result timeout (ms)" />
+                                    <NumericUpDown Value="{Binding ActionResultTimeoutMs}"
+                                                   Minimum="0"
+                                                   Maximum="60000"
+                                                   Increment="500" />
+
+                                    <Grid ColumnDefinitions="*,*"
+                                          ColumnSpacing="8">
+                                        <Button Grid.Column="0"
+                                                Content="Load"
+                                                Command="{Binding LoadConfigCommand}"
+                                                HorizontalAlignment="Stretch" />
+                                        <Button Grid.Column="1"
+                                                Content="Save"
+                                                Command="{Binding SaveConfigCommand}"
+                                                HorizontalAlignment="Stretch" />
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                    </Grid>
+                </ScrollViewer>
+            </TabItem>
+
+            <TabItem Header="Debug">
+                <Grid RowDefinitions="Auto,*"
+                      RowSpacing="16"
+                      Margin="18,0,0,0">
+                    <StackPanel>
+                        <TextBlock Classes="sectionTitle" Text="Debug" />
+                        <TextBlock Classes="muted"
+                                   Text="Serielles Protokoll und interne Meldungen." />
+                    </StackPanel>
+
+                    <Border Grid.Row="1"
+                            Classes="panel">
+                        <Grid RowDefinitions="Auto,*"
+                              RowSpacing="12">
+                            <TextBlock Text="Protocol Log"
+                                       FontSize="16"
+                                       FontWeight="SemiBold" />
                             <ListBox Grid.Row="1"
-                                     ItemsSource="{Binding ProfileBindings}"
-                                     SelectedItem="{Binding SelectedBinding}">
+                                     ItemsSource="{Binding EventLog}">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
-                                        <Grid ColumnDefinitions="150,220,*"
-                                              ColumnSpacing="12">
-                                            <TextBlock Text="{Binding Input}"
-                                                       FontFamily="Consolas"
-                                                       TextTrimming="CharacterEllipsis" />
-                                            <TextBlock Grid.Column="1"
-                                                       Text="{Binding Action}"
-                                                       FontFamily="Consolas"
-                                                       TextTrimming="CharacterEllipsis" />
-                                            <TextBlock Grid.Column="2"
-                                                       Text="{Binding Parameters}"
-                                                       FontFamily="Consolas"
-                                                       TextTrimming="CharacterEllipsis" />
-                                        </Grid>
+                                        <TextBlock Text="{Binding}"
+                                                   FontFamily="Consolas"
+                                                   FontSize="12"
+                                                   TextWrapping="NoWrap" />
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>
                             </ListBox>
                         </Grid>
-
-                        <Grid Grid.Row="2"
-                              RowDefinitions="Auto,Auto,Auto,Auto"
-                              ColumnDefinitions="150,220,*"
-                              RowSpacing="8"
-                              ColumnSpacing="12">
-                            <ComboBox Grid.Column="0"
-                                      ItemsSource="{Binding AvailableInputs}"
-                                      SelectedItem="{Binding BindingEditorInput}"
-                                      HorizontalAlignment="Stretch" />
-                            <ComboBox Grid.Column="1"
-                                      ItemsSource="{Binding AvailableActions}"
-                                      SelectedItem="{Binding BindingEditorAction}"
-                                      HorizontalAlignment="Stretch" />
-                            <TextBox Grid.Column="2"
-                                     PlaceholderText="{Binding BindingParameterPlaceholder}"
-                                     Text="{Binding BindingEditorParameters}" />
-
-                            <StackPanel Grid.Row="1"
-                                        Grid.ColumnSpan="3"
-                                        Spacing="3">
-                                <TextBlock Text="{Binding BindingActionDescription}"
-                                           Opacity="0.82"
-                                           TextWrapping="Wrap" />
-                                <TextBlock Text="{Binding BindingParameterHint}"
-                                           FontFamily="Consolas"
-                                           FontSize="12"
-                                           Opacity="0.72"
-                                           TextWrapping="Wrap" />
-                                <TextBlock Text="{Binding BindingEditorValidationMessage}"
-                                           Foreground="Firebrick"
-                                           FontSize="12"
-                                           TextWrapping="Wrap" />
-                                <TextBlock Text="{Binding ShortcutRecordingStatus}"
-                                           FontSize="12"
-                                           TextWrapping="Wrap" />
-                            </StackPanel>
-
-                            <Grid Grid.Row="2"
-                                  Grid.ColumnSpan="3"
-                                  ColumnDefinitions="*,*"
-                                  ColumnSpacing="8">
-                                <Button Grid.Column="0"
-                                        Content="Record Shortcut"
-                                        Command="{Binding StartShortcutRecordingCommand}"
-                                        HorizontalAlignment="Stretch" />
-                                <Button Grid.Column="1"
-                                        Content="Browse App/File"
-                                        Click="BrowseOpenApp_Click"
-                                        HorizontalAlignment="Stretch" />
-                            </Grid>
-
-                            <Grid Grid.Row="3"
-                                  Grid.ColumnSpan="3"
-                                  ColumnDefinitions="*,*,*,*"
-                                  ColumnSpacing="8">
-                                <Button Grid.Column="0"
-                                        Content="Apply"
-                                        Command="{Binding ApplyBindingCommand}"
-                                        HorizontalAlignment="Stretch" />
-                                <Button Grid.Column="1"
-                                        Content="Add"
-                                        Command="{Binding AddBindingCommand}"
-                                        HorizontalAlignment="Stretch" />
-                                <Button Grid.Column="2"
-                                        Content="Remove"
-                                        Command="{Binding RemoveBindingCommand}"
-                                        HorizontalAlignment="Stretch" />
-                                <Button Grid.Column="3"
-                                        Content="Example"
-                                        Command="{Binding UseParameterExampleCommand}"
-                                        HorizontalAlignment="Stretch" />
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                </Border>
-
-                <Border Grid.Row="1"
-                        Padding="16"
-                        BorderThickness="1"
-                        CornerRadius="6">
-                    <Grid RowDefinitions="Auto,*" RowSpacing="12">
-                        <TextBlock Text="Protocol Log"
-                                   FontSize="16"
-                                   FontWeight="SemiBold" />
-                        <ListBox Grid.Row="1"
-                                 ItemsSource="{Binding EventLog}">
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding}"
-                                               FontFamily="Consolas"
-                                               FontSize="12"
-                                               TextWrapping="NoWrap" />
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
-                    </Grid>
-                </Border>
-            </Grid>
-        </Grid>
+                    </Border>
+                </Grid>
+            </TabItem>
+        </TabControl>
     </Grid>
 </Window>

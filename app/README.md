@@ -41,6 +41,8 @@ Implemented:
 - App/file picker for `system.openApp`.
 - OLED Now Playing display for Spotify track changes using the Spotify window
   title.
+- Dark blue sidebar UI with separate Makros, Geraet, Simulation, Einstellungen,
+  and Debug sections.
 - Structured main window with device, profile, simulator, bindings, and log
   sections.
 - Auto-connect scanning for `hello;device=makropad-s3`.
