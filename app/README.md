@@ -48,6 +48,8 @@ Implemented:
   sections.
 - Auto-connect scanning for `hello;device=makropad-s3`.
 - Configurable OLED action-result timeout.
+- Configurable OLED default screen with `{profile}` and `{status}`
+  placeholders.
 - Serial heartbeat with `ping`/`pong` and `Unresponsive` connection state.
 
 Supported actions:
@@ -93,9 +95,10 @@ Windows audio sessions for the configured process name, for example
 `process=Spotify`.
 
 The app sends
-`config;profile=...;actionResultTimeoutMs=...;preferredDisplay=...` to the
-device after connecting and when saving the config. `0` disables the automatic
-OLED reset for action results.
+`config;profile=...;actionResultTimeoutMs=...;defaultTitle=...;defaultLine1=...;defaultLine2=...;preferredDisplay=...`
+to the device after connecting and when saving the config. `0` disables the
+automatic OLED reset for action results. The default screen supports
+`{profile}` and `{status}` placeholders.
 
 Now Playing is an initial implementation: it polls the Spotify desktop window
 title on Windows and sends `display;mode=media;artist=...;title=...` when the

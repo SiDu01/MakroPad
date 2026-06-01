@@ -105,6 +105,15 @@ public partial class MainWindowViewModel : ViewModelBase
     private int actionResultTimeoutMs = 3000;
 
     [ObservableProperty]
+    private string defaultScreenTitle = "MakroPad";
+
+    [ObservableProperty]
+    private string defaultScreenLine1 = "{profile}";
+
+    [ObservableProperty]
+    private string defaultScreenLine2 = "{status}";
+
+    [ObservableProperty]
     private BindingViewModel? selectedBinding;
 
     partial void OnSelectedBindingChanged(BindingViewModel? value)
@@ -303,6 +312,9 @@ public partial class MainWindowViewModel : ViewModelBase
             AutoConnect = currentConfig.AppSettings.AutoConnect;
             EnableNowPlayingDisplay = currentConfig.AppSettings.EnableNowPlayingDisplay;
             ActionResultTimeoutMs = currentConfig.Hardware.Display.ActionResultTimeoutMs;
+            DefaultScreenTitle = currentConfig.Hardware.Display.DefaultTitle;
+            DefaultScreenLine1 = currentConfig.Hardware.Display.DefaultLine1;
+            DefaultScreenLine2 = currentConfig.Hardware.Display.DefaultLine2;
 
             RefreshProfileNames();
 
@@ -335,7 +347,10 @@ public partial class MainWindowViewModel : ViewModelBase
                 {
                     Display = currentConfig.Hardware.Display with
                     {
-                        ActionResultTimeoutMs = Math.Max(0, ActionResultTimeoutMs)
+                        ActionResultTimeoutMs = Math.Max(0, ActionResultTimeoutMs),
+                        DefaultTitle = NormalizeDisplayLine(DefaultScreenTitle, "MakroPad"),
+                        DefaultLine1 = NormalizeDisplayLine(DefaultScreenLine1, "{profile}"),
+                        DefaultLine2 = NormalizeDisplayLine(DefaultScreenLine2, "{status}")
                     }
                 },
                 AppSettings = currentConfig.AppSettings with
@@ -776,6 +791,9 @@ public partial class MainWindowViewModel : ViewModelBase
             {
                 ["profile"] = ActiveProfileName,
                 ["actionResultTimeoutMs"] = Math.Max(0, ActionResultTimeoutMs).ToString(),
+                ["defaultTitle"] = NormalizeDisplayLine(DefaultScreenTitle, "MakroPad"),
+                ["defaultLine1"] = NormalizeDisplayLine(DefaultScreenLine1, "{profile}"),
+                ["defaultLine2"] = NormalizeDisplayLine(DefaultScreenLine2, "{status}"),
                 ["preferredDisplay"] = EnableNowPlayingDisplay && lastSentNowPlayingTrack is not null
                     ? "media"
                     : "profile"
@@ -1130,6 +1148,11 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
         return Path.Combine(appData, "MakroPad", "config.json");
+    }
+
+    private static string NormalizeDisplayLine(string value, string fallback)
+    {
+        return string.IsNullOrWhiteSpace(value) ? fallback : value.Trim();
     }
 
     private sealed record ActionDefinition(

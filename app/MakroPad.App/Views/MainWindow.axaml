@@ -440,6 +440,20 @@
                                                    Minimum="0"
                                                    Maximum="60000"
                                                    Increment="500" />
+                                    <TextBlock Text="OLED Default Screen"
+                                               FontSize="16"
+                                               FontWeight="SemiBold"
+                                               Margin="0,8,0,0" />
+                                    <TextBlock Classes="label" Text="Title" />
+                                    <TextBox Text="{Binding DefaultScreenTitle}" />
+                                    <TextBlock Classes="label" Text="Line 1" />
+                                    <TextBox Text="{Binding DefaultScreenLine1}" />
+                                    <TextBlock Classes="label" Text="Line 2" />
+                                    <TextBox Text="{Binding DefaultScreenLine2}" />
+                                    <TextBlock Classes="muted"
+                                               FontSize="12"
+                                               TextWrapping="Wrap"
+                                               Text="{}Placeholders: {profile}, {status}" />
 
                                     <Grid ColumnDefinitions="*,*"
                                           ColumnSpacing="8">

@@ -66,6 +66,9 @@ String currentProfileName = "Default";
 String preferredDisplayMode = "profile";
 String currentMediaArtist;
 String currentMediaTitle;
+String defaultScreenTitle = "MakroPad";
+String defaultScreenLine1 = "{profile}";
+String defaultScreenLine2 = "{status}";
 
 String percentDecode(const String& value) {
   String decoded;
@@ -163,11 +166,21 @@ void drawStatusMessage(const String& line1, const String& line2 = "", const Stri
   display.display();
 }
 
-void drawIdleStatus() {
-  drawStatusMessage("MakroPad", currentProfileName, hostAcknowledged ? "Connected" : "Waiting for app");
+void drawMedia(const String& artist, const String& title);
+
+String renderDefaultScreenLine(String line, const String& status) {
+  line.replace("{profile}", currentProfileName);
+  line.replace("{status}", status);
+  return line;
 }
 
-void drawMedia(const String& artist, const String& title);
+void drawIdleStatus() {
+  const String status = hostAcknowledged ? "Connected" : "Waiting for app";
+  drawStatusMessage(
+    renderDefaultScreenLine(defaultScreenTitle, status),
+    renderDefaultScreenLine(defaultScreenLine1, status),
+    renderDefaultScreenLine(defaultScreenLine2, status));
+}
 
 void drawPreferredDisplay() {
   if (preferredDisplayMode == "media" && currentMediaTitle.length() > 0) {
@@ -288,6 +301,21 @@ void handleProtocolLine(String line) {
     const String displayMode = protocolValue(line, "preferredDisplay");
     if (displayMode == "media" || displayMode == "profile") {
       preferredDisplayMode = displayMode;
+    }
+
+    const String configuredDefaultTitle = protocolValue(line, "defaultTitle");
+    if (configuredDefaultTitle.length() > 0) {
+      defaultScreenTitle = configuredDefaultTitle;
+    }
+
+    const String configuredDefaultLine1 = protocolValue(line, "defaultLine1");
+    if (configuredDefaultLine1.length() > 0) {
+      defaultScreenLine1 = configuredDefaultLine1;
+    }
+
+    const String configuredDefaultLine2 = protocolValue(line, "defaultLine2");
+    if (configuredDefaultLine2.length() > 0) {
+      defaultScreenLine2 = configuredDefaultLine2;
     }
 
     temporaryDisplayUntilMs = 0;

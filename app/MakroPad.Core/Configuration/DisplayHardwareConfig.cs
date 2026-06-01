@@ -15,4 +15,10 @@ public sealed record DisplayHardwareConfig
     public int SclPin { get; init; } = 9;
 
     public int ActionResultTimeoutMs { get; init; } = 3000;
+
+    public string DefaultTitle { get; init; } = "MakroPad";
+
+    public string DefaultLine1 { get; init; } = "{profile}";
+
+    public string DefaultLine2 { get; init; } = "{status}";
 }
