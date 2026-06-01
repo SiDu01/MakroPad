@@ -32,6 +32,7 @@ Implemented:
 - Unit tests for protocol encoding and action pipeline behavior.
 - Windows media key actions.
 - Windows `system.volume` action via CoreAudio.
+- Windows `app.volume` action for per-process audio sessions via CoreAudio.
 - Basic editable profile binding overview in the main UI.
 - Action-specific config editor hints, placeholders, and basic validation.
 - Known input selection for `button:1..20` and `slider:1..3`.
@@ -59,6 +60,7 @@ Supported actions:
 - `media.volumeDown`
 - `media.mute`
 - `system.volume`
+- `app.volume` with `process=Spotify`
 - `system.openUrl` with `url=https://example.com`
 - `system.openApp` with `path=notepad.exe`
 - `keyboard.shortcut` with `keys=Ctrl+Alt+T`
@@ -86,7 +88,9 @@ hello-ack;proto=1;app=0.1.0
 ```
 
 Incoming slider values are expected as `0..4095`. `system.volume` maps them to
-Windows master volume `0..100%`.
+Windows master volume `0..100%`. `app.volume` maps them to the volume of active
+Windows audio sessions for the configured process name, for example
+`process=Spotify`.
 
 The app sends
 `config;profile=...;actionResultTimeoutMs=...;preferredDisplay=...` to the

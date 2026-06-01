@@ -16,6 +16,7 @@ public sealed class ActionExecutorTests
         var executor = new ActionExecutor(
             new FakeMediaController(),
             volumeController,
+            new FakeApplicationVolumeController(),
             new FakeKeyboardController(),
             new FakeSystemLauncher());
 
@@ -35,6 +36,7 @@ public sealed class ActionExecutorTests
         var executor = new ActionExecutor(
             new FakeMediaController(),
             volumeController,
+            new FakeApplicationVolumeController(),
             new FakeKeyboardController(),
             new FakeSystemLauncher());
 
@@ -45,6 +47,79 @@ public sealed class ActionExecutorTests
 
         Assert.False(result.Succeeded);
         Assert.Empty(volumeController.SetVolumes);
+    }
+
+    [Theory]
+    [InlineData("0", 0)]
+    [InlineData("2048", 50)]
+    [InlineData("4095", 100)]
+    public async Task ExecuteAsyncMapsSliderValueToApplicationVolumePercent(string rawValue, int expectedPercent)
+    {
+        var appVolumeController = new FakeApplicationVolumeController();
+        var executor = new ActionExecutor(
+            new FakeMediaController(),
+            new FakeVolumeController(),
+            appVolumeController,
+            new FakeKeyboardController(),
+            new FakeSystemLauncher());
+
+        var result = await executor.ExecuteAsync(new ActionExecutionContext(
+            "slider:1",
+            new ActionBinding
+            {
+                Action = "app.volume",
+                Parameters = new Dictionary<string, string> { ["process"] = "Spotify" }
+            },
+            rawValue));
+
+        var setVolume = appVolumeController.SetVolumes.Single();
+        Assert.True(result.Succeeded);
+        Assert.Equal("Spotify", setVolume.ProcessName);
+        Assert.Equal(expectedPercent, setVolume.Percent);
+    }
+
+    [Fact]
+    public async Task ExecuteAsyncFailsApplicationVolumeActionWhenProcessIsMissing()
+    {
+        var appVolumeController = new FakeApplicationVolumeController();
+        var executor = new ActionExecutor(
+            new FakeMediaController(),
+            new FakeVolumeController(),
+            appVolumeController,
+            new FakeKeyboardController(),
+            new FakeSystemLauncher());
+
+        var result = await executor.ExecuteAsync(new ActionExecutionContext(
+            "slider:1",
+            new ActionBinding { Action = "app.volume" },
+            "2048"));
+
+        Assert.False(result.Succeeded);
+        Assert.Empty(appVolumeController.SetVolumes);
+    }
+
+    [Fact]
+    public async Task ExecuteAsyncFailsApplicationVolumeActionWhenValueIsInvalid()
+    {
+        var appVolumeController = new FakeApplicationVolumeController();
+        var executor = new ActionExecutor(
+            new FakeMediaController(),
+            new FakeVolumeController(),
+            appVolumeController,
+            new FakeKeyboardController(),
+            new FakeSystemLauncher());
+
+        var result = await executor.ExecuteAsync(new ActionExecutionContext(
+            "slider:1",
+            new ActionBinding
+            {
+                Action = "app.volume",
+                Parameters = new Dictionary<string, string> { ["process"] = "Spotify" }
+            },
+            "not-a-number"));
+
+        Assert.False(result.Succeeded);
+        Assert.Empty(appVolumeController.SetVolumes);
     }
 
     [Theory]
@@ -61,6 +136,7 @@ public sealed class ActionExecutorTests
         var executor = new ActionExecutor(
             mediaController,
             new FakeVolumeController(),
+            new FakeApplicationVolumeController(),
             new FakeKeyboardController(),
             new FakeSystemLauncher());
 
@@ -80,6 +156,7 @@ public sealed class ActionExecutorTests
         var executor = new ActionExecutor(
             new FakeMediaController(),
             new FakeVolumeController(),
+            new FakeApplicationVolumeController(),
             keyboardController,
             new FakeSystemLauncher());
 
@@ -103,6 +180,7 @@ public sealed class ActionExecutorTests
         var executor = new ActionExecutor(
             new FakeMediaController(),
             new FakeVolumeController(),
+            new FakeApplicationVolumeController(),
             new FakeKeyboardController(),
             launcher);
 
@@ -126,6 +204,7 @@ public sealed class ActionExecutorTests
         var executor = new ActionExecutor(
             new FakeMediaController(),
             new FakeVolumeController(),
+            new FakeApplicationVolumeController(),
             new FakeKeyboardController(),
             launcher);
 
@@ -188,6 +267,22 @@ public sealed class ActionExecutorTests
             SetVolumes.Add(percent);
 
             return Task.FromResult(ActionExecutionResult.Ok($"Volume {percent}%"));
+        }
+    }
+
+    private sealed class FakeApplicationVolumeController : IApplicationVolumeController
+    {
+        public List<(string ProcessName, int Percent)> SetVolumes { get; } = [];
+
+        public Task<ActionExecutionResult> SetApplicationVolumeAsync(
+            string processName,
+            int percent,
+            CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            SetVolumes.Add((processName, percent));
+
+            return Task.FromResult(ActionExecutionResult.Ok($"Volume {percent}% for {processName}"));
         }
     }
 

@@ -4,6 +4,7 @@ public sealed class ActionExecutor
 {
     private readonly ISystemMediaController mediaController;
     private readonly ISystemVolumeController volumeController;
+    private readonly IApplicationVolumeController applicationVolumeController;
     private readonly IKeyboardController keyboardController;
     private readonly ISystemLauncher systemLauncher;
 
@@ -11,6 +12,7 @@ public sealed class ActionExecutor
         : this(
             SystemMediaControllerFactory.Create(),
             SystemVolumeControllerFactory.Create(),
+            ApplicationVolumeControllerFactory.Create(),
             KeyboardControllerFactory.Create(),
             SystemLauncherFactory.Create())
     {
@@ -20,6 +22,7 @@ public sealed class ActionExecutor
         : this(
             mediaController,
             volumeController,
+            ApplicationVolumeControllerFactory.Create(),
             KeyboardControllerFactory.Create(),
             SystemLauncherFactory.Create())
     {
@@ -30,9 +33,25 @@ public sealed class ActionExecutor
         ISystemVolumeController volumeController,
         IKeyboardController keyboardController,
         ISystemLauncher systemLauncher)
+        : this(
+            mediaController,
+            volumeController,
+            ApplicationVolumeControllerFactory.Create(),
+            keyboardController,
+            systemLauncher)
+    {
+    }
+
+    public ActionExecutor(
+        ISystemMediaController mediaController,
+        ISystemVolumeController volumeController,
+        IApplicationVolumeController applicationVolumeController,
+        IKeyboardController keyboardController,
+        ISystemLauncher systemLauncher)
     {
         this.mediaController = mediaController;
         this.volumeController = volumeController;
+        this.applicationVolumeController = applicationVolumeController;
         this.keyboardController = keyboardController;
         this.systemLauncher = systemLauncher;
     }
@@ -53,6 +72,7 @@ public sealed class ActionExecutor
             "media.volumeDown" => mediaController.VolumeDownAsync(cancellationToken),
             "media.mute" => mediaController.MuteAsync(cancellationToken),
             "system.volume" => SetSystemVolumeAsync(context.Value, cancellationToken),
+            "app.volume" => SetApplicationVolumeAsync(context.Binding.Parameters, context.Value, cancellationToken),
             "system.openUrl" => OpenUrlAsync(context.Binding.Parameters, cancellationToken),
             "system.openApp" => OpenAppAsync(context.Binding.Parameters, cancellationToken),
             "keyboard.shortcut" => SendShortcutAsync(context.Binding.Parameters, cancellationToken),
@@ -66,14 +86,28 @@ public sealed class ActionExecutor
         string? sliderValue,
         CancellationToken cancellationToken)
     {
-        if (!int.TryParse(sliderValue, out var rawValue))
+        if (!TryMapSliderValueToPercent(sliderValue, out var percent))
         {
             return Task.FromResult(ActionExecutionResult.Failed("Volume slider value is missing or invalid"));
         }
 
-        var clampedRawValue = Math.Clamp(rawValue, 0, 4095);
-        var percent = (int)Math.Round(clampedRawValue / 4095.0 * 100);
         return volumeController.SetMasterVolumeAsync(percent, cancellationToken);
+    }
+
+    private Task<ActionExecutionResult> SetApplicationVolumeAsync(
+        IReadOnlyDictionary<string, string> parameters,
+        string? sliderValue,
+        CancellationToken cancellationToken)
+    {
+        if (!TryMapSliderValueToPercent(sliderValue, out var percent))
+        {
+            return Task.FromResult(ActionExecutionResult.Failed("Volume slider value is missing or invalid"));
+        }
+
+        var processName = GetFirstParameter(parameters, "process", "processName", "app");
+        return string.IsNullOrWhiteSpace(processName)
+            ? Task.FromResult(ActionExecutionResult.Failed("App volume process parameter is required"))
+            : applicationVolumeController.SetApplicationVolumeAsync(processName, percent, cancellationToken);
     }
 
     private Task<ActionExecutionResult> SendShortcutAsync(
@@ -119,5 +153,18 @@ public sealed class ActionExecutor
         }
 
         return null;
+    }
+
+    private static bool TryMapSliderValueToPercent(string? sliderValue, out int percent)
+    {
+        percent = 0;
+        if (!int.TryParse(sliderValue, out var rawValue))
+        {
+            return false;
+        }
+
+        var clampedRawValue = Math.Clamp(rawValue, 0, 4095);
+        percent = (int)Math.Round(clampedRawValue / 4095.0 * 100);
+        return true;
     }
 }

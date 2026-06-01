@@ -28,6 +28,7 @@ public partial class MainWindowViewModel : ViewModelBase
         new("media.volumeDown", "Decrease system volume", "No parameters required.", "", []),
         new("media.mute", "Toggle system mute", "No parameters required.", "", []),
         new("system.volume", "Map slider value to system volume", "No parameters required. This action uses the incoming slider value.", "", []),
+        new("app.volume", "Map slider value to one app's volume", "Required parameter: process. Example: process=Spotify. This action uses the incoming slider value.", "process=Spotify", ["process"]),
         new("system.openUrl", "Open a URL with the default browser", "Required parameter: url. Example: url=https://example.com", "url=https://example.com", ["url"]),
         new("system.openApp", "Open an app or file through the OS shell", "Required parameter: path. Example: path=notepad.exe", "path=notepad.exe", ["path"]),
         new("keyboard.shortcut", "Send a keyboard shortcut", "Required parameter: keys. Supported examples: Ctrl+C, Ctrl+Shift+Esc, Alt+Tab, Win+E, F1.", "keys=Ctrl+Shift+Esc", ["keys"]),

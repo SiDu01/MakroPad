@@ -24,6 +24,7 @@ Initial action hints:
 | `system.openApp` | `path` | `path=notepad.exe` |
 | `log` | `message` | `message=Hello MakroPad` |
 | `system.volume` | none, uses slider value | |
+| `app.volume` | `process`, uses slider value | `process=Spotify` |
 | `media.playPause` | none | |
 | `media.nextTrack` | none | |
 | `media.previousTrack` | none | |
