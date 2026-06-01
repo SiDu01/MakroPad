@@ -268,6 +268,13 @@ public sealed class ActionExecutorTests
 
             return Task.FromResult(ActionExecutionResult.Ok($"Volume {percent}%"));
         }
+
+        public Task<int?> GetMasterVolumePercentAsync(CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            return Task.FromResult<int?>(SetVolumes.LastOrDefault());
+        }
     }
 
     private sealed class FakeApplicationVolumeController : IApplicationVolumeController

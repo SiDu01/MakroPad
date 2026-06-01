@@ -9,4 +9,11 @@ public sealed class NoopSystemVolumeController : ISystemVolumeController
         return Task.FromResult(ActionExecutionResult.Failed(
             "System volume is only implemented on Windows for now"));
     }
+
+    public Task<int?> GetMasterVolumePercentAsync(CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+
+        return Task.FromResult<int?>(null);
+    }
 }

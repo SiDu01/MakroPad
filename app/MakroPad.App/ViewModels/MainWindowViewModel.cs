@@ -41,6 +41,7 @@ public partial class MainWindowViewModel : ViewModelBase
     private readonly SerialMakroPadConnection serialConnection = new();
     private readonly MakroPadDeviceProbe deviceProbe = new();
     private readonly MakroPadConfigStore configStore;
+    private readonly ISystemVolumeController systemVolumeController = SystemVolumeControllerFactory.Create();
     private readonly ActionPipeline actionPipeline = new(new ActionResolver(), new ActionExecutor());
     private readonly INowPlayingProvider nowPlayingProvider = new ProcessWindowNowPlayingProvider();
     private readonly CancellationTokenSource nowPlayingCancellation = new();
@@ -785,6 +786,8 @@ public partial class MainWindowViewModel : ViewModelBase
             return;
         }
 
+        var now = DateTime.Now;
+        var systemVolume = await systemVolumeController.GetMasterVolumePercentAsync();
         var line = MakroPad.Core.Protocol.ProtocolCodec.Format(
             "config",
             new Dictionary<string, string?>
@@ -794,7 +797,10 @@ public partial class MainWindowViewModel : ViewModelBase
                 ["defaultTitle"] = NormalizeDisplayLine(DefaultScreenTitle, "MakroPad"),
                 ["defaultLine1"] = NormalizeDisplayLine(DefaultScreenLine1, "{profile}"),
                 ["defaultLine2"] = NormalizeDisplayLine(DefaultScreenLine2, "{status}"),
-                ["preferredDisplay"] = EnableNowPlayingDisplay && lastSentNowPlayingTrack is not null
+                ["time"] = now.ToString("HH:mm"),
+                ["date"] = now.ToString("dd.MM.yyyy"),
+                ["volumeSystem"] = systemVolume is null ? null : $"{systemVolume}%",
+                ["preferredDisplay"] = EnableNowPlayingDisplay && lastSentNowPlayingTrack is not null && !DefaultScreenUsesMediaPlaceholder()
                     ? "media"
                     : "profile"
             });
@@ -819,6 +825,7 @@ public partial class MainWindowViewModel : ViewModelBase
             {
                 await timer.WaitForNextTickAsync(cancellationToken);
                 await UpdateNowPlayingAsync(cancellationToken);
+                await SendDeviceConfigAsync();
             }
             catch (OperationCanceledException)
             {
@@ -872,7 +879,8 @@ public partial class MainWindowViewModel : ViewModelBase
             {
                 ["mode"] = "media",
                 ["artist"] = track.Artist,
-                ["title"] = track.Title
+                ["title"] = track.Title,
+                ["preferred"] = DefaultScreenUsesMediaPlaceholder() ? "false" : "true"
             });
 
         try
@@ -1153,6 +1161,13 @@ public partial class MainWindowViewModel : ViewModelBase
     private static string NormalizeDisplayLine(string value, string fallback)
     {
         return string.IsNullOrWhiteSpace(value) ? fallback : value.Trim();
+    }
+
+    private bool DefaultScreenUsesMediaPlaceholder()
+    {
+        return DefaultScreenTitle.Contains("{media.", StringComparison.OrdinalIgnoreCase)
+            || DefaultScreenLine1.Contains("{media.", StringComparison.OrdinalIgnoreCase)
+            || DefaultScreenLine2.Contains("{media.", StringComparison.OrdinalIgnoreCase);
     }
 
     private sealed record ActionDefinition(

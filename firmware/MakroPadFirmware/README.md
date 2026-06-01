@@ -116,6 +116,7 @@ You can manually test the display:
 display;mode=message;text=Hello%20MakroPad
 display;mode=profile;name=Default
 display;mode=media;artist=Daft%20Punk;title=Digital%20Love
+display;mode=media;artist=Daft%20Punk;title=Digital%20Love;preferred=false
 display;mode=clear
 ```
 
@@ -123,7 +124,7 @@ You can manually configure the OLED action-result timeout:
 
 ```text
 config;profile=Default;actionResultTimeoutMs=3000;preferredDisplay=profile
-config;profile=Default;defaultTitle=MakroPad;defaultLine1=%7Bprofile%7D;defaultLine2=%7Bstatus%7D
+config;profile=Default;defaultTitle=MakroPad;defaultLine1=%7Bprofile%7D;defaultLine2=%7Bstatus%7D;time=18:42;date=01.06.2026;volumeSystem=40%25
 ```
 
 `action-result` messages are shown temporarily and then return to the idle
@@ -132,8 +133,11 @@ until another display/config/action message arrives.
 When `preferredDisplay=media` and a media screen has been received, action
 results return to the last media screen instead.
 The default profile screen can be customized with `defaultTitle`,
-`defaultLine1`, and `defaultLine2`. The firmware replaces `{profile}` with the
-current profile name and `{status}` with `Connected` or `Waiting for app`.
+`defaultLine1`, and `defaultLine2`. The firmware supports these placeholders:
+`{profile}`, `{status}`, `{time}`, `{date}`, `{media.artist}`, `{media.title}`,
+`{media.track}`, `{volume.system}`, and `{device.uptime}`.
+Use `preferred=false` on `display;mode=media` to update media placeholder
+values without switching the idle screen to the dedicated media display.
 
 Button and slider events should appear as:
 

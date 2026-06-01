@@ -48,8 +48,8 @@ Implemented:
   sections.
 - Auto-connect scanning for `hello;device=makropad-s3`.
 - Configurable OLED action-result timeout.
-- Configurable OLED default screen with `{profile}` and `{status}`
-  placeholders.
+- Configurable OLED default screen with profile, status, time, date, media,
+  volume, and uptime placeholders.
 - Serial heartbeat with `ping`/`pong` and `Unresponsive` connection state.
 
 Supported actions:
@@ -95,17 +95,20 @@ Windows audio sessions for the configured process name, for example
 `process=Spotify`.
 
 The app sends
-`config;profile=...;actionResultTimeoutMs=...;defaultTitle=...;defaultLine1=...;defaultLine2=...;preferredDisplay=...`
+`config;profile=...;actionResultTimeoutMs=...;defaultTitle=...;defaultLine1=...;defaultLine2=...;time=...;date=...;volumeSystem=...;preferredDisplay=...`
 to the device after connecting and when saving the config. `0` disables the
 automatic OLED reset for action results. The default screen supports
-`{profile}` and `{status}` placeholders.
+`{profile}`, `{status}`, `{time}`, `{date}`, `{media.artist}`, `{media.title}`,
+`{media.track}`, `{volume.system}`, and `{device.uptime}` placeholders.
 
 Now Playing is an initial implementation: it polls the Spotify desktop window
 title on Windows and sends `display;mode=media;artist=...;title=...` when the
 track changes. A later implementation should use Windows Media Session metadata
 directly.
 After temporary action-result messages, the firmware returns to the last media
-screen while Now Playing is active.
+screen while Now Playing is active. If the default screen template contains a
+`{media.*}` placeholder, Now Playing updates the placeholder values instead of
+switching to the dedicated media screen.
 
 ## Next Work
 

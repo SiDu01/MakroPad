@@ -453,7 +453,7 @@
                                     <TextBlock Classes="muted"
                                                FontSize="12"
                                                TextWrapping="Wrap"
-                                               Text="{}Placeholders: {profile}, {status}" />
+                                               Text="{}Placeholders: {profile}, {status}, {time}, {date}, {media.artist}, {media.title}, {media.track}, {volume.system}, {device.uptime}" />
 
                                     <Grid ColumnDefinitions="*,*"
                                           ColumnSpacing="8">

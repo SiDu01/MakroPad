@@ -22,4 +22,22 @@ internal sealed class WindowsSystemVolumeController : ISystemVolumeController
             return Task.FromResult(ActionExecutionResult.Failed($"Volume failed: {ex.Message}"));
         }
     }
+
+    public Task<int?> GetMasterVolumePercentAsync(CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+
+        try
+        {
+            using var deviceEnumerator = new MMDeviceEnumerator();
+            using var device = deviceEnumerator.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia);
+            var percent = (int)Math.Round(device.AudioEndpointVolume.MasterVolumeLevelScalar * 100);
+
+            return Task.FromResult<int?>(Math.Clamp(percent, 0, 100));
+        }
+        catch (Exception ex) when (ex is InvalidOperationException or COMException)
+        {
+            return Task.FromResult<int?>(null);
+        }
+    }
 }

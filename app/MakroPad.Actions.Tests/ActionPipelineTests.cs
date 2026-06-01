@@ -87,5 +87,12 @@ public sealed class ActionPipelineTests
 
             return Task.FromResult(ActionExecutionResult.Ok($"Volume {percent}%"));
         }
+
+        public Task<int?> GetMasterVolumePercentAsync(CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            return Task.FromResult<int?>(50);
+        }
     }
 }

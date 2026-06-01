@@ -24,7 +24,7 @@ constexpr uint32_t HostTimeoutMs = 6000;
 constexpr uint32_t DefaultActionResultTimeoutMs = 3000;
 constexpr uint32_t DebounceMs = 25;
 constexpr int SliderDeadband = 16;
-constexpr size_t MaxLineLength = 256;
+constexpr size_t MaxLineLength = 512;
 constexpr size_t ActiveButtonCount = sizeof(ButtonPins) / sizeof(ButtonPins[0]);
 constexpr size_t ActiveSliderCount = 1;
 
@@ -69,6 +69,9 @@ String currentMediaTitle;
 String defaultScreenTitle = "MakroPad";
 String defaultScreenLine1 = "{profile}";
 String defaultScreenLine2 = "{status}";
+String currentTime;
+String currentDate;
+String currentSystemVolume;
 
 String percentDecode(const String& value) {
   String decoded;
@@ -168,9 +171,34 @@ void drawStatusMessage(const String& line1, const String& line2 = "", const Stri
 
 void drawMedia(const String& artist, const String& title);
 
+String formatUptime() {
+  const uint32_t totalSeconds = millis() / 1000;
+  const uint32_t hours = totalSeconds / 3600;
+  const uint32_t minutes = (totalSeconds % 3600) / 60;
+  const uint32_t seconds = totalSeconds % 60;
+
+  char buffer[16];
+  snprintf(buffer, sizeof(buffer), "%02lu:%02lu:%02lu",
+    static_cast<unsigned long>(hours),
+    static_cast<unsigned long>(minutes),
+    static_cast<unsigned long>(seconds));
+  return String(buffer);
+}
+
 String renderDefaultScreenLine(String line, const String& status) {
+  const String mediaTrack = currentMediaArtist.length() > 0 && currentMediaTitle.length() > 0
+    ? currentMediaArtist + " - " + currentMediaTitle
+    : currentMediaTitle;
+
   line.replace("{profile}", currentProfileName);
   line.replace("{status}", status);
+  line.replace("{time}", currentTime);
+  line.replace("{date}", currentDate);
+  line.replace("{media.artist}", currentMediaArtist);
+  line.replace("{media.title}", currentMediaTitle);
+  line.replace("{media.track}", mediaTrack);
+  line.replace("{volume.system}", currentSystemVolume);
+  line.replace("{device.uptime}", formatUptime());
   return line;
 }
 
@@ -243,7 +271,9 @@ void handleDisplayCommand(const String& line) {
   if (mode == "media") {
     currentMediaArtist = protocolValue(line, "artist");
     currentMediaTitle = protocolValue(line, "title");
-    preferredDisplayMode = "media";
+    if (protocolValue(line, "preferred") != "false") {
+      preferredDisplayMode = "media";
+    }
     drawPreferredDisplay();
     return;
   }
@@ -318,8 +348,13 @@ void handleProtocolLine(String line) {
       defaultScreenLine2 = configuredDefaultLine2;
     }
 
-    temporaryDisplayUntilMs = 0;
-    drawPreferredDisplay();
+    currentTime = protocolValue(line, "time");
+    currentDate = protocolValue(line, "date");
+    currentSystemVolume = protocolValue(line, "volumeSystem");
+
+    if (temporaryDisplayUntilMs == 0) {
+      drawPreferredDisplay();
+    }
     return;
   }
 
