@@ -123,6 +123,12 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty]
     private string bindingEditorValidationMessage = "";
 
+    [ObservableProperty]
+    private bool isRecordingShortcut;
+
+    [ObservableProperty]
+    private string shortcutRecordingStatus = "";
+
     partial void OnActiveProfileNameChanged(string value)
     {
         ProfileEditorName = value;
@@ -501,6 +507,48 @@ public partial class MainWindowViewModel : ViewModelBase
         }
 
         BindingEditorParameters = BindingParameterPlaceholder;
+        BindingEditorValidationMessage = "";
+    }
+
+    [RelayCommand]
+    private void StartShortcutRecording()
+    {
+        BindingEditorAction = "keyboard.shortcut";
+        BindingEditorValidationMessage = "";
+        ShortcutRecordingStatus = "Press a shortcut. Esc cancels.";
+        IsRecordingShortcut = true;
+    }
+
+    public void CompleteShortcutRecording(string shortcut)
+    {
+        if (string.IsNullOrWhiteSpace(shortcut))
+        {
+            CancelShortcutRecording();
+            return;
+        }
+
+        BindingEditorAction = "keyboard.shortcut";
+        BindingEditorParameters = $"keys={shortcut}";
+        ShortcutRecordingStatus = $"Recorded: {shortcut}";
+        BindingEditorValidationMessage = "";
+        IsRecordingShortcut = false;
+    }
+
+    public void CancelShortcutRecording()
+    {
+        IsRecordingShortcut = false;
+        ShortcutRecordingStatus = "Recording cancelled.";
+    }
+
+    public void SetOpenAppPath(string path)
+    {
+        if (string.IsNullOrWhiteSpace(path))
+        {
+            return;
+        }
+
+        BindingEditorAction = "system.openApp";
+        BindingEditorParameters = $"path={path}";
         BindingEditorValidationMessage = "";
     }
 

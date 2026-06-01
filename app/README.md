@@ -37,6 +37,8 @@ Implemented:
 - Known input selection for `button:1..20` and `slider:1..3`.
 - Profile add, rename, and delete controls.
 - Simulator input selection for button and slider IDs.
+- Focused-window shortcut recorder for `keyboard.shortcut`.
+- App/file picker for `system.openApp`.
 - Structured main window with device, profile, simulator, bindings, and log
   sections.
 - Auto-connect scanning for `hello;device=makropad-s3`.

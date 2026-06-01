@@ -43,9 +43,10 @@ Possible UI improvements:
 - Add a quick way to fill the selected action's example parameters. Done with
   the `Example` button.
 - Add action-specific editors:
-  - Shortcut recorder for `keyboard.shortcut`.
+  - Shortcut recorder for `keyboard.shortcut`. First focused-window version is
+    done.
   - URL textbox for `system.openUrl`.
-  - File/app picker for `system.openApp`.
+  - File/app picker for `system.openApp`. First file picker version is done.
 - Document supported shortcut keys in the UI.
 - Show a warning when parameters are ignored for actions that do not need them.
   Done in the basic editor log.

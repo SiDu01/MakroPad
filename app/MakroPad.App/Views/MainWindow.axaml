@@ -292,7 +292,24 @@
                                            Foreground="Firebrick"
                                            FontSize="12"
                                            TextWrapping="Wrap" />
+                                <TextBlock Text="{Binding ShortcutRecordingStatus}"
+                                           FontSize="12"
+                                           TextWrapping="Wrap" />
                             </StackPanel>
+
+                            <Grid Grid.Row="2"
+                                  Grid.ColumnSpan="3"
+                                  ColumnDefinitions="*,*"
+                                  ColumnSpacing="8">
+                                <Button Grid.Column="0"
+                                        Content="Record Shortcut"
+                                        Command="{Binding StartShortcutRecordingCommand}"
+                                        HorizontalAlignment="Stretch" />
+                                <Button Grid.Column="1"
+                                        Content="Browse App/File"
+                                        Click="BrowseOpenApp_Click"
+                                        HorizontalAlignment="Stretch" />
+                            </Grid>
 
                             <Grid Grid.Row="3"
                                   Grid.ColumnSpan="3"
