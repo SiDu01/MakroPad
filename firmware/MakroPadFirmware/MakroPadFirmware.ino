@@ -63,6 +63,9 @@ uint32_t lastHostSeenMs = 0;
 uint32_t actionResultTimeoutMs = DefaultActionResultTimeoutMs;
 uint32_t temporaryDisplayUntilMs = 0;
 String currentProfileName = "Default";
+String preferredDisplayMode = "profile";
+String currentMediaArtist;
+String currentMediaTitle;
 
 String percentDecode(const String& value) {
   String decoded;
@@ -164,6 +167,17 @@ void drawIdleStatus() {
   drawStatusMessage("MakroPad", currentProfileName, hostAcknowledged ? "Connected" : "Waiting for app");
 }
 
+void drawMedia(const String& artist, const String& title);
+
+void drawPreferredDisplay() {
+  if (preferredDisplayMode == "media" && currentMediaTitle.length() > 0) {
+    drawMedia(currentMediaArtist, currentMediaTitle);
+    return;
+  }
+
+  drawIdleStatus();
+}
+
 void markHostSeen() {
   const bool wasAcknowledged = hostAcknowledged;
   hostAcknowledged = true;
@@ -171,7 +185,7 @@ void markHostSeen() {
 
   if (!wasAcknowledged) {
     temporaryDisplayUntilMs = 0;
-    drawIdleStatus();
+    drawPreferredDisplay();
   }
 }
 
@@ -208,12 +222,16 @@ void handleDisplayCommand(const String& line) {
     if (profile.length() > 0) {
       currentProfileName = profile;
     }
-    drawIdleStatus();
+    preferredDisplayMode = "profile";
+    drawPreferredDisplay();
     return;
   }
 
   if (mode == "media") {
-    drawMedia(protocolValue(line, "artist"), protocolValue(line, "title"));
+    currentMediaArtist = protocolValue(line, "artist");
+    currentMediaTitle = protocolValue(line, "title");
+    preferredDisplayMode = "media";
+    drawPreferredDisplay();
     return;
   }
 
@@ -267,8 +285,13 @@ void handleProtocolLine(String line) {
       actionResultTimeoutMs = static_cast<uint32_t>(max(0L, timeout.toInt()));
     }
 
+    const String displayMode = protocolValue(line, "preferredDisplay");
+    if (displayMode == "media" || displayMode == "profile") {
+      preferredDisplayMode = displayMode;
+    }
+
     temporaryDisplayUntilMs = 0;
-    drawIdleStatus();
+    drawPreferredDisplay();
     return;
   }
 
@@ -397,7 +420,7 @@ void updateDisplayTimeout() {
 
   if (static_cast<int32_t>(millis() - temporaryDisplayUntilMs) >= 0) {
     temporaryDisplayUntilMs = 0;
-    drawIdleStatus();
+    drawPreferredDisplay();
   }
 }
 
@@ -409,7 +432,7 @@ void updateHostTimeout() {
   if (static_cast<uint32_t>(millis() - lastHostSeenMs) >= HostTimeoutMs) {
     hostAcknowledged = false;
     temporaryDisplayUntilMs = 0;
-    drawIdleStatus();
+    drawPreferredDisplay();
   }
 }
 

@@ -86,14 +86,17 @@ hello-ack;proto=1;app=0.1.0
 Incoming slider values are expected as `0..4095`. `system.volume` maps them to
 Windows master volume `0..100%`.
 
-The app sends `config;profile=...;actionResultTimeoutMs=...` to the device after
-connecting and when saving the config. `0` disables the automatic OLED reset for
-action results.
+The app sends
+`config;profile=...;actionResultTimeoutMs=...;preferredDisplay=...` to the
+device after connecting and when saving the config. `0` disables the automatic
+OLED reset for action results.
 
 Now Playing is an initial implementation: it polls the Spotify desktop window
 title on Windows and sends `display;mode=media;artist=...;title=...` when the
 track changes. A later implementation should use Windows Media Session metadata
 directly.
+After temporary action-result messages, the firmware returns to the last media
+screen while Now Playing is active.
 
 ## Next Work
 

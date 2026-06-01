@@ -87,6 +87,16 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty]
     private bool enableNowPlayingDisplay = true;
 
+    partial void OnEnableNowPlayingDisplayChanged(bool value)
+    {
+        if (!value)
+        {
+            lastSentNowPlayingTrack = null;
+        }
+
+        _ = SendDeviceConfigAsync();
+    }
+
     [ObservableProperty]
     private string nowPlayingStatus = "Now Playing idle";
 
@@ -764,7 +774,10 @@ public partial class MainWindowViewModel : ViewModelBase
             new Dictionary<string, string?>
             {
                 ["profile"] = ActiveProfileName,
-                ["actionResultTimeoutMs"] = Math.Max(0, ActionResultTimeoutMs).ToString()
+                ["actionResultTimeoutMs"] = Math.Max(0, ActionResultTimeoutMs).ToString(),
+                ["preferredDisplay"] = EnableNowPlayingDisplay && lastSentNowPlayingTrack is not null
+                    ? "media"
+                    : "profile"
             });
 
         try
@@ -817,7 +830,12 @@ public partial class MainWindowViewModel : ViewModelBase
         var track = await nowPlayingProvider.GetCurrentTrackAsync(cancellationToken);
         if (track is null)
         {
-            lastSentNowPlayingTrack = null;
+            if (lastSentNowPlayingTrack is not null)
+            {
+                lastSentNowPlayingTrack = null;
+                await SendDeviceConfigAsync();
+            }
+
             Dispatcher.UIThread.Post(() => NowPlayingStatus = "No Spotify track detected");
             return;
         }

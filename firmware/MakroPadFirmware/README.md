@@ -122,12 +122,14 @@ display;mode=clear
 You can manually configure the OLED action-result timeout:
 
 ```text
-config;profile=Default;actionResultTimeoutMs=3000
+config;profile=Default;actionResultTimeoutMs=3000;preferredDisplay=profile
 ```
 
 `action-result` messages are shown temporarily and then return to the idle
 profile screen. `actionResultTimeoutMs=0` keeps action results on the display
 until another display/config/action message arrives.
+When `preferredDisplay=media` and a media screen has been received, action
+results return to the last media screen instead.
 
 Button and slider events should appear as:
 
