@@ -7,7 +7,8 @@ This works for early testing, but the real UI should guide the user per action.
 
 Goals:
 
-- Show action-specific parameter hints when an action is selected.
+- Show action-specific parameter hints when an action is selected. Done in the
+  basic editor.
 - Prefer structured controls over raw text where possible.
 - Keep raw parameter editing available for advanced or unsupported cases.
 
@@ -30,15 +31,19 @@ Initial action hints:
 
 Possible UI improvements:
 
-- Display a short inline hint below the parameter field.
-- Change the parameter field placeholder based on the selected action.
-- Add validation before saving or applying a binding.
+- Display a short inline hint below the parameter field. Done in the basic
+  editor.
+- Change the parameter field placeholder based on the selected action. Done in
+  the basic editor.
+- Add validation before saving or applying a binding. Basic validation is done
+  for input format, known actions, and required parameters.
 - Add action-specific editors:
   - Shortcut recorder for `keyboard.shortcut`.
   - URL textbox with validation for `system.openUrl`.
   - File/app picker for `system.openApp`.
 - Document supported shortcut keys in the UI.
 - Show a warning when parameters are ignored for actions that do not need them.
+  Done in the basic editor log.
 
 Implementation notes:
 

@@ -171,7 +171,7 @@
             </ScrollViewer>
 
             <Grid Grid.Column="1"
-                  RowDefinitions="340,*"
+                  RowDefinitions="410,*"
                   RowSpacing="18">
                 <Border Grid.Row="0"
                         Padding="16"
@@ -225,7 +225,7 @@
                         </Grid>
 
                         <Grid Grid.Row="2"
-                              RowDefinitions="Auto,Auto"
+                              RowDefinitions="Auto,Auto,Auto,Auto"
                               ColumnDefinitions="150,220,*"
                               RowSpacing="8"
                               ColumnSpacing="12">
@@ -237,10 +237,27 @@
                                       SelectedItem="{Binding BindingEditorAction}"
                                       HorizontalAlignment="Stretch" />
                             <TextBox Grid.Column="2"
-                                     PlaceholderText="message=Hello"
+                                     PlaceholderText="{Binding BindingParameterPlaceholder}"
                                      Text="{Binding BindingEditorParameters}" />
 
-                            <Grid Grid.Row="1"
+                            <StackPanel Grid.Row="1"
+                                        Grid.ColumnSpan="3"
+                                        Spacing="3">
+                                <TextBlock Text="{Binding BindingActionDescription}"
+                                           Opacity="0.82"
+                                           TextWrapping="Wrap" />
+                                <TextBlock Text="{Binding BindingParameterHint}"
+                                           FontFamily="Consolas"
+                                           FontSize="12"
+                                           Opacity="0.72"
+                                           TextWrapping="Wrap" />
+                                <TextBlock Text="{Binding BindingEditorValidationMessage}"
+                                           Foreground="Firebrick"
+                                           FontSize="12"
+                                           TextWrapping="Wrap" />
+                            </StackPanel>
+
+                            <Grid Grid.Row="3"
                                   Grid.ColumnSpan="3"
                                   ColumnDefinitions="*,*,*"
                                   ColumnSpacing="8">

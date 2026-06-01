@@ -16,6 +16,23 @@ namespace MakroPad.App.ViewModels;
 public partial class MainWindowViewModel : ViewModelBase
 {
     private const string SimulatorPort = "Simulator";
+    private static readonly IReadOnlyList<ActionDefinition> ActionDefinitions =
+    [
+        new("media.playPause", "Media Play/Pause", "No parameters required.", "", []),
+        new("media.nextTrack", "Next media track", "No parameters required.", "", []),
+        new("media.previousTrack", "Previous media track", "No parameters required.", "", []),
+        new("media.stop", "Stop media playback", "No parameters required.", "", []),
+        new("media.volumeUp", "Increase system volume", "No parameters required.", "", []),
+        new("media.volumeDown", "Decrease system volume", "No parameters required.", "", []),
+        new("media.mute", "Toggle system mute", "No parameters required.", "", []),
+        new("system.volume", "Map slider value to system volume", "No parameters required. This action uses the incoming slider value.", "", []),
+        new("system.openUrl", "Open a URL with the default browser", "Required parameter: url. Example: url=https://example.com", "url=https://example.com", ["url"]),
+        new("system.openApp", "Open an app or file through the OS shell", "Required parameter: path. Example: path=notepad.exe", "path=notepad.exe", ["path"]),
+        new("keyboard.shortcut", "Send a keyboard shortcut", "Required parameter: keys. Supported examples: Ctrl+C, Ctrl+Shift+Esc, Alt+Tab, Win+E, F1.", "keys=Ctrl+Shift+Esc", ["keys"]),
+        new("log", "Write a message to the app log", "Optional parameter: message. Example: message=Hello MakroPad", "message=Hello MakroPad", [])
+    ];
+    private static readonly IReadOnlyDictionary<string, ActionDefinition> ActionDefinitionLookup =
+        ActionDefinitions.ToDictionary(definition => definition.Id, StringComparer.OrdinalIgnoreCase);
 
     private readonly SimulatedMakroPadConnection simulatedConnection = new();
     private readonly SerialMakroPadConnection serialConnection = new();
@@ -77,8 +94,25 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty]
     private string bindingEditorAction = "media.playPause";
 
+    partial void OnBindingEditorActionChanged(string value)
+    {
+        RefreshActionEditorHints();
+    }
+
     [ObservableProperty]
     private string bindingEditorParameters = "";
+
+    [ObservableProperty]
+    private string bindingParameterPlaceholder = "";
+
+    [ObservableProperty]
+    private string bindingParameterHint = "";
+
+    [ObservableProperty]
+    private string bindingActionDescription = "";
+
+    [ObservableProperty]
+    private string bindingEditorValidationMessage = "";
 
     partial void OnActiveProfileNameChanged(string value)
     {
@@ -115,25 +149,13 @@ public partial class MainWindowViewModel : ViewModelBase
     public ObservableCollection<BindingViewModel> ProfileBindings { get; } = [];
 
     public IReadOnlyList<string> AvailableActions { get; } =
-    [
-        "media.playPause",
-        "media.nextTrack",
-        "media.previousTrack",
-        "media.stop",
-        "media.volumeUp",
-        "media.volumeDown",
-        "media.mute",
-        "system.volume",
-        "system.openUrl",
-        "system.openApp",
-        "keyboard.shortcut",
-        "log"
-    ];
+        ActionDefinitions.Select(definition => definition.Id).ToArray();
 
     public MainWindowViewModel()
     {
         ConfigPath = GetDefaultConfigPath();
         configStore = new MakroPadConfigStore(ConfigPath);
+        RefreshActionEditorHints();
         RefreshPorts();
         _ = LoadConfigAsync();
     }
@@ -654,32 +676,101 @@ public partial class MainWindowViewModel : ViewModelBase
 
         var input = BindingEditorInput.Trim();
         var action = BindingEditorAction.Trim();
+        BindingEditorValidationMessage = "";
 
         if (string.IsNullOrWhiteSpace(input))
         {
-            AddLog("Binding input is required.");
+            SetBindingEditorError("Binding input is required.");
+            return false;
+        }
+
+        if (!IsSupportedInput(input))
+        {
+            SetBindingEditorError("Input must look like button:1 or slider:1.");
             return false;
         }
 
         if (string.IsNullOrWhiteSpace(action))
         {
-            AddLog("Binding action is required.");
+            SetBindingEditorError("Binding action is required.");
             return false;
+        }
+
+        if (!ActionDefinitionLookup.TryGetValue(action, out var actionDefinition))
+        {
+            SetBindingEditorError($"Unsupported action: {action}");
+            return false;
+        }
+
+        var parameters = ParseParameters(BindingEditorParameters, action);
+        foreach (var requiredParameter in actionDefinition.RequiredParameters)
+        {
+            if (!parameters.ContainsKey(requiredParameter))
+            {
+                SetBindingEditorError($"Missing parameter: {requiredParameter}");
+                return false;
+            }
+        }
+
+        if (actionDefinition.RequiredParameters.Count == 0
+            && !action.Equals("log", StringComparison.OrdinalIgnoreCase)
+            && parameters.Count > 0)
+        {
+            AddLog($"Parameters are ignored for {action}.");
         }
 
         binding = new ActionBinding
         {
             Input = input,
             Action = action,
-            Parameters = ParseParameters(BindingEditorParameters, action)
+            Parameters = parameters
         };
 
         return true;
     }
 
+    private void SetBindingEditorError(string message)
+    {
+        BindingEditorValidationMessage = message;
+        AddLog(message);
+    }
+
+    private void RefreshActionEditorHints()
+    {
+        var action = BindingEditorAction.Trim();
+        if (!ActionDefinitionLookup.TryGetValue(action, out var definition))
+        {
+            BindingActionDescription = "Custom or unsupported action.";
+            BindingParameterHint = "Use key=value pairs separated by commas.";
+            BindingParameterPlaceholder = "key=value";
+            return;
+        }
+
+        BindingActionDescription = definition.Description;
+        BindingParameterHint = definition.ParameterHint;
+        BindingParameterPlaceholder = definition.ParameterPlaceholder;
+    }
+
+    private static bool IsSupportedInput(string input)
+    {
+        var separatorIndex = input.IndexOf(':');
+        if (separatorIndex <= 0 || separatorIndex == input.Length - 1)
+        {
+            return false;
+        }
+
+        var inputType = input[..separatorIndex];
+        var id = input[(separatorIndex + 1)..];
+
+        return (inputType.Equals("button", StringComparison.OrdinalIgnoreCase)
+                || inputType.Equals("slider", StringComparison.OrdinalIgnoreCase))
+            && int.TryParse(id, out var numericId)
+            && numericId > 0;
+    }
+
     private static Dictionary<string, string> ParseParameters(string parameters, string action)
     {
-        var result = new Dictionary<string, string>();
+        var result = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
         if (string.IsNullOrWhiteSpace(parameters))
         {
@@ -717,4 +808,11 @@ public partial class MainWindowViewModel : ViewModelBase
         var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
         return Path.Combine(appData, "MakroPad", "config.json");
     }
+
+    private sealed record ActionDefinition(
+        string Id,
+        string Description,
+        string ParameterHint,
+        string ParameterPlaceholder,
+        IReadOnlyList<string> RequiredParameters);
 }

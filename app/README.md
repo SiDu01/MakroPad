@@ -33,6 +33,7 @@ Implemented:
 - Windows media key actions.
 - Windows `system.volume` action via CoreAudio.
 - Basic editable profile binding overview in the main UI.
+- Action-specific config editor hints, placeholders, and basic validation.
 - Structured main window with device, profile, simulator, bindings, and log
   sections.
 - Auto-connect scanning for `hello;device=makropad-s3`.
