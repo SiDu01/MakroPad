@@ -811,7 +811,7 @@
                                                    Foreground="#FF7A90"
                                                    FontSize="12"
                                                    TextWrapping="Wrap" />
-                                        <Grid ColumnDefinitions="*,*,*"
+                                        <Grid ColumnDefinitions="*,*,*,*"
                                               ColumnSpacing="8">
                                             <Button Grid.Column="0"
                                                     Content="Apply"
@@ -824,6 +824,10 @@
                                             <Button Grid.Column="2"
                                                     Content="Remove"
                                                     Command="{Binding RemoveDisplayTriggerCommand}"
+                                                    HorizontalAlignment="Stretch" />
+                                            <Button Grid.Column="3"
+                                                    Content="Test"
+                                                    Command="{Binding TestDisplayTriggerCommand}"
                                                     HorizontalAlignment="Stretch" />
                                         </Grid>
                                     </StackPanel>

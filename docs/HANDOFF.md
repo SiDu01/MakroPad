@@ -75,7 +75,8 @@ MakroPad has a working vertical prototype across firmware and desktop app:
 - Display triggers are currently app-side settings. The editor now mirrors the
   macro binding pattern with a trigger list and Apply/Add/Remove controls.
   Slider triggers use a percentage-change threshold; button triggers display
-  immediately.
+  immediately. The editor also has a Test button that sends the current editor
+  content to the connected OLED without waiting for a hardware input.
 
 ## Known Limitations
 
@@ -114,7 +115,7 @@ the ESP32-S3-DevKitC-1.
 3. Improve the config editor UX with action definitions shared between UI,
    validation, and future docs generation.
 4. Expand display trigger behavior beyond the first matching trigger: reusable
-   templates, ordering/priority controls, and better preview/test controls.
+   templates, ordering/priority controls, and richer preview controls.
 5. Split the firmware sketch into protocol, display, buttons, and sliders once
    the new sliders have been tested.
 6. Add a small diagnostics screen for current device config, last heartbeat,

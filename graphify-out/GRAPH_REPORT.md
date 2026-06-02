@@ -1,16 +1,16 @@
-# Graph Report - MakroPad  (2026-06-02)
+# Graph Report - MakroPad  (2026-06-03)
 
 ## Corpus Check
-- 75 files · ~18,981 words
+- 75 files · ~19,112 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 756 nodes · 973 edges · 89 communities (64 shown, 25 thin omitted)
+- 757 nodes · 979 edges · 90 communities (64 shown, 26 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 12 edges (avg confidence: 0.81)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `bb26f076`
+- Built from commit: `c08b3d24`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -28,6 +28,7 @@
 - [[_COMMUNITY_Community 12|Community 12]]
 - [[_COMMUNITY_Community 14|Community 14]]
 - [[_COMMUNITY_Community 17|Community 17]]
+- [[_COMMUNITY_Community 18|Community 18]]
 - [[_COMMUNITY_Community 19|Community 19]]
 - [[_COMMUNITY_Community 20|Community 20]]
 - [[_COMMUNITY_Community 22|Community 22]]
@@ -70,7 +71,7 @@
 - [[_COMMUNITY_Community 90|Community 90]]
 
 ## God Nodes (most connected - your core abstractions)
-1. `MainWindowViewModel` - 125 edges
+1. `MainWindowViewModel` - 126 edges
 2. `SerialMakroPadConnection` - 28 edges
 3. `ActionExecutor` - 20 edges
 4. `MakroPad Firmware` - 19 edges
@@ -98,7 +99,7 @@
 - **Input to Action Flow** — hardware_buttons_gpio_pullup, hardware_sliders_adc1, protocol_button_message, protocol_slider_message, app_readme_action_pipeline [EXTRACTED 1.00]
 - **OLED Display Configuration Flow** — hardware_oled_i2c_ssd1306, protocol_display_message, protocol_config_message, protocol_action_result_message, app_readme_oled_default_screen [EXTRACTED 1.00]
 
-## Communities (89 total, 25 thin omitted)
+## Communities (90 total, 26 thin omitted)
 
 ### Community 0 - "Community 0"
 Cohesion: 0.11
@@ -117,8 +118,8 @@ Cohesion: 0.11
 Nodes (22): Build and Test Workflow, German Collaboration Rules, Git Commit Workflow, MakroPad Agent Workflow, Repository Editing Rules, Dual Serial Output, Firmware and Desktop App Architecture, Avalonia UI Technology Choice (+14 more)
 
 ### Community 5 - "Community 5"
-Cohesion: 0.10
-Nodes (5): ISystemMediaController, NoopSystemMediaController, ActionPipelineTests, FakeMediaController, FakeVolumeController
+Cohesion: 0.16
+Nodes (4): ISystemMediaController, ActionPipelineTests, FakeMediaController, FakeVolumeController
 
 ### Community 6 - "Community 6"
 Cohesion: 0.05
@@ -215,12 +216,12 @@ Nodes (3): ISystemVolumeController, OledDefaultScreenRenderer, DeviceDisplaySync
 ## Knowledge Gaps
 - **193 isolated node(s):** `PreToolUse`, `ISystemMediaController`, `ISystemVolumeController`, `IApplicationVolumeController`, `IKeyboardController` (+188 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **25 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **26 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `MainWindowViewModel` connect `Community 1` to `Community 2`, `Community 11`, `Community 13`, `Community 45`, `Community 16`, `Community 18`, `Community 90`, `Community 27`?**
+- **Why does `MainWindowViewModel` connect `Community 1` to `Community 2`, `Community 11`, `Community 13`, `Community 45`, `Community 16`, `Community 21`, `Community 90`, `Community 27`?**
   _High betweenness centrality (0.036) - this node is a cross-community bridge._
 - **Why does `FakeMediaController` connect `Community 69` to `Community 5`?**
   _High betweenness centrality (0.013) - this node is a cross-community bridge._
@@ -231,6 +232,6 @@ _Questions this graph is uniquely positioned to answer:_
 - **Should `Community 0` be split into smaller, more focused modules?**
   _Cohesion score 0.11083743842364532 - nodes in this community are weakly interconnected._
 - **Should `Community 1` be split into smaller, more focused modules?**
-  _Cohesion score 0.0473469387755102 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.04644412191582003 - nodes in this community are weakly interconnected._
 - **Should `Community 3` be split into smaller, more focused modules?**
   _Cohesion score 0.12169312169312169 - nodes in this community are weakly interconnected._

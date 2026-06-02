@@ -118,10 +118,11 @@ supports 3-line and 5-line layouts.
 The settings UI also includes a display trigger editor similar to the macro
 binding editor. It can manage multiple button and slider triggers, require a
 configurable percentage change for slider triggers, and then show either normal
-text or lightweight HTML-like content for a configured duration. Supported
-trigger placeholders are `{slider.id}`, `{slider.value}`, `{slider.percent}`,
-`{input}`, `{profile}`, and `{status}`. HTML-like input is rendered app-side to
-plain OLED text lines before it is sent to the firmware.
+text or lightweight HTML-like content for a configured duration. The editor's
+Test button sends the current editor content to the connected OLED immediately.
+Supported trigger placeholders are `{slider.id}`, `{slider.value}`,
+`{slider.percent}`, `{input}`, `{profile}`, and `{status}`. HTML-like input is
+rendered app-side to plain OLED text lines before it is sent to the firmware.
 
 The app sends
 `config;profile=...;actionResultTimeoutMs=...;defaultRows=...;defaultTitle=...;defaultLine1=...;defaultLine2=...;defaultLine3=...;defaultLine4=...;time=...;date=...;volumeSystem=...;preferredDisplay=...`

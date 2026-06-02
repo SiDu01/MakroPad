@@ -931,6 +931,47 @@ public partial class MainWindowViewModel : ViewModelBase
         AddLog($"Display trigger removed: {removed.Input}");
     }
 
+    [RelayCommand]
+    private async Task TestDisplayTriggerAsync()
+    {
+        if (!TryCreateEditorDisplayTrigger(out var trigger))
+        {
+            return;
+        }
+
+        if (activeConnection is null || activeConnection.State != DeviceConnectionState.Connected)
+        {
+            AddLog("No active device connection.");
+            return;
+        }
+
+        var input = trigger.Input;
+        var sliderValue = input.StartsWith("slider:", StringComparison.OrdinalIgnoreCase)
+            ? LastSliderValue
+            : (int?)null;
+        var percent = sliderValue is null ? (int?)null : MapSliderValueToPercent(sliderValue.Value);
+        var lines = RenderDisplayTriggerLines(trigger, input, sliderValue, percent);
+
+        if (lines.Count == 0)
+        {
+            AddLog("Display trigger produced no display lines.");
+            return;
+        }
+
+        try
+        {
+            await deviceDisplaySyncService.SendTemporaryTemplateAsync(
+                activeConnection,
+                lines,
+                NormalizeDisplayTriggerDurationMs(trigger.DurationMs));
+            AddLog($"Display trigger tested: {trigger.Input}");
+        }
+        catch (Exception ex)
+        {
+            AddLog($"Display trigger test failed: {ex.Message}");
+        }
+    }
+
     private void OnDeviceEventReceived(object? sender, DeviceEvent deviceEvent)
     {
         Dispatcher.UIThread.Post(() => HandleDeviceEvent(deviceEvent));
