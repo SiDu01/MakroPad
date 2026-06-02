@@ -90,19 +90,30 @@ Aktueller Stand:
 - Automatischer `hello` / `hello-ack` Handshake.
 - Auto-Connect anhand `hello;device=makropad-s3`, inklusive gespeichertem
   letztem Port.
+- Serial Heartbeat mit `ping` / `pong` und `Unresponsive` Status.
 - Tray-Icon mit Oeffnen und Beenden.
 - JSON-Konfiguration unter `%APPDATA%\MakroPad\config.json`.
-- Read-only Anzeige der Bindings des aktiven Profils.
+- Bearbeiten von Profilen und Bindings in der UI.
+- Bekannte Inputs `button:1..20` und `slider:1..3` in der UI.
 - Action-Pipeline mit Config-Matching und Slider-Throttling.
-- Windows `media.playPause` via System-Media-Key.
+- Windows Media Actions via System-Media-Keys.
 - Windows `system.volume` via CoreAudio / NAudio.
+- Windows `app.volume` fuer aktive Audio-Sessions via CoreAudio / NAudio.
+- `system.openUrl`, `system.openApp`, `keyboard.shortcut` und `log` Actions.
+- Strukturierte Editor-Hilfen fuer haeufige Action-Parameter.
+- Dark Sidebar UI mit Makros, Geraet, Simulation, Einstellungen und Debug.
+- Initiales Spotify Now Playing ueber den Spotify-Fenstertitel.
+- Konfigurierbarer OLED-Defaultscreen mit 3/5 Zeilen, Preview und Platzhaltern.
+- Debug-Ansicht mit automatisch aktualisierten aktiven Audio-Sessions.
+- Graphify-Projektgraph unter `graphify-out/`.
 - Tests fuer ProtocolCodec und Action-Pipeline.
 
 Noch nicht umgesetzt:
 
-- Bearbeiten von Profilen und Bindings in der UI.
-- Spotify-/Media-Session-Informationen fuer OLED.
+- Windows Media Session Metadata als robuste Now-Playing-Quelle.
 - Linux-Implementierungen fuer Media Keys und Lautstaerke.
+- Aufteilung des grossen `MainWindowViewModel` in kleinere ViewModels/Services.
+- Firmware-Aufteilung in Module, sobald der Prototyp stabil ist.
 
 ## Hardware-Einschaetzung
 
@@ -274,8 +285,9 @@ Der erste vertikale App-Prototyp ist weitgehend umgesetzt:
 8. Button 1 kann Windows Media Play/Pause ausloesen.
 9. Slider 1 kann Windows Master-Volume setzen.
 
-Als naechstes koennen Profilbearbeitung, Auto-Connect, Medieninformationen fuer
-das OLED und das volle Hardware-Layout ausgebaut werden.
+Als naechstes sollten technische Schulden im `MainWindowViewModel`, robuste
+Windows-Media-Session-Metadaten und die weitere Spezialisierung des Config
+Editors angegangen werden. Details stehen in [HANDOFF.md](HANDOFF.md).
 
 Der erste Firmware-Prototyp befindet sich in
 `firmware/MakroPadFirmware/MakroPadFirmware.ino`.
@@ -290,7 +302,9 @@ Das erste Avalonia-App-Grundgeruest befindet sich in `app/MakroPad.sln`.
 - Details des Serial-Protokolls nach echtem Hardware-Test pruefen.
 - Welche Library fuer USB HID unter Arduino verwendet wird.
 - Ob Adafruit SSD1306 fuer das OLED bleibt oder U8g2 besser passt.
-- Wie Medieninformationen unter Windows zuerst ausgelesen werden:
-  Windows Media Session API oder Spotify Web API.
+- Ob Now Playing als naechstes ueber Windows Media Session API oder eine
+  Spotify-spezifische API erweitert wird. Aktuell wird der Spotify-Fenstertitel
+  genutzt.
 - Ob Linux-Media-Keys und Linux-Lautstaerke direkt nachgezogen werden.
-- Wie Profil-/Binding-Bearbeitung in der UI konkret aussehen soll.
+- Wie stark die UI vor weiterer Feature-Arbeit in kleinere ViewModels
+  aufgeteilt wird.

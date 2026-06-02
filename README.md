@@ -10,29 +10,42 @@ The project is split into two main parts:
 - A desktop companion app for profile management, complex actions, media
   integration, and tray/background operation.
 
-See [docs/PROJECT_PLAN.md](docs/PROJECT_PLAN.md) for the current requirements,
-architecture, and proposed project structure.
+See [docs/PROJECT_PLAN.md](docs/PROJECT_PLAN.md) for the current requirements
+and architecture. The current continuation notes live in
+[docs/HANDOFF.md](docs/HANDOFF.md).
 
 The first Arduino firmware prototype lives in
 [firmware/MakroPadFirmware](firmware/MakroPadFirmware).
 
 The desktop companion app lives in [app](app). It already includes a simulator,
-real serial-port support, tray/background behavior, JSON configuration, a first
-action pipeline, Windows media play/pause, and Windows master-volume control.
+real serial-port support, tray/background behavior, JSON configuration, action
+execution, Windows media controls, system/app volume control, Now Playing OLED
+updates, and an editable configuration UI.
 
 ## Current Status
 
 Implemented:
 
-- Arduino firmware prototype for 1 button, 1 slider, OLED, and USB Serial.
+- Arduino firmware prototype for up to 20 buttons, up to 3 configured sliders,
+  OLED, USB Serial, heartbeat, action-result timeout, and configurable default
+  screen placeholders.
 - Avalonia desktop app prototype.
 - Simulator connection for app development without electronics.
 - Real COM-port connection using the documented serial protocol.
+- Serial heartbeat with `ping`/`pong` and unresponsive connection status.
 - Tray icon with open and exit commands.
 - JSON config at `%APPDATA%\MakroPad\config.json`.
-- Read-only profile binding overview in the UI.
-- Windows `media.playPause` action.
+- Editable profile and binding overview in the UI.
+- Windows media actions.
 - Windows `system.volume` action.
+- Windows `app.volume` action for active audio sessions.
+- `system.openUrl`, `system.openApp`, `keyboard.shortcut`, and `log` actions.
+- Configurable OLED default screen with preview and placeholders.
+- Initial Spotify Now Playing OLED display via the Spotify window title.
+- Dark sidebar UI with sections for macros, device, simulation, settings, and
+  debug.
+- Debug view for active Windows audio sessions.
+- Graphify project graph in `graphify-out/` for architecture navigation.
 - Unit tests for protocol and action behavior.
 
 Useful commands:

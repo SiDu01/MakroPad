@@ -2,6 +2,8 @@
 
 Desktop companion app for MakroPad.
 
+Current continuation notes are in `../docs/HANDOFF.md`.
+
 ## Projects
 
 - `MakroPad.App`: Avalonia UI application.
@@ -127,9 +129,10 @@ switching to the dedicated media screen.
 
 ## Next Work
 
+- Split the large `MainWindowViewModel` into smaller services/view models.
 - Windows Media Session metadata for richer OLED media display updates.
 - Linux implementations for media and volume actions.
-- Richer config editor controls for action-specific parameters.
+- Richer config editor controls backed by shared action metadata.
 
 ## Run
 

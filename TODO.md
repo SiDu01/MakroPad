@@ -71,3 +71,21 @@ Implementation notes:
   Windows-specific media-session integration.
 - Consider re-sending Now Playing after temporary OLED action-result messages if
   the media display should be sticky.
+
+## Technical Debt
+
+- Split `MainWindowViewModel`. It currently owns device connection state,
+  profile editing, binding editing, action helper UI, OLED preview, Now Playing,
+  and audio session refresh.
+- Move action metadata into a shared model that can drive UI lists, validation,
+  docs, and examples.
+- Move OLED default screen rendering/placeholder logic out of the main view
+  model so firmware behavior and UI preview stay easier to compare.
+- Split the Arduino sketch into focused modules once replacement sliders have
+  been tested.
+
+## Handoff
+
+- Keep `docs/HANDOFF.md` updated after larger milestones.
+- After architecture-significant changes, update `graphify-out/` so future
+  codebase questions have a current graph.
