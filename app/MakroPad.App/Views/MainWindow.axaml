@@ -811,7 +811,7 @@
                                                    Foreground="#FF7A90"
                                                    FontSize="12"
                                                    TextWrapping="Wrap" />
-                                        <Grid ColumnDefinitions="*,*,*,*"
+                                        <Grid ColumnDefinitions="*,*,*,*,*,*"
                                               ColumnSpacing="8">
                                             <Button Grid.Column="0"
                                                     Content="Apply"
@@ -828,6 +828,14 @@
                                             <Button Grid.Column="3"
                                                     Content="Test"
                                                     Command="{Binding TestDisplayTriggerCommand}"
+                                                    HorizontalAlignment="Stretch" />
+                                            <Button Grid.Column="4"
+                                                    Content="Up"
+                                                    Command="{Binding MoveDisplayTriggerUpCommand}"
+                                                    HorizontalAlignment="Stretch" />
+                                            <Button Grid.Column="5"
+                                                    Content="Down"
+                                                    Command="{Binding MoveDisplayTriggerDownCommand}"
                                                     HorizontalAlignment="Stretch" />
                                         </Grid>
                                     </StackPanel>

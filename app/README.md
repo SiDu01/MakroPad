@@ -122,7 +122,7 @@ text or lightweight HTML-like content for a configured duration. The editor's
 Test button sends the current editor content to the connected OLED immediately.
 When multiple enabled triggers match the same input, the app sends their display
 screens in list order and waits each trigger's duration before sending the next
-screen.
+screen. The editor provides Up/Down controls to change this sequence order.
 Supported trigger placeholders are `{slider.id}`, `{slider.value}`,
 `{slider.percent}`, `{input}`, `{profile}`, and `{status}`. HTML-like input is
 rendered app-side to plain OLED text lines before it is sent to the firmware.

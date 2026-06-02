@@ -932,6 +932,18 @@ public partial class MainWindowViewModel : ViewModelBase
     }
 
     [RelayCommand]
+    private void MoveDisplayTriggerUp()
+    {
+        MoveSelectedDisplayTrigger(-1);
+    }
+
+    [RelayCommand]
+    private void MoveDisplayTriggerDown()
+    {
+        MoveSelectedDisplayTrigger(1);
+    }
+
+    [RelayCommand]
     private async Task TestDisplayTriggerAsync()
     {
         if (!TryCreateEditorDisplayTrigger(out var trigger))
@@ -970,6 +982,30 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             AddLog($"Display trigger test failed: {ex.Message}");
         }
+    }
+
+    private void MoveSelectedDisplayTrigger(int direction)
+    {
+        if (SelectedDisplayTrigger is null)
+        {
+            AddLog("No display trigger selected.");
+            return;
+        }
+
+        var sourceIndex = SelectedDisplayTrigger.Index;
+        var targetIndex = sourceIndex + direction;
+        if (sourceIndex < 0
+            || sourceIndex >= DisplayTriggers.Count
+            || targetIndex < 0
+            || targetIndex >= DisplayTriggers.Count)
+        {
+            return;
+        }
+
+        var triggers = CreateDisplayTriggerConfigsFromList();
+        (triggers[sourceIndex], triggers[targetIndex]) = (triggers[targetIndex], triggers[sourceIndex]);
+        UpdateDisplayTriggers(triggers, targetIndex);
+        AddLog($"Display trigger moved: {sourceIndex + 1} -> {targetIndex + 1}");
     }
 
     private void OnDeviceEventReceived(object? sender, DeviceEvent deviceEvent)
