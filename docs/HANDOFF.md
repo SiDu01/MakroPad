@@ -34,6 +34,8 @@ MakroPad has a working vertical prototype across firmware and desktop app:
 - Started the `MainWindowViewModel` split by extracting audio session refresh
   state into `AudioSessionsViewModel` and OLED default screen rendering into
   `OledDefaultScreenRenderer`.
+- Moved Now Playing polling, status, track state, and media display messages
+  into `NowPlayingViewModel`.
 
 ## Supported Actions
 
@@ -71,9 +73,9 @@ MakroPad has a working vertical prototype across firmware and desktop app:
 - Linux implementations for media keys, volume, app volume, and Now Playing are
   still missing.
 - `MainWindowViewModel` is still the largest graph node and owns connection
-  flow, config editing, action helper UI, and Now Playing orchestration.
-  Audio session refresh and OLED default screen rendering are now split out, but
-  more decomposition is still useful.
+  flow, config editing, action helper UI, and device config/OLED sync.
+  Audio sessions, OLED default rendering, and Now Playing orchestration are now
+  split out, but more decomposition is still useful.
 - Firmware is still a single Arduino sketch. That is fine for prototyping, but
   display/protocol/input modules should be split once behavior stabilizes.
 - Slider quality is still being validated with replacement hardware.
@@ -95,7 +97,7 @@ the ESP32-S3-DevKitC-1.
 ## Recommended Next Steps
 
 1. Continue refactoring `MainWindowViewModel` into smaller services/view models.
-   Next best target: Now Playing orchestration and device config/display sync.
+   Next best target: device config/display sync.
 2. Replace Spotify-window-title Now Playing with Windows Media Session metadata.
 3. Improve the config editor UX with action definitions shared between UI,
    validation, and future docs generation.
@@ -104,9 +106,9 @@ the ESP32-S3-DevKitC-1.
 5. Add a small diagnostics screen for current device config, last heartbeat,
    last input, and last OLED message.
 
-Recommendation: continue the `MainWindowViewModel` split with Now Playing and
-device config/display sync. The first extraction is in place, and keeping this
-momentum will make the Windows Media Session work easier.
+Recommendation: continue the `MainWindowViewModel` split with device
+config/display sync. Now Playing is isolated enough that the later Windows Media
+Session provider can slot behind `INowPlayingProvider`.
 
 ## Graphify Notes
 

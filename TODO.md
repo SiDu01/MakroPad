@@ -80,6 +80,8 @@ Implementation notes:
 - Audio session refresh has been moved into `AudioSessionsViewModel`.
 - OLED default screen rendering/placeholder logic has been moved into
   `OledDefaultScreenRenderer`.
+- Now Playing polling, status, last sent track, and media display messages have
+  been moved into `NowPlayingViewModel`.
 - Move action metadata into a shared model that can drive UI lists, validation,
   docs, and examples.
 - Move OLED default screen rendering/placeholder logic out of the main view

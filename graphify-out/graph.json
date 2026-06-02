@@ -902,7 +902,7 @@
       "source_file": "app/MakroPad.Actions/SystemLauncher.cs",
       "source_location": "L1",
       "id": "app_makropad_actions_systemlauncher_cs",
-      "community": 69,
+      "community": 2,
       "norm_label": "systemlauncher.cs"
     },
     {
@@ -911,7 +911,7 @@
       "source_file": "app/MakroPad.Actions/SystemLauncher.cs",
       "source_location": "L5",
       "id": "makropad_actions_systemlauncher_systemlauncher",
-      "community": 69,
+      "community": 2,
       "norm_label": "systemlauncher"
     },
     {
@@ -929,7 +929,7 @@
       "source_file": "app/MakroPad.Actions/SystemLauncher.cs",
       "source_location": "L7",
       "id": "makropad_actions_systemlauncher_systemlauncher_openurlasync",
-      "community": 69,
+      "community": 2,
       "norm_label": ".openurlasync()"
     },
     {
@@ -938,7 +938,7 @@
       "source_file": "app/MakroPad.Actions/SystemLauncher.cs",
       "source_location": "L22",
       "id": "makropad_actions_systemlauncher_systemlauncher_openappasync",
-      "community": 69,
+      "community": 2,
       "norm_label": ".openappasync()"
     },
     {
@@ -947,7 +947,7 @@
       "source_file": "app/MakroPad.Actions/SystemLauncher.cs",
       "source_location": "L36",
       "id": "makropad_actions_systemlauncher_systemlauncher_startprocessasync",
-      "community": 69,
+      "community": 2,
       "norm_label": ".startprocessasync()"
     },
     {
@@ -2319,19 +2319,10 @@
       "norm_label": "actionpipeline"
     },
     {
-      "label": "INowPlayingProvider",
-      "file_type": "code",
-      "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L46",
-      "id": "app_makropad_app_viewmodels_mainwindowviewmodel_cs_inowplayingprovider",
-      "community": 1,
-      "norm_label": "inowplayingprovider"
-    },
-    {
       "label": "OledDefaultScreenRenderer",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L47",
+      "source_location": "L46",
       "id": "oleddefaultscreenrenderer",
       "community": 1,
       "norm_label": "oleddefaultscreenrenderer"
@@ -2340,7 +2331,7 @@
       "label": "CancellationTokenSource",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L48",
+      "source_location": "L47",
       "id": "app_makropad_app_viewmodels_mainwindowviewmodel_cs_cancellationtokensource",
       "community": 1,
       "norm_label": "cancellationtokensource"
@@ -2349,7 +2340,7 @@
       "label": "IMakroPadConnection",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L50",
+      "source_location": "L49",
       "id": "app_makropad_app_viewmodels_mainwindowviewmodel_cs_imakropadconnection",
       "community": 1,
       "norm_label": "imakropadconnection"
@@ -2358,25 +2349,16 @@
       "label": "MakroPadConfig",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L51",
+      "source_location": "L50",
       "id": "makropadconfig",
       "community": 1,
       "norm_label": "makropadconfig"
     },
     {
-      "label": "NowPlayingTrack",
-      "file_type": "code",
-      "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L52",
-      "id": "nowplayingtrack",
-      "community": 1,
-      "norm_label": "nowplayingtrack"
-    },
-    {
       "label": "int",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L53",
+      "source_location": "L51",
       "id": "app_makropad_app_viewmodels_mainwindowviewmodel_cs_int",
       "community": 1,
       "norm_label": "int"
@@ -2385,7 +2367,7 @@
       "label": "bool",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L54",
+      "source_location": "L52",
       "id": "app_makropad_app_viewmodels_mainwindowviewmodel_cs_bool",
       "community": 1,
       "norm_label": "bool"
@@ -2394,7 +2376,7 @@
       "label": ".OnSelectedPortChanged()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L62",
+      "source_location": "L60",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_onselectedportchanged",
       "community": 1,
       "norm_label": ".onselectedportchanged()"
@@ -2403,25 +2385,16 @@
       "label": ".OnEnableNowPlayingDisplayChanged()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L95",
+      "source_location": "L93",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_onenablenowplayingdisplaychanged",
       "community": 15,
       "norm_label": ".onenablenowplayingdisplaychanged()"
     },
     {
-      "label": ".OnNowPlayingStatusChanged()",
-      "file_type": "code",
-      "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L108",
-      "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_onnowplayingstatuschanged",
-      "community": 18,
-      "norm_label": ".onnowplayingstatuschanged()"
-    },
-    {
       "label": ".OnDefaultScreenTitleChanged()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L119",
+      "source_location": "L106",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_ondefaultscreentitlechanged",
       "community": 18,
       "norm_label": ".ondefaultscreentitlechanged()"
@@ -2430,7 +2403,7 @@
       "label": ".OnDefaultScreenLine1Changed()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L127",
+      "source_location": "L114",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_ondefaultscreenline1changed",
       "community": 18,
       "norm_label": ".ondefaultscreenline1changed()"
@@ -2439,7 +2412,7 @@
       "label": ".OnDefaultScreenLine2Changed()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L135",
+      "source_location": "L122",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_ondefaultscreenline2changed",
       "community": 18,
       "norm_label": ".ondefaultscreenline2changed()"
@@ -2448,7 +2421,7 @@
       "label": ".OnDefaultScreenLine3Changed()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L143",
+      "source_location": "L130",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_ondefaultscreenline3changed",
       "community": 18,
       "norm_label": ".ondefaultscreenline3changed()"
@@ -2457,7 +2430,7 @@
       "label": ".OnDefaultScreenLine4Changed()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L151",
+      "source_location": "L138",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_ondefaultscreenline4changed",
       "community": 18,
       "norm_label": ".ondefaultscreenline4changed()"
@@ -2466,7 +2439,7 @@
       "label": ".OnDefaultScreenRowsChanged()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L159",
+      "source_location": "L146",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_ondefaultscreenrowschanged",
       "community": 18,
       "norm_label": ".ondefaultscreenrowschanged()"
@@ -2475,7 +2448,7 @@
       "label": "BindingViewModel",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L165",
+      "source_location": "L152",
       "id": "bindingviewmodel",
       "community": 1,
       "norm_label": "bindingviewmodel"
@@ -2484,7 +2457,7 @@
       "label": ".OnSelectedBindingChanged()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L168",
+      "source_location": "L155",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_onselectedbindingchanged",
       "community": 16,
       "norm_label": ".onselectedbindingchanged()"
@@ -2493,7 +2466,7 @@
       "label": ".OnBindingEditorActionChanged()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L186",
+      "source_location": "L173",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_onbindingeditoractionchanged",
       "community": 21,
       "norm_label": ".onbindingeditoractionchanged()"
@@ -2502,7 +2475,7 @@
       "label": ".OnBindingEditorParametersChanged()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L203",
+      "source_location": "L190",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_onbindingeditorparameterschanged",
       "community": 21,
       "norm_label": ".onbindingeditorparameterschanged()"
@@ -2511,7 +2484,7 @@
       "label": ".OnStructuredParameterValueChanged()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L217",
+      "source_location": "L204",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_onstructuredparametervaluechanged",
       "community": 21,
       "norm_label": ".onstructuredparametervaluechanged()"
@@ -2520,7 +2493,7 @@
       "label": ".OnActiveProfileNameChanged()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L246",
+      "source_location": "L233",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_onactiveprofilenamechanged",
       "community": 15,
       "norm_label": ".onactiveprofilenamechanged()"
@@ -2529,7 +2502,7 @@
       "label": ".OnConnectionStatusChanged()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L269",
+      "source_location": "L256",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_onconnectionstatuschanged",
       "community": 18,
       "norm_label": ".onconnectionstatuschanged()"
@@ -2538,7 +2511,7 @@
       "label": ".RefreshPorts()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L344",
+      "source_location": "L350",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_refreshports",
       "community": 11,
       "norm_label": ".refreshports()"
@@ -2547,7 +2520,7 @@
       "label": ".ConnectAsync()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L362",
+      "source_location": "L368",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_connectasync",
       "community": 11,
       "norm_label": ".connectasync()"
@@ -2556,7 +2529,7 @@
       "label": ".DisconnectAsync()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L395",
+      "source_location": "L401",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_disconnectasync",
       "community": 11,
       "norm_label": ".disconnectasync()"
@@ -2565,7 +2538,7 @@
       "label": ".SendDisplayMessageAsync()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L402",
+      "source_location": "L408",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_senddisplaymessageasync",
       "community": 11,
       "norm_label": ".senddisplaymessageasync()"
@@ -2574,7 +2547,7 @@
       "label": ".LoadConfigAsync()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L426",
+      "source_location": "L432",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_loadconfigasync",
       "community": 11,
       "norm_label": ".loadconfigasync()"
@@ -2583,7 +2556,7 @@
       "label": ".SaveConfigAsync()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L462",
+      "source_location": "L468",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_saveconfigasync",
       "community": 15,
       "norm_label": ".saveconfigasync()"
@@ -2592,7 +2565,7 @@
       "label": ".AutoConnectAsync()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L500",
+      "source_location": "L506",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_autoconnectasync",
       "community": 11,
       "norm_label": ".autoconnectasync()"
@@ -2601,7 +2574,7 @@
       "label": ".SimulateButton()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L539",
+      "source_location": "L545",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_simulatebutton",
       "community": 11,
       "norm_label": ".simulatebutton()"
@@ -2610,7 +2583,7 @@
       "label": ".SimulateSlider()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L551",
+      "source_location": "L557",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_simulateslider",
       "community": 11,
       "norm_label": ".simulateslider()"
@@ -2619,7 +2592,7 @@
       "label": ".AddProfile()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L564",
+      "source_location": "L570",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_addprofile",
       "community": 11,
       "norm_label": ".addprofile()"
@@ -2628,7 +2601,7 @@
       "label": ".RenameProfile()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L591",
+      "source_location": "L597",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_renameprofile",
       "community": 11,
       "norm_label": ".renameprofile()"
@@ -2637,7 +2610,7 @@
       "label": ".DeleteProfile()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L635",
+      "source_location": "L641",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_deleteprofile",
       "community": 11,
       "norm_label": ".deleteprofile()"
@@ -2646,7 +2619,7 @@
       "label": ".UseParameterExample()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L667",
+      "source_location": "L673",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_useparameterexample",
       "community": 1,
       "norm_label": ".useparameterexample()"
@@ -2655,7 +2628,7 @@
       "label": ".StartShortcutRecording()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L680",
+      "source_location": "L686",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_startshortcutrecording",
       "community": 1,
       "norm_label": ".startshortcutrecording()"
@@ -2664,7 +2637,7 @@
       "label": ".CompleteShortcutRecording()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L689",
+      "source_location": "L695",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_completeshortcutrecording",
       "community": 1,
       "norm_label": ".completeshortcutrecording()"
@@ -2673,7 +2646,7 @@
       "label": ".CancelShortcutRecording()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L704",
+      "source_location": "L710",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_cancelshortcutrecording",
       "community": 1,
       "norm_label": ".cancelshortcutrecording()"
@@ -2682,7 +2655,7 @@
       "label": ".SetOpenAppPath()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L710",
+      "source_location": "L716",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_setopenapppath",
       "community": 1,
       "norm_label": ".setopenapppath()"
@@ -2691,7 +2664,7 @@
       "label": ".ApplyBinding()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L722",
+      "source_location": "L728",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_applybinding",
       "community": 16,
       "norm_label": ".applybinding()"
@@ -2700,7 +2673,7 @@
       "label": ".AddBinding()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L752",
+      "source_location": "L758",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_addbinding",
       "community": 16,
       "norm_label": ".addbinding()"
@@ -2709,7 +2682,7 @@
       "label": ".RemoveBinding()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L775",
+      "source_location": "L781",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_removebinding",
       "community": 16,
       "norm_label": ".removebinding()"
@@ -2718,7 +2691,7 @@
       "label": ".OnDeviceEventReceived()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L805",
+      "source_location": "L811",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_ondeviceeventreceived",
       "community": 27,
       "norm_label": ".ondeviceeventreceived()"
@@ -2727,7 +2700,7 @@
       "label": ".OnDeviceStateChanged()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L810",
+      "source_location": "L816",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_ondevicestatechanged",
       "community": 1,
       "norm_label": ".ondevicestatechanged()"
@@ -2736,7 +2709,7 @@
       "label": ".HandleDeviceEvent()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L815",
+      "source_location": "L821",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_handledeviceevent",
       "community": 27,
       "norm_label": ".handledeviceevent()"
@@ -2745,7 +2718,7 @@
       "label": ".HandleProtocolMessageSafelyAsync()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L825",
+      "source_location": "L831",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_handleprotocolmessagesafelyasync",
       "community": 27,
       "norm_label": ".handleprotocolmessagesafelyasync()"
@@ -2754,7 +2727,7 @@
       "label": ".HandleProtocolMessageAsync()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L837",
+      "source_location": "L843",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_handleprotocolmessageasync",
       "community": 27,
       "norm_label": ".handleprotocolmessageasync()"
@@ -2763,7 +2736,7 @@
       "label": ".HandleConfiguredInputAsync()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L874",
+      "source_location": "L880",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_handleconfiguredinputasync",
       "community": 27,
       "norm_label": ".handleconfiguredinputasync()"
@@ -2772,34 +2745,16 @@
       "label": ".SendDeviceConfigAsync()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L908",
+      "source_location": "L914",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_senddeviceconfigasync",
       "community": 15,
       "norm_label": ".senddeviceconfigasync()"
     },
     {
-      "label": ".RunNowPlayingLoopAsync()",
-      "file_type": "code",
-      "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L949",
-      "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_runnowplayingloopasync",
-      "community": 15,
-      "norm_label": ".runnowplayingloopasync()"
-    },
-    {
-      "label": ".UpdateNowPlayingAsync()",
-      "file_type": "code",
-      "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L972",
-      "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_updatenowplayingasync",
-      "community": 15,
-      "norm_label": ".updatenowplayingasync()"
-    },
-    {
       "label": ".FormatActionResult()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L1028",
+      "source_location": "L955",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_formatactionresult",
       "community": 27,
       "norm_label": ".formatactionresult()"
@@ -2808,7 +2763,7 @@
       "label": ".DisconnectActiveConnectionAsync()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L1045",
+      "source_location": "L972",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_disconnectactiveconnectionasync",
       "community": 11,
       "norm_label": ".disconnectactiveconnectionasync()"
@@ -2817,7 +2772,7 @@
       "label": ".AddLog()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L1058",
+      "source_location": "L985",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_addlog",
       "community": 11,
       "norm_label": ".addlog()"
@@ -2826,7 +2781,7 @@
       "label": ".RefreshProfileNames()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L1068",
+      "source_location": "L995",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_refreshprofilenames",
       "community": 11,
       "norm_label": ".refreshprofilenames()"
@@ -2835,7 +2790,7 @@
       "label": ".RefreshProfileBindings()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L1077",
+      "source_location": "L1004",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_refreshprofilebindings",
       "community": 16,
       "norm_label": ".refreshprofilebindings()"
@@ -2844,7 +2799,7 @@
       "label": ".GetActiveProfile()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L1108",
+      "source_location": "L1035",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_getactiveprofile",
       "community": 16,
       "norm_label": ".getactiveprofile()"
@@ -2853,7 +2808,7 @@
       "label": ".UpdateActiveProfile()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L1114",
+      "source_location": "L1041",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_updateactiveprofile",
       "community": 16,
       "norm_label": ".updateactiveprofile()"
@@ -2862,7 +2817,7 @@
       "label": ".TryCreateEditorBinding()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L1126",
+      "source_location": "L1053",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_trycreateeditorbinding",
       "community": 16,
       "norm_label": ".trycreateeditorbinding()"
@@ -2871,7 +2826,7 @@
       "label": ".SetBindingEditorError()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L1194",
+      "source_location": "L1121",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_setbindingeditorerror",
       "community": 16,
       "norm_label": ".setbindingeditorerror()"
@@ -2880,7 +2835,7 @@
       "label": ".RefreshActionEditorHints()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L1200",
+      "source_location": "L1127",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_refreshactioneditorhints",
       "community": 21,
       "norm_label": ".refreshactioneditorhints()"
@@ -2889,7 +2844,7 @@
       "label": ".IsSupportedInput()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L1216",
+      "source_location": "L1143",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_issupportedinput",
       "community": 16,
       "norm_label": ".issupportedinput()"
@@ -2898,7 +2853,7 @@
       "label": ".TryValidateProfileName()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L1233",
+      "source_location": "L1160",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_tryvalidateprofilename",
       "community": 11,
       "norm_label": ".tryvalidateprofilename()"
@@ -2907,7 +2862,7 @@
       "label": ".ParseParameters()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L1251",
+      "source_location": "L1178",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_parseparameters",
       "community": 21,
       "norm_label": ".parseparameters()"
@@ -2916,7 +2871,7 @@
       "label": ".GetDefaultConfigPath()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L1286",
+      "source_location": "L1213",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_getdefaultconfigpath",
       "community": 1,
       "norm_label": ".getdefaultconfigpath()"
@@ -2925,7 +2880,7 @@
       "label": ".DefaultScreenUsesMediaPlaceholder()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L1292",
+      "source_location": "L1219",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_defaultscreenusesmediaplaceholder",
       "community": 15,
       "norm_label": ".defaultscreenusesmediaplaceholder()"
@@ -2934,7 +2889,7 @@
       "label": ".RefreshOledPreview()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L1302",
+      "source_location": "L1229",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_refresholedpreview",
       "community": 18,
       "norm_label": ".refresholedpreview()"
@@ -2943,7 +2898,7 @@
       "label": ".RenderOledPreview()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L1311",
+      "source_location": "L1238",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_renderoledpreview",
       "community": 1,
       "norm_label": ".renderoledpreview()"
@@ -2952,7 +2907,7 @@
       "label": ".RefreshStructuredParameterFromRaw()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L1327",
+      "source_location": "L1254",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_refreshstructuredparameterfromraw",
       "community": 21,
       "norm_label": ".refreshstructuredparameterfromraw()"
@@ -2961,7 +2916,7 @@
       "label": ".UpdateRawParametersFromStructuredValue()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L1337",
+      "source_location": "L1264",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_updaterawparametersfromstructuredvalue",
       "community": 21,
       "norm_label": ".updaterawparametersfromstructuredvalue()"
@@ -2970,10 +2925,82 @@
       "label": ".GetStructuredParameterKey()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L1352",
+      "source_location": "L1279",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_getstructuredparameterkey",
       "community": 21,
       "norm_label": ".getstructuredparameterkey()"
+    },
+    {
+      "label": "NowPlayingViewModel.cs",
+      "file_type": "code",
+      "source_file": "app/MakroPad.App/ViewModels/NowPlayingViewModel.cs",
+      "source_location": "L1",
+      "id": "app_makropad_app_viewmodels_nowplayingviewmodel_cs",
+      "community": 45,
+      "norm_label": "nowplayingviewmodel.cs"
+    },
+    {
+      "label": "NowPlayingViewModel",
+      "file_type": "code",
+      "source_file": "app/MakroPad.App/ViewModels/NowPlayingViewModel.cs",
+      "source_location": "L13",
+      "id": "viewmodels_nowplayingviewmodel_nowplayingviewmodel",
+      "community": 45,
+      "norm_label": "nowplayingviewmodel"
+    },
+    {
+      "label": "INowPlayingProvider",
+      "file_type": "code",
+      "source_file": "app/MakroPad.App/ViewModels/NowPlayingViewModel.cs",
+      "source_location": "L15",
+      "id": "app_makropad_app_viewmodels_nowplayingviewmodel_cs_inowplayingprovider",
+      "community": 45,
+      "norm_label": "inowplayingprovider"
+    },
+    {
+      "label": "string",
+      "file_type": "code",
+      "source_file": "app/MakroPad.App/ViewModels/NowPlayingViewModel.cs",
+      "source_location": "L17",
+      "id": "app_makropad_app_viewmodels_nowplayingviewmodel_cs_string",
+      "community": 45,
+      "norm_label": "string"
+    },
+    {
+      "label": ".SetEnabled()",
+      "file_type": "code",
+      "source_file": "app/MakroPad.App/ViewModels/NowPlayingViewModel.cs",
+      "source_location": "L29",
+      "id": "viewmodels_nowplayingviewmodel_nowplayingviewmodel_setenabled",
+      "community": 45,
+      "norm_label": ".setenabled()"
+    },
+    {
+      "label": ".RunLoopAsync()",
+      "file_type": "code",
+      "source_file": "app/MakroPad.App/ViewModels/NowPlayingViewModel.cs",
+      "source_location": "L40",
+      "id": "viewmodels_nowplayingviewmodel_nowplayingviewmodel_runloopasync",
+      "community": 45,
+      "norm_label": ".runloopasync()"
+    },
+    {
+      "label": ".UpdateAsync()",
+      "file_type": "code",
+      "source_file": "app/MakroPad.App/ViewModels/NowPlayingViewModel.cs",
+      "source_location": "L73",
+      "id": "viewmodels_nowplayingviewmodel_nowplayingviewmodel_updateasync",
+      "community": 45,
+      "norm_label": ".updateasync()"
+    },
+    {
+      "label": ".SetStatusAsync()",
+      "file_type": "code",
+      "source_file": "app/MakroPad.App/ViewModels/NowPlayingViewModel.cs",
+      "source_location": "L137",
+      "id": "viewmodels_nowplayingviewmodel_nowplayingviewmodel_setstatusasync",
+      "community": 45,
+      "norm_label": ".setstatusasync()"
     },
     {
       "label": "ViewModelBase.cs",
@@ -3987,7 +4014,7 @@
       "label": "Handoff",
       "file_type": "document",
       "source_file": "TODO.md",
-      "source_location": "L91",
+      "source_location": "L93",
       "id": "makropad_todo_handoff",
       "community": 70,
       "norm_label": "handoff"
@@ -4149,7 +4176,7 @@
       "label": "Supported Actions",
       "file_type": "document",
       "source_file": "docs/HANDOFF.md",
-      "source_location": "L38",
+      "source_location": "L40",
       "id": "docs_handoff_supported_actions",
       "community": 66,
       "norm_label": "supported actions"
@@ -4158,7 +4185,7 @@
       "label": "OLED Behavior",
       "file_type": "document",
       "source_file": "docs/HANDOFF.md",
-      "source_location": "L56",
+      "source_location": "L58",
       "id": "docs_handoff_oled_behavior",
       "community": 66,
       "norm_label": "oled behavior"
@@ -4167,7 +4194,7 @@
       "label": "Known Limitations",
       "file_type": "document",
       "source_file": "docs/HANDOFF.md",
-      "source_location": "L66",
+      "source_location": "L68",
       "id": "docs_handoff_known_limitations",
       "community": 66,
       "norm_label": "known limitations"
@@ -4176,7 +4203,7 @@
       "label": "Verification Baseline",
       "file_type": "document",
       "source_file": "docs/HANDOFF.md",
-      "source_location": "L83",
+      "source_location": "L85",
       "id": "docs_handoff_verification_baseline",
       "community": 66,
       "norm_label": "verification baseline"
@@ -4185,7 +4212,7 @@
       "label": "code:powershell (dotnet build app\\MakroPad.sln)",
       "file_type": "document",
       "source_file": "docs/HANDOFF.md",
-      "source_location": "L87",
+      "source_location": "L89",
       "id": "docs_handoff_codeblock_1",
       "community": 66,
       "norm_label": "code:powershell (dotnet build app\\makropad.sln)"
@@ -4194,7 +4221,7 @@
       "label": "Recommended Next Steps",
       "file_type": "document",
       "source_file": "docs/HANDOFF.md",
-      "source_location": "L95",
+      "source_location": "L97",
       "id": "docs_handoff_recommended_next_steps",
       "community": 66,
       "norm_label": "recommended next steps"
@@ -4203,7 +4230,7 @@
       "label": "Graphify Notes",
       "file_type": "document",
       "source_file": "docs/HANDOFF.md",
-      "source_location": "L111",
+      "source_location": "L113",
       "id": "docs_handoff_graphify_notes",
       "community": 66,
       "norm_label": "graphify notes"
@@ -5037,6 +5064,51 @@
       "norm_label": "code:text (button;id=12;state=down)"
     },
     {
+      "label": "INowPlayingProvider",
+      "file_type": "code",
+      "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
+      "source_location": "L46",
+      "community": 1,
+      "norm_label": "inowplayingprovider",
+      "id": "app_makropad_app_viewmodels_mainwindowviewmodel_cs_inowplayingprovider"
+    },
+    {
+      "label": "NowPlayingTrack",
+      "file_type": "code",
+      "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
+      "source_location": "L52",
+      "community": 1,
+      "norm_label": "nowplayingtrack",
+      "id": "nowplayingtrack"
+    },
+    {
+      "label": ".OnNowPlayingStatusChanged()",
+      "file_type": "code",
+      "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
+      "source_location": "L108",
+      "community": 18,
+      "norm_label": ".onnowplayingstatuschanged()",
+      "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_onnowplayingstatuschanged"
+    },
+    {
+      "label": ".RunNowPlayingLoopAsync()",
+      "file_type": "code",
+      "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
+      "source_location": "L949",
+      "community": 15,
+      "norm_label": ".runnowplayingloopasync()",
+      "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_runnowplayingloopasync"
+    },
+    {
+      "label": ".UpdateNowPlayingAsync()",
+      "file_type": "code",
+      "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
+      "source_location": "L972",
+      "community": 15,
+      "norm_label": ".updatenowplayingasync()",
+      "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_updatenowplayingasync"
+    },
+    {
       "label": "ActionExecutionContext.cs",
       "file_type": "code",
       "source_file": "MakroPad.Actions/ActionExecutionContext.cs",
@@ -5275,7 +5347,7 @@
       "file_type": "code",
       "source_file": "MakroPad.Actions/SystemLauncher.cs",
       "source_location": "L1",
-      "community": 69,
+      "community": 2,
       "norm_label": "systemlauncher.cs",
       "id": "makropad_actions_systemlauncher_cs"
     },
@@ -6676,9 +6748,9 @@
       "source_file": ".codex/hooks.json",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "codex_hooks_json",
-      "target": "codex_hooks_hooks",
-      "confidence_score": 1.0
+      "target": "codex_hooks_hooks"
     },
     {
       "relation": "contains",
@@ -6686,9 +6758,9 @@
       "source_file": ".codex/hooks.json",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "codex_hooks_hooks",
-      "target": "codex_hooks_hooks_pretooluse",
-      "confidence_score": 1.0
+      "target": "codex_hooks_hooks_pretooluse"
     },
     {
       "relation": "contains",
@@ -6696,9 +6768,9 @@
       "source_file": "app/MakroPad.Actions/ActionExecutionResult.cs",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_actions_actionexecutionresult_cs",
-      "target": "makropad_actions_actionexecutionresult_ok",
-      "confidence_score": 1.0
+      "target": "makropad_actions_actionexecutionresult_ok"
     },
     {
       "relation": "contains",
@@ -6706,9 +6778,9 @@
       "source_file": "app/MakroPad.Actions/ActionExecutionResult.cs",
       "source_location": "L10",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_actions_actionexecutionresult_cs",
-      "target": "makropad_actions_actionexecutionresult_failed",
-      "confidence_score": 1.0
+      "target": "makropad_actions_actionexecutionresult_failed"
     },
     {
       "relation": "contains",
@@ -6736,9 +6808,9 @@
       "source_file": "app/MakroPad.Actions/ActionExecutor.cs",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_actions_actionexecutor_cs",
-      "target": "makropad_actions_actionexecutor_actionexecutor",
-      "confidence_score": 1.0
+      "target": "makropad_actions_actionexecutor_actionexecutor"
     },
     {
       "relation": "references",
@@ -6747,9 +6819,9 @@
       "source_location": "L5",
       "weight": 1.0,
       "context": "field",
+      "confidence_score": 1.0,
       "source": "makropad_actions_actionexecutor_actionexecutor",
-      "target": "app_makropad_actions_actionexecutor_cs_isystemmediacontroller",
-      "confidence_score": 1.0
+      "target": "app_makropad_actions_actionexecutor_cs_isystemmediacontroller"
     },
     {
       "relation": "references",
@@ -6758,9 +6830,9 @@
       "source_location": "L6",
       "weight": 1.0,
       "context": "field",
+      "confidence_score": 1.0,
       "source": "makropad_actions_actionexecutor_actionexecutor",
-      "target": "app_makropad_actions_actionexecutor_cs_isystemvolumecontroller",
-      "confidence_score": 1.0
+      "target": "app_makropad_actions_actionexecutor_cs_isystemvolumecontroller"
     },
     {
       "relation": "references",
@@ -6769,9 +6841,9 @@
       "source_location": "L7",
       "weight": 1.0,
       "context": "field",
+      "confidence_score": 1.0,
       "source": "makropad_actions_actionexecutor_actionexecutor",
-      "target": "app_makropad_actions_actionexecutor_cs_iapplicationvolumecontroller",
-      "confidence_score": 1.0
+      "target": "app_makropad_actions_actionexecutor_cs_iapplicationvolumecontroller"
     },
     {
       "relation": "references",
@@ -6780,9 +6852,9 @@
       "source_location": "L8",
       "weight": 1.0,
       "context": "field",
+      "confidence_score": 1.0,
       "source": "makropad_actions_actionexecutor_actionexecutor",
-      "target": "app_makropad_actions_actionexecutor_cs_ikeyboardcontroller",
-      "confidence_score": 1.0
+      "target": "app_makropad_actions_actionexecutor_cs_ikeyboardcontroller"
     },
     {
       "relation": "references",
@@ -6791,9 +6863,9 @@
       "source_location": "L9",
       "weight": 1.0,
       "context": "field",
+      "confidence_score": 1.0,
       "source": "makropad_actions_actionexecutor_actionexecutor",
-      "target": "app_makropad_actions_actionexecutor_cs_isystemlauncher",
-      "confidence_score": 1.0
+      "target": "app_makropad_actions_actionexecutor_cs_isystemlauncher"
     },
     {
       "relation": "method",
@@ -7067,9 +7139,9 @@
       "source_file": "app/MakroPad.Actions/ActionPipeline.cs",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_actions_actionpipeline_cs",
-      "target": "makropad_actions_actionpipeline_actionpipeline",
-      "confidence_score": 1.0
+      "target": "makropad_actions_actionpipeline_actionpipeline"
     },
     {
       "relation": "references",
@@ -7078,9 +7150,9 @@
       "source_location": "L7",
       "weight": 1.0,
       "context": "field",
+      "confidence_score": 1.0,
       "source": "makropad_actions_actionpipeline_actionpipeline",
-      "target": "app_makropad_actions_actionpipeline_cs_timespan",
-      "confidence_score": 1.0
+      "target": "app_makropad_actions_actionpipeline_cs_timespan"
     },
     {
       "relation": "references",
@@ -7111,9 +7183,9 @@
       "source_location": "L11",
       "weight": 1.0,
       "context": "field",
+      "confidence_score": 1.0,
       "source": "makropad_actions_actionpipeline_actionpipeline",
-      "target": "app_makropad_actions_actionpipeline_cs_dictionary",
-      "confidence_score": 1.0
+      "target": "app_makropad_actions_actionpipeline_cs_dictionary"
     },
     {
       "relation": "method",
@@ -7184,9 +7256,9 @@
       "source_file": "app/MakroPad.Actions/ActionPipelineResult.cs",
       "source_location": "L14",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_actions_actionpipelineresult_cs",
-      "target": "makropad_actions_actionpipelineresult_executed",
-      "confidence_score": 1.0
+      "target": "makropad_actions_actionpipelineresult_executed"
     },
     {
       "relation": "contains",
@@ -7194,9 +7266,9 @@
       "source_file": "app/MakroPad.Actions/ActionPipelineResult.cs",
       "source_location": "L27",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_actions_actionpipelineresult_cs",
-      "target": "makropad_actions_actionpipelineresult_throttled",
-      "confidence_score": 1.0
+      "target": "makropad_actions_actionpipelineresult_throttled"
     },
     {
       "relation": "contains",
@@ -7204,9 +7276,9 @@
       "source_file": "app/MakroPad.Actions/ActionPipelineResult.cs",
       "source_location": "L32",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_actions_actionpipelineresult_cs",
-      "target": "makropad_actions_actionpipelineresult_unbound",
-      "confidence_score": 1.0
+      "target": "makropad_actions_actionpipelineresult_unbound"
     },
     {
       "relation": "contains",
@@ -7244,9 +7316,9 @@
       "source_file": "app/MakroPad.Actions/ActionResolver.cs",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_actions_actionresolver_cs",
-      "target": "makropad_actions_actionresolver_actionresolver",
-      "confidence_score": 1.0
+      "target": "makropad_actions_actionresolver_actionresolver"
     },
     {
       "relation": "method",
@@ -7274,9 +7346,9 @@
       "source_file": "app/MakroPad.Actions/ApplicationVolumeControllerFactory.cs",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_actions_applicationvolumecontrollerfactory_cs",
-      "target": "makropad_actions_applicationvolumecontrollerfactory_applicationvolumecontrollerfactory",
-      "confidence_score": 1.0
+      "target": "makropad_actions_applicationvolumecontrollerfactory_applicationvolumecontrollerfactory"
     },
     {
       "relation": "method",
@@ -7304,9 +7376,9 @@
       "source_file": "app/MakroPad.Actions/IApplicationVolumeController.cs",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_actions_iapplicationvolumecontroller_cs",
-      "target": "makropad_actions_iapplicationvolumecontroller_iapplicationvolumecontroller",
-      "confidence_score": 1.0
+      "target": "makropad_actions_iapplicationvolumecontroller_iapplicationvolumecontroller"
     },
     {
       "relation": "method",
@@ -7344,9 +7416,9 @@
       "source_file": "app/MakroPad.Actions/IKeyboardController.cs",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_actions_ikeyboardcontroller_cs",
-      "target": "makropad_actions_ikeyboardcontroller_ikeyboardcontroller",
-      "confidence_score": 1.0
+      "target": "makropad_actions_ikeyboardcontroller_ikeyboardcontroller"
     },
     {
       "relation": "method",
@@ -7374,9 +7446,9 @@
       "source_file": "app/MakroPad.Actions/ISystemLauncher.cs",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_actions_isystemlauncher_cs",
-      "target": "makropad_actions_isystemlauncher_isystemlauncher",
-      "confidence_score": 1.0
+      "target": "makropad_actions_isystemlauncher_isystemlauncher"
     },
     {
       "relation": "method",
@@ -7414,9 +7486,9 @@
       "source_file": "app/MakroPad.Actions/ISystemMediaController.cs",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_actions_isystemmediacontroller_cs",
-      "target": "makropad_actions_isystemmediacontroller_isystemmediacontroller",
-      "confidence_score": 1.0
+      "target": "makropad_actions_isystemmediacontroller_isystemmediacontroller"
     },
     {
       "relation": "method",
@@ -7504,9 +7576,9 @@
       "source_file": "app/MakroPad.Actions/ISystemVolumeController.cs",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_actions_isystemvolumecontroller_cs",
-      "target": "makropad_actions_isystemvolumecontroller_isystemvolumecontroller",
-      "confidence_score": 1.0
+      "target": "makropad_actions_isystemvolumecontroller_isystemvolumecontroller"
     },
     {
       "relation": "method",
@@ -7544,9 +7616,9 @@
       "source_file": "app/MakroPad.Actions/KeyboardControllerFactory.cs",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_actions_keyboardcontrollerfactory_cs",
-      "target": "makropad_actions_keyboardcontrollerfactory_keyboardcontrollerfactory",
-      "confidence_score": 1.0
+      "target": "makropad_actions_keyboardcontrollerfactory_keyboardcontrollerfactory"
     },
     {
       "relation": "method",
@@ -7574,9 +7646,9 @@
       "source_file": "app/MakroPad.Actions/NoopApplicationVolumeController.cs",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_actions_noopapplicationvolumecontroller_cs",
-      "target": "makropad_actions_noopapplicationvolumecontroller_noopapplicationvolumecontroller",
-      "confidence_score": 1.0
+      "target": "makropad_actions_noopapplicationvolumecontroller_noopapplicationvolumecontroller"
     },
     {
       "relation": "inherits",
@@ -7644,9 +7716,9 @@
       "source_file": "app/MakroPad.Actions/NoopKeyboardController.cs",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_actions_noopkeyboardcontroller_cs",
-      "target": "makropad_actions_noopkeyboardcontroller_noopkeyboardcontroller",
-      "confidence_score": 1.0
+      "target": "makropad_actions_noopkeyboardcontroller_noopkeyboardcontroller"
     },
     {
       "relation": "inherits",
@@ -7704,9 +7776,9 @@
       "source_file": "app/MakroPad.Actions/NoopSystemMediaController.cs",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_actions_noopsystemmediacontroller_cs",
-      "target": "makropad_actions_noopsystemmediacontroller_noopsystemmediacontroller",
-      "confidence_score": 1.0
+      "target": "makropad_actions_noopsystemmediacontroller_noopsystemmediacontroller"
     },
     {
       "relation": "inherits",
@@ -7921,9 +7993,9 @@
       "source_file": "app/MakroPad.Actions/NoopSystemVolumeController.cs",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_actions_noopsystemvolumecontroller_cs",
-      "target": "makropad_actions_noopsystemvolumecontroller_noopsystemvolumecontroller",
-      "confidence_score": 1.0
+      "target": "makropad_actions_noopsystemvolumecontroller_noopsystemvolumecontroller"
     },
     {
       "relation": "inherits",
@@ -8001,9 +8073,9 @@
       "source_file": "app/MakroPad.Actions/SystemLauncher.cs",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_actions_systemlauncher_cs",
-      "target": "makropad_actions_systemlauncher_systemlauncher",
-      "confidence_score": 1.0
+      "target": "makropad_actions_systemlauncher_systemlauncher"
     },
     {
       "relation": "inherits",
@@ -8093,9 +8165,9 @@
       "source_file": "app/MakroPad.Actions/SystemLauncherFactory.cs",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_actions_systemlauncherfactory_cs",
-      "target": "makropad_actions_systemlauncherfactory_systemlauncherfactory",
-      "confidence_score": 1.0
+      "target": "makropad_actions_systemlauncherfactory_systemlauncherfactory"
     },
     {
       "relation": "method",
@@ -8123,9 +8195,9 @@
       "source_file": "app/MakroPad.Actions/SystemMediaControllerFactory.cs",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_actions_systemmediacontrollerfactory_cs",
-      "target": "makropad_actions_systemmediacontrollerfactory_systemmediacontrollerfactory",
-      "confidence_score": 1.0
+      "target": "makropad_actions_systemmediacontrollerfactory_systemmediacontrollerfactory"
     },
     {
       "relation": "method",
@@ -8153,9 +8225,9 @@
       "source_file": "app/MakroPad.Actions/SystemVolumeControllerFactory.cs",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_actions_systemvolumecontrollerfactory_cs",
-      "target": "makropad_actions_systemvolumecontrollerfactory_systemvolumecontrollerfactory",
-      "confidence_score": 1.0
+      "target": "makropad_actions_systemvolumecontrollerfactory_systemvolumecontrollerfactory"
     },
     {
       "relation": "method",
@@ -8183,9 +8255,9 @@
       "source_file": "app/MakroPad.Actions/WindowsApplicationVolumeController.cs",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_actions_windowsapplicationvolumecontroller_cs",
-      "target": "makropad_actions_windowsapplicationvolumecontroller_windowsapplicationvolumecontroller",
-      "confidence_score": 1.0
+      "target": "makropad_actions_windowsapplicationvolumecontroller_windowsapplicationvolumecontroller"
     },
     {
       "relation": "method",
@@ -8308,9 +8380,9 @@
       "source_file": "app/MakroPad.Actions/WindowsKeyboardController.cs",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_actions_windowskeyboardcontroller_cs",
-      "target": "makropad_actions_windowskeyboardcontroller_windowskeyboardcontroller",
-      "confidence_score": 1.0
+      "target": "makropad_actions_windowskeyboardcontroller_windowskeyboardcontroller"
     },
     {
       "relation": "references",
@@ -8319,9 +8391,9 @@
       "source_location": "L9",
       "weight": 1.0,
       "context": "field",
+      "confidence_score": 1.0,
       "source": "makropad_actions_windowskeyboardcontroller_windowskeyboardcontroller",
-      "target": "app_makropad_actions_windowskeyboardcontroller_cs_uint",
-      "confidence_score": 1.0
+      "target": "app_makropad_actions_windowskeyboardcontroller_cs_uint"
     },
     {
       "relation": "references",
@@ -8330,9 +8402,9 @@
       "source_location": "L13",
       "weight": 1.0,
       "context": "field",
+      "confidence_score": 1.0,
       "source": "makropad_actions_windowskeyboardcontroller_windowskeyboardcontroller",
-      "target": "app_makropad_actions_windowskeyboardcontroller_cs_ushort",
-      "confidence_score": 1.0
+      "target": "app_makropad_actions_windowskeyboardcontroller_cs_ushort"
     },
     {
       "relation": "references",
@@ -8341,9 +8413,9 @@
       "source_location": "L15",
       "weight": 1.0,
       "context": "field",
+      "confidence_score": 1.0,
       "source": "makropad_actions_windowskeyboardcontroller_windowskeyboardcontroller",
-      "target": "app_makropad_actions_windowskeyboardcontroller_cs_dictionary",
-      "confidence_score": 1.0
+      "target": "app_makropad_actions_windowskeyboardcontroller_cs_dictionary"
     },
     {
       "relation": "method",
@@ -8509,9 +8581,9 @@
       "source_file": "app/MakroPad.Actions/WindowsSystemMediaController.cs",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_actions_windowssystemmediacontroller_cs",
-      "target": "makropad_actions_windowssystemmediacontroller_windowssystemmediacontroller",
-      "confidence_score": 1.0
+      "target": "makropad_actions_windowssystemmediacontroller_windowssystemmediacontroller"
     },
     {
       "relation": "references",
@@ -8520,9 +8592,9 @@
       "source_location": "L14",
       "weight": 1.0,
       "context": "field",
+      "confidence_score": 1.0,
       "source": "makropad_actions_windowssystemmediacontroller_windowssystemmediacontroller",
-      "target": "app_makropad_actions_windowssystemmediacontroller_cs_ushort",
-      "confidence_score": 1.0
+      "target": "app_makropad_actions_windowssystemmediacontroller_cs_ushort"
     },
     {
       "relation": "references",
@@ -8531,9 +8603,9 @@
       "source_location": "L17",
       "weight": 1.0,
       "context": "field",
+      "confidence_score": 1.0,
       "source": "makropad_actions_windowssystemmediacontroller_windowssystemmediacontroller",
-      "target": "app_makropad_actions_windowssystemmediacontroller_cs_uint",
-      "confidence_score": 1.0
+      "target": "app_makropad_actions_windowssystemmediacontroller_cs_uint"
     },
     {
       "relation": "method",
@@ -8772,9 +8844,9 @@
       "source_file": "app/MakroPad.Actions/WindowsSystemVolumeController.cs",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_actions_windowssystemvolumecontroller_cs",
-      "target": "makropad_actions_windowssystemvolumecontroller_windowssystemvolumecontroller",
-      "confidence_score": 1.0
+      "target": "makropad_actions_windowssystemvolumecontroller_windowssystemvolumecontroller"
     },
     {
       "relation": "method",
@@ -8812,9 +8884,9 @@
       "source_file": "app/MakroPad.Actions.Tests/ActionExecutorTests.cs",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_actions_tests_actionexecutortests_cs",
-      "target": "makropad_actions_tests_actionexecutortests_actionexecutortests",
-      "confidence_score": 1.0
+      "target": "makropad_actions_tests_actionexecutortests_actionexecutortests"
     },
     {
       "relation": "contains",
@@ -8822,9 +8894,9 @@
       "source_file": "app/MakroPad.Actions.Tests/ActionExecutorTests.cs",
       "source_location": "L224",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_actions_tests_actionexecutortests_cs",
-      "target": "makropad_actions_tests_actionexecutortests_fakemediacontroller",
-      "confidence_score": 1.0
+      "target": "makropad_actions_tests_actionexecutortests_fakemediacontroller"
     },
     {
       "relation": "contains",
@@ -8832,9 +8904,9 @@
       "source_file": "app/MakroPad.Actions.Tests/ActionExecutorTests.cs",
       "source_location": "L258",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_actions_tests_actionexecutortests_cs",
-      "target": "makropad_actions_tests_actionexecutortests_fakevolumecontroller",
-      "confidence_score": 1.0
+      "target": "makropad_actions_tests_actionexecutortests_fakevolumecontroller"
     },
     {
       "relation": "contains",
@@ -8842,9 +8914,9 @@
       "source_file": "app/MakroPad.Actions.Tests/ActionExecutorTests.cs",
       "source_location": "L280",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_actions_tests_actionexecutortests_cs",
-      "target": "makropad_actions_tests_actionexecutortests_fakeapplicationvolumecontroller",
-      "confidence_score": 1.0
+      "target": "makropad_actions_tests_actionexecutortests_fakeapplicationvolumecontroller"
     },
     {
       "relation": "contains",
@@ -8852,9 +8924,9 @@
       "source_file": "app/MakroPad.Actions.Tests/ActionExecutorTests.cs",
       "source_location": "L304",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_actions_tests_actionexecutortests_cs",
-      "target": "makropad_actions_tests_actionexecutortests_fakekeyboardcontroller",
-      "confidence_score": 1.0
+      "target": "makropad_actions_tests_actionexecutortests_fakekeyboardcontroller"
     },
     {
       "relation": "contains",
@@ -8862,9 +8934,9 @@
       "source_file": "app/MakroPad.Actions.Tests/ActionExecutorTests.cs",
       "source_location": "L319",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_actions_tests_actionexecutortests_cs",
-      "target": "makropad_actions_tests_actionexecutortests_fakesystemlauncher",
-      "confidence_score": 1.0
+      "target": "makropad_actions_tests_actionexecutortests_fakesystemlauncher"
     },
     {
       "relation": "method",
@@ -9249,9 +9321,9 @@
       "source_file": "app/MakroPad.Actions.Tests/ActionPipelineTests.cs",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_actions_tests_actionpipelinetests_cs",
-      "target": "makropad_actions_tests_actionpipelinetests_actionpipelinetests",
-      "confidence_score": 1.0
+      "target": "makropad_actions_tests_actionpipelinetests_actionpipelinetests"
     },
     {
       "relation": "contains",
@@ -9259,9 +9331,9 @@
       "source_file": "app/MakroPad.Actions.Tests/ActionPipelineTests.cs",
       "source_location": "L49",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_actions_tests_actionpipelinetests_cs",
-      "target": "makropad_actions_tests_actionpipelinetests_fakemediacontroller",
-      "confidence_score": 1.0
+      "target": "makropad_actions_tests_actionpipelinetests_fakemediacontroller"
     },
     {
       "relation": "contains",
@@ -9269,9 +9341,9 @@
       "source_file": "app/MakroPad.Actions.Tests/ActionPipelineTests.cs",
       "source_location": "L77",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_actions_tests_actionpipelinetests_cs",
-      "target": "makropad_actions_tests_actionpipelinetests_fakevolumecontroller",
-      "confidence_score": 1.0
+      "target": "makropad_actions_tests_actionpipelinetests_fakevolumecontroller"
     },
     {
       "relation": "method",
@@ -9538,9 +9610,9 @@
       "source_file": "app/MakroPad.App/App.axaml.cs",
       "source_location": "L13",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_app_app_axaml_cs",
-      "target": "makropad_app_app_axaml_app",
-      "confidence_score": 1.0
+      "target": "makropad_app_app_axaml_app"
     },
     {
       "relation": "inherits",
@@ -9581,9 +9653,9 @@
       "source_location": "L17",
       "weight": 1.0,
       "context": "field",
+      "confidence_score": 1.0,
       "source": "makropad_app_app_axaml_app",
-      "target": "app_makropad_app_app_axaml_cs_bool",
-      "confidence_score": 1.0
+      "target": "app_makropad_app_app_axaml_cs_bool"
     },
     {
       "relation": "method",
@@ -9674,9 +9746,9 @@
       "source_file": "app/MakroPad.App/Program.cs",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_app_program_cs",
-      "target": "makropad_app_program_program",
-      "confidence_score": 1.0
+      "target": "makropad_app_program_program"
     },
     {
       "relation": "method",
@@ -9725,9 +9797,9 @@
       "source_file": "app/MakroPad.App/ViewLocator.cs",
       "source_location": "L12",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_app_viewlocator_cs",
-      "target": "makropad_app_viewlocator_viewlocator",
-      "confidence_score": 1.0
+      "target": "makropad_app_viewlocator_viewlocator"
     },
     {
       "relation": "inherits",
@@ -9775,9 +9847,9 @@
       "source_file": "app/MakroPad.App/Services/INowPlayingProvider.cs",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_app_services_inowplayingprovider_cs",
-      "target": "services_inowplayingprovider_inowplayingprovider",
-      "confidence_score": 1.0
+      "target": "services_inowplayingprovider_inowplayingprovider"
     },
     {
       "relation": "method",
@@ -9805,9 +9877,9 @@
       "source_file": "app/MakroPad.App/Services/OledDefaultScreenRenderer.cs",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_app_services_oleddefaultscreenrenderer_cs",
-      "target": "services_oleddefaultscreenrenderer_oleddefaultscreenrenderer",
-      "confidence_score": 1.0
+      "target": "services_oleddefaultscreenrenderer_oleddefaultscreenrenderer"
     },
     {
       "relation": "references",
@@ -9816,9 +9888,9 @@
       "source_location": "L8",
       "weight": 1.0,
       "context": "field",
+      "confidence_score": 1.0,
       "source": "services_oleddefaultscreenrenderer_oleddefaultscreenrenderer",
-      "target": "app_makropad_app_services_oleddefaultscreenrenderer_cs_int",
-      "confidence_score": 1.0
+      "target": "app_makropad_app_services_oleddefaultscreenrenderer_cs_int"
     },
     {
       "relation": "method",
@@ -9826,9 +9898,9 @@
       "source_file": "app/MakroPad.App/Services/OledDefaultScreenRenderer.cs",
       "source_location": "L10",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "services_oleddefaultscreenrenderer_oleddefaultscreenrenderer",
-      "target": "services_oleddefaultscreenrenderer_oleddefaultscreenrenderer_renderpreview",
-      "confidence_score": 1.0
+      "target": "services_oleddefaultscreenrenderer_oleddefaultscreenrenderer_renderpreview"
     },
     {
       "relation": "method",
@@ -9836,9 +9908,9 @@
       "source_file": "app/MakroPad.App/Services/OledDefaultScreenRenderer.cs",
       "source_location": "L26",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "services_oleddefaultscreenrenderer_oleddefaultscreenrenderer",
-      "target": "services_oleddefaultscreenrenderer_oleddefaultscreenrenderer_rendertemplate",
-      "confidence_score": 1.0
+      "target": "services_oleddefaultscreenrenderer_oleddefaultscreenrenderer_rendertemplate"
     },
     {
       "relation": "method",
@@ -9846,9 +9918,9 @@
       "source_file": "app/MakroPad.App/Services/OledDefaultScreenRenderer.cs",
       "source_location": "L46",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "services_oleddefaultscreenrenderer_oleddefaultscreenrenderer",
-      "target": "services_oleddefaultscreenrenderer_oleddefaultscreenrenderer_usesmediaplaceholder",
-      "confidence_score": 1.0
+      "target": "services_oleddefaultscreenrenderer_oleddefaultscreenrenderer_usesmediaplaceholder"
     },
     {
       "relation": "method",
@@ -9856,9 +9928,9 @@
       "source_file": "app/MakroPad.App/Services/OledDefaultScreenRenderer.cs",
       "source_location": "L51",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "services_oleddefaultscreenrenderer_oleddefaultscreenrenderer",
-      "target": "services_oleddefaultscreenrenderer_oleddefaultscreenrenderer_normalizerows",
-      "confidence_score": 1.0
+      "target": "services_oleddefaultscreenrenderer_oleddefaultscreenrenderer_normalizerows"
     },
     {
       "relation": "method",
@@ -9866,9 +9938,9 @@
       "source_file": "app/MakroPad.App/Services/OledDefaultScreenRenderer.cs",
       "source_location": "L56",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "services_oleddefaultscreenrenderer_oleddefaultscreenrenderer",
-      "target": "services_oleddefaultscreenrenderer_oleddefaultscreenrenderer_normalizeline",
-      "confidence_score": 1.0
+      "target": "services_oleddefaultscreenrenderer_oleddefaultscreenrenderer_normalizeline"
     },
     {
       "relation": "method",
@@ -9876,9 +9948,9 @@
       "source_file": "app/MakroPad.App/Services/OledDefaultScreenRenderer.cs",
       "source_location": "L61",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "services_oleddefaultscreenrenderer_oleddefaultscreenrenderer",
-      "target": "services_oleddefaultscreenrenderer_oleddefaultscreenrenderer_fitpreviewline",
-      "confidence_score": 1.0
+      "target": "services_oleddefaultscreenrenderer_oleddefaultscreenrenderer_fitpreviewline"
     },
     {
       "relation": "calls",
@@ -9887,9 +9959,9 @@
       "source_file": "app/MakroPad.App/Services/OledDefaultScreenRenderer.cs",
       "source_location": "L19",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "services_oleddefaultscreenrenderer_oleddefaultscreenrenderer_renderpreview",
-      "target": "services_oleddefaultscreenrenderer_oleddefaultscreenrenderer_fitpreviewline",
-      "confidence_score": 1.0
+      "target": "services_oleddefaultscreenrenderer_oleddefaultscreenrenderer_fitpreviewline"
     },
     {
       "relation": "calls",
@@ -9898,9 +9970,9 @@
       "source_file": "app/MakroPad.App/Services/OledDefaultScreenRenderer.cs",
       "source_location": "L19",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "services_oleddefaultscreenrenderer_oleddefaultscreenrenderer_renderpreview",
-      "target": "services_oleddefaultscreenrenderer_oleddefaultscreenrenderer_rendertemplate",
-      "confidence_score": 1.0
+      "target": "services_oleddefaultscreenrenderer_oleddefaultscreenrenderer_rendertemplate"
     },
     {
       "relation": "calls",
@@ -9909,9 +9981,9 @@
       "source_file": "app/MakroPad.App/Services/OledDefaultScreenRenderer.cs",
       "source_location": "L34",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "services_oleddefaultscreenrenderer_oleddefaultscreenrenderer_rendertemplate",
-      "target": "services_oleddefaultscreenrenderer_oleddefaultscreenrenderer_normalizeline",
-      "confidence_score": 1.0
+      "target": "services_oleddefaultscreenrenderer_oleddefaultscreenrenderer_normalizeline"
     },
     {
       "relation": "contains",
@@ -9919,9 +9991,9 @@
       "source_file": "app/MakroPad.App/Services/ProcessWindowNowPlayingProvider.cs",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_app_services_processwindownowplayingprovider_cs",
-      "target": "services_processwindownowplayingprovider_processwindownowplayingprovider",
-      "confidence_score": 1.0
+      "target": "services_processwindownowplayingprovider_processwindownowplayingprovider"
     },
     {
       "relation": "inherits",
@@ -9940,9 +10012,9 @@
       "source_location": "L11",
       "weight": 1.0,
       "context": "field",
+      "confidence_score": 1.0,
       "source": "services_processwindownowplayingprovider_processwindownowplayingprovider",
-      "target": "app_makropad_app_services_processwindownowplayingprovider_cs_string",
-      "confidence_score": 1.0
+      "target": "app_makropad_app_services_processwindownowplayingprovider_cs_string"
     },
     {
       "relation": "method",
@@ -10002,9 +10074,9 @@
       "source_file": "app/MakroPad.App/ViewModels/AudioSessionsViewModel.cs",
       "source_location": "L13",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_app_viewmodels_audiosessionsviewmodel_cs",
-      "target": "viewmodels_audiosessionsviewmodel_audiosessionsviewmodel",
-      "confidence_score": 1.0
+      "target": "viewmodels_audiosessionsviewmodel_audiosessionsviewmodel"
     },
     {
       "relation": "inherits",
@@ -10012,9 +10084,9 @@
       "source_file": "app/MakroPad.App/ViewModels/AudioSessionsViewModel.cs",
       "source_location": "L13",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_audiosessionsviewmodel_audiosessionsviewmodel",
-      "target": "viewmodels_viewmodelbase_viewmodelbase",
-      "confidence_score": 1.0
+      "target": "viewmodels_viewmodelbase_viewmodelbase"
     },
     {
       "relation": "references",
@@ -10023,9 +10095,9 @@
       "source_location": "L15",
       "weight": 1.0,
       "context": "field",
+      "confidence_score": 1.0,
       "source": "viewmodels_audiosessionsviewmodel_audiosessionsviewmodel",
-      "target": "app_makropad_app_viewmodels_audiosessionsviewmodel_cs_iapplicationvolumecontroller",
-      "confidence_score": 1.0
+      "target": "app_makropad_app_viewmodels_audiosessionsviewmodel_cs_iapplicationvolumecontroller"
     },
     {
       "relation": "references",
@@ -10034,9 +10106,9 @@
       "source_location": "L17",
       "weight": 1.0,
       "context": "field",
+      "confidence_score": 1.0,
       "source": "viewmodels_audiosessionsviewmodel_audiosessionsviewmodel",
-      "target": "app_makropad_app_viewmodels_audiosessionsviewmodel_cs_string",
-      "confidence_score": 1.0
+      "target": "app_makropad_app_viewmodels_audiosessionsviewmodel_cs_string"
     },
     {
       "relation": "method",
@@ -10044,9 +10116,9 @@
       "source_file": "app/MakroPad.App/ViewModels/AudioSessionsViewModel.cs",
       "source_location": "L29",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_audiosessionsviewmodel_audiosessionsviewmodel",
-      "target": "viewmodels_audiosessionsviewmodel_audiosessionsviewmodel_refreshaudiosessionsasync",
-      "confidence_score": 1.0
+      "target": "viewmodels_audiosessionsviewmodel_audiosessionsviewmodel_refreshaudiosessionsasync"
     },
     {
       "relation": "method",
@@ -10054,9 +10126,9 @@
       "source_file": "app/MakroPad.App/ViewModels/AudioSessionsViewModel.cs",
       "source_location": "L58",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_audiosessionsviewmodel_audiosessionsviewmodel",
-      "target": "viewmodels_audiosessionsviewmodel_audiosessionsviewmodel_runrefreshloopasync",
-      "confidence_score": 1.0
+      "target": "viewmodels_audiosessionsviewmodel_audiosessionsviewmodel_runrefreshloopasync"
     },
     {
       "relation": "calls",
@@ -10065,9 +10137,9 @@
       "source_file": "app/MakroPad.App/ViewModels/AudioSessionsViewModel.cs",
       "source_location": "L67",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_audiosessionsviewmodel_audiosessionsviewmodel_runrefreshloopasync",
-      "target": "viewmodels_audiosessionsviewmodel_audiosessionsviewmodel_refreshaudiosessionsasync",
-      "confidence_score": 1.0
+      "target": "viewmodels_audiosessionsviewmodel_audiosessionsviewmodel_refreshaudiosessionsasync"
     },
     {
       "relation": "contains",
@@ -10075,9 +10147,9 @@
       "source_file": "app/MakroPad.App/ViewModels/BindingViewModel.cs",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_app_viewmodels_bindingviewmodel_cs",
-      "target": "viewmodels_bindingviewmodel_bindingviewmodel",
-      "confidence_score": 1.0
+      "target": "viewmodels_bindingviewmodel_bindingviewmodel"
     },
     {
       "relation": "contains",
@@ -10095,9 +10167,9 @@
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
       "source_location": "L18",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_app_viewmodels_mainwindowviewmodel_cs",
-      "target": "viewmodels_mainwindowviewmodel_mainwindowviewmodel",
-      "confidence_score": 1.0
+      "target": "viewmodels_mainwindowviewmodel_mainwindowviewmodel"
     },
     {
       "relation": "inherits",
@@ -10116,9 +10188,9 @@
       "source_location": "L243",
       "weight": 1.0,
       "context": "field",
+      "confidence_score": 1.0,
       "source": "viewmodels_mainwindowviewmodel_mainwindowviewmodel",
-      "target": "app_makropad_app_viewmodels_mainwindowviewmodel_cs_string",
-      "confidence_score": 1.0
+      "target": "app_makropad_app_viewmodels_mainwindowviewmodel_cs_string"
     },
     {
       "relation": "references",
@@ -10193,9 +10265,9 @@
       "source_location": "L44",
       "weight": 1.0,
       "context": "field",
+      "confidence_score": 1.0,
       "source": "viewmodels_mainwindowviewmodel_mainwindowviewmodel",
-      "target": "app_makropad_app_viewmodels_mainwindowviewmodel_cs_isystemvolumecontroller",
-      "confidence_score": 1.0
+      "target": "app_makropad_app_viewmodels_mainwindowviewmodel_cs_isystemvolumecontroller"
     },
     {
       "relation": "references",
@@ -10212,23 +10284,12 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L46",
-      "weight": 1.0,
-      "context": "field",
-      "source": "viewmodels_mainwindowviewmodel_mainwindowviewmodel",
-      "target": "app_makropad_app_viewmodels_mainwindowviewmodel_cs_inowplayingprovider",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
       "source_location": "L47",
       "weight": 1.0,
       "context": "field",
+      "confidence_score": 1.0,
       "source": "viewmodels_mainwindowviewmodel_mainwindowviewmodel",
-      "target": "oleddefaultscreenrenderer",
-      "confidence_score": 1.0
+      "target": "oleddefaultscreenrenderer"
     },
     {
       "relation": "references",
@@ -10237,9 +10298,9 @@
       "source_location": "L49",
       "weight": 1.0,
       "context": "field",
+      "confidence_score": 1.0,
       "source": "viewmodels_mainwindowviewmodel_mainwindowviewmodel",
-      "target": "app_makropad_app_viewmodels_mainwindowviewmodel_cs_cancellationtokensource",
-      "confidence_score": 1.0
+      "target": "app_makropad_app_viewmodels_mainwindowviewmodel_cs_cancellationtokensource"
     },
     {
       "relation": "references",
@@ -10248,9 +10309,9 @@
       "source_location": "L50",
       "weight": 1.0,
       "context": "field",
+      "confidence_score": 1.0,
       "source": "viewmodels_mainwindowviewmodel_mainwindowviewmodel",
-      "target": "app_makropad_app_viewmodels_mainwindowviewmodel_cs_imakropadconnection",
-      "confidence_score": 1.0
+      "target": "app_makropad_app_viewmodels_mainwindowviewmodel_cs_imakropadconnection"
     },
     {
       "relation": "references",
@@ -10266,24 +10327,13 @@
     {
       "relation": "references",
       "confidence": "EXTRACTED",
-      "source_file": "MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L52",
-      "weight": 1.0,
-      "context": "field",
-      "confidence_score": 1.0,
-      "source": "viewmodels_mainwindowviewmodel_mainwindowviewmodel",
-      "target": "nowplayingtrack"
-    },
-    {
-      "relation": "references",
-      "confidence": "EXTRACTED",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
       "source_location": "L156",
       "weight": 1.0,
       "context": "field",
+      "confidence_score": 1.0,
       "source": "viewmodels_mainwindowviewmodel_mainwindowviewmodel",
-      "target": "app_makropad_app_viewmodels_mainwindowviewmodel_cs_int",
-      "confidence_score": 1.0
+      "target": "app_makropad_app_viewmodels_mainwindowviewmodel_cs_int"
     },
     {
       "relation": "references",
@@ -10292,9 +10342,9 @@
       "source_location": "L240",
       "weight": 1.0,
       "context": "field",
+      "confidence_score": 1.0,
       "source": "viewmodels_mainwindowviewmodel_mainwindowviewmodel",
-      "target": "app_makropad_app_viewmodels_mainwindowviewmodel_cs_bool",
-      "confidence_score": 1.0
+      "target": "app_makropad_app_viewmodels_mainwindowviewmodel_cs_bool"
     },
     {
       "relation": "method",
@@ -10315,16 +10365,6 @@
       "confidence_score": 1.0,
       "source": "viewmodels_mainwindowviewmodel_mainwindowviewmodel",
       "target": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_onenablenowplayingdisplaychanged"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L108",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "viewmodels_mainwindowviewmodel_mainwindowviewmodel",
-      "target": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_onnowplayingstatuschanged"
     },
     {
       "relation": "method",
@@ -10731,26 +10771,6 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L962",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "viewmodels_mainwindowviewmodel_mainwindowviewmodel",
-      "target": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_runnowplayingloopasync"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L1007",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "viewmodels_mainwindowviewmodel_mainwindowviewmodel",
-      "target": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_updatenowplayingasync"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "MakroPad.App/ViewModels/MainWindowViewModel.cs",
       "source_location": "L1063",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -10913,9 +10933,9 @@
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
       "source_location": "L1311",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_mainwindowviewmodel_mainwindowviewmodel",
-      "target": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_renderoledpreview",
-      "confidence_score": 1.0
+      "target": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_renderoledpreview"
     },
     {
       "relation": "method",
@@ -10946,6 +10966,58 @@
       "confidence_score": 1.0,
       "source": "viewmodels_mainwindowviewmodel_mainwindowviewmodel",
       "target": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_getstructuredparameterkey"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
+      "source_location": "L46",
+      "weight": 1.0,
+      "context": "field",
+      "confidence_score": 1.0,
+      "source": "viewmodels_mainwindowviewmodel_mainwindowviewmodel",
+      "target": "app_makropad_app_viewmodels_mainwindowviewmodel_cs_inowplayingprovider"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "MakroPad.App/ViewModels/MainWindowViewModel.cs",
+      "source_location": "L52",
+      "weight": 1.0,
+      "context": "field",
+      "confidence_score": 1.0,
+      "source": "viewmodels_mainwindowviewmodel_mainwindowviewmodel",
+      "target": "nowplayingtrack"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "MakroPad.App/ViewModels/MainWindowViewModel.cs",
+      "source_location": "L108",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "viewmodels_mainwindowviewmodel_mainwindowviewmodel",
+      "target": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_onnowplayingstatuschanged"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "MakroPad.App/ViewModels/MainWindowViewModel.cs",
+      "source_location": "L962",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "viewmodels_mainwindowviewmodel_mainwindowviewmodel",
+      "target": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_runnowplayingloopasync"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "MakroPad.App/ViewModels/MainWindowViewModel.cs",
+      "source_location": "L1007",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "viewmodels_mainwindowviewmodel_mainwindowviewmodel",
+      "target": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_updatenowplayingasync"
     },
     {
       "relation": "contains",
@@ -11109,23 +11181,23 @@
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
-      "source_file": "MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L102",
+      "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
+      "source_location": "L96",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_onenablenowplayingdisplaychanged",
-      "target": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_senddeviceconfigasync"
+      "target": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_refresholedpreview",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L110",
+      "source_location": "L102",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_onnowplayingstatuschanged",
-      "target": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_refresholedpreview"
+      "source": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_onenablenowplayingdisplaychanged",
+      "target": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_senddeviceconfigasync"
     },
     {
       "relation": "calls",
@@ -11922,6 +11994,28 @@
     {
       "relation": "calls",
       "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "app/MakroPad.App/ViewModels/NowPlayingViewModel.cs",
+      "source_location": "L60",
+      "weight": 1.0,
+      "source": "viewmodels_nowplayingviewmodel_nowplayingviewmodel_runloopasync",
+      "target": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_senddeviceconfigasync"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "app/MakroPad.App/ViewModels/NowPlayingViewModel.cs",
+      "source_location": "L101",
+      "weight": 1.0,
+      "source": "viewmodels_nowplayingviewmodel_nowplayingviewmodel_updateasync",
+      "target": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_senddeviceconfigasync"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "MakroPad.App/ViewModels/MainWindowViewModel.cs",
       "source_location": "L972",
@@ -11968,39 +12062,6 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L971",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_runnowplayingloopasync",
-      "target": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_updatenowplayingasync"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L1049",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_updatenowplayingasync",
-      "target": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_defaultscreenusesmediaplaceholder"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L1059",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_updatenowplayingasync",
-      "target": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_addlog"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "MakroPad.App/ViewModels/MainWindowViewModel.cs",
       "source_location": "L1216",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -12016,6 +12077,28 @@
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_setbindingeditorerror",
+      "target": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_addlog"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "app/MakroPad.App/ViewModels/NowPlayingViewModel.cs",
+      "source_location": "L133",
+      "weight": 1.0,
+      "source": "viewmodels_nowplayingviewmodel_nowplayingviewmodel_updateasync",
+      "target": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_addlog"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "MakroPad.App/ViewModels/MainWindowViewModel.cs",
+      "source_location": "L1059",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_updatenowplayingasync",
       "target": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_addlog"
     },
     {
@@ -12076,6 +12159,39 @@
     {
       "relation": "calls",
       "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "app/MakroPad.App/ViewModels/NowPlayingViewModel.cs",
+      "source_location": "L122",
+      "weight": 1.0,
+      "source": "viewmodels_nowplayingviewmodel_nowplayingviewmodel_updateasync",
+      "target": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_defaultscreenusesmediaplaceholder"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "MakroPad.App/ViewModels/MainWindowViewModel.cs",
+      "source_location": "L1049",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_updatenowplayingasync",
+      "target": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_defaultscreenusesmediaplaceholder"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "MakroPad.App/ViewModels/MainWindowViewModel.cs",
+      "source_location": "L110",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_onnowplayingstatuschanged",
+      "target": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_refresholedpreview"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "MakroPad.App/ViewModels/MainWindowViewModel.cs",
       "source_location": "L1382",
@@ -12098,12 +12214,127 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "app/MakroPad.App/ViewModels/NowPlayingViewModel.cs",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "app_makropad_app_viewmodels_nowplayingviewmodel_cs",
+      "target": "viewmodels_nowplayingviewmodel_nowplayingviewmodel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "app/MakroPad.App/ViewModels/NowPlayingViewModel.cs",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "viewmodels_nowplayingviewmodel_nowplayingviewmodel",
+      "target": "viewmodels_viewmodelbase_viewmodelbase",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "app/MakroPad.App/ViewModels/NowPlayingViewModel.cs",
+      "source_location": "L15",
+      "weight": 1.0,
+      "context": "field",
+      "source": "viewmodels_nowplayingviewmodel_nowplayingviewmodel",
+      "target": "app_makropad_app_viewmodels_nowplayingviewmodel_cs_inowplayingprovider",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "app/MakroPad.App/ViewModels/NowPlayingViewModel.cs",
+      "source_location": "L17",
+      "weight": 1.0,
+      "context": "field",
+      "source": "viewmodels_nowplayingviewmodel_nowplayingviewmodel",
+      "target": "app_makropad_app_viewmodels_nowplayingviewmodel_cs_string",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "app/MakroPad.App/ViewModels/NowPlayingViewModel.cs",
+      "source_location": "L29",
+      "weight": 1.0,
+      "source": "viewmodels_nowplayingviewmodel_nowplayingviewmodel",
+      "target": "viewmodels_nowplayingviewmodel_nowplayingviewmodel_setenabled",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "app/MakroPad.App/ViewModels/NowPlayingViewModel.cs",
+      "source_location": "L40",
+      "weight": 1.0,
+      "source": "viewmodels_nowplayingviewmodel_nowplayingviewmodel",
+      "target": "viewmodels_nowplayingviewmodel_nowplayingviewmodel_runloopasync",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "app/MakroPad.App/ViewModels/NowPlayingViewModel.cs",
+      "source_location": "L73",
+      "weight": 1.0,
+      "source": "viewmodels_nowplayingviewmodel_nowplayingviewmodel",
+      "target": "viewmodels_nowplayingviewmodel_nowplayingviewmodel_updateasync",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "app/MakroPad.App/ViewModels/NowPlayingViewModel.cs",
+      "source_location": "L137",
+      "weight": 1.0,
+      "source": "viewmodels_nowplayingviewmodel_nowplayingviewmodel",
+      "target": "viewmodels_nowplayingviewmodel_nowplayingviewmodel_setstatusasync",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "app/MakroPad.App/ViewModels/NowPlayingViewModel.cs",
+      "source_location": "L54",
+      "weight": 1.0,
+      "source": "viewmodels_nowplayingviewmodel_nowplayingviewmodel_runloopasync",
+      "target": "viewmodels_nowplayingviewmodel_nowplayingviewmodel_updateasync",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "app/MakroPad.App/ViewModels/NowPlayingViewModel.cs",
+      "source_location": "L68",
+      "weight": 1.0,
+      "source": "viewmodels_nowplayingviewmodel_nowplayingviewmodel_runloopasync",
+      "target": "viewmodels_nowplayingviewmodel_nowplayingviewmodel_setstatusasync",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "app/MakroPad.App/ViewModels/NowPlayingViewModel.cs",
+      "source_location": "L83",
+      "weight": 1.0,
+      "source": "viewmodels_nowplayingviewmodel_nowplayingviewmodel_updateasync",
+      "target": "viewmodels_nowplayingviewmodel_nowplayingviewmodel_setstatusasync",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "app/MakroPad.App/ViewModels/ViewModelBase.cs",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_app_viewmodels_viewmodelbase_cs",
-      "target": "viewmodels_viewmodelbase_viewmodelbase",
-      "confidence_score": 1.0
+      "target": "viewmodels_viewmodelbase_viewmodelbase"
     },
     {
       "relation": "inherits",
@@ -12131,9 +12362,9 @@
       "source_file": "app/MakroPad.App/Views/MainWindow.axaml.cs",
       "source_location": "L12",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_app_views_mainwindow_axaml_cs",
-      "target": "views_mainwindow_axaml_mainwindow",
-      "confidence_score": 1.0
+      "target": "views_mainwindow_axaml_mainwindow"
     },
     {
       "relation": "inherits",
@@ -12223,9 +12454,9 @@
       "source_file": "app/MakroPad.Core/Configuration/MakroPadConfig.cs",
       "source_location": "L15",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_core_configuration_makropadconfig_cs",
-      "target": "configuration_makropadconfig_createdefault",
-      "confidence_score": 1.0
+      "target": "configuration_makropadconfig_createdefault"
     },
     {
       "relation": "contains",
@@ -12243,9 +12474,9 @@
       "source_file": "app/MakroPad.Core/Configuration/MakroPadConfigStore.cs",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_core_configuration_makropadconfigstore_cs",
-      "target": "configuration_makropadconfigstore_makropadconfigstore",
-      "confidence_score": 1.0
+      "target": "configuration_makropadconfigstore_makropadconfigstore"
     },
     {
       "relation": "references",
@@ -12305,9 +12536,9 @@
       "source_file": "app/MakroPad.Core/Protocol/ProtocolCodec.cs",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_core_protocol_protocolcodec_cs",
-      "target": "protocol_protocolcodec_protocolcodec",
-      "confidence_score": 1.0
+      "target": "protocol_protocolcodec_protocolcodec"
     },
     {
       "relation": "method",
@@ -12387,9 +12618,9 @@
       "source_file": "app/MakroPad.Core/Protocol/ProtocolMessage.cs",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_core_protocol_protocolmessage_cs",
-      "target": "protocol_protocolmessage_getvalue",
-      "confidence_score": 1.0
+      "target": "protocol_protocolmessage_getvalue"
     },
     {
       "relation": "contains",
@@ -12407,9 +12638,9 @@
       "source_file": "app/MakroPad.Core.Tests/Protocol/ProtocolCodecTests.cs",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_core_tests_protocol_protocolcodectests_cs",
-      "target": "protocol_protocolcodectests_protocolcodectests",
-      "confidence_score": 1.0
+      "target": "protocol_protocolcodectests_protocolcodectests"
     },
     {
       "relation": "method",
@@ -12487,9 +12718,9 @@
       "source_file": "app/MakroPad.Device/IMakroPadConnection.cs",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_device_imakropadconnection_cs",
-      "target": "makropad_device_imakropadconnection_imakropadconnection",
-      "confidence_score": 1.0
+      "target": "makropad_device_imakropadconnection_imakropadconnection"
     },
     {
       "relation": "method",
@@ -12557,9 +12788,9 @@
       "source_file": "app/MakroPad.Device/MakroPadDeviceProbe.cs",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_device_makropaddeviceprobe_cs",
-      "target": "makropad_device_makropaddeviceprobe_makropaddeviceprobe",
-      "confidence_score": 1.0
+      "target": "makropad_device_makropaddeviceprobe_makropaddeviceprobe"
     },
     {
       "relation": "references",
@@ -12568,9 +12799,9 @@
       "source_location": "L9",
       "weight": 1.0,
       "context": "field",
+      "confidence_score": 1.0,
       "source": "makropad_device_makropaddeviceprobe_makropaddeviceprobe",
-      "target": "app_makropad_device_makropaddeviceprobe_cs_int",
-      "confidence_score": 1.0
+      "target": "app_makropad_device_makropaddeviceprobe_cs_int"
     },
     {
       "relation": "method",
@@ -12672,9 +12903,9 @@
       "source_file": "app/MakroPad.Device/SerialMakroPadConnection.cs",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_device_serialmakropadconnection_cs",
-      "target": "makropad_device_serialmakropadconnection_serialmakropadconnection",
-      "confidence_score": 1.0
+      "target": "makropad_device_serialmakropadconnection_serialmakropadconnection"
     },
     {
       "relation": "inherits",
@@ -12703,9 +12934,9 @@
       "source_location": "L19",
       "weight": 1.0,
       "context": "field",
+      "confidence_score": 1.0,
       "source": "makropad_device_serialmakropadconnection_serialmakropadconnection",
-      "target": "app_makropad_device_serialmakropadconnection_cs_int",
-      "confidence_score": 1.0
+      "target": "app_makropad_device_serialmakropadconnection_cs_int"
     },
     {
       "relation": "references",
@@ -12714,9 +12945,9 @@
       "source_location": "L11",
       "weight": 1.0,
       "context": "field",
+      "confidence_score": 1.0,
       "source": "makropad_device_serialmakropadconnection_serialmakropadconnection",
-      "target": "app_makropad_device_serialmakropadconnection_cs_timespan",
-      "confidence_score": 1.0
+      "target": "app_makropad_device_serialmakropadconnection_cs_timespan"
     },
     {
       "relation": "references",
@@ -12747,9 +12978,9 @@
       "source_location": "L15",
       "weight": 1.0,
       "context": "field",
+      "confidence_score": 1.0,
       "source": "makropad_device_serialmakropadconnection_serialmakropadconnection",
-      "target": "app_makropad_device_serialmakropadconnection_cs_cancellationtokensource",
-      "confidence_score": 1.0
+      "target": "app_makropad_device_serialmakropadconnection_cs_cancellationtokensource"
     },
     {
       "relation": "references",
@@ -12780,9 +13011,9 @@
       "source_location": "L20",
       "weight": 1.0,
       "context": "field",
+      "confidence_score": 1.0,
       "source": "makropad_device_serialmakropadconnection_serialmakropadconnection",
-      "target": "app_makropad_device_serialmakropadconnection_cs_deviceconnectionstate",
-      "confidence_score": 1.0
+      "target": "app_makropad_device_serialmakropadconnection_cs_deviceconnectionstate"
     },
     {
       "relation": "method",
@@ -13183,9 +13414,9 @@
       "source_file": "app/MakroPad.Device/SimulatedMakroPadConnection.cs",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_device_simulatedmakropadconnection_cs",
-      "target": "makropad_device_simulatedmakropadconnection_simulatedmakropadconnection",
-      "confidence_score": 1.0
+      "target": "makropad_device_simulatedmakropadconnection_simulatedmakropadconnection"
     },
     {
       "relation": "references",
@@ -13194,9 +13425,9 @@
       "source_location": "L7",
       "weight": 1.0,
       "context": "field",
+      "confidence_score": 1.0,
       "source": "makropad_device_simulatedmakropadconnection_simulatedmakropadconnection",
-      "target": "app_makropad_device_simulatedmakropadconnection_cs_deviceconnectionstate",
-      "confidence_score": 1.0
+      "target": "app_makropad_device_simulatedmakropadconnection_cs_deviceconnectionstate"
     },
     {
       "relation": "method",
@@ -13413,9 +13644,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents_md",
-      "target": "makropad_agents_makropad_agent_workflow",
-      "confidence_score": 1.0
+      "target": "makropad_agents_makropad_agent_workflow"
     },
     {
       "relation": "contains",
@@ -13423,9 +13654,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "makropad_agents_makropad_agent_workflow",
-      "target": "makropad_agents_sprache_und_zusammenarbeit",
-      "confidence_score": 1.0
+      "target": "makropad_agents_sprache_und_zusammenarbeit"
     },
     {
       "relation": "contains",
@@ -13433,9 +13664,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L14",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "makropad_agents_makropad_agent_workflow",
-      "target": "makropad_agents_entwicklung",
-      "confidence_score": 1.0
+      "target": "makropad_agents_entwicklung"
     },
     {
       "relation": "contains",
@@ -13443,9 +13674,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L22",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "makropad_agents_makropad_agent_workflow",
-      "target": "makropad_agents_tests_und_verifikation",
-      "confidence_score": 1.0
+      "target": "makropad_agents_tests_und_verifikation"
     },
     {
       "relation": "contains",
@@ -13453,9 +13684,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L34",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "makropad_agents_makropad_agent_workflow",
-      "target": "makropad_agents_git",
-      "confidence_score": 1.0
+      "target": "makropad_agents_git"
     },
     {
       "relation": "contains",
@@ -13463,9 +13694,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L40",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "makropad_agents_makropad_agent_workflow",
-      "target": "makropad_agents_projektfokus",
-      "confidence_score": 1.0
+      "target": "makropad_agents_projektfokus"
     },
     {
       "relation": "contains",
@@ -13473,9 +13704,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L51",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "makropad_agents_makropad_agent_workflow",
-      "target": "makropad_agents_abschlussformat",
-      "confidence_score": 1.0
+      "target": "makropad_agents_abschlussformat"
     },
     {
       "relation": "contains",
@@ -13483,9 +13714,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L61",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "makropad_agents_makropad_agent_workflow",
-      "target": "makropad_agents_graphify",
-      "confidence_score": 1.0
+      "target": "makropad_agents_graphify"
     },
     {
       "relation": "contains",
@@ -13493,9 +13724,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L26",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "makropad_agents_tests_und_verifikation",
-      "target": "makropad_agents_codeblock_1",
-      "confidence_score": 1.0
+      "target": "makropad_agents_codeblock_1"
     },
     {
       "relation": "contains",
@@ -13503,9 +13734,9 @@
       "source_file": "README.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_md",
-      "target": "makropad_readme_makropad",
-      "confidence_score": 1.0
+      "target": "makropad_readme_makropad"
     },
     {
       "relation": "contains",
@@ -13513,9 +13744,9 @@
       "source_file": "README.md",
       "source_location": "L25",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "makropad_readme_makropad",
-      "target": "makropad_readme_current_status",
-      "confidence_score": 1.0
+      "target": "makropad_readme_current_status"
     },
     {
       "relation": "contains",
@@ -13523,9 +13754,9 @@
       "source_file": "README.md",
       "source_location": "L53",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "makropad_readme_current_status",
-      "target": "makropad_readme_codeblock_1",
-      "confidence_score": 1.0
+      "target": "makropad_readme_codeblock_1"
     },
     {
       "relation": "contains",
@@ -13533,9 +13764,9 @@
       "source_file": "TODO.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "todo_md",
-      "target": "makropad_todo_todo",
-      "confidence_score": 1.0
+      "target": "makropad_todo_todo"
     },
     {
       "relation": "contains",
@@ -13543,9 +13774,9 @@
       "source_file": "TODO.md",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "makropad_todo_todo",
-      "target": "makropad_todo_config_editor_parameter_hints",
-      "confidence_score": 1.0
+      "target": "makropad_todo_config_editor_parameter_hints"
     },
     {
       "relation": "contains",
@@ -13553,9 +13784,9 @@
       "source_file": "TODO.md",
       "source_location": "L66",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "makropad_todo_todo",
-      "target": "makropad_todo_now_playing",
-      "confidence_score": 1.0
+      "target": "makropad_todo_now_playing"
     },
     {
       "relation": "contains",
@@ -13563,9 +13794,9 @@
       "source_file": "TODO.md",
       "source_location": "L75",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "makropad_todo_todo",
-      "target": "makropad_todo_technical_debt",
-      "confidence_score": 1.0
+      "target": "makropad_todo_technical_debt"
     },
     {
       "relation": "contains",
@@ -13573,9 +13804,9 @@
       "source_file": "TODO.md",
       "source_location": "L91",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "makropad_todo_todo",
-      "target": "makropad_todo_handoff",
-      "confidence_score": 1.0
+      "target": "makropad_todo_handoff"
     },
     {
       "relation": "contains",
@@ -13583,9 +13814,9 @@
       "source_file": "app/README.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_readme_md",
-      "target": "app_readme_makropad_app",
-      "confidence_score": 1.0
+      "target": "app_readme_makropad_app"
     },
     {
       "relation": "contains",
@@ -13593,9 +13824,9 @@
       "source_file": "app/README.md",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_readme_makropad_app",
-      "target": "app_readme_projects",
-      "confidence_score": 1.0
+      "target": "app_readme_projects"
     },
     {
       "relation": "contains",
@@ -13603,9 +13834,9 @@
       "source_file": "app/README.md",
       "source_location": "L16",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_readme_makropad_app",
-      "target": "app_readme_current_prototype",
-      "confidence_score": 1.0
+      "target": "app_readme_current_prototype"
     },
     {
       "relation": "contains",
@@ -13613,9 +13844,9 @@
       "source_file": "app/README.md",
       "source_location": "L130",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_readme_makropad_app",
-      "target": "app_readme_next_work",
-      "confidence_score": 1.0
+      "target": "app_readme_next_work"
     },
     {
       "relation": "contains",
@@ -13623,9 +13854,9 @@
       "source_file": "app/README.md",
       "source_location": "L137",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_readme_makropad_app",
-      "target": "app_readme_run",
-      "confidence_score": 1.0
+      "target": "app_readme_run"
     },
     {
       "relation": "contains",
@@ -13633,9 +13864,9 @@
       "source_file": "app/README.md",
       "source_location": "L143",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_readme_makropad_app",
-      "target": "app_readme_build",
-      "confidence_score": 1.0
+      "target": "app_readme_build"
     },
     {
       "relation": "contains",
@@ -13643,9 +13874,9 @@
       "source_file": "app/README.md",
       "source_location": "L149",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_readme_makropad_app",
-      "target": "app_readme_test",
-      "confidence_score": 1.0
+      "target": "app_readme_test"
     },
     {
       "relation": "references",
@@ -13693,9 +13924,9 @@
       "source_file": "app/README.md",
       "source_location": "L94",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_readme_current_prototype",
-      "target": "app_readme_codeblock_1",
-      "confidence_score": 1.0
+      "target": "app_readme_codeblock_1"
     },
     {
       "relation": "contains",
@@ -13703,9 +13934,9 @@
       "source_file": "app/README.md",
       "source_location": "L101",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_readme_current_prototype",
-      "target": "app_readme_codeblock_2",
-      "confidence_score": 1.0
+      "target": "app_readme_codeblock_2"
     },
     {
       "relation": "contains",
@@ -13713,9 +13944,9 @@
       "source_file": "app/README.md",
       "source_location": "L139",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_readme_run",
-      "target": "app_readme_codeblock_3",
-      "confidence_score": 1.0
+      "target": "app_readme_codeblock_3"
     },
     {
       "relation": "contains",
@@ -13723,9 +13954,9 @@
       "source_file": "app/README.md",
       "source_location": "L145",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_readme_build",
-      "target": "app_readme_codeblock_4",
-      "confidence_score": 1.0
+      "target": "app_readme_codeblock_4"
     },
     {
       "relation": "contains",
@@ -13733,9 +13964,9 @@
       "source_file": "app/README.md",
       "source_location": "L151",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_readme_test",
-      "target": "app_readme_codeblock_5",
-      "confidence_score": 1.0
+      "target": "app_readme_codeblock_5"
     },
     {
       "relation": "contains",
@@ -13743,9 +13974,9 @@
       "source_file": "docs/HANDOFF.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_handoff_md",
-      "target": "docs_handoff_makropad_handoff",
-      "confidence_score": 1.0
+      "target": "docs_handoff_makropad_handoff"
     },
     {
       "relation": "contains",
@@ -13753,9 +13984,9 @@
       "source_file": "docs/HANDOFF.md",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_handoff_makropad_handoff",
-      "target": "docs_handoff_current_state",
-      "confidence_score": 1.0
+      "target": "docs_handoff_current_state"
     },
     {
       "relation": "contains",
@@ -13763,9 +13994,9 @@
       "source_file": "docs/HANDOFF.md",
       "source_location": "L20",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_handoff_makropad_handoff",
-      "target": "docs_handoff_recent_milestones",
-      "confidence_score": 1.0
+      "target": "docs_handoff_recent_milestones"
     },
     {
       "relation": "contains",
@@ -13773,9 +14004,9 @@
       "source_file": "docs/HANDOFF.md",
       "source_location": "L38",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_handoff_makropad_handoff",
-      "target": "docs_handoff_supported_actions",
-      "confidence_score": 1.0
+      "target": "docs_handoff_supported_actions"
     },
     {
       "relation": "contains",
@@ -13783,9 +14014,9 @@
       "source_file": "docs/HANDOFF.md",
       "source_location": "L56",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_handoff_makropad_handoff",
-      "target": "docs_handoff_oled_behavior",
-      "confidence_score": 1.0
+      "target": "docs_handoff_oled_behavior"
     },
     {
       "relation": "contains",
@@ -13793,9 +14024,9 @@
       "source_file": "docs/HANDOFF.md",
       "source_location": "L66",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_handoff_makropad_handoff",
-      "target": "docs_handoff_known_limitations",
-      "confidence_score": 1.0
+      "target": "docs_handoff_known_limitations"
     },
     {
       "relation": "contains",
@@ -13803,9 +14034,9 @@
       "source_file": "docs/HANDOFF.md",
       "source_location": "L83",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_handoff_makropad_handoff",
-      "target": "docs_handoff_verification_baseline",
-      "confidence_score": 1.0
+      "target": "docs_handoff_verification_baseline"
     },
     {
       "relation": "contains",
@@ -13813,9 +14044,9 @@
       "source_file": "docs/HANDOFF.md",
       "source_location": "L95",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_handoff_makropad_handoff",
-      "target": "docs_handoff_recommended_next_steps",
-      "confidence_score": 1.0
+      "target": "docs_handoff_recommended_next_steps"
     },
     {
       "relation": "contains",
@@ -13823,9 +14054,9 @@
       "source_file": "docs/HANDOFF.md",
       "source_location": "L111",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_handoff_makropad_handoff",
-      "target": "docs_handoff_graphify_notes",
-      "confidence_score": 1.0
+      "target": "docs_handoff_graphify_notes"
     },
     {
       "relation": "contains",
@@ -13833,9 +14064,9 @@
       "source_file": "docs/HANDOFF.md",
       "source_location": "L87",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_handoff_verification_baseline",
-      "target": "docs_handoff_codeblock_1",
-      "confidence_score": 1.0
+      "target": "docs_handoff_codeblock_1"
     },
     {
       "relation": "contains",
@@ -13843,9 +14074,9 @@
       "source_file": "docs/HARDWARE.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_hardware_md",
-      "target": "docs_hardware_hardware_plan",
-      "confidence_score": 1.0
+      "target": "docs_hardware_hardware_plan"
     },
     {
       "relation": "contains",
@@ -13853,9 +14084,9 @@
       "source_file": "docs/HARDWARE.md",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_hardware_hardware_plan",
-      "target": "docs_hardware_zielhardware",
-      "confidence_score": 1.0
+      "target": "docs_hardware_zielhardware"
     },
     {
       "relation": "contains",
@@ -13863,9 +14094,9 @@
       "source_file": "docs/HARDWARE.md",
       "source_location": "L22",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_hardware_hardware_plan",
-      "target": "docs_hardware_wichtige_board_hinweise",
-      "confidence_score": 1.0
+      "target": "docs_hardware_wichtige_board_hinweise"
     },
     {
       "relation": "contains",
@@ -13873,9 +14104,9 @@
       "source_file": "docs/HARDWARE.md",
       "source_location": "L39",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_hardware_hardware_plan",
-      "target": "docs_hardware_elektrisches_grundprinzip",
-      "confidence_score": 1.0
+      "target": "docs_hardware_elektrisches_grundprinzip"
     },
     {
       "relation": "contains",
@@ -13883,9 +14114,9 @@
       "source_file": "docs/HARDWARE.md",
       "source_location": "L100",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_hardware_hardware_plan",
-      "target": "docs_hardware_vorgeschlagener_pinout_entwurf",
-      "confidence_score": 1.0
+      "target": "docs_hardware_vorgeschlagener_pinout_entwurf"
     },
     {
       "relation": "contains",
@@ -13893,9 +14124,9 @@
       "source_file": "docs/HARDWARE.md",
       "source_location": "L148",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_hardware_hardware_plan",
-      "target": "docs_hardware_pins_die_vorerst_frei_bleiben_sollten",
-      "confidence_score": 1.0
+      "target": "docs_hardware_pins_die_vorerst_frei_bleiben_sollten"
     },
     {
       "relation": "contains",
@@ -13903,9 +14134,9 @@
       "source_file": "docs/HARDWARE.md",
       "source_location": "L164",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_hardware_hardware_plan",
-      "target": "docs_hardware_board_revision_pruefen",
-      "confidence_score": 1.0
+      "target": "docs_hardware_board_revision_pruefen"
     },
     {
       "relation": "contains",
@@ -13913,9 +14144,9 @@
       "source_file": "docs/HARDWARE.md",
       "source_location": "L185",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_hardware_hardware_plan",
-      "target": "docs_hardware_erster_prototyp",
-      "confidence_score": 1.0
+      "target": "docs_hardware_erster_prototyp"
     },
     {
       "relation": "contains",
@@ -13923,9 +14154,9 @@
       "source_file": "docs/HARDWARE.md",
       "source_location": "L205",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_hardware_hardware_plan",
-      "target": "docs_hardware_offene_hardware_aufgaben",
-      "confidence_score": 1.0
+      "target": "docs_hardware_offene_hardware_aufgaben"
     },
     {
       "relation": "contains",
@@ -13933,9 +14164,9 @@
       "source_file": "docs/HARDWARE.md",
       "source_location": "L41",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_hardware_elektrisches_grundprinzip",
-      "target": "docs_hardware_buttons",
-      "confidence_score": 1.0
+      "target": "docs_hardware_buttons"
     },
     {
       "relation": "contains",
@@ -13943,9 +14174,9 @@
       "source_file": "docs/HARDWARE.md",
       "source_location": "L62",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_hardware_elektrisches_grundprinzip",
-      "target": "docs_hardware_slider",
-      "confidence_score": 1.0
+      "target": "docs_hardware_slider"
     },
     {
       "relation": "contains",
@@ -13953,9 +14184,9 @@
       "source_file": "docs/HARDWARE.md",
       "source_location": "L82",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_hardware_elektrisches_grundprinzip",
-      "target": "docs_hardware_oled",
-      "confidence_score": 1.0
+      "target": "docs_hardware_oled"
     },
     {
       "relation": "contains",
@@ -13963,9 +14194,9 @@
       "source_file": "docs/HARDWARE.md",
       "source_location": "L45",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_hardware_buttons",
-      "target": "docs_hardware_codeblock_1",
-      "confidence_score": 1.0
+      "target": "docs_hardware_codeblock_1"
     },
     {
       "relation": "contains",
@@ -13973,9 +14204,9 @@
       "source_file": "docs/HARDWARE.md",
       "source_location": "L68",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_hardware_slider",
-      "target": "docs_hardware_codeblock_2",
-      "confidence_score": 1.0
+      "target": "docs_hardware_codeblock_2"
     },
     {
       "relation": "contains",
@@ -13983,9 +14214,9 @@
       "source_file": "docs/HARDWARE.md",
       "source_location": "L86",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_hardware_oled",
-      "target": "docs_hardware_codeblock_3",
-      "confidence_score": 1.0
+      "target": "docs_hardware_codeblock_3"
     },
     {
       "relation": "contains",
@@ -13993,9 +14224,9 @@
       "source_file": "docs/HARDWARE.md",
       "source_location": "L105",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_hardware_vorgeschlagener_pinout_entwurf",
-      "target": "docs_hardware_slider_105",
-      "confidence_score": 1.0
+      "target": "docs_hardware_slider_105"
     },
     {
       "relation": "contains",
@@ -14003,9 +14234,9 @@
       "source_file": "docs/HARDWARE.md",
       "source_location": "L113",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_hardware_vorgeschlagener_pinout_entwurf",
-      "target": "docs_hardware_oled_i2c",
-      "confidence_score": 1.0
+      "target": "docs_hardware_oled_i2c"
     },
     {
       "relation": "contains",
@@ -14013,9 +14244,9 @@
       "source_file": "docs/HARDWARE.md",
       "source_location": "L123",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_hardware_vorgeschlagener_pinout_entwurf",
-      "target": "docs_hardware_buttons_123",
-      "confidence_score": 1.0
+      "target": "docs_hardware_buttons_123"
     },
     {
       "relation": "contains",
@@ -14023,9 +14254,9 @@
       "source_file": "docs/PROJECT_PLAN.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_project_plan_md",
-      "target": "docs_project_plan_makropad_project_plan",
-      "confidence_score": 1.0
+      "target": "docs_project_plan_makropad_project_plan"
     },
     {
       "relation": "contains",
@@ -14033,9 +14264,9 @@
       "source_file": "docs/PROJECT_PLAN.md",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_project_plan_makropad_project_plan",
-      "target": "docs_project_plan_ziel",
-      "confidence_score": 1.0
+      "target": "docs_project_plan_ziel"
     },
     {
       "relation": "contains",
@@ -14043,9 +14274,9 @@
       "source_file": "docs/PROJECT_PLAN.md",
       "source_location": "L14",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_project_plan_makropad_project_plan",
-      "target": "docs_project_plan_bekannte_anforderungen",
-      "confidence_score": 1.0
+      "target": "docs_project_plan_bekannte_anforderungen"
     },
     {
       "relation": "contains",
@@ -14053,9 +14284,9 @@
       "source_file": "docs/PROJECT_PLAN.md",
       "source_location": "L33",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_project_plan_makropad_project_plan",
-      "target": "docs_project_plan_empfohlene_architektur",
-      "confidence_score": 1.0
+      "target": "docs_project_plan_empfohlene_architektur"
     },
     {
       "relation": "contains",
@@ -14063,9 +14294,9 @@
       "source_file": "docs/PROJECT_PLAN.md",
       "source_location": "L118",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_project_plan_makropad_project_plan",
-      "target": "docs_project_plan_hardware_einschaetzung",
-      "confidence_score": 1.0
+      "target": "docs_project_plan_hardware_einschaetzung"
     },
     {
       "relation": "contains",
@@ -14073,9 +14304,9 @@
       "source_file": "docs/PROJECT_PLAN.md",
       "source_location": "L144",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_project_plan_makropad_project_plan",
-      "target": "docs_project_plan_kommunikationsmodell",
-      "confidence_score": 1.0
+      "target": "docs_project_plan_kommunikationsmodell"
     },
     {
       "relation": "contains",
@@ -14083,9 +14314,9 @@
       "source_file": "docs/PROJECT_PLAN.md",
       "source_location": "L172",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_project_plan_makropad_project_plan",
-      "target": "docs_project_plan_konfigurationsmodell",
-      "confidence_score": 1.0
+      "target": "docs_project_plan_konfigurationsmodell"
     },
     {
       "relation": "contains",
@@ -14093,9 +14324,9 @@
       "source_file": "docs/PROJECT_PLAN.md",
       "source_location": "L221",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_project_plan_makropad_project_plan",
-      "target": "docs_project_plan_vorgeschlagene_projektstruktur",
-      "confidence_score": 1.0
+      "target": "docs_project_plan_vorgeschlagene_projektstruktur"
     },
     {
       "relation": "contains",
@@ -14103,9 +14334,9 @@
       "source_file": "docs/PROJECT_PLAN.md",
       "source_location": "L274",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_project_plan_makropad_project_plan",
-      "target": "docs_project_plan_empfohlener_erster_meilenstein",
-      "confidence_score": 1.0
+      "target": "docs_project_plan_empfohlener_erster_meilenstein"
     },
     {
       "relation": "contains",
@@ -14113,9 +14344,9 @@
       "source_file": "docs/PROJECT_PLAN.md",
       "source_location": "L297",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_project_plan_makropad_project_plan",
-      "target": "docs_project_plan_offene_entscheidungen",
-      "confidence_score": 1.0
+      "target": "docs_project_plan_offene_entscheidungen"
     },
     {
       "relation": "contains",
@@ -14123,9 +14354,9 @@
       "source_file": "docs/PROJECT_PLAN.md",
       "source_location": "L37",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_project_plan_empfohlene_architektur",
-      "target": "docs_project_plan_esp32_s3_firmware",
-      "confidence_score": 1.0
+      "target": "docs_project_plan_esp32_s3_firmware"
     },
     {
       "relation": "contains",
@@ -14133,9 +14364,9 @@
       "source_file": "docs/PROJECT_PLAN.md",
       "source_location": "L57",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_project_plan_empfohlene_architektur",
-      "target": "docs_project_plan_desktop_companion_app",
-      "confidence_score": 1.0
+      "target": "docs_project_plan_desktop_companion_app"
     },
     {
       "relation": "contains",
@@ -14143,9 +14374,9 @@
       "source_file": "docs/PROJECT_PLAN.md",
       "source_location": "L151",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_project_plan_kommunikationsmodell",
-      "target": "docs_project_plan_codeblock_1",
-      "confidence_score": 1.0
+      "target": "docs_project_plan_codeblock_1"
     },
     {
       "relation": "contains",
@@ -14153,9 +14384,9 @@
       "source_file": "docs/PROJECT_PLAN.md",
       "source_location": "L161",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_project_plan_kommunikationsmodell",
-      "target": "docs_project_plan_codeblock_2",
-      "confidence_score": 1.0
+      "target": "docs_project_plan_codeblock_2"
     },
     {
       "relation": "contains",
@@ -14163,9 +14394,9 @@
       "source_file": "docs/PROJECT_PLAN.md",
       "source_location": "L186",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_project_plan_konfigurationsmodell",
-      "target": "docs_project_plan_codeblock_3",
-      "confidence_score": 1.0
+      "target": "docs_project_plan_codeblock_3"
     },
     {
       "relation": "contains",
@@ -14173,9 +14404,9 @@
       "source_file": "docs/PROJECT_PLAN.md",
       "source_location": "L223",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_project_plan_vorgeschlagene_projektstruktur",
-      "target": "docs_project_plan_codeblock_4",
-      "confidence_score": 1.0
+      "target": "docs_project_plan_codeblock_4"
     },
     {
       "relation": "contains",
@@ -14183,9 +14414,9 @@
       "source_file": "docs/PROTOCOL.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_protocol_md",
-      "target": "docs_protocol_serial_protocol",
-      "confidence_score": 1.0
+      "target": "docs_protocol_serial_protocol"
     },
     {
       "relation": "contains",
@@ -14193,9 +14424,9 @@
       "source_file": "docs/PROTOCOL.md",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_protocol_serial_protocol",
-      "target": "docs_protocol_ziel",
-      "confidence_score": 1.0
+      "target": "docs_protocol_ziel"
     },
     {
       "relation": "contains",
@@ -14203,9 +14434,9 @@
       "source_file": "docs/PROTOCOL.md",
       "source_location": "L16",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_protocol_serial_protocol",
-      "target": "docs_protocol_transport",
-      "confidence_score": 1.0
+      "target": "docs_protocol_transport"
     },
     {
       "relation": "contains",
@@ -14213,9 +14444,9 @@
       "source_file": "docs/PROTOCOL.md",
       "source_location": "L30",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_protocol_serial_protocol",
-      "target": "docs_protocol_format",
-      "confidence_score": 1.0
+      "target": "docs_protocol_format"
     },
     {
       "relation": "contains",
@@ -14223,9 +14454,9 @@
       "source_file": "docs/PROTOCOL.md",
       "source_location": "L78",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_protocol_serial_protocol",
-      "target": "docs_protocol_verbindungsaufbau",
-      "confidence_score": 1.0
+      "target": "docs_protocol_verbindungsaufbau"
     },
     {
       "relation": "contains",
@@ -14233,9 +14464,9 @@
       "source_file": "docs/PROTOCOL.md",
       "source_location": "L109",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_protocol_serial_protocol",
-      "target": "docs_protocol_heartbeat",
-      "confidence_score": 1.0
+      "target": "docs_protocol_heartbeat"
     },
     {
       "relation": "contains",
@@ -14243,9 +14474,9 @@
       "source_file": "docs/PROTOCOL.md",
       "source_location": "L133",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_protocol_serial_protocol",
-      "target": "docs_protocol_esp_app_nachrichten",
-      "confidence_score": 1.0
+      "target": "docs_protocol_esp_app_nachrichten"
     },
     {
       "relation": "contains",
@@ -14253,9 +14484,9 @@
       "source_file": "docs/PROTOCOL.md",
       "source_location": "L220",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_protocol_serial_protocol",
-      "target": "docs_protocol_app_esp_nachrichten",
-      "confidence_score": 1.0
+      "target": "docs_protocol_app_esp_nachrichten"
     },
     {
       "relation": "contains",
@@ -14263,9 +14494,9 @@
       "source_file": "docs/PROTOCOL.md",
       "source_location": "L295",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_protocol_serial_protocol",
-      "target": "docs_protocol_fehlerbehandlung",
-      "confidence_score": 1.0
+      "target": "docs_protocol_fehlerbehandlung"
     },
     {
       "relation": "contains",
@@ -14273,9 +14504,9 @@
       "source_file": "docs/PROTOCOL.md",
       "source_location": "L310",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_protocol_serial_protocol",
-      "target": "docs_protocol_beispielablauf",
-      "confidence_score": 1.0
+      "target": "docs_protocol_beispielablauf"
     },
     {
       "relation": "contains",
@@ -14283,9 +14514,9 @@
       "source_file": "docs/PROTOCOL.md",
       "source_location": "L324",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_protocol_serial_protocol",
-      "target": "docs_protocol_warum_nicht_direkt_json",
-      "confidence_score": 1.0
+      "target": "docs_protocol_warum_nicht_direkt_json"
     },
     {
       "relation": "contains",
@@ -14293,9 +14524,9 @@
       "source_file": "docs/PROTOCOL.md",
       "source_location": "L334",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_protocol_serial_protocol",
-      "target": "docs_protocol_offene_entscheidungen",
-      "confidence_score": 1.0
+      "target": "docs_protocol_offene_entscheidungen"
     },
     {
       "relation": "contains",
@@ -14303,9 +14534,9 @@
       "source_file": "docs/PROTOCOL.md",
       "source_location": "L34",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_protocol_format",
-      "target": "docs_protocol_codeblock_1",
-      "confidence_score": 1.0
+      "target": "docs_protocol_codeblock_1"
     },
     {
       "relation": "contains",
@@ -14313,9 +14544,9 @@
       "source_file": "docs/PROTOCOL.md",
       "source_location": "L40",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_protocol_format",
-      "target": "docs_protocol_codeblock_2",
-      "confidence_score": 1.0
+      "target": "docs_protocol_codeblock_2"
     },
     {
       "relation": "contains",
@@ -14323,9 +14554,9 @@
       "source_file": "docs/PROTOCOL.md",
       "source_location": "L68",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_protocol_format",
-      "target": "docs_protocol_codeblock_3",
-      "confidence_score": 1.0
+      "target": "docs_protocol_codeblock_3"
     },
     {
       "relation": "contains",
@@ -14333,9 +14564,9 @@
       "source_file": "docs/PROTOCOL.md",
       "source_location": "L74",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_protocol_format",
-      "target": "docs_protocol_codeblock_4",
-      "confidence_score": 1.0
+      "target": "docs_protocol_codeblock_4"
     },
     {
       "relation": "contains",
@@ -14343,9 +14574,9 @@
       "source_file": "docs/PROTOCOL.md",
       "source_location": "L85",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_protocol_verbindungsaufbau",
-      "target": "docs_protocol_codeblock_5",
-      "confidence_score": 1.0
+      "target": "docs_protocol_codeblock_5"
     },
     {
       "relation": "contains",
@@ -14353,9 +14584,9 @@
       "source_file": "docs/PROTOCOL.md",
       "source_location": "L91",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_protocol_verbindungsaufbau",
-      "target": "docs_protocol_codeblock_6",
-      "confidence_score": 1.0
+      "target": "docs_protocol_codeblock_6"
     },
     {
       "relation": "contains",
@@ -14363,9 +14594,9 @@
       "source_file": "docs/PROTOCOL.md",
       "source_location": "L115",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_protocol_heartbeat",
-      "target": "docs_protocol_codeblock_7",
-      "confidence_score": 1.0
+      "target": "docs_protocol_codeblock_7"
     },
     {
       "relation": "contains",
@@ -14373,9 +14604,9 @@
       "source_file": "docs/PROTOCOL.md",
       "source_location": "L135",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_protocol_esp_app_nachrichten",
-      "target": "docs_protocol_hello",
-      "confidence_score": 1.0
+      "target": "docs_protocol_hello"
     },
     {
       "relation": "contains",
@@ -14383,9 +14614,9 @@
       "source_file": "docs/PROTOCOL.md",
       "source_location": "L154",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_protocol_esp_app_nachrichten",
-      "target": "docs_protocol_ready",
-      "confidence_score": 1.0
+      "target": "docs_protocol_ready"
     },
     {
       "relation": "contains",
@@ -14393,9 +14624,9 @@
       "source_file": "docs/PROTOCOL.md",
       "source_location": "L162",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_protocol_esp_app_nachrichten",
-      "target": "docs_protocol_button",
-      "confidence_score": 1.0
+      "target": "docs_protocol_button"
     },
     {
       "relation": "contains",
@@ -14403,9 +14634,9 @@
       "source_file": "docs/PROTOCOL.md",
       "source_location": "L183",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_protocol_esp_app_nachrichten",
-      "target": "docs_protocol_slider",
-      "confidence_score": 1.0
+      "target": "docs_protocol_slider"
     },
     {
       "relation": "contains",
@@ -14413,9 +14644,9 @@
       "source_file": "docs/PROTOCOL.md",
       "source_location": "L205",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_protocol_esp_app_nachrichten",
-      "target": "docs_protocol_error",
-      "confidence_score": 1.0
+      "target": "docs_protocol_error"
     },
     {
       "relation": "contains",
@@ -14423,9 +14654,9 @@
       "source_file": "docs/PROTOCOL.md",
       "source_location": "L139",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_protocol_hello",
-      "target": "docs_protocol_codeblock_8",
-      "confidence_score": 1.0
+      "target": "docs_protocol_codeblock_8"
     },
     {
       "relation": "contains",
@@ -14433,9 +14664,9 @@
       "source_file": "docs/PROTOCOL.md",
       "source_location": "L158",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_protocol_ready",
-      "target": "docs_protocol_codeblock_9",
-      "confidence_score": 1.0
+      "target": "docs_protocol_codeblock_9"
     },
     {
       "relation": "contains",
@@ -14443,9 +14674,9 @@
       "source_file": "docs/PROTOCOL.md",
       "source_location": "L166",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_protocol_button",
-      "target": "docs_protocol_codeblock_10",
-      "confidence_score": 1.0
+      "target": "docs_protocol_codeblock_10"
     },
     {
       "relation": "contains",
@@ -14453,9 +14684,9 @@
       "source_file": "docs/PROTOCOL.md",
       "source_location": "L187",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_protocol_slider",
-      "target": "docs_protocol_codeblock_11",
-      "confidence_score": 1.0
+      "target": "docs_protocol_codeblock_11"
     },
     {
       "relation": "contains",
@@ -14463,9 +14694,9 @@
       "source_file": "docs/PROTOCOL.md",
       "source_location": "L209",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_protocol_error",
-      "target": "docs_protocol_codeblock_12",
-      "confidence_score": 1.0
+      "target": "docs_protocol_codeblock_12"
     },
     {
       "relation": "contains",
@@ -14473,9 +14704,9 @@
       "source_file": "docs/PROTOCOL.md",
       "source_location": "L222",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_protocol_app_esp_nachrichten",
-      "target": "docs_protocol_hello_ack",
-      "confidence_score": 1.0
+      "target": "docs_protocol_hello_ack"
     },
     {
       "relation": "contains",
@@ -14483,9 +14714,9 @@
       "source_file": "docs/PROTOCOL.md",
       "source_location": "L230",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_protocol_app_esp_nachrichten",
-      "target": "docs_protocol_display",
-      "confidence_score": 1.0
+      "target": "docs_protocol_display"
     },
     {
       "relation": "contains",
@@ -14493,9 +14724,9 @@
       "source_file": "docs/PROTOCOL.md",
       "source_location": "L255",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_protocol_app_esp_nachrichten",
-      "target": "docs_protocol_config",
-      "confidence_score": 1.0
+      "target": "docs_protocol_config"
     },
     {
       "relation": "contains",
@@ -14503,9 +14734,9 @@
       "source_file": "docs/PROTOCOL.md",
       "source_location": "L274",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_protocol_app_esp_nachrichten",
-      "target": "docs_protocol_action_result",
-      "confidence_score": 1.0
+      "target": "docs_protocol_action_result"
     },
     {
       "relation": "contains",
@@ -14513,9 +14744,9 @@
       "source_file": "docs/PROTOCOL.md",
       "source_location": "L226",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_protocol_hello_ack",
-      "target": "docs_protocol_codeblock_13",
-      "confidence_score": 1.0
+      "target": "docs_protocol_codeblock_13"
     },
     {
       "relation": "contains",
@@ -14523,9 +14754,9 @@
       "source_file": "docs/PROTOCOL.md",
       "source_location": "L234",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_protocol_display",
-      "target": "docs_protocol_codeblock_14",
-      "confidence_score": 1.0
+      "target": "docs_protocol_codeblock_14"
     },
     {
       "relation": "contains",
@@ -14533,9 +14764,9 @@
       "source_file": "docs/PROTOCOL.md",
       "source_location": "L259",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_protocol_config",
-      "target": "docs_protocol_codeblock_15",
-      "confidence_score": 1.0
+      "target": "docs_protocol_codeblock_15"
     },
     {
       "relation": "contains",
@@ -14543,9 +14774,9 @@
       "source_file": "docs/PROTOCOL.md",
       "source_location": "L278",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_protocol_action_result",
-      "target": "docs_protocol_codeblock_16",
-      "confidence_score": 1.0
+      "target": "docs_protocol_codeblock_16"
     },
     {
       "relation": "contains",
@@ -14553,9 +14784,9 @@
       "source_file": "docs/PROTOCOL.md",
       "source_location": "L290",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_protocol_action_result",
-      "target": "docs_protocol_codeblock_17",
-      "confidence_score": 1.0
+      "target": "docs_protocol_codeblock_17"
     },
     {
       "relation": "contains",
@@ -14563,9 +14794,9 @@
       "source_file": "docs/PROTOCOL.md",
       "source_location": "L306",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_protocol_fehlerbehandlung",
-      "target": "docs_protocol_codeblock_18",
-      "confidence_score": 1.0
+      "target": "docs_protocol_codeblock_18"
     },
     {
       "relation": "contains",
@@ -14573,9 +14804,9 @@
       "source_file": "docs/PROTOCOL.md",
       "source_location": "L312",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_protocol_beispielablauf",
-      "target": "docs_protocol_codeblock_19",
-      "confidence_score": 1.0
+      "target": "docs_protocol_codeblock_19"
     },
     {
       "relation": "contains",
@@ -14583,9 +14814,9 @@
       "source_file": "firmware/MakroPadFirmware/README.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "firmware_makropadfirmware_readme_md",
-      "target": "makropadfirmware_readme_makropad_firmware",
-      "confidence_score": 1.0
+      "target": "makropadfirmware_readme_makropad_firmware"
     },
     {
       "relation": "contains",
@@ -14593,9 +14824,9 @@
       "source_file": "firmware/MakroPadFirmware/README.md",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "makropadfirmware_readme_makropad_firmware",
-      "target": "makropadfirmware_readme_target",
-      "confidence_score": 1.0
+      "target": "makropadfirmware_readme_target"
     },
     {
       "relation": "contains",
@@ -14603,9 +14834,9 @@
       "source_file": "firmware/MakroPadFirmware/README.md",
       "source_location": "L20",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "makropadfirmware_readme_makropad_firmware",
-      "target": "makropadfirmware_readme_pinout",
-      "confidence_score": 1.0
+      "target": "makropadfirmware_readme_pinout"
     },
     {
       "relation": "contains",
@@ -14613,9 +14844,9 @@
       "source_file": "firmware/MakroPadFirmware/README.md",
       "source_location": "L55",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "makropadfirmware_readme_makropad_firmware",
-      "target": "makropadfirmware_readme_required_arduino_libraries",
-      "confidence_score": 1.0
+      "target": "makropadfirmware_readme_required_arduino_libraries"
     },
     {
       "relation": "contains",
@@ -14623,9 +14854,9 @@
       "source_file": "firmware/MakroPadFirmware/README.md",
       "source_location": "L64",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "makropadfirmware_readme_makropad_firmware",
-      "target": "makropadfirmware_readme_recommended_arduino_board_settings",
-      "confidence_score": 1.0
+      "target": "makropadfirmware_readme_recommended_arduino_board_settings"
     },
     {
       "relation": "contains",
@@ -14633,9 +14864,9 @@
       "source_file": "firmware/MakroPadFirmware/README.md",
       "source_location": "L77",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "makropadfirmware_readme_makropad_firmware",
-      "target": "makropadfirmware_readme_first_test",
-      "confidence_score": 1.0
+      "target": "makropadfirmware_readme_first_test"
     },
     {
       "relation": "contains",
@@ -14643,9 +14874,9 @@
       "source_file": "firmware/MakroPadFirmware/README.md",
       "source_location": "L88",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "makropadfirmware_readme_first_test",
-      "target": "makropadfirmware_readme_codeblock_1",
-      "confidence_score": 1.0
+      "target": "makropadfirmware_readme_codeblock_1"
     },
     {
       "relation": "contains",
@@ -14653,9 +14884,9 @@
       "source_file": "firmware/MakroPadFirmware/README.md",
       "source_location": "L95",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "makropadfirmware_readme_first_test",
-      "target": "makropadfirmware_readme_codeblock_2",
-      "confidence_score": 1.0
+      "target": "makropadfirmware_readme_codeblock_2"
     },
     {
       "relation": "contains",
@@ -14663,9 +14894,9 @@
       "source_file": "firmware/MakroPadFirmware/README.md",
       "source_location": "L103",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "makropadfirmware_readme_first_test",
-      "target": "makropadfirmware_readme_codeblock_3",
-      "confidence_score": 1.0
+      "target": "makropadfirmware_readme_codeblock_3"
     },
     {
       "relation": "contains",
@@ -14673,9 +14904,9 @@
       "source_file": "firmware/MakroPadFirmware/README.md",
       "source_location": "L109",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "makropadfirmware_readme_first_test",
-      "target": "makropadfirmware_readme_codeblock_4",
-      "confidence_score": 1.0
+      "target": "makropadfirmware_readme_codeblock_4"
     },
     {
       "relation": "contains",
@@ -14683,9 +14914,9 @@
       "source_file": "firmware/MakroPadFirmware/README.md",
       "source_location": "L115",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "makropadfirmware_readme_first_test",
-      "target": "makropadfirmware_readme_codeblock_5",
-      "confidence_score": 1.0
+      "target": "makropadfirmware_readme_codeblock_5"
     },
     {
       "relation": "contains",
@@ -14693,9 +14924,9 @@
       "source_file": "firmware/MakroPadFirmware/README.md",
       "source_location": "L125",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "makropadfirmware_readme_first_test",
-      "target": "makropadfirmware_readme_codeblock_6",
-      "confidence_score": 1.0
+      "target": "makropadfirmware_readme_codeblock_6"
     },
     {
       "relation": "contains",
@@ -14703,9 +14934,9 @@
       "source_file": "firmware/MakroPadFirmware/README.md",
       "source_location": "L148",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "makropadfirmware_readme_first_test",
-      "target": "makropadfirmware_readme_codeblock_7",
-      "confidence_score": 1.0
+      "target": "makropadfirmware_readme_codeblock_7"
     },
     {
       "relation": "contains",
@@ -14713,9 +14944,20 @@
       "source_file": "firmware/MakroPadFirmware/README.md",
       "source_location": "L156",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "makropadfirmware_readme_first_test",
-      "target": "makropadfirmware_readme_codeblock_8",
-      "confidence_score": 1.0
+      "target": "makropadfirmware_readme_codeblock_8"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "MakroPad.App/ViewModels/MainWindowViewModel.cs",
+      "source_location": "L971",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_runnowplayingloopasync",
+      "target": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_updatenowplayingasync"
     },
     {
       "relation": "calls",
@@ -15606,5 +15848,5 @@
       "source_file": "app/README.md"
     }
   ],
-  "built_at_commit": "4172a0f1e84eb1d3d4e6bf63f7d321ad4878dda6"
+  "built_at_commit": "4b3503413ef677fd03ab2d336859e137b6ff55c9"
 }
