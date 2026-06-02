@@ -1,12 +1,18 @@
-# Graph Report - .  (2026-06-02)
+# Graph Report - MakroPad  (2026-06-02)
 
 ## Corpus Check
-- Corpus is ~15,505 words - fits in a single context window. You may not need a graph.
+- 71 files · ~17,056 words
+- Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 466 nodes · 632 edges · 62 communities (39 shown, 23 thin omitted)
+- 707 nodes · 862 edges · 88 communities (61 shown, 27 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 8 edges (avg confidence: 0.82)
 - Token cost: 0 input · 0 output
+
+## Graph Freshness
+- Built from commit: `4172a0f1`
+- Run `git rev-parse HEAD` and compare to check if the graph is stale.
+- Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
 - [[_COMMUNITY_Community 0|Community 0]]
@@ -33,10 +39,12 @@
 - [[_COMMUNITY_Community 26|Community 26]]
 - [[_COMMUNITY_Community 28|Community 28]]
 - [[_COMMUNITY_Community 29|Community 29]]
+- [[_COMMUNITY_Community 30|Community 30]]
 - [[_COMMUNITY_Community 31|Community 31]]
 - [[_COMMUNITY_Community 32|Community 32]]
 - [[_COMMUNITY_Community 33|Community 33]]
 - [[_COMMUNITY_Community 34|Community 34]]
+- [[_COMMUNITY_Community 35|Community 35]]
 - [[_COMMUNITY_Community 36|Community 36]]
 - [[_COMMUNITY_Community 37|Community 37]]
 - [[_COMMUNITY_Community 38|Community 38]]
@@ -47,104 +55,179 @@
 - [[_COMMUNITY_Community 43|Community 43]]
 - [[_COMMUNITY_Community 44|Community 44]]
 - [[_COMMUNITY_Community 45|Community 45]]
+- [[_COMMUNITY_Community 46|Community 46]]
 - [[_COMMUNITY_Community 47|Community 47]]
+- [[_COMMUNITY_Community 48|Community 48]]
+- [[_COMMUNITY_Community 62|Community 62]]
+- [[_COMMUNITY_Community 63|Community 63]]
+- [[_COMMUNITY_Community 64|Community 64]]
+- [[_COMMUNITY_Community 65|Community 65]]
+- [[_COMMUNITY_Community 66|Community 66]]
+- [[_COMMUNITY_Community 67|Community 67]]
+- [[_COMMUNITY_Community 68|Community 68]]
+- [[_COMMUNITY_Community 69|Community 69]]
+- [[_COMMUNITY_Community 70|Community 70]]
+- [[_COMMUNITY_Community 71|Community 71]]
+- [[_COMMUNITY_Community 72|Community 72]]
 
 ## God Nodes (most connected - your core abstractions)
-1. `MainWindowViewModel` - 89 edges
-2. `SerialMakroPadConnection` - 23 edges
-3. `MakroPad Firmware` - 19 edges
-4. `ActionExecutor` - 14 edges
-5. `WindowsSystemMediaController` - 14 edges
-6. `SimulatedMakroPadConnection` - 13 edges
-7. `WindowsKeyboardController` - 11 edges
-8. `NoopSystemMediaController` - 10 edges
-9. `ActionExecutorTests` - 10 edges
-10. `FakeMediaController` - 10 edges
+1. `MainWindowViewModel` - 99 edges
+2. `SerialMakroPadConnection` - 28 edges
+3. `ActionExecutor` - 20 edges
+4. `MakroPad Firmware` - 19 edges
+5. `WindowsSystemMediaController` - 17 edges
+6. `WindowsKeyboardController` - 15 edges
+7. `SimulatedMakroPadConnection` - 15 edges
+8. `Serial Protocol` - 12 edges
+9. `NoopSystemMediaController` - 11 edges
+10. `ActionExecutorTests` - 11 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `MakroPad Firmware` --semantically_similar_to--> `ESP32-S3 Firmware`  [INFERRED] [semantically similar]
   firmware/MakroPadFirmware/README.md → README.md
 - `ActiveSliderCount` --rationale_for--> `slider Message`  [INFERRED]
   firmware/MakroPadFirmware/README.md → docs/PROTOCOL.md
-- `Supported Actions Catalog` --conceptually_related_to--> `Action Pipeline`  [EXTRACTED]
-  TODO.md → app/README.md
-- `action-result Message` --shares_data_with--> `Action Pipeline`  [EXTRACTED]
-  docs/PROTOCOL.md → app/README.md
-- `Dual Serial Output` --rationale_for--> `USB CDC Serial Transport`  [INFERRED]
-  firmware/MakroPadFirmware/README.md → docs/PROTOCOL.md
+- `ActionExecutor` --references--> `ISystemMediaController`  [EXTRACTED]
+  app/MakroPad.Actions/ActionExecutor.cs → MakroPad.Actions/ActionExecutor.cs
+- `ActionExecutor` --references--> `ISystemVolumeController`  [EXTRACTED]
+  app/MakroPad.Actions/ActionExecutor.cs → MakroPad.Actions/ActionExecutor.cs
+- `ActionExecutor` --references--> `IApplicationVolumeController`  [EXTRACTED]
+  app/MakroPad.Actions/ActionExecutor.cs → MakroPad.Actions/ActionExecutor.cs
 
 ## Hyperedges (group relationships)
 - **Serial Handshake Flow** — protocol_hello_message, protocol_hello_ack_message, app_readme_serial_connection, firmware_readme_makropad_firmware [EXTRACTED 1.00]
 - **Input to Action Flow** — hardware_buttons_gpio_pullup, hardware_sliders_adc1, protocol_button_message, protocol_slider_message, app_readme_action_pipeline [EXTRACTED 1.00]
 - **OLED Display Configuration Flow** — hardware_oled_i2c_ssd1306, protocol_display_message, protocol_config_message, protocol_action_result_message, app_readme_oled_default_screen [EXTRACTED 1.00]
 
-## Communities (62 total, 23 thin omitted)
+## Communities (88 total, 27 thin omitted)
 
 ### Community 0 - "Community 0"
-Cohesion: 0.08
-Nodes (38): Action Pipeline, MakroPad.Actions Project, MakroPad App, MakroPad.App Project, MakroPad.Core Project, MakroPad.Device Project, OLED Default Screen, Serial Connection (+30 more)
+Cohesion: 0.11
+Nodes (29): Action Pipeline, MakroPad.Actions Project, OLED Default Screen, Serial Heartbeat, Windows Media Actions, Windows Volume Actions, ActiveSliderCount, Adafruit GFX Library (+21 more)
 
 ### Community 1 - "Community 1"
-Cohesion: 0.07
-Nodes (19): ActionPipeline, BindingViewModel, IReadOnlyDictionary, IReadOnlyList, bool, CancellationTokenSource, IApplicationVolumeController, IMakroPadConnection (+11 more)
+Cohesion: 0.05
+Nodes (27): ActionPipeline, bool, CancellationTokenSource, IMakroPadConnection, INowPlayingProvider, int, ISystemVolumeController, string (+19 more)
 
 ### Community 2 - "Community 2"
-Cohesion: 0.08
-Nodes (7): IKeyboardController, ISystemLauncher, NoopKeyboardController, SystemLauncher, ActionExecutorTests, FakeKeyboardController, FakeSystemLauncher
+Cohesion: 0.06
+Nodes (10): ISystemLauncher, ISystemVolumeController, NoopSystemVolumeController, ActionExecutorTests, FakeApplicationVolumeController, FakeKeyboardController, FakeMediaController, FakeSystemLauncher (+2 more)
 
 ### Community 3 - "Community 3"
-Cohesion: 0.16
-Nodes (10): DateTimeOffset, IDisposable, CancellationTokenSource, DeviceConnectionState, int, TimeSpan, SerialMakroPadConnection, object (+2 more)
+Cohesion: 0.12
+Nodes (14): CancellationTokenSource, DeviceConnectionState, int, TimeSpan, DateTimeOffset, IDisposable, CancellationTokenSource, DeviceConnectionState (+6 more)
 
 ### Community 4 - "Community 4"
 Cohesion: 0.11
 Nodes (22): Build and Test Workflow, German Collaboration Rules, Git Commit Workflow, MakroPad Agent Workflow, Repository Editing Rules, Dual Serial Output, Firmware and Desktop App Architecture, Avalonia UI Technology Choice (+14 more)
 
 ### Community 5 - "Community 5"
-Cohesion: 0.11
-Nodes (6): ISystemVolumeController, NoopSystemVolumeController, FakeVolumeController, ActionPipelineTests, FakeVolumeController, WindowsSystemVolumeController
+Cohesion: 0.17
+Nodes (4): ISystemMediaController, ActionPipelineTests, FakeMediaController, FakeVolumeController
 
 ### Community 6 - "Community 6"
-Cohesion: 0.20
-Nodes (3): ISystemMediaController, FakeMediaController, FakeMediaController
+Cohesion: 0.05
+Nodes (40): action-result, App -> ESP Nachrichten, Beispielablauf, button, code:text (type;key=value;key=value), code:text (button;id=1;state=down), code:text (slider;id=1;value=1834;raw=1841), code:text (error;code=display_init_failed;message=OLED%20not%20found) (+32 more)
 
 ### Community 7 - "Community 7"
-Cohesion: 0.24
-Nodes (6): ActionExecutor, IApplicationVolumeController, IKeyboardController, ISystemLauncher, ISystemMediaController, ISystemVolumeController
+Cohesion: 0.15
+Nodes (11): IApplicationVolumeController, IKeyboardController, ISystemLauncher, ISystemMediaController, ISystemVolumeController, ActionExecutor, IApplicationVolumeController, IKeyboardController (+3 more)
 
 ### Community 8 - "Community 8"
-Cohesion: 0.18
-Nodes (4): IApplicationVolumeController, NoopApplicationVolumeController, FakeApplicationVolumeController, WindowsApplicationVolumeController
+Cohesion: 0.20
+Nodes (3): IApplicationVolumeController, NoopApplicationVolumeController, WindowsApplicationVolumeController
 
 ### Community 9 - "Community 9"
-Cohesion: 0.24
-Nodes (3): uint, ushort, WindowsSystemMediaController
+Cohesion: 0.18
+Nodes (5): uint, ushort, uint, ushort, WindowsSystemMediaController
 
 ### Community 10 - "Community 10"
-Cohesion: 0.23
-Nodes (3): IMakroPadConnection, DeviceConnectionState, SimulatedMakroPadConnection
+Cohesion: 0.19
+Nodes (4): DeviceConnectionState, IMakroPadConnection, DeviceConnectionState, SimulatedMakroPadConnection
 
 ### Community 12 - "Community 12"
-Cohesion: 0.27
-Nodes (4): Dictionary, uint, ushort, WindowsKeyboardController
+Cohesion: 0.13
+Nodes (9): Dictionary, uint, ushort, IKeyboardController, NoopKeyboardController, Dictionary, uint, ushort (+1 more)
 
 ### Community 14 - "Community 14"
-Cohesion: 0.24
-Nodes (5): Application, MainWindow, App, bool, TrayIcon
+Cohesion: 0.20
+Nodes (6): bool, Application, MainWindow, App, bool, TrayIcon
 
 ### Community 19 - "Community 19"
-Cohesion: 0.29
-Nodes (5): ActionExecutor, ActionResolver, ActionPipeline, Dictionary, TimeSpan
+Cohesion: 0.20
+Nodes (7): ActionExecutor, ActionResolver, Dictionary, TimeSpan, ActionPipeline, Dictionary, TimeSpan
+
+### Community 23 - "Community 23"
+Cohesion: 0.31
+Nodes (3): int, int, MakroPadDeviceProbe
 
 ### Community 26 - "Community 26"
-Cohesion: 0.40
-Nodes (3): INowPlayingProvider, string, ProcessWindowNowPlayingProvider
+Cohesion: 0.29
+Nodes (4): string, INowPlayingProvider, string, ProcessWindowNowPlayingProvider
+
+### Community 30 - "Community 30"
+Cohesion: 0.60
+Nodes (3): Executed(), Throttled(), Unbound()
 
 ### Community 44 - "Community 44"
 Cohesion: 1.00
 Nodes (3): ActionDefinition Metadata Model, Config Editor Parameter Hints, Structured Action Controls
 
+### Community 45 - "Community 45"
+Cohesion: 0.22
+Nodes (5): IApplicationVolumeController, string, ObservableObject, AudioSessionsViewModel, ViewModelBase
+
+### Community 62 - "Community 62"
+Cohesion: 0.10
+Nodes (20): Build, code:text (%APPDATA%\MakroPad\config.json), code:text (hello-ack;proto=1;app=0.1.0), code:powershell (dotnet run --project app\MakroPad.App\MakroPad.App.csproj), code:powershell (dotnet build app\MakroPad.sln), code:powershell (dotnet test app\MakroPad.sln), Current Prototype, MakroPad App (+12 more)
+
+### Community 63 - "Community 63"
+Cohesion: 0.11
+Nodes (18): Board-Revision pruefen, Buttons, Buttons, code:text (GPIO ---- Switch ---- GND), code:text (3V3 ---- Potentiometer Ende 1), code:text (OLED VCC -> 3V3), Elektrisches Grundprinzip, Erster Prototyp (+10 more)
+
+### Community 64 - "Community 64"
+Cohesion: 0.12
+Nodes (16): Bekannte Anforderungen, code:text (hello;fw=0.1.0;device=makropad-s3), code:text (display;mode=media;artist=Daft Punk;title=Digital Love), code:json ({), code:text (MakroPad/), Desktop Companion App, Empfohlene Architektur, Empfohlener erster Meilenstein (+8 more)
+
+### Community 65 - "Community 65"
+Cohesion: 0.13
+Nodes (14): code:text (hello;proto=1;fw=0.2.0;device=makropad-s3;buttons=20;sliders), code:text (hello-ack;proto=1;app=manual), code:text (ping;id=1), code:text (pong;id=1), code:text (display;mode=message;text=Hello%20MakroPad), code:text (config;profile=Default;actionResultTimeoutMs=3000;preferredD), code:text (button;id=1;state=down), code:text (button;id=12;state=down) (+6 more)
+
+### Community 66 - "Community 66"
+Cohesion: 0.18
+Nodes (10): code:powershell (dotnet build app\MakroPad.sln), Current State, Graphify Notes, Known Limitations, MakroPad Handoff, OLED Behavior, Recent Milestones, Recommended Next Steps (+2 more)
+
+### Community 67 - "Community 67"
+Cohesion: 0.20
+Nodes (9): Abschlussformat, code:powershell (dotnet build app\MakroPad.sln), Entwicklung, Git, graphify, MakroPad Agent Workflow, Projektfokus, Sprache und Zusammenarbeit (+1 more)
+
+### Community 70 - "Community 70"
+Cohesion: 0.33
+Nodes (5): Config Editor Parameter Hints, Handoff, Now Playing, Technical Debt, TODO
+
+### Community 71 - "Community 71"
+Cohesion: 0.50
+Nodes (3): code:powershell (dotnet build app\MakroPad.sln), Current Status, MakroPad
+
 ## Knowledge Gaps
-- **71 isolated node(s):** `ISystemMediaController`, `ISystemVolumeController`, `IApplicationVolumeController`, `IKeyboardController`, `ISystemLauncher` (+66 more)
+- **187 isolated node(s):** `PreToolUse`, `ISystemMediaController`, `ISystemVolumeController`, `IApplicationVolumeController`, `IKeyboardController` (+182 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **23 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **27 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+
+## Suggested Questions
+_Questions this graph is uniquely positioned to answer:_
+
+- **Why does `MainWindowViewModel` connect `Community 1` to `Community 11`, `Community 45`, `Community 15`, `Community 16`, `Community 18`, `Community 21`, `Community 27`?**
+  _High betweenness centrality (0.022) - this node is a cross-community bridge._
+- **Why does `FakeMediaController` connect `Community 2` to `Community 5`?**
+  _High betweenness centrality (0.015) - this node is a cross-community bridge._
+- **Why does `FakeKeyboardController` connect `Community 2` to `Community 12`?**
+  _High betweenness centrality (0.009) - this node is a cross-community bridge._
+- **What connects `PreToolUse`, `ISystemMediaController`, `ISystemVolumeController` to the rest of the system?**
+  _187 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Should `Community 0` be split into smaller, more focused modules?**
+  _Cohesion score 0.11083743842364532 - nodes in this community are weakly interconnected._
+- **Should `Community 1` be split into smaller, more focused modules?**
+  _Cohesion score 0.05121951219512195 - nodes in this community are weakly interconnected._
+- **Should `Community 2` be split into smaller, more focused modules?**
+  _Cohesion score 0.05813953488372093 - nodes in this community are weakly interconnected._

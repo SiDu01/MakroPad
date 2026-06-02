@@ -31,6 +31,9 @@ MakroPad has a working vertical prototype across firmware and desktop app:
 - Specialized the action editor for common actions while keeping raw parameter
   editing available.
 - Added Graphify project graph and agent workflow guidance.
+- Started the `MainWindowViewModel` split by extracting audio session refresh
+  state into `AudioSessionsViewModel` and OLED default screen rendering into
+  `OledDefaultScreenRenderer`.
 
 ## Supported Actions
 
@@ -67,9 +70,10 @@ MakroPad has a working vertical prototype across firmware and desktop app:
   robust and app-agnostic.
 - Linux implementations for media keys, volume, app volume, and Now Playing are
   still missing.
-- `MainWindowViewModel` is the largest graph node and now owns UI state,
-  connection flow, config editing, audio session refresh, and Now Playing.
-  Splitting it will likely reduce future friction.
+- `MainWindowViewModel` is still the largest graph node and owns connection
+  flow, config editing, action helper UI, and Now Playing orchestration.
+  Audio session refresh and OLED default screen rendering are now split out, but
+  more decomposition is still useful.
 - Firmware is still a single Arduino sketch. That is fine for prototyping, but
   display/protocol/input modules should be split once behavior stabilizes.
 - Slider quality is still being validated with replacement hardware.
@@ -90,8 +94,8 @@ the ESP32-S3-DevKitC-1.
 
 ## Recommended Next Steps
 
-1. Refactor `MainWindowViewModel` into smaller services/view models.
-   Start with audio sessions, Now Playing, and OLED default screen state.
+1. Continue refactoring `MainWindowViewModel` into smaller services/view models.
+   Next best target: Now Playing orchestration and device config/display sync.
 2. Replace Spotify-window-title Now Playing with Windows Media Session metadata.
 3. Improve the config editor UX with action definitions shared between UI,
    validation, and future docs generation.
@@ -100,9 +104,9 @@ the ESP32-S3-DevKitC-1.
 5. Add a small diagnostics screen for current device config, last heartbeat,
    last input, and last OLED message.
 
-Recommendation: do the `MainWindowViewModel` split next. The project graph shows
-it as the largest hub, and reducing that pressure will make the next UI and
-Now Playing work easier.
+Recommendation: continue the `MainWindowViewModel` split with Now Playing and
+device config/display sync. The first extraction is in place, and keeping this
+momentum will make the Windows Media Session work easier.
 
 ## Graphify Notes
 

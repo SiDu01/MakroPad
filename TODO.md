@@ -77,10 +77,14 @@ Implementation notes:
 - Split `MainWindowViewModel`. It currently owns device connection state,
   profile editing, binding editing, action helper UI, OLED preview, Now Playing,
   and audio session refresh.
+- Audio session refresh has been moved into `AudioSessionsViewModel`.
+- OLED default screen rendering/placeholder logic has been moved into
+  `OledDefaultScreenRenderer`.
 - Move action metadata into a shared model that can drive UI lists, validation,
   docs, and examples.
 - Move OLED default screen rendering/placeholder logic out of the main view
-  model so firmware behavior and UI preview stay easier to compare.
+  model so firmware behavior and UI preview stay easier to compare. Done for
+  the app-side preview/config helpers; firmware comparison tests are still open.
 - Split the Arduino sketch into focused modules once replacement sliders have
   been tested.
 

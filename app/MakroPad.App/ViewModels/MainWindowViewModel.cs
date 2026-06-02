@@ -42,9 +42,9 @@ public partial class MainWindowViewModel : ViewModelBase
     private readonly MakroPadDeviceProbe deviceProbe = new();
     private readonly MakroPadConfigStore configStore;
     private readonly ISystemVolumeController systemVolumeController = SystemVolumeControllerFactory.Create();
-    private readonly IApplicationVolumeController applicationVolumeController = ApplicationVolumeControllerFactory.Create();
     private readonly ActionPipeline actionPipeline = new(new ActionResolver(), new ActionExecutor());
     private readonly INowPlayingProvider nowPlayingProvider = new ProcessWindowNowPlayingProvider();
+    private readonly OledDefaultScreenRenderer oledDefaultScreenRenderer = new();
     private readonly CancellationTokenSource nowPlayingCancellation = new();
     private readonly CancellationTokenSource audioSessionsCancellation = new();
     private IMakroPadConnection? activeConnection;
@@ -243,9 +243,6 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty]
     private string shortcutRecordingStatus = "";
 
-    [ObservableProperty]
-    private string audioSessionsStatus = "Audio sessions idle";
-
     partial void OnActiveProfileNameChanged(string value)
     {
         ProfileEditorName = value;
@@ -275,15 +272,15 @@ public partial class MainWindowViewModel : ViewModelBase
         RefreshOledPreview();
     }
 
-    public string OledPreviewTitle => FitOledPreviewLine(RenderDefaultScreenTemplate(DefaultScreenTitle));
+    public string OledPreviewTitle => RenderOledPreview().Title;
 
-    public string OledPreviewLine1 => FitOledPreviewLine(RenderDefaultScreenTemplate(DefaultScreenLine1));
+    public string OledPreviewLine1 => RenderOledPreview().Line1;
 
-    public string OledPreviewLine2 => FitOledPreviewLine(RenderDefaultScreenTemplate(DefaultScreenLine2));
+    public string OledPreviewLine2 => RenderOledPreview().Line2;
 
-    public string OledPreviewLine3 => FitOledPreviewLine(RenderDefaultScreenTemplate(DefaultScreenLine3));
+    public string OledPreviewLine3 => RenderOledPreview().Line3;
 
-    public string OledPreviewLine4 => FitOledPreviewLine(RenderDefaultScreenTemplate(DefaultScreenLine4));
+    public string OledPreviewLine4 => RenderOledPreview().Line4;
 
     public bool UsesFiveLineOledLayout => DefaultScreenRows == 5;
 
@@ -293,9 +290,15 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public ObservableCollection<string> EventLog { get; } = [];
 
-    public ObservableCollection<ApplicationAudioSession> AudioSessions { get; } = [];
+    public AudioSessionsViewModel AudioSessionsViewModel { get; }
 
-    public ObservableCollection<string> AvailableAudioProcessNames { get; } = [];
+    public ObservableCollection<ApplicationAudioSession> AudioSessions => AudioSessionsViewModel.AudioSessions;
+
+    public ObservableCollection<string> AvailableAudioProcessNames => AudioSessionsViewModel.AvailableAudioProcessNames;
+
+    public string AudioSessionsStatus => AudioSessionsViewModel.AudioSessionsStatus;
+
+    public IAsyncRelayCommand RefreshAudioSessionsCommand => AudioSessionsViewModel.RefreshAudioSessionsCommand;
 
     public ObservableCollection<string> ProfileNames { get; } = [];
 
@@ -320,10 +323,20 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         ConfigPath = GetDefaultConfigPath();
         configStore = new MakroPadConfigStore(ConfigPath);
+        AudioSessionsViewModel = new AudioSessionsViewModel(ApplicationVolumeControllerFactory.Create());
+        AudioSessionsViewModel.PropertyChanged += (_, args) =>
+        {
+            if (args.PropertyName == nameof(AudioSessionsViewModel.AudioSessionsStatus))
+            {
+                OnPropertyChanged(nameof(AudioSessionsStatus));
+            }
+        };
+        AudioSessionsViewModel.SessionsRefreshed += (_, _) =>
+            OnPropertyChanged(nameof(StructuredParameterValidationMessage));
         RefreshActionEditorHints();
         RefreshPorts();
-        _ = RefreshAudioSessionsAsync();
-        _ = RunAudioSessionRefreshLoopAsync(audioSessionsCancellation.Token);
+        _ = AudioSessionsViewModel.RefreshAudioSessionsAsync();
+        _ = AudioSessionsViewModel.RunRefreshLoopAsync(audioSessionsCancellation.Token);
         _ = RunNowPlayingLoopAsync(nowPlayingCancellation.Token);
         _ = LoadConfigAsync();
     }
@@ -420,7 +433,7 @@ public partial class MainWindowViewModel : ViewModelBase
             AutoConnect = currentConfig.AppSettings.AutoConnect;
             EnableNowPlayingDisplay = currentConfig.AppSettings.EnableNowPlayingDisplay;
             ActionResultTimeoutMs = currentConfig.Hardware.Display.ActionResultTimeoutMs;
-            DefaultScreenRows = NormalizeDefaultScreenRows(currentConfig.Hardware.Display.DefaultLayoutRows);
+            DefaultScreenRows = OledDefaultScreenRenderer.NormalizeRows(currentConfig.Hardware.Display.DefaultLayoutRows);
             DefaultScreenTitle = currentConfig.Hardware.Display.DefaultTitle;
             DefaultScreenLine1 = currentConfig.Hardware.Display.DefaultLine1;
             DefaultScreenLine2 = currentConfig.Hardware.Display.DefaultLine2;
@@ -459,10 +472,10 @@ public partial class MainWindowViewModel : ViewModelBase
                     Display = currentConfig.Hardware.Display with
                     {
                         ActionResultTimeoutMs = Math.Max(0, ActionResultTimeoutMs),
-                        DefaultLayoutRows = NormalizeDefaultScreenRows(DefaultScreenRows),
-                        DefaultTitle = NormalizeDisplayLine(DefaultScreenTitle, "MakroPad"),
-                        DefaultLine1 = NormalizeDisplayLine(DefaultScreenLine1, "{profile}"),
-                        DefaultLine2 = NormalizeDisplayLine(DefaultScreenLine2, "{status}"),
+                        DefaultLayoutRows = OledDefaultScreenRenderer.NormalizeRows(DefaultScreenRows),
+                        DefaultTitle = OledDefaultScreenRenderer.NormalizeLine(DefaultScreenTitle, "MakroPad"),
+                        DefaultLine1 = OledDefaultScreenRenderer.NormalizeLine(DefaultScreenLine1, "{profile}"),
+                        DefaultLine2 = OledDefaultScreenRenderer.NormalizeLine(DefaultScreenLine2, "{status}"),
                         DefaultLine3 = DefaultScreenLine3.Trim(),
                         DefaultLine4 = DefaultScreenLine4.Trim()
                     }
@@ -707,32 +720,6 @@ public partial class MainWindowViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private async Task RefreshAudioSessionsAsync()
-    {
-        AudioSessionsStatus = "Refreshing audio sessions...";
-        var sessions = await applicationVolumeController.GetAudioSessionsAsync();
-
-        AudioSessions.Clear();
-        AvailableAudioProcessNames.Clear();
-
-        foreach (var session in sessions)
-        {
-            AudioSessions.Add(session);
-        }
-
-        foreach (var processName in sessions
-            .Select(session => session.ProcessName)
-            .Distinct(StringComparer.OrdinalIgnoreCase)
-            .OrderBy(name => name, StringComparer.OrdinalIgnoreCase))
-        {
-            AvailableAudioProcessNames.Add(processName);
-        }
-
-        AudioSessionsStatus = $"Audio sessions: {sessions.Count} found at {DateTime.Now:HH:mm:ss}";
-        OnPropertyChanged(nameof(StructuredParameterValidationMessage));
-    }
-
-    [RelayCommand]
     private void ApplyBinding()
     {
         if (SelectedBinding is null)
@@ -935,10 +922,10 @@ public partial class MainWindowViewModel : ViewModelBase
             {
                 ["profile"] = ActiveProfileName,
                 ["actionResultTimeoutMs"] = Math.Max(0, ActionResultTimeoutMs).ToString(),
-                ["defaultRows"] = NormalizeDefaultScreenRows(DefaultScreenRows).ToString(),
-                ["defaultTitle"] = NormalizeDisplayLine(DefaultScreenTitle, "MakroPad"),
-                ["defaultLine1"] = NormalizeDisplayLine(DefaultScreenLine1, "{profile}"),
-                ["defaultLine2"] = NormalizeDisplayLine(DefaultScreenLine2, "{status}"),
+                ["defaultRows"] = OledDefaultScreenRenderer.NormalizeRows(DefaultScreenRows).ToString(),
+                ["defaultTitle"] = OledDefaultScreenRenderer.NormalizeLine(DefaultScreenTitle, "MakroPad"),
+                ["defaultLine1"] = OledDefaultScreenRenderer.NormalizeLine(DefaultScreenLine1, "{profile}"),
+                ["defaultLine2"] = OledDefaultScreenRenderer.NormalizeLine(DefaultScreenLine2, "{status}"),
                 ["defaultLine3"] = DefaultScreenLine3.Trim(),
                 ["defaultLine4"] = DefaultScreenLine4.Trim(),
                 ["time"] = now.ToString("HH:mm"),
@@ -978,28 +965,6 @@ public partial class MainWindowViewModel : ViewModelBase
             catch (Exception ex)
             {
                 Dispatcher.UIThread.Post(() => NowPlayingStatus = $"Now Playing failed: {ex.Message}");
-            }
-        }
-    }
-
-    private async Task RunAudioSessionRefreshLoopAsync(CancellationToken cancellationToken)
-    {
-        using var timer = new PeriodicTimer(TimeSpan.FromSeconds(5));
-
-        while (!cancellationToken.IsCancellationRequested)
-        {
-            try
-            {
-                await timer.WaitForNextTickAsync(cancellationToken);
-                await RefreshAudioSessionsAsync();
-            }
-            catch (OperationCanceledException)
-            {
-                break;
-            }
-            catch (Exception ex)
-            {
-                Dispatcher.UIThread.Post(() => AudioSessionsStatus = $"Audio sessions failed: {ex.Message}");
             }
         }
     }
@@ -1324,18 +1289,14 @@ public partial class MainWindowViewModel : ViewModelBase
         return Path.Combine(appData, "MakroPad", "config.json");
     }
 
-    private static string NormalizeDisplayLine(string value, string fallback)
-    {
-        return string.IsNullOrWhiteSpace(value) ? fallback : value.Trim();
-    }
-
     private bool DefaultScreenUsesMediaPlaceholder()
     {
-        return DefaultScreenTitle.Contains("{media.", StringComparison.OrdinalIgnoreCase)
-            || DefaultScreenLine1.Contains("{media.", StringComparison.OrdinalIgnoreCase)
-            || DefaultScreenLine2.Contains("{media.", StringComparison.OrdinalIgnoreCase)
-            || DefaultScreenLine3.Contains("{media.", StringComparison.OrdinalIgnoreCase)
-            || DefaultScreenLine4.Contains("{media.", StringComparison.OrdinalIgnoreCase);
+        return OledDefaultScreenRenderer.UsesMediaPlaceholder(
+            DefaultScreenTitle,
+            DefaultScreenLine1,
+            DefaultScreenLine2,
+            DefaultScreenLine3,
+            DefaultScreenLine4);
     }
 
     private void RefreshOledPreview()
@@ -1347,34 +1308,20 @@ public partial class MainWindowViewModel : ViewModelBase
         OnPropertyChanged(nameof(OledPreviewLine4));
     }
 
-    private string RenderDefaultScreenTemplate(string template)
+    private OledDefaultScreenPreview RenderOledPreview()
     {
-        var now = DateTime.Now;
-        var artist = lastSentNowPlayingTrack?.Artist ?? "";
-        var title = lastSentNowPlayingTrack?.Title ?? "";
-        var mediaTrack = string.IsNullOrWhiteSpace(artist) || string.IsNullOrWhiteSpace(title)
-            ? title
-            : $"{artist} - {title}";
-
-        return NormalizeDisplayLine(template, "")
-            .Replace("{profile}", ActiveProfileName, StringComparison.OrdinalIgnoreCase)
-            .Replace("{status}", ConnectionStatus, StringComparison.OrdinalIgnoreCase)
-            .Replace("{time}", now.ToString("HH:mm"), StringComparison.OrdinalIgnoreCase)
-            .Replace("{date}", now.ToString("dd.MM.yyyy"), StringComparison.OrdinalIgnoreCase)
-            .Replace("{media.artist}", artist, StringComparison.OrdinalIgnoreCase)
-            .Replace("{media.title}", title, StringComparison.OrdinalIgnoreCase)
-            .Replace("{media.track}", mediaTrack, StringComparison.OrdinalIgnoreCase)
-            .Replace("{volume.system}", lastKnownSystemVolumePercent is null ? "" : $"{lastKnownSystemVolumePercent}%", StringComparison.OrdinalIgnoreCase)
-            .Replace("{device.uptime}", "00:00:00", StringComparison.OrdinalIgnoreCase);
-    }
-
-    private static string FitOledPreviewLine(string line)
-    {
-        const int maxCharacters = 21;
-        var trimmed = line.Trim();
-        return trimmed.Length <= maxCharacters
-            ? trimmed
-            : trimmed[..(maxCharacters - 2)] + "..";
+        return oledDefaultScreenRenderer.RenderPreview(
+            DefaultScreenTitle,
+            DefaultScreenLine1,
+            DefaultScreenLine2,
+            DefaultScreenLine3,
+            DefaultScreenLine4,
+            new OledDefaultScreenRenderContext(
+                ActiveProfileName,
+                ConnectionStatus,
+                lastSentNowPlayingTrack,
+                lastKnownSystemVolumePercent,
+                DateTime.Now));
     }
 
     private void RefreshStructuredParameterFromRaw()
@@ -1460,11 +1407,6 @@ public partial class MainWindowViewModel : ViewModelBase
         "log" => "Message",
         _ => "Parameter"
     };
-
-    private static int NormalizeDefaultScreenRows(int rows)
-    {
-        return rows == 5 ? 5 : 3;
-    }
 
     private sealed record ActionDefinition(
         string Id,
