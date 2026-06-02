@@ -105,8 +105,9 @@ hello-ack;proto=1;app=0.1.0
 Incoming slider values are expected as `0..4095`. `system.volume` maps them to
 Windows master volume `0..100%`. `app.volume` maps them to the volume of active
 Windows audio sessions for the configured process name, for example
-`process=Spotify`. Volume slider actions use a 2 percentage point deadband so
-small analog jitter does not bounce between adjacent values like 99% and 100%.
+`process=Spotify`. Volume slider actions use a configurable percentage
+deadband, defaulting to 2 percentage points, so small analog jitter does not
+bounce between adjacent values like 99% and 100%.
 
 The OLED default screen editor shows a small 128x64-style preview. Long lines
 are clipped to match the firmware's current text fitting behavior. The editor

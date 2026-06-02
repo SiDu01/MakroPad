@@ -58,6 +58,25 @@ public sealed class ActionPipelineTests
         Assert.Equal([100, 97], volumeController.SetVolumes);
     }
 
+    [Fact]
+    public async Task HandleInputAsyncUsesConfiguredSliderVolumeDeadband()
+    {
+        var volumeController = new FakeVolumeController();
+        var pipeline = CreatePipeline(volumeController);
+        var config = MakroPadConfig.CreateDefault() with
+        {
+            AppSettings = new AppSettingsConfig { VolumeSliderDeadbandPercent = 0 }
+        };
+
+        var first = await pipeline.HandleInputAsync(config, "slider:1", "4095");
+        await Task.Delay(120);
+        var second = await pipeline.HandleInputAsync(config, "slider:1", "4054");
+
+        Assert.Equal(ActionPipelineResultKind.Executed, first.Kind);
+        Assert.Equal(ActionPipelineResultKind.Executed, second.Kind);
+        Assert.Equal([100, 99], volumeController.SetVolumes);
+    }
+
     private static ActionPipeline CreatePipeline(FakeVolumeController? volumeController = null)
     {
         return new ActionPipeline(

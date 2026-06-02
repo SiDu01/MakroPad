@@ -38,8 +38,9 @@ MakroPad has a working vertical prototype across firmware and desktop app:
   into `NowPlayingViewModel`.
 - Moved device `config` message sync and OLED preview rendering coordination
   into `DeviceDisplaySyncService`.
-- Added a 2 percentage point app-side deadband for `system.volume` and
-  `app.volume` slider actions to suppress adjacent-percent jitter.
+- Added a configurable app-side deadband for `system.volume` and `app.volume`
+  slider actions to suppress adjacent-percent jitter. The default is 2
+  percentage points and `0` disables the filter.
 
 ## Supported Actions
 
@@ -52,8 +53,8 @@ MakroPad has a working vertical prototype across firmware and desktop app:
 | `media.volumeUp` | none | Windows media key |
 | `media.volumeDown` | none | Windows media key |
 | `media.mute` | none | Windows media key |
-| `system.volume` | none | Uses slider value `0..4095`, 2 percentage point deadband |
-| `app.volume` | `process=Spotify` | Uses slider value, active audio sessions, 2 percentage point deadband |
+| `system.volume` | none | Uses slider value `0..4095`, configurable deadband |
+| `app.volume` | `process=Spotify` | Uses slider value, active audio sessions, configurable deadband |
 | `system.openUrl` | `url=https://example.com` | Opens default browser |
 | `system.openApp` | `path=notepad.exe` | Opens app/file via OS shell |
 | `keyboard.shortcut` | `keys=Ctrl+Shift+Esc` | Sends supported key combinations |

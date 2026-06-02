@@ -88,6 +88,9 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty]
     private bool enableNowPlayingDisplay = true;
 
+    [ObservableProperty]
+    private int volumeSliderDeadbandPercent = 2;
+
     partial void OnEnableNowPlayingDisplayChanged(bool value)
     {
         NowPlayingViewModel.SetEnabled(value);
@@ -437,6 +440,7 @@ public partial class MainWindowViewModel : ViewModelBase
             ActiveProfileName = currentConfig.ActiveProfile;
             AutoConnect = currentConfig.AppSettings.AutoConnect;
             EnableNowPlayingDisplay = currentConfig.AppSettings.EnableNowPlayingDisplay;
+            VolumeSliderDeadbandPercent = NormalizeVolumeSliderDeadbandPercent(currentConfig.AppSettings.VolumeSliderDeadbandPercent);
             ActionResultTimeoutMs = currentConfig.Hardware.Display.ActionResultTimeoutMs;
             DefaultScreenRows = OledDefaultScreenRenderer.NormalizeRows(currentConfig.Hardware.Display.DefaultLayoutRows);
             DefaultScreenTitle = currentConfig.Hardware.Display.DefaultTitle;
@@ -489,6 +493,7 @@ public partial class MainWindowViewModel : ViewModelBase
                 {
                     AutoConnect = AutoConnect,
                     EnableNowPlayingDisplay = EnableNowPlayingDisplay,
+                    VolumeSliderDeadbandPercent = NormalizeVolumeSliderDeadbandPercent(VolumeSliderDeadbandPercent),
                     LastPort = SelectedPort == SimulatorPort ? currentConfig.AppSettings.LastPort : SelectedPort
                 }
             };
@@ -1185,6 +1190,11 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
         return Path.Combine(appData, "MakroPad", "config.json");
+    }
+
+    private static int NormalizeVolumeSliderDeadbandPercent(int value)
+    {
+        return Math.Clamp(value, 0, 25);
     }
 
     private bool DefaultScreenUsesMediaPlaceholder()

@@ -5,7 +5,6 @@ namespace MakroPad.Actions;
 public sealed class ActionPipeline
 {
     private static readonly TimeSpan SliderThrottleInterval = TimeSpan.FromMilliseconds(100);
-    private const int SliderVolumePercentDeadband = 2;
 
     private readonly ActionResolver actionResolver;
     private readonly ActionExecutor actionExecutor;
@@ -35,7 +34,7 @@ public sealed class ActionPipeline
             return ActionPipelineResult.Unbound(input, config.ActiveProfile);
         }
 
-        if (ShouldThrottleSliderVolumeChange(input, binding, value))
+        if (ShouldThrottleSliderVolumeChange(input, binding, value, config.AppSettings.VolumeSliderDeadbandPercent))
         {
             return ActionPipelineResult.Throttled(input);
         }
@@ -65,7 +64,11 @@ public sealed class ActionPipeline
         return false;
     }
 
-    private bool ShouldThrottleSliderVolumeChange(string input, ActionBinding binding, string? value)
+    private bool ShouldThrottleSliderVolumeChange(
+        string input,
+        ActionBinding binding,
+        string? value,
+        int volumeDeadbandPercent)
     {
         if (!input.StartsWith("slider:", StringComparison.OrdinalIgnoreCase)
             || !IsSliderVolumeAction(binding.Action)
@@ -74,10 +77,11 @@ public sealed class ActionPipeline
             return false;
         }
 
+        var deadbandPercent = Math.Clamp(volumeDeadbandPercent, 0, 25);
         var key = $"{input}:{binding.Action}";
         if (lastSliderVolumePercentByInput.TryGetValue(key, out var lastPercent)
             && percent is not 0 and not 100
-            && Math.Abs(percent - lastPercent) < SliderVolumePercentDeadband)
+            && Math.Abs(percent - lastPercent) < deadbandPercent)
         {
             return true;
         }

@@ -457,6 +457,16 @@
                                                    Minimum="0"
                                                    Maximum="60000"
                                                    Increment="500" />
+                                    <TextBlock Classes="label"
+                                               Text="Volume slider deadband (%)" />
+                                    <NumericUpDown Value="{Binding VolumeSliderDeadbandPercent}"
+                                                   Minimum="0"
+                                                   Maximum="25"
+                                                   Increment="1" />
+                                    <TextBlock Classes="muted"
+                                               FontSize="12"
+                                               TextWrapping="Wrap"
+                                               Text="0 disables filtering. 2 suppresses adjacent-percent jitter." />
                                     <TextBlock Text="OLED Default Screen"
                                                FontSize="16"
                                                FontWeight="SemiBold"
