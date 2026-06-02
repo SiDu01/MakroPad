@@ -62,6 +62,14 @@
             <Setter Property="Background" Value="#102844" />
             <Setter Property="FontWeight" Value="SemiBold" />
         </Style>
+        <Style Selector="TabItem.settingsGroup">
+            <Setter Property="Foreground" Value="#9FB2C8" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+        </Style>
+        <Style Selector="TabItem.settingsSub">
+            <Setter Property="Padding" Value="32,10,12,10" />
+            <Setter Property="FontSize" Value="13" />
+        </Style>
     </Window.Styles>
 
     <Grid RowDefinitions="Auto,*">
@@ -400,7 +408,12 @@
                 </ScrollViewer>
             </TabItem>
 
-            <TabItem Header="Einstellungen">
+            <TabItem Header="Einstellungen"
+                     Classes="settingsGroup"
+                     IsEnabled="False" />
+
+            <TabItem Header="Profiles"
+                     Classes="settingsSub">
                 <Grid RowDefinitions="Auto,*"
                       RowSpacing="16"
                       Margin="18,0,0,0">
@@ -409,7 +422,7 @@
                         <StackPanel>
                             <TextBlock Classes="sectionTitle" Text="Einstellungen" />
                             <TextBlock Classes="muted"
-                                       Text="Profile, App-Verhalten und OLED-Anzeigen konfigurieren." />
+                                       Text="Profile verwalten." />
                         </StackPanel>
                         <StackPanel Grid.Column="1"
                                     Orientation="Horizontal"
@@ -422,231 +435,295 @@
                         </StackPanel>
                     </Grid>
 
-                    <TabControl Grid.Row="1"
-                                TabStripPlacement="Left">
-                        <TabItem Header="Profiles">
-                            <ScrollViewer Margin="18,0,0,0"
-                                          VerticalScrollBarVisibility="Auto">
-                                <Border Classes="panel"
-                                        HorizontalAlignment="Stretch">
-                                    <Grid RowDefinitions="Auto,Auto"
-                                          RowSpacing="18">
-                                        <TextBlock Text="Profiles"
-                                                   FontSize="16"
-                                                   FontWeight="SemiBold" />
+                    <ScrollViewer Grid.Row="1"
+                                  VerticalScrollBarVisibility="Auto">
+                        <Border Classes="panel"
+                                HorizontalAlignment="Stretch">
+                            <Grid RowDefinitions="Auto,Auto"
+                                  RowSpacing="18">
+                                <TextBlock Text="Profiles"
+                                           FontSize="16"
+                                           FontWeight="SemiBold" />
 
-                                        <Grid Grid.Row="1"
-                                              ColumnDefinitions="*,150"
-                                              RowDefinitions="Auto,Auto"
-                                              ColumnSpacing="12"
-                                              RowSpacing="12">
-                                            <StackPanel Spacing="6">
-                                                <TextBlock Classes="label" Text="Active profile" />
-                                                <ComboBox ItemsSource="{Binding ProfileNames}"
-                                                          SelectedItem="{Binding ActiveProfileName}"
-                                                          HorizontalAlignment="Stretch" />
-                                            </StackPanel>
-                                            <Button Grid.Column="1"
-                                                    Content="Delete"
-                                                    Command="{Binding DeleteProfileCommand}"
-                                                    HorizontalAlignment="Stretch"
-                                                    VerticalAlignment="Bottom" />
+                                <Grid Grid.Row="1"
+                                      ColumnDefinitions="*,150"
+                                      RowDefinitions="Auto,Auto"
+                                      ColumnSpacing="12"
+                                      RowSpacing="12">
+                                    <StackPanel Spacing="6">
+                                        <TextBlock Classes="label" Text="Active profile" />
+                                        <ComboBox ItemsSource="{Binding ProfileNames}"
+                                                  SelectedItem="{Binding ActiveProfileName}"
+                                                  HorizontalAlignment="Stretch" />
+                                    </StackPanel>
+                                    <Button Grid.Column="1"
+                                            Content="Delete"
+                                            Command="{Binding DeleteProfileCommand}"
+                                            HorizontalAlignment="Stretch"
+                                            VerticalAlignment="Bottom" />
 
-                                            <StackPanel Grid.Row="1"
-                                                        Spacing="6">
-                                                <TextBlock Classes="label" Text="Profile name" />
-                                                <TextBox Text="{Binding ProfileEditorName}" />
-                                            </StackPanel>
-                                            <Grid Grid.Row="1"
-                                                  Grid.Column="1"
-                                                  ColumnDefinitions="*,*"
-                                                  ColumnSpacing="8"
-                                                  VerticalAlignment="Bottom">
-                                                <Button Grid.Column="0"
-                                                        Content="Add"
-                                                        Command="{Binding AddProfileCommand}"
-                                                        HorizontalAlignment="Stretch" />
-                                                <Button Grid.Column="1"
-                                                        Content="Rename"
-                                                        Command="{Binding RenameProfileCommand}"
-                                                        HorizontalAlignment="Stretch" />
-                                            </Grid>
-                                        </Grid>
+                                    <StackPanel Grid.Row="1"
+                                                Spacing="6">
+                                        <TextBlock Classes="label" Text="Profile name" />
+                                        <TextBox Text="{Binding ProfileEditorName}" />
+                                    </StackPanel>
+                                    <Grid Grid.Row="1"
+                                          Grid.Column="1"
+                                          ColumnDefinitions="*,*"
+                                          ColumnSpacing="8"
+                                          VerticalAlignment="Bottom">
+                                        <Button Grid.Column="0"
+                                                Content="Add"
+                                                Command="{Binding AddProfileCommand}"
+                                                HorizontalAlignment="Stretch" />
+                                        <Button Grid.Column="1"
+                                                Content="Rename"
+                                                Command="{Binding RenameProfileCommand}"
+                                                HorizontalAlignment="Stretch" />
                                     </Grid>
-                                </Border>
-                            </ScrollViewer>
-                        </TabItem>
+                                </Grid>
+                            </Grid>
+                        </Border>
+                    </ScrollViewer>
+                </Grid>
+            </TabItem>
 
-                        <TabItem Header="Application">
-                            <ScrollViewer Margin="18,0,0,0"
-                                          VerticalScrollBarVisibility="Auto">
-                                <Border Classes="panel"
-                                        HorizontalAlignment="Stretch">
-                                    <StackPanel Spacing="12">
-                                        <TextBlock Text="Application"
-                                                   FontSize="16"
-                                                   FontWeight="SemiBold" />
-                                        <TextBlock Text="{Binding ConfigPath}"
-                                                   FontSize="11"
-                                                   TextWrapping="Wrap"
-                                                   Classes="muted" />
-                                        <TextBlock Classes="label"
-                                                   Text="Action result timeout (ms)" />
-                                        <NumericUpDown Value="{Binding ActionResultTimeoutMs}"
+            <TabItem Header="Application"
+                     Classes="settingsSub">
+                <Grid RowDefinitions="Auto,*"
+                      RowSpacing="16"
+                      Margin="18,0,0,0">
+                    <Grid ColumnDefinitions="*,Auto"
+                          ColumnSpacing="16">
+                        <StackPanel>
+                            <TextBlock Classes="sectionTitle" Text="Einstellungen" />
+                            <TextBlock Classes="muted"
+                                       Text="App-Verhalten konfigurieren." />
+                        </StackPanel>
+                        <StackPanel Grid.Column="1"
+                                    Orientation="Horizontal"
+                                    Spacing="8"
+                                    VerticalAlignment="Center">
+                            <Button Content="Load"
+                                    Command="{Binding LoadConfigCommand}" />
+                            <Button Content="Save"
+                                    Command="{Binding SaveConfigCommand}" />
+                        </StackPanel>
+                    </Grid>
+
+                    <ScrollViewer Grid.Row="1"
+                                  VerticalScrollBarVisibility="Auto">
+                        <Border Classes="panel"
+                                HorizontalAlignment="Stretch">
+                            <StackPanel Spacing="12">
+                                <TextBlock Text="Application"
+                                           FontSize="16"
+                                           FontWeight="SemiBold" />
+                                <TextBlock Text="{Binding ConfigPath}"
+                                           FontSize="11"
+                                           TextWrapping="Wrap"
+                                           Classes="muted" />
+                                <TextBlock Classes="label"
+                                           Text="Action result timeout (ms)" />
+                                <NumericUpDown Value="{Binding ActionResultTimeoutMs}"
+                                               Minimum="0"
+                                               Maximum="60000"
+                                               Increment="500" />
+                                <TextBlock Classes="label"
+                                           Text="Volume slider deadband (%)" />
+                                <NumericUpDown Value="{Binding VolumeSliderDeadbandPercent}"
+                                               Minimum="0"
+                                               Maximum="25"
+                                               Increment="1" />
+                                <TextBlock Classes="muted"
+                                           FontSize="12"
+                                           TextWrapping="Wrap"
+                                           Text="0 disables filtering. 2 suppresses adjacent-percent jitter." />
+                            </StackPanel>
+                        </Border>
+                    </ScrollViewer>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="OLED Default"
+                     Classes="settingsSub">
+                <Grid RowDefinitions="Auto,*"
+                      RowSpacing="16"
+                      Margin="18,0,0,0">
+                    <Grid ColumnDefinitions="*,Auto"
+                          ColumnSpacing="16">
+                        <StackPanel>
+                            <TextBlock Classes="sectionTitle" Text="Einstellungen" />
+                            <TextBlock Classes="muted"
+                                       Text="OLED-Startanzeige konfigurieren." />
+                        </StackPanel>
+                        <StackPanel Grid.Column="1"
+                                    Orientation="Horizontal"
+                                    Spacing="8"
+                                    VerticalAlignment="Center">
+                            <Button Content="Load"
+                                    Command="{Binding LoadConfigCommand}" />
+                            <Button Content="Save"
+                                    Command="{Binding SaveConfigCommand}" />
+                        </StackPanel>
+                    </Grid>
+
+                    <ScrollViewer Grid.Row="1"
+                                  VerticalScrollBarVisibility="Auto">
+                        <Grid ColumnDefinitions="*,300"
+                              ColumnSpacing="16">
+                            <Border Classes="panel">
+                                <StackPanel Spacing="12">
+                                    <TextBlock Text="OLED Default Screen"
+                                               FontSize="16"
+                                               FontWeight="SemiBold" />
+                                    <TextBlock Classes="label" Text="Layout rows" />
+                                    <ComboBox ItemsSource="{Binding AvailableOledLayoutRows}"
+                                              SelectedItem="{Binding DefaultScreenRows}"
+                                              HorizontalAlignment="Stretch" />
+                                    <TextBlock Classes="label" Text="Title" />
+                                    <TextBox Text="{Binding DefaultScreenTitle}" />
+                                    <TextBlock Classes="label" Text="Line 1" />
+                                    <TextBox Text="{Binding DefaultScreenLine1}" />
+                                    <TextBlock Classes="label" Text="Line 2" />
+                                    <TextBox Text="{Binding DefaultScreenLine2}" />
+                                    <TextBlock IsVisible="{Binding UsesFiveLineOledLayout}"
+                                               Classes="label"
+                                               Text="Line 3" />
+                                    <TextBox IsVisible="{Binding UsesFiveLineOledLayout}"
+                                             Text="{Binding DefaultScreenLine3}" />
+                                    <TextBlock IsVisible="{Binding UsesFiveLineOledLayout}"
+                                               Classes="label"
+                                               Text="Line 4" />
+                                    <TextBox IsVisible="{Binding UsesFiveLineOledLayout}"
+                                             Text="{Binding DefaultScreenLine4}" />
+                                    <TextBlock Classes="muted"
+                                               FontSize="12"
+                                               TextWrapping="Wrap"
+                                               Text="{}Placeholders: {profile}, {status}, {time}, {date}, {media.artist}, {media.title}, {media.track}, {volume.system}, {device.uptime}" />
+                                </StackPanel>
+                            </Border>
+
+                            <Border Grid.Column="1"
+                                    Background="#02060C"
+                                    BorderBrush="#2D5C88"
+                                    BorderThickness="1"
+                                    CornerRadius="4"
+                                    Width="256"
+                                    Height="128"
+                                    Padding="12"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Top">
+                                <StackPanel Spacing="6"
+                                            VerticalAlignment="Top">
+                                    <TextBlock Text="{Binding OledPreviewTitle}"
+                                               FontFamily="Consolas"
+                                               FontSize="16"
+                                               TextWrapping="NoWrap" />
+                                    <TextBlock Text="{Binding OledPreviewLine1}"
+                                               FontFamily="Consolas"
+                                               FontSize="16"
+                                               TextWrapping="NoWrap" />
+                                    <TextBlock Text="{Binding OledPreviewLine2}"
+                                               FontFamily="Consolas"
+                                               FontSize="16"
+                                               TextWrapping="NoWrap" />
+                                    <TextBlock IsVisible="{Binding UsesFiveLineOledLayout}"
+                                               Text="{Binding OledPreviewLine3}"
+                                               FontFamily="Consolas"
+                                               FontSize="16"
+                                               TextWrapping="NoWrap" />
+                                    <TextBlock IsVisible="{Binding UsesFiveLineOledLayout}"
+                                               Text="{Binding OledPreviewLine4}"
+                                               FontFamily="Consolas"
+                                               FontSize="16"
+                                               TextWrapping="NoWrap" />
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                    </ScrollViewer>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Display Trigger"
+                     Classes="settingsSub">
+                <Grid RowDefinitions="Auto,*"
+                      RowSpacing="16"
+                      Margin="18,0,0,0">
+                    <Grid ColumnDefinitions="*,Auto"
+                          ColumnSpacing="16">
+                        <StackPanel>
+                            <TextBlock Classes="sectionTitle" Text="Einstellungen" />
+                            <TextBlock Classes="muted"
+                                       Text="Trigger fuer temporaere OLED-Anzeigen konfigurieren." />
+                        </StackPanel>
+                        <StackPanel Grid.Column="1"
+                                    Orientation="Horizontal"
+                                    Spacing="8"
+                                    VerticalAlignment="Center">
+                            <Button Content="Load"
+                                    Command="{Binding LoadConfigCommand}" />
+                            <Button Content="Save"
+                                    Command="{Binding SaveConfigCommand}" />
+                        </StackPanel>
+                    </Grid>
+
+                    <ScrollViewer Grid.Row="1"
+                                  VerticalScrollBarVisibility="Auto">
+                        <Border Classes="panel"
+                                HorizontalAlignment="Stretch">
+                            <StackPanel Spacing="12">
+                                <TextBlock Text="Display Trigger"
+                                           FontSize="16"
+                                           FontWeight="SemiBold" />
+                                <CheckBox Content="Show custom display content when a slider changes"
+                                          IsChecked="{Binding SliderDisplayTriggerEnabled}" />
+                                <Grid ColumnDefinitions="*,*"
+                                      ColumnSpacing="8">
+                                    <StackPanel Spacing="6">
+                                        <TextBlock Classes="label" Text="Slider" />
+                                        <ComboBox ItemsSource="{Binding AvailableSliderIds}"
+                                                  SelectedItem="{Binding SliderDisplayTriggerSliderId}"
+                                                  HorizontalAlignment="Stretch" />
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="1"
+                                                Spacing="6">
+                                        <TextBlock Classes="label" Text="Mode" />
+                                        <ComboBox ItemsSource="{Binding AvailableDisplayTemplateModes}"
+                                                  SelectedItem="{Binding SliderDisplayTriggerTemplateMode}"
+                                                  HorizontalAlignment="Stretch" />
+                                    </StackPanel>
+                                </Grid>
+                                <Grid ColumnDefinitions="*,*"
+                                      ColumnSpacing="8">
+                                    <StackPanel Spacing="6">
+                                        <TextBlock Classes="label" Text="Change threshold (%)" />
+                                        <NumericUpDown Value="{Binding SliderDisplayTriggerChangePercent}"
+                                                       Minimum="0"
+                                                       Maximum="100"
+                                                       Increment="1" />
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="1"
+                                                Spacing="6">
+                                        <TextBlock Classes="label" Text="Display duration (ms)" />
+                                        <NumericUpDown Value="{Binding SliderDisplayTriggerDurationMs}"
                                                        Minimum="0"
                                                        Maximum="60000"
                                                        Increment="500" />
-                                        <TextBlock Classes="label"
-                                                   Text="Volume slider deadband (%)" />
-                                        <NumericUpDown Value="{Binding VolumeSliderDeadbandPercent}"
-                                                       Minimum="0"
-                                                       Maximum="25"
-                                                       Increment="1" />
-                                        <TextBlock Classes="muted"
-                                                   FontSize="12"
-                                                   TextWrapping="Wrap"
-                                                   Text="0 disables filtering. 2 suppresses adjacent-percent jitter." />
                                     </StackPanel>
-                                </Border>
-                            </ScrollViewer>
-                        </TabItem>
-
-                        <TabItem Header="OLED Default">
-                            <ScrollViewer Margin="18,0,0,0"
-                                          VerticalScrollBarVisibility="Auto">
-                                <Grid ColumnDefinitions="*,300"
-                                      ColumnSpacing="16">
-                                    <Border Classes="panel">
-                                        <StackPanel Spacing="12">
-                                            <TextBlock Text="OLED Default Screen"
-                                                       FontSize="16"
-                                                       FontWeight="SemiBold" />
-                                            <TextBlock Classes="label" Text="Layout rows" />
-                                            <ComboBox ItemsSource="{Binding AvailableOledLayoutRows}"
-                                                      SelectedItem="{Binding DefaultScreenRows}"
-                                                      HorizontalAlignment="Stretch" />
-                                            <TextBlock Classes="label" Text="Title" />
-                                            <TextBox Text="{Binding DefaultScreenTitle}" />
-                                            <TextBlock Classes="label" Text="Line 1" />
-                                            <TextBox Text="{Binding DefaultScreenLine1}" />
-                                            <TextBlock Classes="label" Text="Line 2" />
-                                            <TextBox Text="{Binding DefaultScreenLine2}" />
-                                            <TextBlock IsVisible="{Binding UsesFiveLineOledLayout}"
-                                                       Classes="label"
-                                                       Text="Line 3" />
-                                            <TextBox IsVisible="{Binding UsesFiveLineOledLayout}"
-                                                     Text="{Binding DefaultScreenLine3}" />
-                                            <TextBlock IsVisible="{Binding UsesFiveLineOledLayout}"
-                                                       Classes="label"
-                                                       Text="Line 4" />
-                                            <TextBox IsVisible="{Binding UsesFiveLineOledLayout}"
-                                                     Text="{Binding DefaultScreenLine4}" />
-                                            <TextBlock Classes="muted"
-                                                       FontSize="12"
-                                                       TextWrapping="Wrap"
-                                                       Text="{}Placeholders: {profile}, {status}, {time}, {date}, {media.artist}, {media.title}, {media.track}, {volume.system}, {device.uptime}" />
-                                        </StackPanel>
-                                    </Border>
-
-                                    <Border Grid.Column="1"
-                                            Background="#02060C"
-                                            BorderBrush="#2D5C88"
-                                            BorderThickness="1"
-                                            CornerRadius="4"
-                                            Width="256"
-                                            Height="128"
-                                            Padding="12"
-                                            HorizontalAlignment="Left"
-                                            VerticalAlignment="Top">
-                                        <StackPanel Spacing="6"
-                                                    VerticalAlignment="Top">
-                                            <TextBlock Text="{Binding OledPreviewTitle}"
-                                                       FontFamily="Consolas"
-                                                       FontSize="16"
-                                                       TextWrapping="NoWrap" />
-                                            <TextBlock Text="{Binding OledPreviewLine1}"
-                                                       FontFamily="Consolas"
-                                                       FontSize="16"
-                                                       TextWrapping="NoWrap" />
-                                            <TextBlock Text="{Binding OledPreviewLine2}"
-                                                       FontFamily="Consolas"
-                                                       FontSize="16"
-                                                       TextWrapping="NoWrap" />
-                                            <TextBlock IsVisible="{Binding UsesFiveLineOledLayout}"
-                                                       Text="{Binding OledPreviewLine3}"
-                                                       FontFamily="Consolas"
-                                                       FontSize="16"
-                                                       TextWrapping="NoWrap" />
-                                            <TextBlock IsVisible="{Binding UsesFiveLineOledLayout}"
-                                                       Text="{Binding OledPreviewLine4}"
-                                                       FontFamily="Consolas"
-                                                       FontSize="16"
-                                                       TextWrapping="NoWrap" />
-                                        </StackPanel>
-                                    </Border>
                                 </Grid>
-                            </ScrollViewer>
-                        </TabItem>
-
-                        <TabItem Header="Display Trigger">
-                            <ScrollViewer Margin="18,0,0,0"
-                                          VerticalScrollBarVisibility="Auto">
-                                <Border Classes="panel"
-                                        HorizontalAlignment="Stretch">
-                                    <StackPanel Spacing="12">
-                                        <TextBlock Text="Display Trigger"
-                                                   FontSize="16"
-                                                   FontWeight="SemiBold" />
-                                        <CheckBox Content="Show custom display content when a slider changes"
-                                                  IsChecked="{Binding SliderDisplayTriggerEnabled}" />
-                                        <Grid ColumnDefinitions="*,*"
-                                              ColumnSpacing="8">
-                                            <StackPanel Spacing="6">
-                                                <TextBlock Classes="label" Text="Slider" />
-                                                <ComboBox ItemsSource="{Binding AvailableSliderIds}"
-                                                          SelectedItem="{Binding SliderDisplayTriggerSliderId}"
-                                                          HorizontalAlignment="Stretch" />
-                                            </StackPanel>
-                                            <StackPanel Grid.Column="1"
-                                                        Spacing="6">
-                                                <TextBlock Classes="label" Text="Mode" />
-                                                <ComboBox ItemsSource="{Binding AvailableDisplayTemplateModes}"
-                                                          SelectedItem="{Binding SliderDisplayTriggerTemplateMode}"
-                                                          HorizontalAlignment="Stretch" />
-                                            </StackPanel>
-                                        </Grid>
-                                        <Grid ColumnDefinitions="*,*"
-                                              ColumnSpacing="8">
-                                            <StackPanel Spacing="6">
-                                                <TextBlock Classes="label" Text="Change threshold (%)" />
-                                                <NumericUpDown Value="{Binding SliderDisplayTriggerChangePercent}"
-                                                               Minimum="0"
-                                                               Maximum="100"
-                                                               Increment="1" />
-                                            </StackPanel>
-                                            <StackPanel Grid.Column="1"
-                                                        Spacing="6">
-                                                <TextBlock Classes="label" Text="Display duration (ms)" />
-                                                <NumericUpDown Value="{Binding SliderDisplayTriggerDurationMs}"
-                                                               Minimum="0"
-                                                               Maximum="60000"
-                                                               Increment="500" />
-                                            </StackPanel>
-                                        </Grid>
-                                        <TextBlock Classes="label" Text="Display content" />
-                                        <TextBox Text="{Binding SliderDisplayTriggerTemplate}"
-                                                 AcceptsReturn="True"
-                                                 MinHeight="180"
-                                                 TextWrapping="Wrap" />
-                                        <TextBlock Classes="muted"
-                                                   FontSize="12"
-                                                   TextWrapping="Wrap"
-                                                   Text="{}Placeholders: {slider.id}, {slider.value}, {slider.percent}, {input}, {profile}, {status}. HTML mode supports simple tags such as h1, p, br and li." />
-                                    </StackPanel>
-                                </Border>
-                            </ScrollViewer>
-                        </TabItem>
-                    </TabControl>
+                                <TextBlock Classes="label" Text="Display content" />
+                                <TextBox Text="{Binding SliderDisplayTriggerTemplate}"
+                                         AcceptsReturn="True"
+                                         MinHeight="180"
+                                         TextWrapping="Wrap" />
+                                <TextBlock Classes="muted"
+                                           FontSize="12"
+                                           TextWrapping="Wrap"
+                                           Text="{}Placeholders: {slider.id}, {slider.value}, {slider.percent}, {input}, {profile}, {status}. HTML mode supports simple tags such as h1, p, br and li." />
+                            </StackPanel>
+                        </Border>
+                    </ScrollViewer>
                 </Grid>
             </TabItem>
 
