@@ -1085,23 +1085,45 @@ public partial class MainWindowViewModel : ViewModelBase
             lastDisplayTriggerPercentByInput[input] = percent.Value;
         }
 
-        var trigger = triggers[0];
-        var lines = RenderDisplayTriggerLines(trigger, input, sliderValue, percent);
-        if (lines.Count == 0)
-        {
-            return;
-        }
-
         try
         {
-            await deviceDisplaySyncService.SendTemporaryTemplateAsync(
-                activeConnection,
-                lines,
-                NormalizeDisplayTriggerDurationMs(trigger.DurationMs));
+            await SendDisplayTriggerSequenceAsync(triggers, input, sliderValue, percent);
         }
         catch (Exception ex)
         {
             AddLog($"Display trigger failed: {ex.Message}");
+        }
+    }
+
+    private async Task SendDisplayTriggerSequenceAsync(
+        IReadOnlyList<DisplayTriggerConfig> triggers,
+        string input,
+        int? sliderValue,
+        int? percent)
+    {
+        var sentCount = 0;
+        for (var index = 0; index < triggers.Count; index++)
+        {
+            var trigger = triggers[index];
+            var lines = RenderDisplayTriggerLines(trigger, input, sliderValue, percent);
+            if (lines.Count == 0)
+            {
+                continue;
+            }
+
+            var durationMs = NormalizeDisplayTriggerDurationMs(trigger.DurationMs);
+            await deviceDisplaySyncService.SendTemporaryTemplateAsync(activeConnection, lines, durationMs);
+            sentCount++;
+
+            if (index < triggers.Count - 1 && durationMs > 0)
+            {
+                await Task.Delay(durationMs);
+            }
+        }
+
+        if (sentCount > 1)
+        {
+            AddLog($"Display trigger sequence sent: {input} ({sentCount} screens)");
         }
     }
 
