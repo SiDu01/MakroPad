@@ -320,6 +320,21 @@ void handleDisplayCommand(const String& line) {
     drawStatusMessage(protocolValue(line, "text"));
     return;
   }
+
+  if (mode == "template") {
+    drawStatusMessage(
+      protocolValue(line, "line1"),
+      protocolValue(line, "line2"),
+      protocolValue(line, "line3"),
+      protocolValue(line, "line4"),
+      protocolValue(line, "line5"));
+
+    const String duration = protocolValue(line, "durationMs");
+    temporaryDisplayUntilMs = duration.length() > 0 && duration.toInt() > 0
+      ? millis() + static_cast<uint32_t>(duration.toInt())
+      : 0;
+    return;
+  }
 }
 
 void handleProtocolLine(String line) {

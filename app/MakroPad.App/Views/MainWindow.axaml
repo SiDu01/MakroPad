@@ -530,6 +530,56 @@
                                         </StackPanel>
                                     </Border>
 
+                                    <TextBlock Text="Display Trigger"
+                                               FontSize="16"
+                                               FontWeight="SemiBold"
+                                               Margin="0,8,0,0" />
+                                    <CheckBox Content="Show custom display content when a slider changes"
+                                              IsChecked="{Binding SliderDisplayTriggerEnabled}" />
+                                    <Grid ColumnDefinitions="*,*"
+                                          ColumnSpacing="8">
+                                        <StackPanel Spacing="6">
+                                            <TextBlock Classes="label" Text="Slider" />
+                                            <ComboBox ItemsSource="{Binding AvailableSliderIds}"
+                                                      SelectedItem="{Binding SliderDisplayTriggerSliderId}"
+                                                      HorizontalAlignment="Stretch" />
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="1"
+                                                    Spacing="6">
+                                            <TextBlock Classes="label" Text="Mode" />
+                                            <ComboBox ItemsSource="{Binding AvailableDisplayTemplateModes}"
+                                                      SelectedItem="{Binding SliderDisplayTriggerTemplateMode}"
+                                                      HorizontalAlignment="Stretch" />
+                                        </StackPanel>
+                                    </Grid>
+                                    <Grid ColumnDefinitions="*,*"
+                                          ColumnSpacing="8">
+                                        <StackPanel Spacing="6">
+                                            <TextBlock Classes="label" Text="Change threshold (%)" />
+                                            <NumericUpDown Value="{Binding SliderDisplayTriggerChangePercent}"
+                                                           Minimum="0"
+                                                           Maximum="100"
+                                                           Increment="1" />
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="1"
+                                                    Spacing="6">
+                                            <TextBlock Classes="label" Text="Display duration (ms)" />
+                                            <NumericUpDown Value="{Binding SliderDisplayTriggerDurationMs}"
+                                                           Minimum="0"
+                                                           Maximum="60000"
+                                                           Increment="500" />
+                                        </StackPanel>
+                                    </Grid>
+                                    <TextBlock Classes="label" Text="Display content" />
+                                    <TextBox Text="{Binding SliderDisplayTriggerTemplate}"
+                                             AcceptsReturn="True"
+                                             MinHeight="90"
+                                             TextWrapping="Wrap" />
+                                    <TextBlock Classes="muted"
+                                               FontSize="12"
+                                               TextWrapping="Wrap"
+                                               Text="{}Placeholders: {slider.id}, {slider.value}, {slider.percent}, {input}, {profile}, {status}. HTML mode supports simple tags such as h1, p, br and li." />
+
                                     <Grid ColumnDefinitions="*,*"
                                           ColumnSpacing="8">
                                         <Button Grid.Column="0"

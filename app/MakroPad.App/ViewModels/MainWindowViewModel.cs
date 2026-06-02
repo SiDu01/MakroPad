@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Threading;
@@ -48,6 +50,7 @@ public partial class MainWindowViewModel : ViewModelBase
     private IMakroPadConnection? activeConnection;
     private MakroPadConfig currentConfig = MakroPadConfig.CreateDefault();
     private bool isRefreshingEditor;
+    private readonly Dictionary<string, int> lastDisplayTriggerPercentByInput = new(StringComparer.OrdinalIgnoreCase);
 
     [ObservableProperty]
     private string connectionStatus = "Disconnected";
@@ -90,6 +93,24 @@ public partial class MainWindowViewModel : ViewModelBase
 
     [ObservableProperty]
     private int volumeSliderDeadbandPercent = 2;
+
+    [ObservableProperty]
+    private bool sliderDisplayTriggerEnabled;
+
+    [ObservableProperty]
+    private int sliderDisplayTriggerSliderId = 1;
+
+    [ObservableProperty]
+    private int sliderDisplayTriggerChangePercent = 5;
+
+    [ObservableProperty]
+    private int sliderDisplayTriggerDurationMs = 3000;
+
+    [ObservableProperty]
+    private string sliderDisplayTriggerTemplateMode = "normal";
+
+    [ObservableProperty]
+    private string sliderDisplayTriggerTemplate = "Slider {slider.id}\n{slider.percent}%";
 
     partial void OnEnableNowPlayingDisplayChanged(bool value)
     {
@@ -311,6 +332,8 @@ public partial class MainWindowViewModel : ViewModelBase
     public IReadOnlyList<int> AvailableSliderIds { get; } =
         Enumerable.Range(1, 3).ToArray();
 
+    public IReadOnlyList<string> AvailableDisplayTemplateModes { get; } = ["normal", "html"];
+
     public MainWindowViewModel()
     {
         ConfigPath = GetDefaultConfigPath();
@@ -441,6 +464,7 @@ public partial class MainWindowViewModel : ViewModelBase
             AutoConnect = currentConfig.AppSettings.AutoConnect;
             EnableNowPlayingDisplay = currentConfig.AppSettings.EnableNowPlayingDisplay;
             VolumeSliderDeadbandPercent = NormalizeVolumeSliderDeadbandPercent(currentConfig.AppSettings.VolumeSliderDeadbandPercent);
+            ApplyDisplayTriggerSettings(currentConfig.AppSettings.DisplayTriggers);
             ActionResultTimeoutMs = currentConfig.Hardware.Display.ActionResultTimeoutMs;
             DefaultScreenRows = OledDefaultScreenRenderer.NormalizeRows(currentConfig.Hardware.Display.DefaultLayoutRows);
             DefaultScreenTitle = currentConfig.Hardware.Display.DefaultTitle;
@@ -494,6 +518,7 @@ public partial class MainWindowViewModel : ViewModelBase
                     AutoConnect = AutoConnect,
                     EnableNowPlayingDisplay = EnableNowPlayingDisplay,
                     VolumeSliderDeadbandPercent = NormalizeVolumeSliderDeadbandPercent(VolumeSliderDeadbandPercent),
+                    DisplayTriggers = CreateDisplayTriggerConfigs(),
                     LastPort = SelectedPort == SimulatorPort ? currentConfig.AppSettings.LastPort : SelectedPort
                 }
             };
@@ -868,16 +893,68 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             var id = message.GetValue("id");
             var value = message.GetValue("value");
+            var hasSliderValue = int.TryParse(value, out var sliderValue);
 
-            if (int.TryParse(value, out var sliderValue))
+            if (hasSliderValue)
             {
                 LastSliderValue = sliderValue;
             }
 
             if (id is not null)
             {
-                await HandleConfiguredInputAsync($"slider:{id}", value);
+                var input = $"slider:{id}";
+                await HandleConfiguredInputAsync(input, value);
+                if (hasSliderValue)
+                {
+                    await HandleDisplayTriggersAsync(input, sliderValue);
+                }
             }
+        }
+    }
+
+    private async Task HandleDisplayTriggersAsync(string input, int sliderValue)
+    {
+        var trigger = currentConfig.AppSettings.DisplayTriggers
+            .FirstOrDefault(candidate => candidate.Enabled
+                && candidate.Input.Equals(input, StringComparison.OrdinalIgnoreCase));
+
+        if (trigger is null)
+        {
+            lastDisplayTriggerPercentByInput[input] = MapSliderValueToPercent(sliderValue);
+            return;
+        }
+
+        var percent = MapSliderValueToPercent(sliderValue);
+        if (!lastDisplayTriggerPercentByInput.TryGetValue(input, out var previousPercent))
+        {
+            lastDisplayTriggerPercentByInput[input] = percent;
+            return;
+        }
+
+        var threshold = NormalizeDisplayTriggerChangePercent(trigger.ChangePercent);
+        if ((threshold == 0 && percent == previousPercent)
+            || (threshold > 0 && Math.Abs(percent - previousPercent) < threshold))
+        {
+            return;
+        }
+
+        lastDisplayTriggerPercentByInput[input] = percent;
+        var lines = RenderDisplayTriggerLines(trigger, input, sliderValue, percent);
+        if (lines.Count == 0)
+        {
+            return;
+        }
+
+        try
+        {
+            await deviceDisplaySyncService.SendTemporaryTemplateAsync(
+                activeConnection,
+                lines,
+                NormalizeDisplayTriggerDurationMs(trigger.DurationMs));
+        }
+        catch (Exception ex)
+        {
+            AddLog($"Display trigger failed: {ex.Message}");
         }
     }
 
@@ -1195,6 +1272,107 @@ public partial class MainWindowViewModel : ViewModelBase
     private static int NormalizeVolumeSliderDeadbandPercent(int value)
     {
         return Math.Clamp(value, 0, 25);
+    }
+
+    private void ApplyDisplayTriggerSettings(IReadOnlyList<DisplayTriggerConfig> triggers)
+    {
+        var trigger = triggers.FirstOrDefault(candidate => candidate.Input.StartsWith("slider:", StringComparison.OrdinalIgnoreCase))
+            ?? new DisplayTriggerConfig();
+
+        SliderDisplayTriggerEnabled = trigger.Enabled;
+        SliderDisplayTriggerSliderId = TryParseInputId(trigger.Input, out var sliderId) ? sliderId : 1;
+        SliderDisplayTriggerChangePercent = NormalizeDisplayTriggerChangePercent(trigger.ChangePercent);
+        SliderDisplayTriggerDurationMs = NormalizeDisplayTriggerDurationMs(trigger.DurationMs);
+        SliderDisplayTriggerTemplateMode = NormalizeDisplayTriggerTemplateMode(trigger.TemplateMode);
+        SliderDisplayTriggerTemplate = string.IsNullOrWhiteSpace(trigger.Template)
+            ? "Slider {slider.id}\n{slider.percent}%"
+            : trigger.Template;
+        lastDisplayTriggerPercentByInput.Clear();
+    }
+
+    private List<DisplayTriggerConfig> CreateDisplayTriggerConfigs()
+    {
+        return
+        [
+            new DisplayTriggerConfig
+            {
+                Enabled = SliderDisplayTriggerEnabled,
+                Input = $"slider:{Math.Max(1, SliderDisplayTriggerSliderId)}",
+                ChangePercent = NormalizeDisplayTriggerChangePercent(SliderDisplayTriggerChangePercent),
+                DurationMs = NormalizeDisplayTriggerDurationMs(SliderDisplayTriggerDurationMs),
+                TemplateMode = NormalizeDisplayTriggerTemplateMode(SliderDisplayTriggerTemplateMode),
+                Template = string.IsNullOrWhiteSpace(SliderDisplayTriggerTemplate)
+                    ? "Slider {slider.id}\n{slider.percent}%"
+                    : SliderDisplayTriggerTemplate.Trim()
+            }
+        ];
+    }
+
+    private static int NormalizeDisplayTriggerChangePercent(int value)
+    {
+        return Math.Clamp(value, 0, 100);
+    }
+
+    private static int NormalizeDisplayTriggerDurationMs(int value)
+    {
+        return Math.Clamp(value, 0, 60000);
+    }
+
+    private static string NormalizeDisplayTriggerTemplateMode(string? value)
+    {
+        return value?.Equals("html", StringComparison.OrdinalIgnoreCase) == true ? "html" : "normal";
+    }
+
+    private static bool TryParseInputId(string input, out int id)
+    {
+        id = 0;
+        var separatorIndex = input.IndexOf(':');
+        return separatorIndex >= 0
+            && int.TryParse(input[(separatorIndex + 1)..], out id)
+            && id > 0;
+    }
+
+    private static int MapSliderValueToPercent(int sliderValue)
+    {
+        return Math.Clamp((int)Math.Round(Math.Clamp(sliderValue, 0, 4095) / 4095.0 * 100), 0, 100);
+    }
+
+    private List<string> RenderDisplayTriggerLines(DisplayTriggerConfig trigger, string input, int sliderValue, int percent)
+    {
+        var text = ReplaceDisplayTriggerPlaceholders(trigger.Template, input, sliderValue, percent);
+        if (NormalizeDisplayTriggerTemplateMode(trigger.TemplateMode) == "html")
+        {
+            text = RenderHtmlLikeDisplayText(text);
+        }
+
+        return text
+            .Replace("\r\n", "\n")
+            .Replace('\r', '\n')
+            .Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+            .Where(line => line.Length > 0)
+            .Take(5)
+            .ToList();
+    }
+
+    private string ReplaceDisplayTriggerPlaceholders(string template, string input, int sliderValue, int percent)
+    {
+        var sliderId = TryParseInputId(input, out var id) ? id.ToString() : "";
+        return template
+            .Replace("{input}", input, StringComparison.OrdinalIgnoreCase)
+            .Replace("{slider.id}", sliderId, StringComparison.OrdinalIgnoreCase)
+            .Replace("{slider.value}", sliderValue.ToString(), StringComparison.OrdinalIgnoreCase)
+            .Replace("{slider.percent}", percent.ToString(), StringComparison.OrdinalIgnoreCase)
+            .Replace("{profile}", ActiveProfileName, StringComparison.OrdinalIgnoreCase)
+            .Replace("{status}", ConnectionStatus, StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static string RenderHtmlLikeDisplayText(string html)
+    {
+        var text = Regex.Replace(html, "(?i)<\\s*br\\s*/?\\s*>", "\n");
+        text = Regex.Replace(text, "(?i)</\\s*(p|div|h[1-6]|li|tr)\\s*>", "\n");
+        text = Regex.Replace(text, "(?i)<\\s*li\\s*>", "- ");
+        text = Regex.Replace(text, "<[^>]+>", "");
+        return WebUtility.HtmlDecode(text);
     }
 
     private bool DefaultScreenUsesMediaPlaceholder()

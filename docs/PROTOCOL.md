@@ -235,6 +235,7 @@ Aktualisiert den OLED-Inhalt.
 display;mode=profile;name=Gaming
 display;mode=media;artist=Daft Punk;title=Digital Love
 display;mode=message;text=Connected
+display;mode=template;durationMs=3000;line1=Slider%201;line2=75%25
 ```
 
 Unterstuetzte Modi fuer Version 1:
@@ -244,13 +245,17 @@ Unterstuetzte Modi fuer Version 1:
 | `profile` | `name` | Aktives Profil anzeigen |
 | `media` | `artist`, `title` | Aktuellen Track anzeigen |
 | `message` | `text` | Freie Statusnachricht anzeigen |
+| `template` | `durationMs`, `line1`..`line5` | App-gerenderte OLED-Zeilen temporaer anzeigen |
 | `clear` | keine | Display leeren |
 
 Firmware-Hinweis:
 
 - Lange Texte sollen abgeschnitten oder ueber mehrere Zeilen verteilt werden.
-- Die App sollte keine pixelgenauen Layoutdaten senden. Das Layout bleibt in der
-  Firmware, bis wir einen Grund fuer etwas Komplexeres haben.
+- Die App sollte keine pixelgenauen Layoutdaten senden. `template` sendet
+  bereits gerenderte Textzeilen, aber keine Bitmap- oder Browser-Daten.
+- Bei `template` setzt `durationMs > 0` das Display nach Ablauf wieder auf die
+  bevorzugte Anzeige zurueck. `0` zeigt den Inhalt ohne automatisches
+  Zuruecksetzen.
 
 ### config
 

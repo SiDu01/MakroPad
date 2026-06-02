@@ -8,5 +8,7 @@ public sealed record AppSettingsConfig
 
     public int VolumeSliderDeadbandPercent { get; init; } = 2;
 
+    public List<DisplayTriggerConfig> DisplayTriggers { get; init; } = [];
+
     public string? LastPort { get; init; }
 }
