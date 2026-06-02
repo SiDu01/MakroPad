@@ -82,6 +82,8 @@ Implementation notes:
   `OledDefaultScreenRenderer`.
 - Now Playing polling, status, last sent track, and media display messages have
   been moved into `NowPlayingViewModel`.
+- Device `config` message sync and OLED preview coordination have been moved
+  into `DeviceDisplaySyncService`.
 - Move action metadata into a shared model that can drive UI lists, validation,
   docs, and examples.
 - Move OLED default screen rendering/placeholder logic out of the main view

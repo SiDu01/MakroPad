@@ -41,14 +41,12 @@ public partial class MainWindowViewModel : ViewModelBase
     private readonly SerialMakroPadConnection serialConnection = new();
     private readonly MakroPadDeviceProbe deviceProbe = new();
     private readonly MakroPadConfigStore configStore;
-    private readonly ISystemVolumeController systemVolumeController = SystemVolumeControllerFactory.Create();
+    private readonly DeviceDisplaySyncService deviceDisplaySyncService;
     private readonly ActionPipeline actionPipeline = new(new ActionResolver(), new ActionExecutor());
-    private readonly OledDefaultScreenRenderer oledDefaultScreenRenderer = new();
     private readonly CancellationTokenSource nowPlayingCancellation = new();
     private readonly CancellationTokenSource audioSessionsCancellation = new();
     private IMakroPadConnection? activeConnection;
     private MakroPadConfig currentConfig = MakroPadConfig.CreateDefault();
-    private int? lastKnownSystemVolumePercent;
     private bool isRefreshingEditor;
 
     [ObservableProperty]
@@ -314,6 +312,7 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         ConfigPath = GetDefaultConfigPath();
         configStore = new MakroPadConfigStore(ConfigPath);
+        deviceDisplaySyncService = new DeviceDisplaySyncService(SystemVolumeControllerFactory.Create());
         AudioSessionsViewModel = new AudioSessionsViewModel(ApplicationVolumeControllerFactory.Create());
         NowPlayingViewModel = new NowPlayingViewModel(new ProcessWindowNowPlayingProvider());
         AudioSessionsViewModel.PropertyChanged += (_, args) =>
@@ -913,38 +912,10 @@ public partial class MainWindowViewModel : ViewModelBase
 
     private async Task SendDeviceConfigAsync()
     {
-        if (activeConnection is null || activeConnection.State != DeviceConnectionState.Connected)
-        {
-            return;
-        }
-
-        var now = DateTime.Now;
-        var systemVolume = await systemVolumeController.GetMasterVolumePercentAsync();
-        lastKnownSystemVolumePercent = systemVolume;
-        RefreshOledPreview();
-        var line = MakroPad.Core.Protocol.ProtocolCodec.Format(
-            "config",
-            new Dictionary<string, string?>
-            {
-                ["profile"] = ActiveProfileName,
-                ["actionResultTimeoutMs"] = Math.Max(0, ActionResultTimeoutMs).ToString(),
-                ["defaultRows"] = OledDefaultScreenRenderer.NormalizeRows(DefaultScreenRows).ToString(),
-                ["defaultTitle"] = OledDefaultScreenRenderer.NormalizeLine(DefaultScreenTitle, "MakroPad"),
-                ["defaultLine1"] = OledDefaultScreenRenderer.NormalizeLine(DefaultScreenLine1, "{profile}"),
-                ["defaultLine2"] = OledDefaultScreenRenderer.NormalizeLine(DefaultScreenLine2, "{status}"),
-                ["defaultLine3"] = DefaultScreenLine3.Trim(),
-                ["defaultLine4"] = DefaultScreenLine4.Trim(),
-                ["time"] = now.ToString("HH:mm"),
-                ["date"] = now.ToString("dd.MM.yyyy"),
-                ["volumeSystem"] = systemVolume is null ? null : $"{systemVolume}%",
-                ["preferredDisplay"] = EnableNowPlayingDisplay && NowPlayingViewModel.LastSentTrack is not null && !DefaultScreenUsesMediaPlaceholder()
-                    ? "media"
-                    : "profile"
-            });
-
         try
         {
-            await activeConnection.SendLineAsync(line);
+            await deviceDisplaySyncService.SendConfigAsync(activeConnection, CreateDeviceDisplayState());
+            RefreshOledPreview();
         }
         catch (Exception ex)
         {
@@ -1218,12 +1189,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
     private bool DefaultScreenUsesMediaPlaceholder()
     {
-        return OledDefaultScreenRenderer.UsesMediaPlaceholder(
-            DefaultScreenTitle,
-            DefaultScreenLine1,
-            DefaultScreenLine2,
-            DefaultScreenLine3,
-            DefaultScreenLine4);
+        return deviceDisplaySyncService.UsesMediaPlaceholder(CreateDeviceDisplayState());
     }
 
     private void RefreshOledPreview()
@@ -1237,18 +1203,23 @@ public partial class MainWindowViewModel : ViewModelBase
 
     private OledDefaultScreenPreview RenderOledPreview()
     {
-        return oledDefaultScreenRenderer.RenderPreview(
+        return deviceDisplaySyncService.RenderPreview(CreateDeviceDisplayState());
+    }
+
+    private DeviceDisplayState CreateDeviceDisplayState()
+    {
+        return new DeviceDisplayState(
+            ActiveProfileName,
+            ConnectionStatus,
+            ActionResultTimeoutMs,
+            DefaultScreenRows,
             DefaultScreenTitle,
             DefaultScreenLine1,
             DefaultScreenLine2,
             DefaultScreenLine3,
             DefaultScreenLine4,
-            new OledDefaultScreenRenderContext(
-                ActiveProfileName,
-                ConnectionStatus,
-                NowPlayingViewModel.LastSentTrack,
-                lastKnownSystemVolumePercent,
-                DateTime.Now));
+            EnableNowPlayingDisplay,
+            NowPlayingViewModel.LastSentTrack);
     }
 
     private void RefreshStructuredParameterFromRaw()

@@ -36,6 +36,8 @@ MakroPad has a working vertical prototype across firmware and desktop app:
   `OledDefaultScreenRenderer`.
 - Moved Now Playing polling, status, track state, and media display messages
   into `NowPlayingViewModel`.
+- Moved device `config` message sync and OLED preview rendering coordination
+  into `DeviceDisplaySyncService`.
 
 ## Supported Actions
 
@@ -73,9 +75,9 @@ MakroPad has a working vertical prototype across firmware and desktop app:
 - Linux implementations for media keys, volume, app volume, and Now Playing are
   still missing.
 - `MainWindowViewModel` is still the largest graph node and owns connection
-  flow, config editing, action helper UI, and device config/OLED sync.
-  Audio sessions, OLED default rendering, and Now Playing orchestration are now
-  split out, but more decomposition is still useful.
+  flow, config editing, action helper UI, and profile/binding editing. Audio
+  sessions, OLED default rendering, Now Playing orchestration, and device
+  config/OLED sync are now split out, but more decomposition is still useful.
 - Firmware is still a single Arduino sketch. That is fine for prototyping, but
   display/protocol/input modules should be split once behavior stabilizes.
 - Slider quality is still being validated with replacement hardware.
@@ -97,7 +99,7 @@ the ESP32-S3-DevKitC-1.
 ## Recommended Next Steps
 
 1. Continue refactoring `MainWindowViewModel` into smaller services/view models.
-   Next best target: device config/display sync.
+   Next best target: action metadata/editor definitions.
 2. Replace Spotify-window-title Now Playing with Windows Media Session metadata.
 3. Improve the config editor UX with action definitions shared between UI,
    validation, and future docs generation.
@@ -106,9 +108,9 @@ the ESP32-S3-DevKitC-1.
 5. Add a small diagnostics screen for current device config, last heartbeat,
    last input, and last OLED message.
 
-Recommendation: continue the `MainWindowViewModel` split with device
-config/display sync. Now Playing is isolated enough that the later Windows Media
-Session provider can slot behind `INowPlayingProvider`.
+Recommendation: continue the `MainWindowViewModel` split with action metadata.
+Moving `ActionDefinition` out next will let UI lists, validation, examples, and
+future docs generation share one source of truth.
 
 ## Graphify Notes
 
