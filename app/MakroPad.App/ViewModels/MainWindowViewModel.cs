@@ -46,6 +46,7 @@ public partial class MainWindowViewModel : ViewModelBase
     private readonly ActionPipeline actionPipeline = new(new ActionResolver(), new ActionExecutor());
     private readonly INowPlayingProvider nowPlayingProvider = new ProcessWindowNowPlayingProvider();
     private readonly CancellationTokenSource nowPlayingCancellation = new();
+    private readonly CancellationTokenSource audioSessionsCancellation = new();
     private IMakroPadConnection? activeConnection;
     private MakroPadConfig currentConfig = MakroPadConfig.CreateDefault();
     private NowPlayingTrack? lastSentNowPlayingTrack;
@@ -188,8 +189,12 @@ public partial class MainWindowViewModel : ViewModelBase
         RefreshStructuredParameterFromRaw();
         OnPropertyChanged(nameof(HasStructuredParameter));
         OnPropertyChanged(nameof(IsAppVolumeAction));
+        OnPropertyChanged(nameof(IsKeyboardShortcutAction));
+        OnPropertyChanged(nameof(IsOpenAppAction));
         OnPropertyChanged(nameof(ShowsStructuredTextInput));
         OnPropertyChanged(nameof(StructuredParameterLabel));
+        OnPropertyChanged(nameof(StructuredParameterValidationMessage));
+        OnPropertyChanged(nameof(StructuredParameterValidationMessage));
     }
 
     [ObservableProperty]
@@ -203,6 +208,7 @@ public partial class MainWindowViewModel : ViewModelBase
         }
 
         RefreshStructuredParameterFromRaw();
+        OnPropertyChanged(nameof(StructuredParameterValidationMessage));
     }
 
     [ObservableProperty]
@@ -216,6 +222,7 @@ public partial class MainWindowViewModel : ViewModelBase
         }
 
         UpdateRawParametersFromStructuredValue();
+        OnPropertyChanged(nameof(StructuredParameterValidationMessage));
     }
 
     [ObservableProperty]
@@ -235,6 +242,9 @@ public partial class MainWindowViewModel : ViewModelBase
 
     [ObservableProperty]
     private string shortcutRecordingStatus = "";
+
+    [ObservableProperty]
+    private string audioSessionsStatus = "Audio sessions idle";
 
     partial void OnActiveProfileNameChanged(string value)
     {
@@ -313,6 +323,7 @@ public partial class MainWindowViewModel : ViewModelBase
         RefreshActionEditorHints();
         RefreshPorts();
         _ = RefreshAudioSessionsAsync();
+        _ = RunAudioSessionRefreshLoopAsync(audioSessionsCancellation.Token);
         _ = RunNowPlayingLoopAsync(nowPlayingCancellation.Token);
         _ = LoadConfigAsync();
     }
@@ -698,6 +709,7 @@ public partial class MainWindowViewModel : ViewModelBase
     [RelayCommand]
     private async Task RefreshAudioSessionsAsync()
     {
+        AudioSessionsStatus = "Refreshing audio sessions...";
         var sessions = await applicationVolumeController.GetAudioSessionsAsync();
 
         AudioSessions.Clear();
@@ -715,6 +727,9 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             AvailableAudioProcessNames.Add(processName);
         }
+
+        AudioSessionsStatus = $"Audio sessions: {sessions.Count} found at {DateTime.Now:HH:mm:ss}";
+        OnPropertyChanged(nameof(StructuredParameterValidationMessage));
     }
 
     [RelayCommand]
@@ -963,6 +978,28 @@ public partial class MainWindowViewModel : ViewModelBase
             catch (Exception ex)
             {
                 Dispatcher.UIThread.Post(() => NowPlayingStatus = $"Now Playing failed: {ex.Message}");
+            }
+        }
+    }
+
+    private async Task RunAudioSessionRefreshLoopAsync(CancellationToken cancellationToken)
+    {
+        using var timer = new PeriodicTimer(TimeSpan.FromSeconds(5));
+
+        while (!cancellationToken.IsCancellationRequested)
+        {
+            try
+            {
+                await timer.WaitForNextTickAsync(cancellationToken);
+                await RefreshAudioSessionsAsync();
+            }
+            catch (OperationCanceledException)
+            {
+                break;
+            }
+            catch (Exception ex)
+            {
+                Dispatcher.UIThread.Post(() => AudioSessionsStatus = $"Audio sessions failed: {ex.Message}");
             }
         }
     }
@@ -1382,7 +1419,37 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public bool IsAppVolumeAction => BindingEditorAction.Equals("app.volume", StringComparison.OrdinalIgnoreCase);
 
+    public bool IsKeyboardShortcutAction => BindingEditorAction.Equals("keyboard.shortcut", StringComparison.OrdinalIgnoreCase);
+
+    public bool IsOpenAppAction => BindingEditorAction.Equals("system.openApp", StringComparison.OrdinalIgnoreCase);
+
     public bool ShowsStructuredTextInput => HasStructuredParameter && !IsAppVolumeAction;
+
+    public string StructuredParameterValidationMessage
+    {
+        get
+        {
+            if (!HasStructuredParameter || string.IsNullOrWhiteSpace(StructuredParameterValue))
+            {
+                return "";
+            }
+
+            if (BindingEditorAction.Equals("system.openUrl", StringComparison.OrdinalIgnoreCase)
+                && (!Uri.TryCreate(StructuredParameterValue, UriKind.Absolute, out var uri)
+                    || (uri.Scheme != Uri.UriSchemeHttp && uri.Scheme != Uri.UriSchemeHttps)))
+            {
+                return "URL must start with http:// or https://.";
+            }
+
+            if (BindingEditorAction.Equals("app.volume", StringComparison.OrdinalIgnoreCase)
+                && !AvailableAudioProcessNames.Contains(StructuredParameterValue, StringComparer.OrdinalIgnoreCase))
+            {
+                return "Process is not in the current audio session list.";
+            }
+
+            return "";
+        }
+    }
 
     public string StructuredParameterLabel => BindingEditorAction switch
     {

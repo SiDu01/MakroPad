@@ -56,6 +56,11 @@ Implemented:
   discovery.
 - Config editor shows structured parameter fields for common actions while
   keeping the raw parameter field available.
+- Active audio sessions refresh automatically every few seconds and can still
+  be refreshed manually from the Debug tab.
+- Action-specific helper controls are shown only for matching actions, e.g.
+  shortcut recording for `keyboard.shortcut` and file browsing for
+  `system.openApp`.
 - Serial heartbeat with `ping`/`pong` and `Unresponsive` connection state.
 
 Supported actions:

@@ -202,6 +202,10 @@
                                                   ItemsSource="{Binding AvailableAudioProcessNames}"
                                                   SelectedItem="{Binding StructuredParameterValue}"
                                                   HorizontalAlignment="Stretch" />
+                                        <TextBlock Text="{Binding StructuredParameterValidationMessage}"
+                                                   Foreground="#FFB86B"
+                                                   FontSize="12"
+                                                   TextWrapping="Wrap" />
                                     </StackPanel>
                                     <TextBlock Text="{Binding BindingActionDescription}"
                                                TextWrapping="Wrap" />
@@ -225,10 +229,12 @@
                                       ColumnDefinitions="*,*"
                                       ColumnSpacing="8">
                                     <Button Grid.Column="0"
+                                            IsVisible="{Binding IsKeyboardShortcutAction}"
                                             Content="Record Shortcut"
                                             Command="{Binding StartShortcutRecordingCommand}"
                                             HorizontalAlignment="Stretch" />
                                     <Button Grid.Column="1"
+                                            IsVisible="{Binding IsOpenAppAction}"
                                             Content="Browse App/File"
                                             Click="BrowseOpenApp_Click"
                                             HorizontalAlignment="Stretch" />
@@ -567,7 +573,7 @@
 
                         <Border Grid.Column="1"
                                 Classes="panel">
-                            <Grid RowDefinitions="Auto,Auto,*"
+                            <Grid RowDefinitions="Auto,Auto,Auto,*"
                                   RowSpacing="12">
                                 <Grid ColumnDefinitions="*,Auto">
                                     <TextBlock Text="Audio Sessions"
@@ -584,7 +590,12 @@
                                     <TextBlock Grid.Column="1" Classes="label" Text="Volume" />
                                     <TextBlock Grid.Column="2" Classes="label" Text="PID" />
                                 </Grid>
-                                <ListBox Grid.Row="2"
+                                <TextBlock Grid.Row="2"
+                                           Text="{Binding AudioSessionsStatus}"
+                                           Classes="muted"
+                                           FontSize="12"
+                                           TextWrapping="Wrap" />
+                                <ListBox Grid.Row="3"
                                          ItemsSource="{Binding AudioSessions}">
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
