@@ -120,6 +120,8 @@ binding editor. It can manage multiple button and slider triggers, require a
 configurable percentage change for slider triggers, and then show either normal
 text or lightweight HTML-like content for a configured duration. The editor's
 Test button sends the current editor content to the connected OLED immediately.
+The editor also shows an app-side OLED preview and supports slider conditions:
+`any`, `inRange`, `increasing`, and `decreasing`.
 When multiple enabled triggers match the same input, the app sends their display
 screens in list order and waits each trigger's duration before sending the next
 screen. The editor provides Up/Down controls to change this sequence order.

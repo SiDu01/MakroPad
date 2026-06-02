@@ -79,6 +79,9 @@ MakroPad has a working vertical prototype across firmware and desktop app:
   content to the connected OLED without waiting for a hardware input. Multiple
   enabled triggers for the same input are sent in list order as a timed display
   sequence, and the editor has Up/Down controls to reorder that sequence.
+  Slider triggers support `any`, `inRange`, `increasing`, and `decreasing`
+  conditions. The editor includes an app-side OLED preview and compact wrapping
+  action buttons.
 
 ## Known Limitations
 
@@ -116,8 +119,8 @@ the ESP32-S3-DevKitC-1.
 2. Replace Spotify-window-title Now Playing with Windows Media Session metadata.
 3. Improve the config editor UX with action definitions shared between UI,
    validation, and future docs generation.
-4. Expand display trigger editing with reusable templates, priority conditions,
-   and richer preview controls.
+4. Expand display trigger editing with reusable templates and richer preview
+   controls.
 5. Split the firmware sketch into protocol, display, buttons, and sliders once
    the new sliders have been tested.
 6. Add a small diagnostics screen for current device config, last heartbeat,

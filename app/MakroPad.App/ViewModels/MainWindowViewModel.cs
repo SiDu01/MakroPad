@@ -71,6 +71,11 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty]
     private int lastSliderValue;
 
+    partial void OnLastSliderValueChanged(int value)
+    {
+        RefreshDisplayTriggerPreview();
+    }
+
     [ObservableProperty]
     private int simulatorButtonId = 1;
 
@@ -107,11 +112,15 @@ public partial class MainWindowViewModel : ViewModelBase
 
         DisplayTriggerEditorEnabled = value?.Enabled ?? true;
         DisplayTriggerEditorInput = value?.Input ?? "slider:1";
+        DisplayTriggerEditorCondition = value?.Condition ?? "any";
+        DisplayTriggerEditorMinPercent = value?.MinPercent ?? 0;
+        DisplayTriggerEditorMaxPercent = value?.MaxPercent ?? 100;
         DisplayTriggerEditorChangePercent = value?.ChangePercent ?? 5;
         DisplayTriggerEditorDurationMs = value?.DurationMs ?? 3000;
         DisplayTriggerEditorTemplateMode = value?.TemplateMode ?? "normal";
         DisplayTriggerEditorTemplate = value?.Template ?? "Slider {slider.id}\n{slider.percent}%";
         DisplayTriggerEditorValidationMessage = "";
+        RefreshDisplayTriggerPreview();
     }
 
     [ObservableProperty]
@@ -120,8 +129,42 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty]
     private string displayTriggerEditorInput = "slider:1";
 
+    partial void OnDisplayTriggerEditorInputChanged(string value)
+    {
+        RefreshDisplayTriggerPreview();
+    }
+
+    [ObservableProperty]
+    private string displayTriggerEditorCondition = "any";
+
+    partial void OnDisplayTriggerEditorConditionChanged(string value)
+    {
+        RefreshDisplayTriggerPreview();
+    }
+
+    [ObservableProperty]
+    private int displayTriggerEditorMinPercent;
+
+    partial void OnDisplayTriggerEditorMinPercentChanged(int value)
+    {
+        RefreshDisplayTriggerPreview();
+    }
+
+    [ObservableProperty]
+    private int displayTriggerEditorMaxPercent = 100;
+
+    partial void OnDisplayTriggerEditorMaxPercentChanged(int value)
+    {
+        RefreshDisplayTriggerPreview();
+    }
+
     [ObservableProperty]
     private int displayTriggerEditorChangePercent = 5;
+
+    partial void OnDisplayTriggerEditorChangePercentChanged(int value)
+    {
+        RefreshDisplayTriggerPreview();
+    }
 
     [ObservableProperty]
     private int displayTriggerEditorDurationMs = 3000;
@@ -129,11 +172,36 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty]
     private string displayTriggerEditorTemplateMode = "normal";
 
+    partial void OnDisplayTriggerEditorTemplateModeChanged(string value)
+    {
+        RefreshDisplayTriggerPreview();
+    }
+
     [ObservableProperty]
     private string displayTriggerEditorTemplate = "Slider {slider.id}\n{slider.percent}%";
 
+    partial void OnDisplayTriggerEditorTemplateChanged(string value)
+    {
+        RefreshDisplayTriggerPreview();
+    }
+
     [ObservableProperty]
     private string displayTriggerEditorValidationMessage = "";
+
+    [ObservableProperty]
+    private string displayTriggerPreviewLine1 = "";
+
+    [ObservableProperty]
+    private string displayTriggerPreviewLine2 = "";
+
+    [ObservableProperty]
+    private string displayTriggerPreviewLine3 = "";
+
+    [ObservableProperty]
+    private string displayTriggerPreviewLine4 = "";
+
+    [ObservableProperty]
+    private string displayTriggerPreviewLine5 = "";
 
     partial void OnEnableNowPlayingDisplayChanged(bool value)
     {
@@ -358,6 +426,8 @@ public partial class MainWindowViewModel : ViewModelBase
         Enumerable.Range(1, 3).ToArray();
 
     public IReadOnlyList<string> AvailableDisplayTemplateModes { get; } = ["normal", "html"];
+
+    public IReadOnlyList<string> AvailableDisplayTriggerConditions { get; } = ["any", "inRange", "increasing", "decreasing"];
 
     public MainWindowViewModel()
     {
@@ -1087,13 +1157,13 @@ public partial class MainWindowViewModel : ViewModelBase
 
     private async Task HandleDisplayTriggersAsync(string input, int? sliderValue = null)
     {
-        var triggers = currentConfig.AppSettings.DisplayTriggers
+        var allTriggers = currentConfig.AppSettings.DisplayTriggers
             .Where(candidate => candidate.Enabled
                 && candidate.Input.Equals(input, StringComparison.OrdinalIgnoreCase))
             .Select(NormalizeDisplayTrigger)
             .ToList();
 
-        if (triggers.Count == 0)
+        if (allTriggers.Count == 0)
         {
             if (sliderValue is not null)
             {
@@ -1111,7 +1181,7 @@ public partial class MainWindowViewModel : ViewModelBase
                 return;
             }
 
-            var threshold = triggers.Min(trigger => NormalizeDisplayTriggerChangePercent(trigger.ChangePercent));
+            var threshold = allTriggers.Min(trigger => NormalizeDisplayTriggerChangePercent(trigger.ChangePercent));
             if ((threshold == 0 && percent == previousPercent)
                 || (threshold > 0 && Math.Abs(percent.Value - previousPercent) < threshold))
             {
@@ -1119,11 +1189,30 @@ public partial class MainWindowViewModel : ViewModelBase
             }
 
             lastDisplayTriggerPercentByInput[input] = percent.Value;
+            var triggers = allTriggers
+                .Where(trigger => DisplayTriggerConditionMatches(trigger, percent.Value, previousPercent))
+                .ToList();
+
+            if (triggers.Count == 0)
+            {
+                return;
+            }
+
+            try
+            {
+                await SendDisplayTriggerSequenceAsync(triggers, input, sliderValue, percent);
+            }
+            catch (Exception ex)
+            {
+                AddLog($"Display trigger failed: {ex.Message}");
+            }
+
+            return;
         }
 
         try
         {
-            await SendDisplayTriggerSequenceAsync(triggers, input, sliderValue, percent);
+            await SendDisplayTriggerSequenceAsync(allTriggers, input, sliderValue, percent);
         }
         catch (Exception ex)
         {
@@ -1491,6 +1580,9 @@ public partial class MainWindowViewModel : ViewModelBase
                 index,
                 trigger.Enabled,
                 trigger.Input,
+                trigger.Condition,
+                trigger.MinPercent,
+                trigger.MaxPercent,
                 trigger.ChangePercent,
                 trigger.DurationMs,
                 trigger.TemplateMode,
@@ -1527,6 +1619,9 @@ public partial class MainWindowViewModel : ViewModelBase
             {
                 Enabled = trigger.Enabled,
                 Input = trigger.Input,
+                Condition = trigger.Condition,
+                MinPercent = trigger.MinPercent,
+                MaxPercent = trigger.MaxPercent,
                 ChangePercent = trigger.ChangePercent,
                 DurationMs = trigger.DurationMs,
                 TemplateMode = trigger.TemplateMode,
@@ -1553,10 +1648,20 @@ public partial class MainWindowViewModel : ViewModelBase
             return false;
         }
 
+        if (!input.StartsWith("slider:", StringComparison.OrdinalIgnoreCase)
+            && NormalizeDisplayTriggerCondition(DisplayTriggerEditorCondition) != "any")
+        {
+            SetDisplayTriggerEditorError("Slider conditions require a slider input.");
+            return false;
+        }
+
         trigger = NormalizeDisplayTrigger(new DisplayTriggerConfig
         {
             Enabled = DisplayTriggerEditorEnabled,
             Input = input,
+            Condition = DisplayTriggerEditorCondition,
+            MinPercent = DisplayTriggerEditorMinPercent,
+            MaxPercent = DisplayTriggerEditorMaxPercent,
             ChangePercent = DisplayTriggerEditorChangePercent,
             DurationMs = DisplayTriggerEditorDurationMs,
             TemplateMode = DisplayTriggerEditorTemplateMode,
@@ -1577,6 +1682,9 @@ public partial class MainWindowViewModel : ViewModelBase
         return trigger with
         {
             Input = string.IsNullOrWhiteSpace(trigger.Input) ? "slider:1" : trigger.Input.Trim(),
+            Condition = NormalizeDisplayTriggerCondition(trigger.Condition),
+            MinPercent = NormalizePercent(trigger.MinPercent),
+            MaxPercent = Math.Max(NormalizePercent(trigger.MinPercent), NormalizePercent(trigger.MaxPercent)),
             ChangePercent = NormalizeDisplayTriggerChangePercent(trigger.ChangePercent),
             DurationMs = NormalizeDisplayTriggerDurationMs(trigger.DurationMs),
             TemplateMode = NormalizeDisplayTriggerTemplateMode(trigger.TemplateMode),
@@ -1596,9 +1704,34 @@ public partial class MainWindowViewModel : ViewModelBase
         return Math.Clamp(value, 0, 60000);
     }
 
+    private static int NormalizePercent(int value)
+    {
+        return Math.Clamp(value, 0, 100);
+    }
+
     private static string NormalizeDisplayTriggerTemplateMode(string? value)
     {
         return value?.Equals("html", StringComparison.OrdinalIgnoreCase) == true ? "html" : "normal";
+    }
+
+    private static string NormalizeDisplayTriggerCondition(string? value)
+    {
+        return value switch
+        {
+            "inRange" or "increasing" or "decreasing" => value,
+            _ => "any"
+        };
+    }
+
+    private static bool DisplayTriggerConditionMatches(DisplayTriggerConfig trigger, int percent, int previousPercent)
+    {
+        return NormalizeDisplayTriggerCondition(trigger.Condition) switch
+        {
+            "inRange" => percent >= trigger.MinPercent && percent <= trigger.MaxPercent,
+            "increasing" => percent > previousPercent,
+            "decreasing" => percent < previousPercent,
+            _ => true
+        };
     }
 
     private static bool TryParseInputId(string input, out int id)
@@ -1651,6 +1784,51 @@ public partial class MainWindowViewModel : ViewModelBase
         text = Regex.Replace(text, "(?i)<\\s*li\\s*>", "- ");
         text = Regex.Replace(text, "<[^>]+>", "");
         return WebUtility.HtmlDecode(text);
+    }
+
+    private void RefreshDisplayTriggerPreview()
+    {
+        if (!TryCreateEditorDisplayTriggerForPreview(out var trigger))
+        {
+            SetDisplayTriggerPreviewLines([]);
+            return;
+        }
+
+        var input = trigger.Input;
+        var sliderValue = input.StartsWith("slider:", StringComparison.OrdinalIgnoreCase)
+            ? LastSliderValue
+            : (int?)null;
+        var percent = sliderValue is null ? (int?)null : MapSliderValueToPercent(sliderValue.Value);
+        SetDisplayTriggerPreviewLines(RenderDisplayTriggerLines(trigger, input, sliderValue, percent));
+    }
+
+    private bool TryCreateEditorDisplayTriggerForPreview(out DisplayTriggerConfig trigger)
+    {
+        trigger = NormalizeDisplayTrigger(new DisplayTriggerConfig
+        {
+            Enabled = DisplayTriggerEditorEnabled,
+            Input = string.IsNullOrWhiteSpace(DisplayTriggerEditorInput) ? "slider:1" : DisplayTriggerEditorInput,
+            Condition = DisplayTriggerEditorCondition,
+            MinPercent = DisplayTriggerEditorMinPercent,
+            MaxPercent = DisplayTriggerEditorMaxPercent,
+            ChangePercent = DisplayTriggerEditorChangePercent,
+            DurationMs = DisplayTriggerEditorDurationMs,
+            TemplateMode = DisplayTriggerEditorTemplateMode,
+            Template = string.IsNullOrWhiteSpace(DisplayTriggerEditorTemplate)
+                ? " "
+                : DisplayTriggerEditorTemplate
+        });
+
+        return true;
+    }
+
+    private void SetDisplayTriggerPreviewLines(IReadOnlyList<string> lines)
+    {
+        DisplayTriggerPreviewLine1 = lines.Count > 0 ? lines[0] : "";
+        DisplayTriggerPreviewLine2 = lines.Count > 1 ? lines[1] : "";
+        DisplayTriggerPreviewLine3 = lines.Count > 2 ? lines[2] : "";
+        DisplayTriggerPreviewLine4 = lines.Count > 3 ? lines[3] : "";
+        DisplayTriggerPreviewLine5 = lines.Count > 4 ? lines[4] : "";
     }
 
     private bool DefaultScreenUsesMediaPlaceholder()
@@ -1784,6 +1962,9 @@ public sealed record DisplayTriggerViewModel(
     int Index,
     bool Enabled,
     string Input,
+    string Condition,
+    int MinPercent,
+    int MaxPercent,
     int ChangePercent,
     int DurationMs,
     string TemplateMode,
@@ -1804,4 +1985,8 @@ public sealed record DisplayTriggerViewModel(
             return string.IsNullOrWhiteSpace(firstLine) ? "(empty)" : firstLine;
         }
     }
+
+    public string ConditionDisplay => Condition == "inRange"
+        ? $"{Condition} {MinPercent}-{MaxPercent}%"
+        : Condition;
 }

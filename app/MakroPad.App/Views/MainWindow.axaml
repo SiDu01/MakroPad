@@ -675,7 +675,7 @@
                             <Border Classes="panel">
                                 <Grid RowDefinitions="Auto,*"
                                       RowSpacing="10">
-                                    <Grid ColumnDefinitions="70,150,110,110,90,*"
+                                    <Grid ColumnDefinitions="54,130,150,90,96,78,*"
                                           ColumnSpacing="12">
                                         <TextBlock Text="On"
                                                    FontWeight="SemiBold"
@@ -685,18 +685,22 @@
                                                    FontWeight="SemiBold"
                                                    Classes="label" />
                                         <TextBlock Grid.Column="2"
-                                                   Text="Change"
+                                                   Text="Condition"
                                                    FontWeight="SemiBold"
                                                    Classes="label" />
                                         <TextBlock Grid.Column="3"
-                                                   Text="Duration"
+                                                   Text="Change"
                                                    FontWeight="SemiBold"
                                                    Classes="label" />
                                         <TextBlock Grid.Column="4"
-                                                   Text="Mode"
+                                                   Text="Duration"
                                                    FontWeight="SemiBold"
                                                    Classes="label" />
                                         <TextBlock Grid.Column="5"
+                                                   Text="Mode"
+                                                   FontWeight="SemiBold"
+                                                   Classes="label" />
+                                        <TextBlock Grid.Column="6"
                                                    Text="Content"
                                                    FontWeight="SemiBold"
                                                    Classes="label" />
@@ -708,7 +712,7 @@
                                              MinHeight="220">
                                         <ListBox.ItemTemplate>
                                             <DataTemplate>
-                                                <Grid ColumnDefinitions="70,150,110,110,90,*"
+                                                <Grid ColumnDefinitions="54,130,150,90,96,78,*"
                                                       ColumnSpacing="12">
                                                     <TextBlock Text="{Binding EnabledDisplay}"
                                                                FontFamily="Consolas" />
@@ -717,15 +721,18 @@
                                                                FontFamily="Consolas"
                                                                TextTrimming="CharacterEllipsis" />
                                                     <TextBlock Grid.Column="2"
-                                                               Text="{Binding ChangePercent, StringFormat='{}{0}%'}"
+                                                               Text="{Binding ConditionDisplay}"
                                                                FontFamily="Consolas" />
                                                     <TextBlock Grid.Column="3"
-                                                               Text="{Binding DurationMs, StringFormat='{}{0} ms'}"
+                                                               Text="{Binding ChangePercent, StringFormat='{}{0}%'}"
                                                                FontFamily="Consolas" />
                                                     <TextBlock Grid.Column="4"
-                                                               Text="{Binding TemplateMode}"
+                                                               Text="{Binding DurationMs, StringFormat='{}{0} ms'}"
                                                                FontFamily="Consolas" />
                                                     <TextBlock Grid.Column="5"
+                                                               Text="{Binding TemplateMode}"
+                                                               FontFamily="Consolas" />
+                                                    <TextBlock Grid.Column="6"
                                                                Text="{Binding TemplateSummary}"
                                                                FontFamily="Consolas"
                                                                TextTrimming="CharacterEllipsis" />
@@ -738,8 +745,8 @@
 
                             <Border Grid.Row="1"
                                     Classes="panel">
-                                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto"
-                                      ColumnDefinitions="150,150,150,*"
+                                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto"
+                                      ColumnDefinitions="120,140,140,*,256"
                                       RowSpacing="10"
                                       ColumnSpacing="12">
                                     <CheckBox Grid.Column="0"
@@ -755,23 +762,67 @@
                                               SelectedItem="{Binding DisplayTriggerEditorTemplateMode}"
                                               HorizontalAlignment="Stretch" />
                                     <Grid Grid.Column="3"
-                                          ColumnDefinitions="*,*"
+                                          ColumnDefinitions="*,*,*,*"
                                           ColumnSpacing="8">
                                         <NumericUpDown Grid.Column="0"
-                                                       Value="{Binding DisplayTriggerEditorChangePercent}"
+                                                       Value="{Binding DisplayTriggerEditorMinPercent}"
                                                        Minimum="0"
                                                        Maximum="100"
                                                        Increment="1" />
                                         <NumericUpDown Grid.Column="1"
+                                                       Value="{Binding DisplayTriggerEditorMaxPercent}"
+                                                       Minimum="0"
+                                                       Maximum="100"
+                                                       Increment="1" />
+                                        <NumericUpDown Grid.Column="2"
+                                                       Value="{Binding DisplayTriggerEditorChangePercent}"
+                                                       Minimum="0"
+                                                       Maximum="100"
+                                                       Increment="1" />
+                                        <NumericUpDown Grid.Column="3"
                                                        Value="{Binding DisplayTriggerEditorDurationMs}"
                                                        Minimum="0"
                                                        Maximum="60000"
                                                        Increment="500" />
                                     </Grid>
+                                    <Border Grid.Column="4"
+                                            Grid.RowSpan="4"
+                                            Background="#02060C"
+                                            BorderBrush="#2D5C88"
+                                            BorderThickness="1"
+                                            CornerRadius="4"
+                                            Width="256"
+                                            Height="128"
+                                            Padding="12"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Top">
+                                        <StackPanel Spacing="6">
+                                            <TextBlock Text="{Binding DisplayTriggerPreviewLine1}"
+                                                       FontFamily="Consolas"
+                                                       FontSize="16"
+                                                       TextWrapping="NoWrap" />
+                                            <TextBlock Text="{Binding DisplayTriggerPreviewLine2}"
+                                                       FontFamily="Consolas"
+                                                       FontSize="16"
+                                                       TextWrapping="NoWrap" />
+                                            <TextBlock Text="{Binding DisplayTriggerPreviewLine3}"
+                                                       FontFamily="Consolas"
+                                                       FontSize="16"
+                                                       TextWrapping="NoWrap" />
+                                            <TextBlock Text="{Binding DisplayTriggerPreviewLine4}"
+                                                       FontFamily="Consolas"
+                                                       FontSize="16"
+                                                       TextWrapping="NoWrap" />
+                                            <TextBlock Text="{Binding DisplayTriggerPreviewLine5}"
+                                                       FontFamily="Consolas"
+                                                       FontSize="16"
+                                                       TextWrapping="NoWrap" />
+                                        </StackPanel>
+                                    </Border>
 
                                     <Grid Grid.Row="1"
                                           Grid.ColumnSpan="4"
-                                          ColumnDefinitions="150,150,150,*"
+                                          ColumnDefinitions="120,140,140,*"
                                           ColumnSpacing="12">
                                         <TextBlock Grid.Column="1"
                                                    Classes="label"
@@ -780,27 +831,45 @@
                                                    Classes="label"
                                                    Text="Mode" />
                                         <Grid Grid.Column="3"
-                                              ColumnDefinitions="*,*"
+                                              ColumnDefinitions="*,*,*,*"
                                               ColumnSpacing="8">
                                             <TextBlock Classes="label"
-                                                       Text="Change threshold (%)" />
+                                                       Text="Min %" />
                                             <TextBlock Grid.Column="1"
+                                                       Classes="label"
+                                                       Text="Max %" />
+                                            <TextBlock Grid.Column="2"
+                                                       Classes="label"
+                                                       Text="Change threshold (%)" />
+                                            <TextBlock Grid.Column="3"
                                                        Classes="label"
                                                        Text="Display duration (ms)" />
                                         </Grid>
                                     </Grid>
 
+                                    <ComboBox Grid.Row="2"
+                                              Grid.Column="1"
+                                              Grid.ColumnSpan="2"
+                                              ItemsSource="{Binding AvailableDisplayTriggerConditions}"
+                                              SelectedItem="{Binding DisplayTriggerEditorCondition}"
+                                              HorizontalAlignment="Stretch" />
                                     <TextBlock Grid.Row="2"
+                                               Grid.Column="3"
+                                               Classes="label"
+                                               VerticalAlignment="Center"
+                                               Text="Condition" />
+
+                                    <TextBlock Grid.Row="3"
                                                Grid.ColumnSpan="4"
                                                Classes="label"
                                                Text="Display content" />
-                                    <TextBox Grid.Row="3"
+                                    <TextBox Grid.Row="4"
                                              Grid.ColumnSpan="4"
                                              Text="{Binding DisplayTriggerEditorTemplate}"
                                              AcceptsReturn="True"
                                              MinHeight="160"
                                              TextWrapping="Wrap" />
-                                    <StackPanel Grid.Row="4"
+                                    <StackPanel Grid.Row="5"
                                                 Grid.ColumnSpan="4"
                                                 Spacing="8">
                                         <TextBlock Classes="muted"
@@ -811,33 +880,32 @@
                                                    Foreground="#FF7A90"
                                                    FontSize="12"
                                                    TextWrapping="Wrap" />
-                                        <Grid ColumnDefinitions="*,*,*,*,*,*"
-                                              ColumnSpacing="8">
-                                            <Button Grid.Column="0"
-                                                    Content="Apply"
+                                        <WrapPanel>
+                                            <Button Content="Apply"
                                                     Command="{Binding ApplyDisplayTriggerCommand}"
-                                                    HorizontalAlignment="Stretch" />
-                                            <Button Grid.Column="1"
-                                                    Content="Add"
+                                                    MinWidth="72"
+                                                    Margin="0,0,8,8" />
+                                            <Button Content="Add"
                                                     Command="{Binding AddDisplayTriggerCommand}"
-                                                    HorizontalAlignment="Stretch" />
-                                            <Button Grid.Column="2"
-                                                    Content="Remove"
+                                                    MinWidth="72"
+                                                    Margin="0,0,8,8" />
+                                            <Button Content="Remove"
                                                     Command="{Binding RemoveDisplayTriggerCommand}"
-                                                    HorizontalAlignment="Stretch" />
-                                            <Button Grid.Column="3"
-                                                    Content="Test"
+                                                    MinWidth="72"
+                                                    Margin="0,0,8,8" />
+                                            <Button Content="Test"
                                                     Command="{Binding TestDisplayTriggerCommand}"
-                                                    HorizontalAlignment="Stretch" />
-                                            <Button Grid.Column="4"
-                                                    Content="Up"
+                                                    MinWidth="72"
+                                                    Margin="0,0,8,8" />
+                                            <Button Content="Up"
                                                     Command="{Binding MoveDisplayTriggerUpCommand}"
-                                                    HorizontalAlignment="Stretch" />
-                                            <Button Grid.Column="5"
-                                                    Content="Down"
+                                                    MinWidth="64"
+                                                    Margin="0,0,8,8" />
+                                            <Button Content="Down"
                                                     Command="{Binding MoveDisplayTriggerDownCommand}"
-                                                    HorizontalAlignment="Stretch" />
-                                        </Grid>
+                                                    MinWidth="72"
+                                                    Margin="0,0,8,8" />
+                                        </WrapPanel>
                                     </StackPanel>
                                 </Grid>
                             </Border>

@@ -1,16 +1,16 @@
 # Graph Report - MakroPad  (2026-06-03)
 
 ## Corpus Check
-- 75 files · ~19,318 words
+- 75 files · ~19,827 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 761 nodes · 992 edges · 90 communities (64 shown, 26 thin omitted)
+- 775 nodes · 1025 edges · 90 communities (64 shown, 26 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 12 edges (avg confidence: 0.81)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `f8881f6d`
+- Built from commit: `4dd23806`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -22,7 +22,6 @@
 - [[_COMMUNITY_Community 5|Community 5]]
 - [[_COMMUNITY_Community 6|Community 6]]
 - [[_COMMUNITY_Community 7|Community 7]]
-- [[_COMMUNITY_Community 8|Community 8]]
 - [[_COMMUNITY_Community 9|Community 9]]
 - [[_COMMUNITY_Community 10|Community 10]]
 - [[_COMMUNITY_Community 12|Community 12]]
@@ -71,7 +70,7 @@
 - [[_COMMUNITY_Community 90|Community 90]]
 
 ## God Nodes (most connected - your core abstractions)
-1. `MainWindowViewModel` - 130 edges
+1. `MainWindowViewModel` - 144 edges
 2. `SerialMakroPadConnection` - 28 edges
 3. `ActionExecutor` - 20 edges
 4. `MakroPad Firmware` - 19 edges
@@ -102,8 +101,8 @@
 ## Communities (90 total, 26 thin omitted)
 
 ### Community 0 - "Community 0"
-Cohesion: 0.11
-Nodes (29): Action Pipeline, MakroPad.Actions Project, OLED Default Screen, Serial Heartbeat, Windows Media Actions, Windows Volume Actions, ActiveSliderCount, Adafruit GFX Library (+21 more)
+Cohesion: 0.06
+Nodes (49): Action Pipeline, Build, code:text (%APPDATA%\MakroPad\config.json), code:text (hello-ack;proto=1;app=0.1.0), code:powershell (dotnet run --project app\MakroPad.App\MakroPad.App.csproj), code:powershell (dotnet build app\MakroPad.sln), code:powershell (dotnet test app\MakroPad.sln), Current Prototype (+41 more)
 
 ### Community 1 - "Community 1"
 Cohesion: 0.05
@@ -128,10 +127,6 @@ Nodes (40): action-result, App -> ESP Nachrichten, Beispielablauf, button, code:
 ### Community 7 - "Community 7"
 Cohesion: 0.15
 Nodes (11): IApplicationVolumeController, IKeyboardController, ISystemLauncher, ISystemMediaController, ISystemVolumeController, ActionExecutor, IApplicationVolumeController, IKeyboardController (+3 more)
-
-### Community 8 - "Community 8"
-Cohesion: 0.10
-Nodes (20): Build, code:text (%APPDATA%\MakroPad\config.json), code:text (hello-ack;proto=1;app=0.1.0), code:powershell (dotnet run --project app\MakroPad.App\MakroPad.App.csproj), code:powershell (dotnet build app\MakroPad.sln), code:powershell (dotnet test app\MakroPad.sln), Current Prototype, MakroPad App (+12 more)
 
 ### Community 9 - "Community 9"
 Cohesion: 0.18
@@ -174,8 +169,8 @@ Cohesion: 0.14
 Nodes (8): IApplicationVolumeController, string, INowPlayingProvider, string, ObservableObject, AudioSessionsViewModel, NowPlayingViewModel, ViewModelBase
 
 ### Community 62 - "Community 62"
-Cohesion: 0.15
-Nodes (4): IApplicationVolumeController, NoopApplicationVolumeController, FakeApplicationVolumeController, WindowsApplicationVolumeController
+Cohesion: 0.20
+Nodes (3): IApplicationVolumeController, NoopApplicationVolumeController, WindowsApplicationVolumeController
 
 ### Community 63 - "Community 63"
 Cohesion: 0.11
@@ -199,7 +194,7 @@ Nodes (9): Abschlussformat, code:powershell (dotnet build app\MakroPad.sln), Ent
 
 ### Community 69 - "Community 69"
 Cohesion: 0.05
-Nodes (10): ISystemLauncher, ISystemVolumeController, NoopSystemVolumeController, SystemLauncher, ActionExecutorTests, FakeKeyboardController, FakeMediaController, FakeSystemLauncher (+2 more)
+Nodes (11): ISystemLauncher, ISystemVolumeController, NoopSystemVolumeController, SystemLauncher, ActionExecutorTests, FakeApplicationVolumeController, FakeKeyboardController, FakeMediaController (+3 more)
 
 ### Community 70 - "Community 70"
 Cohesion: 0.33
@@ -221,8 +216,8 @@ Nodes (3): ISystemVolumeController, OledDefaultScreenRenderer, DeviceDisplaySync
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `MainWindowViewModel` connect `Community 1` to `Community 2`, `Community 11`, `Community 13`, `Community 45`, `Community 16`, `Community 21`, `Community 90`, `Community 27`?**
-  _High betweenness centrality (0.038) - this node is a cross-community bridge._
+- **Why does `MainWindowViewModel` connect `Community 1` to `Community 2`, `Community 8`, `Community 11`, `Community 45`, `Community 13`, `Community 16`, `Community 21`, `Community 90`, `Community 27`?**
+  _High betweenness centrality (0.043) - this node is a cross-community bridge._
 - **Why does `FakeMediaController` connect `Community 69` to `Community 5`?**
   _High betweenness centrality (0.013) - this node is a cross-community bridge._
 - **Why does `FakeKeyboardController` connect `Community 69` to `Community 12`?**
@@ -230,7 +225,7 @@ _Questions this graph is uniquely positioned to answer:_
 - **What connects `PreToolUse`, `ISystemMediaController`, `ISystemVolumeController` to the rest of the system?**
   _193 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
-  _Cohesion score 0.11083743842364532 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.05551020408163265 - nodes in this community are weakly interconnected._
 - **Should `Community 1` be split into smaller, more focused modules?**
   _Cohesion score 0.04644412191582003 - nodes in this community are weakly interconnected._
 - **Should `Community 3` be split into smaller, more focused modules?**
