@@ -670,59 +670,166 @@
 
                     <ScrollViewer Grid.Row="1"
                                   VerticalScrollBarVisibility="Auto">
-                        <Border Classes="panel"
-                                HorizontalAlignment="Stretch">
-                            <StackPanel Spacing="12">
-                                <TextBlock Text="Display Trigger"
-                                           FontSize="16"
-                                           FontWeight="SemiBold" />
-                                <CheckBox Content="Show custom display content when a slider changes"
-                                          IsChecked="{Binding SliderDisplayTriggerEnabled}" />
-                                <Grid ColumnDefinitions="*,*"
-                                      ColumnSpacing="8">
-                                    <StackPanel Spacing="6">
-                                        <TextBlock Classes="label" Text="Slider" />
-                                        <ComboBox ItemsSource="{Binding AvailableSliderIds}"
-                                                  SelectedItem="{Binding SliderDisplayTriggerSliderId}"
-                                                  HorizontalAlignment="Stretch" />
-                                    </StackPanel>
-                                    <StackPanel Grid.Column="1"
-                                                Spacing="6">
-                                        <TextBlock Classes="label" Text="Mode" />
-                                        <ComboBox ItemsSource="{Binding AvailableDisplayTemplateModes}"
-                                                  SelectedItem="{Binding SliderDisplayTriggerTemplateMode}"
-                                                  HorizontalAlignment="Stretch" />
-                                    </StackPanel>
+                        <Grid RowDefinitions="*,Auto"
+                              RowSpacing="16">
+                            <Border Classes="panel">
+                                <Grid RowDefinitions="Auto,*"
+                                      RowSpacing="10">
+                                    <Grid ColumnDefinitions="70,150,110,110,90,*"
+                                          ColumnSpacing="12">
+                                        <TextBlock Text="On"
+                                                   FontWeight="SemiBold"
+                                                   Classes="label" />
+                                        <TextBlock Grid.Column="1"
+                                                   Text="Input"
+                                                   FontWeight="SemiBold"
+                                                   Classes="label" />
+                                        <TextBlock Grid.Column="2"
+                                                   Text="Change"
+                                                   FontWeight="SemiBold"
+                                                   Classes="label" />
+                                        <TextBlock Grid.Column="3"
+                                                   Text="Duration"
+                                                   FontWeight="SemiBold"
+                                                   Classes="label" />
+                                        <TextBlock Grid.Column="4"
+                                                   Text="Mode"
+                                                   FontWeight="SemiBold"
+                                                   Classes="label" />
+                                        <TextBlock Grid.Column="5"
+                                                   Text="Content"
+                                                   FontWeight="SemiBold"
+                                                   Classes="label" />
+                                    </Grid>
+
+                                    <ListBox Grid.Row="1"
+                                             ItemsSource="{Binding DisplayTriggers}"
+                                             SelectedItem="{Binding SelectedDisplayTrigger}"
+                                             MinHeight="220">
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <Grid ColumnDefinitions="70,150,110,110,90,*"
+                                                      ColumnSpacing="12">
+                                                    <TextBlock Text="{Binding EnabledDisplay}"
+                                                               FontFamily="Consolas" />
+                                                    <TextBlock Grid.Column="1"
+                                                               Text="{Binding Input}"
+                                                               FontFamily="Consolas"
+                                                               TextTrimming="CharacterEllipsis" />
+                                                    <TextBlock Grid.Column="2"
+                                                               Text="{Binding ChangePercent, StringFormat='{}{0}%'}"
+                                                               FontFamily="Consolas" />
+                                                    <TextBlock Grid.Column="3"
+                                                               Text="{Binding DurationMs, StringFormat='{}{0} ms'}"
+                                                               FontFamily="Consolas" />
+                                                    <TextBlock Grid.Column="4"
+                                                               Text="{Binding TemplateMode}"
+                                                               FontFamily="Consolas" />
+                                                    <TextBlock Grid.Column="5"
+                                                               Text="{Binding TemplateSummary}"
+                                                               FontFamily="Consolas"
+                                                               TextTrimming="CharacterEllipsis" />
+                                                </Grid>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
                                 </Grid>
-                                <Grid ColumnDefinitions="*,*"
-                                      ColumnSpacing="8">
-                                    <StackPanel Spacing="6">
-                                        <TextBlock Classes="label" Text="Change threshold (%)" />
-                                        <NumericUpDown Value="{Binding SliderDisplayTriggerChangePercent}"
+                            </Border>
+
+                            <Border Grid.Row="1"
+                                    Classes="panel">
+                                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto"
+                                      ColumnDefinitions="150,150,150,*"
+                                      RowSpacing="10"
+                                      ColumnSpacing="12">
+                                    <CheckBox Grid.Column="0"
+                                              Content="Enabled"
+                                              IsChecked="{Binding DisplayTriggerEditorEnabled}"
+                                              VerticalAlignment="Center" />
+                                    <ComboBox Grid.Column="1"
+                                              ItemsSource="{Binding AvailableInputs}"
+                                              SelectedItem="{Binding DisplayTriggerEditorInput}"
+                                              HorizontalAlignment="Stretch" />
+                                    <ComboBox Grid.Column="2"
+                                              ItemsSource="{Binding AvailableDisplayTemplateModes}"
+                                              SelectedItem="{Binding DisplayTriggerEditorTemplateMode}"
+                                              HorizontalAlignment="Stretch" />
+                                    <Grid Grid.Column="3"
+                                          ColumnDefinitions="*,*"
+                                          ColumnSpacing="8">
+                                        <NumericUpDown Grid.Column="0"
+                                                       Value="{Binding DisplayTriggerEditorChangePercent}"
                                                        Minimum="0"
                                                        Maximum="100"
                                                        Increment="1" />
-                                    </StackPanel>
-                                    <StackPanel Grid.Column="1"
-                                                Spacing="6">
-                                        <TextBlock Classes="label" Text="Display duration (ms)" />
-                                        <NumericUpDown Value="{Binding SliderDisplayTriggerDurationMs}"
+                                        <NumericUpDown Grid.Column="1"
+                                                       Value="{Binding DisplayTriggerEditorDurationMs}"
                                                        Minimum="0"
                                                        Maximum="60000"
                                                        Increment="500" />
+                                    </Grid>
+
+                                    <Grid Grid.Row="1"
+                                          Grid.ColumnSpan="4"
+                                          ColumnDefinitions="150,150,150,*"
+                                          ColumnSpacing="12">
+                                        <TextBlock Grid.Column="1"
+                                                   Classes="label"
+                                                   Text="Input" />
+                                        <TextBlock Grid.Column="2"
+                                                   Classes="label"
+                                                   Text="Mode" />
+                                        <Grid Grid.Column="3"
+                                              ColumnDefinitions="*,*"
+                                              ColumnSpacing="8">
+                                            <TextBlock Classes="label"
+                                                       Text="Change threshold (%)" />
+                                            <TextBlock Grid.Column="1"
+                                                       Classes="label"
+                                                       Text="Display duration (ms)" />
+                                        </Grid>
+                                    </Grid>
+
+                                    <TextBlock Grid.Row="2"
+                                               Grid.ColumnSpan="4"
+                                               Classes="label"
+                                               Text="Display content" />
+                                    <TextBox Grid.Row="3"
+                                             Grid.ColumnSpan="4"
+                                             Text="{Binding DisplayTriggerEditorTemplate}"
+                                             AcceptsReturn="True"
+                                             MinHeight="160"
+                                             TextWrapping="Wrap" />
+                                    <StackPanel Grid.Row="4"
+                                                Grid.ColumnSpan="4"
+                                                Spacing="8">
+                                        <TextBlock Classes="muted"
+                                                   FontSize="12"
+                                                   TextWrapping="Wrap"
+                                                   Text="{}Placeholders: {slider.id}, {slider.value}, {slider.percent}, {input}, {profile}, {status}. HTML mode supports simple tags such as h1, p, br and li." />
+                                        <TextBlock Text="{Binding DisplayTriggerEditorValidationMessage}"
+                                                   Foreground="#FF7A90"
+                                                   FontSize="12"
+                                                   TextWrapping="Wrap" />
+                                        <Grid ColumnDefinitions="*,*,*"
+                                              ColumnSpacing="8">
+                                            <Button Grid.Column="0"
+                                                    Content="Apply"
+                                                    Command="{Binding ApplyDisplayTriggerCommand}"
+                                                    HorizontalAlignment="Stretch" />
+                                            <Button Grid.Column="1"
+                                                    Content="Add"
+                                                    Command="{Binding AddDisplayTriggerCommand}"
+                                                    HorizontalAlignment="Stretch" />
+                                            <Button Grid.Column="2"
+                                                    Content="Remove"
+                                                    Command="{Binding RemoveDisplayTriggerCommand}"
+                                                    HorizontalAlignment="Stretch" />
+                                        </Grid>
                                     </StackPanel>
                                 </Grid>
-                                <TextBlock Classes="label" Text="Display content" />
-                                <TextBox Text="{Binding SliderDisplayTriggerTemplate}"
-                                         AcceptsReturn="True"
-                                         MinHeight="180"
-                                         TextWrapping="Wrap" />
-                                <TextBlock Classes="muted"
-                                           FontSize="12"
-                                           TextWrapping="Wrap"
-                                           Text="{}Placeholders: {slider.id}, {slider.value}, {slider.percent}, {input}, {profile}, {status}. HTML mode supports simple tags such as h1, p, br and li." />
-                            </StackPanel>
-                        </Border>
+                            </Border>
+                        </Grid>
                     </ScrollViewer>
                 </Grid>
             </TabItem>

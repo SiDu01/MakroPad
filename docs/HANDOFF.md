@@ -41,9 +41,9 @@ MakroPad has a working vertical prototype across firmware and desktop app:
 - Added a configurable app-side deadband for `system.volume` and `app.volume`
   slider actions to suppress adjacent-percent jitter. The default is 2
   percentage points and `0` disables the filter.
-- Added a first configurable OLED display trigger for slider changes. The app
-  can render normal text or lightweight HTML-like content to OLED text lines and
-  sends them as temporary `display;mode=template` messages.
+- Added configurable OLED display triggers for button and slider inputs. The
+  app can render normal text or lightweight HTML-like content to OLED text lines
+  and sends them as temporary `display;mode=template` messages.
 
 ## Supported Actions
 
@@ -72,10 +72,10 @@ MakroPad has a working vertical prototype across firmware and desktop app:
   unless the default template itself contains `{media.*}` placeholders.
 - If the default template contains `{media.*}`, Now Playing updates placeholder
   values without forcing the dedicated media screen.
-- Display triggers are currently app-side settings. The first editor supports
-  one slider trigger with percentage-change threshold, display duration, normal
-  text mode, and lightweight HTML-like mode rendered to plain OLED lines before
-  sending.
+- Display triggers are currently app-side settings. The editor now mirrors the
+  macro binding pattern with a trigger list and Apply/Add/Remove controls.
+  Slider triggers use a percentage-change threshold; button triggers display
+  immediately.
 
 ## Known Limitations
 
@@ -113,8 +113,8 @@ the ESP32-S3-DevKitC-1.
 2. Replace Spotify-window-title Now Playing with Windows Media Session metadata.
 3. Improve the config editor UX with action definitions shared between UI,
    validation, and future docs generation.
-4. Expand display triggers beyond the first slider editor: multiple triggers,
-   button triggers, reusable templates, and better preview/test controls.
+4. Expand display trigger behavior beyond the first matching trigger: reusable
+   templates, ordering/priority controls, and better preview/test controls.
 5. Split the firmware sketch into protocol, display, buttons, and sliders once
    the new sliders have been tested.
 6. Add a small diagnostics screen for current device config, last heartbeat,

@@ -54,8 +54,8 @@ Implemented:
   volume, and uptime placeholders.
 - OLED default screen preview in the settings UI.
 - OLED default screen layout can use either 3 or 5 lines.
-- Configurable OLED slider display trigger with normal text or lightweight
-  HTML-like input rendered to OLED text lines.
+- Configurable OLED display trigger list for buttons and sliders with normal
+  text or lightweight HTML-like input rendered to OLED text lines.
 - Debug view lists active Windows audio sessions for `app.volume` process
   discovery.
 - Config editor shows structured parameter fields for common actions while
@@ -115,8 +115,9 @@ The OLED default screen editor shows a small 128x64-style preview. Long lines
 are clipped to match the firmware's current text fitting behavior. The editor
 supports 3-line and 5-line layouts.
 
-The settings UI also includes a first display trigger editor. It can watch one
-slider, require a configurable percentage change, and then show either normal
+The settings UI also includes a display trigger editor similar to the macro
+binding editor. It can manage multiple button and slider triggers, require a
+configurable percentage change for slider triggers, and then show either normal
 text or lightweight HTML-like content for a configured duration. Supported
 trigger placeholders are `{slider.id}`, `{slider.value}`, `{slider.percent}`,
 `{input}`, `{profile}`, and `{status}`. HTML-like input is rendered app-side to

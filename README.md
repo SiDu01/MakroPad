@@ -41,8 +41,8 @@ Implemented:
 - Windows `app.volume` action for active audio sessions.
 - `system.openUrl`, `system.openApp`, `keyboard.shortcut`, and `log` actions.
 - Configurable OLED default screen with preview and placeholders.
-- Configurable OLED slider display trigger with normal text or lightweight
-  HTML-like content rendered by the app.
+- Configurable OLED display triggers for buttons and sliders with normal text
+  or lightweight HTML-like content rendered by the app.
 - Initial Spotify Now Playing OLED display via the Spotify window title.
 - Dark sidebar UI with sections for macros, device, simulation, settings, and
   debug.
