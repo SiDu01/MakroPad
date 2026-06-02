@@ -5,10 +5,12 @@ namespace MakroPad.Actions;
 public sealed class ActionPipeline
 {
     private static readonly TimeSpan SliderThrottleInterval = TimeSpan.FromMilliseconds(100);
+    private const int SliderVolumePercentDeadband = 2;
 
     private readonly ActionResolver actionResolver;
     private readonly ActionExecutor actionExecutor;
     private readonly Dictionary<string, DateTimeOffset> lastSliderExecutionByInput = [];
+    private readonly Dictionary<string, int> lastSliderVolumePercentByInput = [];
 
     public ActionPipeline(ActionResolver actionResolver, ActionExecutor actionExecutor)
     {
@@ -31,6 +33,11 @@ public sealed class ActionPipeline
         if (binding is null)
         {
             return ActionPipelineResult.Unbound(input, config.ActiveProfile);
+        }
+
+        if (ShouldThrottleSliderVolumeChange(input, binding, value))
+        {
+            return ActionPipelineResult.Throttled(input);
         }
 
         var executionResult = await actionExecutor.ExecuteAsync(
@@ -56,5 +63,45 @@ public sealed class ActionPipeline
 
         lastSliderExecutionByInput[input] = now;
         return false;
+    }
+
+    private bool ShouldThrottleSliderVolumeChange(string input, ActionBinding binding, string? value)
+    {
+        if (!input.StartsWith("slider:", StringComparison.OrdinalIgnoreCase)
+            || !IsSliderVolumeAction(binding.Action)
+            || !TryMapSliderValueToPercent(value, out var percent))
+        {
+            return false;
+        }
+
+        var key = $"{input}:{binding.Action}";
+        if (lastSliderVolumePercentByInput.TryGetValue(key, out var lastPercent)
+            && percent is not 0 and not 100
+            && Math.Abs(percent - lastPercent) < SliderVolumePercentDeadband)
+        {
+            return true;
+        }
+
+        lastSliderVolumePercentByInput[key] = percent;
+        return false;
+    }
+
+    private static bool IsSliderVolumeAction(string action)
+    {
+        return action.Equals("system.volume", StringComparison.OrdinalIgnoreCase)
+            || action.Equals("app.volume", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static bool TryMapSliderValueToPercent(string? sliderValue, out int percent)
+    {
+        percent = 0;
+        if (!int.TryParse(sliderValue, out var rawValue))
+        {
+            return false;
+        }
+
+        var clampedRawValue = Math.Clamp(rawValue, 0, 4095);
+        percent = (int)Math.Round(clampedRawValue / 4095.0 * 100);
+        return true;
     }
 }

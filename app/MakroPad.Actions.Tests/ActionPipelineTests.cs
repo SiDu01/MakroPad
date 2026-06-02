@@ -39,11 +39,30 @@ public sealed class ActionPipelineTests
         Assert.Equal(ActionPipelineResultKind.Throttled, second.Kind);
     }
 
-    private static ActionPipeline CreatePipeline()
+    [Fact]
+    public async Task HandleInputAsyncIgnoresOnePercentSliderVolumeJitter()
+    {
+        var volumeController = new FakeVolumeController();
+        var pipeline = CreatePipeline(volumeController);
+        var config = MakroPadConfig.CreateDefault();
+
+        var first = await pipeline.HandleInputAsync(config, "slider:1", "4095");
+        await Task.Delay(120);
+        var second = await pipeline.HandleInputAsync(config, "slider:1", "4054");
+        await Task.Delay(120);
+        var third = await pipeline.HandleInputAsync(config, "slider:1", "3972");
+
+        Assert.Equal(ActionPipelineResultKind.Executed, first.Kind);
+        Assert.Equal(ActionPipelineResultKind.Throttled, second.Kind);
+        Assert.Equal(ActionPipelineResultKind.Executed, third.Kind);
+        Assert.Equal([100, 97], volumeController.SetVolumes);
+    }
+
+    private static ActionPipeline CreatePipeline(FakeVolumeController? volumeController = null)
     {
         return new ActionPipeline(
             new ActionResolver(),
-            new ActionExecutor(new FakeMediaController(), new FakeVolumeController()));
+            new ActionExecutor(new FakeMediaController(), volumeController ?? new FakeVolumeController()));
     }
 
     private sealed class FakeMediaController : ISystemMediaController
