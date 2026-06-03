@@ -290,6 +290,12 @@ Die Firmware zeigt diese Meldungen temporaer an und kehrt danach zur bevorzugten
 Anzeige zurueck, wenn `actionResultTimeoutMs` groesser als `0` ist. Bei aktivem
 Now Playing ist das der letzte Media-Screen, sonst der Idle-/Profil-Screen.
 
+Die Desktop-App verwendet inzwischen bevorzugt konfigurierbare
+`actionResult`-Display-Trigger und sendet deren gerenderte Inhalte als
+`display;mode=template`. Die `action-result` Nachricht bleibt als
+Kompatibilitaets-Fallback erhalten, wenn kein passender Display-Trigger
+konfiguriert ist oder das Trigger-Senden fehlschlaegt.
+
 Aktuell sendet die App `action-result` nach ausgefuehrten Actions. Beispiele:
 
 ```text

@@ -29,6 +29,31 @@ public sealed record MakroPadConfig
                 Display = new DisplayHardwareConfig()
             },
             ActiveProfile = "Default",
+            AppSettings = new AppSettingsConfig
+            {
+                DisplayTriggerDefaultsInitialized = true,
+                DisplayTriggers =
+                [
+                    new DisplayTriggerConfig
+                    {
+                        Enabled = true,
+                        EventType = "actionResult",
+                        Input = "*",
+                        ActionStatus = "ok",
+                        DurationMs = 3000,
+                        Template = "Action\n{action.message}"
+                    },
+                    new DisplayTriggerConfig
+                    {
+                        Enabled = true,
+                        EventType = "actionResult",
+                        Input = "*",
+                        ActionStatus = "failed",
+                        DurationMs = 3000,
+                        Template = "Action failed\n{action.message}"
+                    }
+                ]
+            },
             Profiles =
             [
                 new ProfileConfig

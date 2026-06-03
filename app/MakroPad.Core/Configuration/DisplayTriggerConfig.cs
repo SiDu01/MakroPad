@@ -4,7 +4,11 @@ public sealed record DisplayTriggerConfig
 {
     public bool Enabled { get; init; }
 
+    public string EventType { get; init; } = "input";
+
     public string Input { get; init; } = "slider:1";
+
+    public string ActionStatus { get; init; } = "any";
 
     public string Condition { get; init; } = "any";
 

@@ -681,11 +681,11 @@
                                                    FontWeight="SemiBold"
                                                    Classes="label" />
                                         <TextBlock Grid.Column="1"
-                                                   Text="Input"
+                                                   Text="Event"
                                                    FontWeight="SemiBold"
                                                    Classes="label" />
                                         <TextBlock Grid.Column="2"
-                                                   Text="Condition"
+                                                   Text="Match"
                                                    FontWeight="SemiBold"
                                                    Classes="label" />
                                         <TextBlock Grid.Column="3"
@@ -717,11 +717,11 @@
                                                     <TextBlock Text="{Binding EnabledDisplay}"
                                                                FontFamily="Consolas" />
                                                     <TextBlock Grid.Column="1"
-                                                               Text="{Binding Input}"
+                                                               Text="{Binding EventType}"
                                                                FontFamily="Consolas"
                                                                TextTrimming="CharacterEllipsis" />
                                                     <TextBlock Grid.Column="2"
-                                                               Text="{Binding ConditionDisplay}"
+                                                               Text="{Binding MatchDisplay}"
                                                                FontFamily="Consolas" />
                                                     <TextBlock Grid.Column="3"
                                                                Text="{Binding ChangePercent, StringFormat='{}{0}%'}"
@@ -745,7 +745,7 @@
 
                             <Border Grid.Row="1"
                                     Classes="panel">
-                                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto"
+                                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto"
                                       ColumnDefinitions="120,140,140,*,256"
                                       RowSpacing="10"
                                       ColumnSpacing="12">
@@ -754,12 +754,12 @@
                                               IsChecked="{Binding DisplayTriggerEditorEnabled}"
                                               VerticalAlignment="Center" />
                                     <ComboBox Grid.Column="1"
-                                              ItemsSource="{Binding AvailableInputs}"
-                                              SelectedItem="{Binding DisplayTriggerEditorInput}"
+                                              ItemsSource="{Binding AvailableDisplayTriggerEventTypes}"
+                                              SelectedItem="{Binding DisplayTriggerEditorEventType}"
                                               HorizontalAlignment="Stretch" />
                                     <ComboBox Grid.Column="2"
-                                              ItemsSource="{Binding AvailableDisplayTemplateModes}"
-                                              SelectedItem="{Binding DisplayTriggerEditorTemplateMode}"
+                                              ItemsSource="{Binding AvailableDisplayTriggerInputs}"
+                                              SelectedItem="{Binding DisplayTriggerEditorInput}"
                                               HorizontalAlignment="Stretch" />
                                     <Grid Grid.Column="3"
                                           ColumnDefinitions="*,*,*,*"
@@ -826,10 +826,10 @@
                                           ColumnSpacing="12">
                                         <TextBlock Grid.Column="1"
                                                    Classes="label"
-                                                   Text="Input" />
+                                                   Text="Event type" />
                                         <TextBlock Grid.Column="2"
                                                    Classes="label"
-                                                   Text="Mode" />
+                                                   Text="Input match" />
                                         <Grid Grid.Column="3"
                                               ColumnDefinitions="*,*,*,*"
                                               ColumnSpacing="8">
@@ -849,33 +849,56 @@
 
                                     <ComboBox Grid.Row="2"
                                               Grid.Column="1"
-                                              Grid.ColumnSpan="2"
+                                              ItemsSource="{Binding AvailableDisplayTemplateModes}"
+                                              SelectedItem="{Binding DisplayTriggerEditorTemplateMode}"
+                                              HorizontalAlignment="Stretch" />
+                                    <ComboBox Grid.Row="2"
+                                              Grid.Column="2"
                                               ItemsSource="{Binding AvailableDisplayTriggerConditions}"
                                               SelectedItem="{Binding DisplayTriggerEditorCondition}"
                                               HorizontalAlignment="Stretch" />
-                                    <TextBlock Grid.Row="2"
-                                               Grid.Column="3"
-                                               Classes="label"
-                                               VerticalAlignment="Center"
-                                               Text="Condition" />
+                                    <Grid Grid.Row="2"
+                                          Grid.Column="3"
+                                          ColumnDefinitions="*,*"
+                                          ColumnSpacing="8">
+                                        <ComboBox ItemsSource="{Binding AvailableDisplayTriggerActionStatuses}"
+                                                  SelectedItem="{Binding DisplayTriggerEditorActionStatus}"
+                                                  HorizontalAlignment="Stretch" />
+                                        <TextBlock Grid.Column="1"
+                                                   Classes="label"
+                                                   VerticalAlignment="Center"
+                                                   Text="Action status" />
+                                    </Grid>
 
-                                    <TextBlock Grid.Row="3"
+                                    <Grid Grid.Row="3"
+                                          Grid.ColumnSpan="4"
+                                          ColumnDefinitions="120,140,140,*"
+                                          ColumnSpacing="12">
+                                        <TextBlock Grid.Column="1"
+                                                   Classes="label"
+                                                   Text="Mode" />
+                                        <TextBlock Grid.Column="2"
+                                                   Classes="label"
+                                                   Text="Slider condition" />
+                                    </Grid>
+
+                                    <TextBlock Grid.Row="4"
                                                Grid.ColumnSpan="4"
                                                Classes="label"
                                                Text="Display content" />
-                                    <TextBox Grid.Row="4"
+                                    <TextBox Grid.Row="5"
                                              Grid.ColumnSpan="4"
                                              Text="{Binding DisplayTriggerEditorTemplate}"
                                              AcceptsReturn="True"
                                              MinHeight="160"
                                              TextWrapping="Wrap" />
-                                    <StackPanel Grid.Row="5"
+                                    <StackPanel Grid.Row="6"
                                                 Grid.ColumnSpan="4"
                                                 Spacing="8">
                                         <TextBlock Classes="muted"
                                                    FontSize="12"
                                                    TextWrapping="Wrap"
-                                                   Text="{}Placeholders: {slider.id}, {slider.value}, {slider.percent}, {input}, {profile}, {status}. HTML mode supports simple tags such as h1, p, br and li." />
+                                                   Text="{}Placeholders: {slider.id}, {slider.value}, {slider.percent}, {action.status}, {action.name}, {action.message}, {input}, {profile}, {status}. HTML mode supports simple tags such as h1, p, br and li." />
                                         <TextBlock Text="{Binding DisplayTriggerEditorValidationMessage}"
                                                    Foreground="#FF7A90"
                                                    FontSize="12"

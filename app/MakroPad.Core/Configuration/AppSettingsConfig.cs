@@ -10,5 +10,7 @@ public sealed record AppSettingsConfig
 
     public List<DisplayTriggerConfig> DisplayTriggers { get; init; } = [];
 
+    public bool DisplayTriggerDefaultsInitialized { get; init; }
+
     public string? LastPort { get; init; }
 }

@@ -43,6 +43,8 @@ Implemented:
 - Configurable OLED default screen with preview and placeholders.
 - Configurable OLED display triggers for buttons and sliders with conditions,
   preview, and normal text or lightweight HTML-like content rendered by the app.
+- Configurable action-result display triggers replace the default hard-coded
+  Action/Action failed screens while keeping firmware fallback compatibility.
 - Initial Spotify Now Playing OLED display via the Spotify window title.
 - Dark sidebar UI with sections for macros, device, simulation, settings, and
   debug.

@@ -111,7 +111,9 @@ public partial class MainWindowViewModel : ViewModelBase
         }
 
         DisplayTriggerEditorEnabled = value?.Enabled ?? true;
+        DisplayTriggerEditorEventType = value?.EventType ?? "input";
         DisplayTriggerEditorInput = value?.Input ?? "slider:1";
+        DisplayTriggerEditorActionStatus = value?.ActionStatus ?? "any";
         DisplayTriggerEditorCondition = value?.Condition ?? "any";
         DisplayTriggerEditorMinPercent = value?.MinPercent ?? 0;
         DisplayTriggerEditorMaxPercent = value?.MaxPercent ?? 100;
@@ -125,6 +127,14 @@ public partial class MainWindowViewModel : ViewModelBase
 
     [ObservableProperty]
     private bool displayTriggerEditorEnabled = true;
+
+    [ObservableProperty]
+    private string displayTriggerEditorEventType = "input";
+
+    partial void OnDisplayTriggerEditorEventTypeChanged(string value)
+    {
+        RefreshDisplayTriggerPreview();
+    }
 
     [ObservableProperty]
     private string displayTriggerEditorInput = "slider:1";
@@ -144,6 +154,14 @@ public partial class MainWindowViewModel : ViewModelBase
 
     [ObservableProperty]
     private int displayTriggerEditorMinPercent;
+
+    [ObservableProperty]
+    private string displayTriggerEditorActionStatus = "any";
+
+    partial void OnDisplayTriggerEditorActionStatusChanged(string value)
+    {
+        RefreshDisplayTriggerPreview();
+    }
 
     partial void OnDisplayTriggerEditorMinPercentChanged(int value)
     {
@@ -419,6 +437,13 @@ public partial class MainWindowViewModel : ViewModelBase
         ..Enumerable.Range(1, 3).Select(id => $"slider:{id}")
     ];
 
+    public IReadOnlyList<string> AvailableDisplayTriggerInputs { get; } =
+    [
+        "*",
+        ..Enumerable.Range(1, 20).Select(id => $"button:{id}"),
+        ..Enumerable.Range(1, 3).Select(id => $"slider:{id}")
+    ];
+
     public IReadOnlyList<int> AvailableButtonIds { get; } =
         Enumerable.Range(1, 20).ToArray();
 
@@ -426,6 +451,10 @@ public partial class MainWindowViewModel : ViewModelBase
         Enumerable.Range(1, 3).ToArray();
 
     public IReadOnlyList<string> AvailableDisplayTemplateModes { get; } = ["normal", "html"];
+
+    public IReadOnlyList<string> AvailableDisplayTriggerEventTypes { get; } = ["input", "actionResult"];
+
+    public IReadOnlyList<string> AvailableDisplayTriggerActionStatuses { get; } = ["any", "ok", "failed"];
 
     public IReadOnlyList<string> AvailableDisplayTriggerConditions { get; } = ["any", "inRange", "increasing", "decreasing"];
 
@@ -555,6 +584,7 @@ public partial class MainWindowViewModel : ViewModelBase
         try
         {
             currentConfig = await configStore.LoadOrCreateDefaultAsync();
+            currentConfig = EnsureDefaultActionResultDisplayTriggers(currentConfig);
             ActiveProfileName = currentConfig.ActiveProfile;
             AutoConnect = currentConfig.AppSettings.AutoConnect;
             EnableNowPlayingDisplay = currentConfig.AppSettings.EnableNowPlayingDisplay;
@@ -1032,7 +1062,17 @@ public partial class MainWindowViewModel : ViewModelBase
             ? LastSliderValue
             : (int?)null;
         var percent = sliderValue is null ? (int?)null : MapSliderValueToPercent(sliderValue.Value);
-        var lines = RenderDisplayTriggerLines(trigger, input, sliderValue, percent);
+        var actionStatus = NormalizeDisplayTriggerEventType(trigger.EventType) == "actionResult"
+            ? NormalizeActionStatus(trigger.ActionStatus) == "any" ? "ok" : NormalizeActionStatus(trigger.ActionStatus)
+            : "";
+        var lines = RenderDisplayTriggerLines(
+            trigger,
+            input,
+            sliderValue,
+            percent,
+            actionStatus,
+            "media.playPause",
+            actionStatus == "failed" ? "Action failed" : "Action completed");
 
         if (lines.Count == 0)
         {
@@ -1159,7 +1199,9 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         var allTriggers = currentConfig.AppSettings.DisplayTriggers
             .Where(candidate => candidate.Enabled
-                && candidate.Input.Equals(input, StringComparison.OrdinalIgnoreCase))
+                && NormalizeDisplayTriggerEventType(candidate.EventType) == "input"
+                && (candidate.Input == "*"
+                    || candidate.Input.Equals(input, StringComparison.OrdinalIgnoreCase)))
             .Select(NormalizeDisplayTrigger)
             .ToList();
 
@@ -1224,13 +1266,23 @@ public partial class MainWindowViewModel : ViewModelBase
         IReadOnlyList<DisplayTriggerConfig> triggers,
         string input,
         int? sliderValue,
-        int? percent)
+        int? percent,
+        string actionStatus = "",
+        string actionName = "",
+        string actionMessage = "")
     {
         var sentCount = 0;
         for (var index = 0; index < triggers.Count; index++)
         {
             var trigger = triggers[index];
-            var lines = RenderDisplayTriggerLines(trigger, input, sliderValue, percent);
+            var lines = RenderDisplayTriggerLines(
+                trigger,
+                input,
+                sliderValue,
+                percent,
+                actionStatus,
+                actionName,
+                actionMessage);
             if (lines.Count == 0)
             {
                 continue;
@@ -1266,6 +1318,18 @@ public partial class MainWindowViewModel : ViewModelBase
         if (activeConnection is not null && result.ShouldSendFeedback && result.ExecutionResult is not null)
         {
             var status = result.ExecutionResult.Succeeded ? "ok" : "failed";
+            var actionName = result.Binding?.Action ?? "";
+            var handledByDisplayTrigger = await HandleActionResultDisplayTriggersAsync(
+                input,
+                status,
+                actionName,
+                result.ExecutionResult.Message);
+
+            if (handledByDisplayTrigger)
+            {
+                return;
+            }
+
             var line = MakroPad.Core.Protocol.ProtocolCodec.Format(
                 "action-result",
                 new Dictionary<string, string?>
@@ -1283,6 +1347,46 @@ public partial class MainWindowViewModel : ViewModelBase
             {
                 AddLog($"Action feedback failed: {ex.Message}");
             }
+        }
+    }
+
+    private async Task<bool> HandleActionResultDisplayTriggersAsync(
+        string input,
+        string status,
+        string actionName,
+        string message)
+    {
+        var triggers = currentConfig.AppSettings.DisplayTriggers
+            .Where(candidate => candidate.Enabled
+                && NormalizeDisplayTriggerEventType(candidate.EventType) == "actionResult"
+                && (candidate.Input == "*"
+                    || candidate.Input.Equals(input, StringComparison.OrdinalIgnoreCase))
+                && (NormalizeActionStatus(candidate.ActionStatus) == "any"
+                    || NormalizeActionStatus(candidate.ActionStatus) == status))
+            .Select(NormalizeDisplayTrigger)
+            .ToList();
+
+        if (triggers.Count == 0)
+        {
+            return false;
+        }
+
+        try
+        {
+            await SendDisplayTriggerSequenceAsync(
+                triggers,
+                input,
+                null,
+                null,
+                status,
+                actionName,
+                message);
+            return true;
+        }
+        catch (Exception ex)
+        {
+            AddLog($"Action result display trigger failed: {ex.Message}");
+            return false;
         }
     }
 
@@ -1579,7 +1683,9 @@ public partial class MainWindowViewModel : ViewModelBase
             DisplayTriggers.Add(new DisplayTriggerViewModel(
                 index,
                 trigger.Enabled,
+                trigger.EventType,
                 trigger.Input,
+                trigger.ActionStatus,
                 trigger.Condition,
                 trigger.MinPercent,
                 trigger.MaxPercent,
@@ -1618,7 +1724,9 @@ public partial class MainWindowViewModel : ViewModelBase
             .Select(trigger => NormalizeDisplayTrigger(new DisplayTriggerConfig
             {
                 Enabled = trigger.Enabled,
+                EventType = trigger.EventType,
                 Input = trigger.Input,
+                ActionStatus = trigger.ActionStatus,
                 Condition = trigger.Condition,
                 MinPercent = trigger.MinPercent,
                 MaxPercent = trigger.MaxPercent,
@@ -1636,9 +1744,10 @@ public partial class MainWindowViewModel : ViewModelBase
         DisplayTriggerEditorValidationMessage = "";
 
         var input = DisplayTriggerEditorInput.Trim();
-        if (!IsSupportedInput(input))
+        var eventType = NormalizeDisplayTriggerEventType(DisplayTriggerEditorEventType);
+        if (input != "*" && !IsSupportedInput(input))
         {
-            SetDisplayTriggerEditorError("Input must look like button:1 or slider:1.");
+            SetDisplayTriggerEditorError("Input must be * or look like button:1 or slider:1.");
             return false;
         }
 
@@ -1648,7 +1757,8 @@ public partial class MainWindowViewModel : ViewModelBase
             return false;
         }
 
-        if (!input.StartsWith("slider:", StringComparison.OrdinalIgnoreCase)
+        if (eventType == "input"
+            && !input.StartsWith("slider:", StringComparison.OrdinalIgnoreCase)
             && NormalizeDisplayTriggerCondition(DisplayTriggerEditorCondition) != "any")
         {
             SetDisplayTriggerEditorError("Slider conditions require a slider input.");
@@ -1658,7 +1768,9 @@ public partial class MainWindowViewModel : ViewModelBase
         trigger = NormalizeDisplayTrigger(new DisplayTriggerConfig
         {
             Enabled = DisplayTriggerEditorEnabled,
+            EventType = eventType,
             Input = input,
+            ActionStatus = DisplayTriggerEditorActionStatus,
             Condition = DisplayTriggerEditorCondition,
             MinPercent = DisplayTriggerEditorMinPercent,
             MaxPercent = DisplayTriggerEditorMaxPercent,
@@ -1681,7 +1793,9 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         return trigger with
         {
+            EventType = NormalizeDisplayTriggerEventType(trigger.EventType),
             Input = string.IsNullOrWhiteSpace(trigger.Input) ? "slider:1" : trigger.Input.Trim(),
+            ActionStatus = NormalizeActionStatus(trigger.ActionStatus),
             Condition = NormalizeDisplayTriggerCondition(trigger.Condition),
             MinPercent = NormalizePercent(trigger.MinPercent),
             MaxPercent = Math.Max(NormalizePercent(trigger.MinPercent), NormalizePercent(trigger.MaxPercent)),
@@ -1714,6 +1828,22 @@ public partial class MainWindowViewModel : ViewModelBase
         return value?.Equals("html", StringComparison.OrdinalIgnoreCase) == true ? "html" : "normal";
     }
 
+    private static string NormalizeDisplayTriggerEventType(string? value)
+    {
+        return value?.Equals("actionResult", StringComparison.OrdinalIgnoreCase) == true
+            ? "actionResult"
+            : "input";
+    }
+
+    private static string NormalizeActionStatus(string? value)
+    {
+        return value switch
+        {
+            "ok" or "failed" => value,
+            _ => "any"
+        };
+    }
+
     private static string NormalizeDisplayTriggerCondition(string? value)
     {
         return value switch
@@ -1734,6 +1864,48 @@ public partial class MainWindowViewModel : ViewModelBase
         };
     }
 
+    private static MakroPadConfig EnsureDefaultActionResultDisplayTriggers(MakroPadConfig config)
+    {
+        if (config.AppSettings.DisplayTriggerDefaultsInitialized)
+        {
+            return config;
+        }
+
+        var triggers = config.AppSettings.DisplayTriggers.ToList();
+        if (!triggers.Any(trigger => NormalizeDisplayTriggerEventType(trigger.EventType) == "actionResult"))
+        {
+            triggers.Add(
+                new DisplayTriggerConfig
+                {
+                    Enabled = true,
+                    EventType = "actionResult",
+                    Input = "*",
+                    ActionStatus = "ok",
+                    DurationMs = config.Hardware.Display.ActionResultTimeoutMs,
+                    Template = "Action\n{action.message}"
+                });
+            triggers.Add(
+                new DisplayTriggerConfig
+                {
+                    Enabled = true,
+                    EventType = "actionResult",
+                    Input = "*",
+                    ActionStatus = "failed",
+                    DurationMs = config.Hardware.Display.ActionResultTimeoutMs,
+                    Template = "Action failed\n{action.message}"
+                });
+        }
+
+        return config with
+        {
+            AppSettings = config.AppSettings with
+            {
+                DisplayTriggerDefaultsInitialized = true,
+                DisplayTriggers = triggers
+            }
+        };
+    }
+
     private static bool TryParseInputId(string input, out int id)
     {
         id = 0;
@@ -1748,9 +1920,23 @@ public partial class MainWindowViewModel : ViewModelBase
         return Math.Clamp((int)Math.Round(Math.Clamp(sliderValue, 0, 4095) / 4095.0 * 100), 0, 100);
     }
 
-    private List<string> RenderDisplayTriggerLines(DisplayTriggerConfig trigger, string input, int? sliderValue, int? percent)
+    private List<string> RenderDisplayTriggerLines(
+        DisplayTriggerConfig trigger,
+        string input,
+        int? sliderValue,
+        int? percent,
+        string actionStatus = "",
+        string actionName = "",
+        string actionMessage = "")
     {
-        var text = ReplaceDisplayTriggerPlaceholders(trigger.Template, input, sliderValue, percent);
+        var text = ReplaceDisplayTriggerPlaceholders(
+            trigger.Template,
+            input,
+            sliderValue,
+            percent,
+            actionStatus,
+            actionName,
+            actionMessage);
         if (NormalizeDisplayTriggerTemplateMode(trigger.TemplateMode) == "html")
         {
             text = RenderHtmlLikeDisplayText(text);
@@ -1765,7 +1951,14 @@ public partial class MainWindowViewModel : ViewModelBase
             .ToList();
     }
 
-    private string ReplaceDisplayTriggerPlaceholders(string template, string input, int? sliderValue, int? percent)
+    private string ReplaceDisplayTriggerPlaceholders(
+        string template,
+        string input,
+        int? sliderValue,
+        int? percent,
+        string actionStatus,
+        string actionName,
+        string actionMessage)
     {
         var sliderId = TryParseInputId(input, out var id) ? id.ToString() : "";
         return template
@@ -1773,6 +1966,9 @@ public partial class MainWindowViewModel : ViewModelBase
             .Replace("{slider.id}", sliderId, StringComparison.OrdinalIgnoreCase)
             .Replace("{slider.value}", sliderValue?.ToString() ?? "", StringComparison.OrdinalIgnoreCase)
             .Replace("{slider.percent}", percent?.ToString() ?? "", StringComparison.OrdinalIgnoreCase)
+            .Replace("{action.status}", actionStatus, StringComparison.OrdinalIgnoreCase)
+            .Replace("{action.name}", actionName, StringComparison.OrdinalIgnoreCase)
+            .Replace("{action.message}", actionMessage, StringComparison.OrdinalIgnoreCase)
             .Replace("{profile}", ActiveProfileName, StringComparison.OrdinalIgnoreCase)
             .Replace("{status}", ConnectionStatus, StringComparison.OrdinalIgnoreCase);
     }
@@ -1799,7 +1995,17 @@ public partial class MainWindowViewModel : ViewModelBase
             ? LastSliderValue
             : (int?)null;
         var percent = sliderValue is null ? (int?)null : MapSliderValueToPercent(sliderValue.Value);
-        SetDisplayTriggerPreviewLines(RenderDisplayTriggerLines(trigger, input, sliderValue, percent));
+        var actionStatus = NormalizeDisplayTriggerEventType(trigger.EventType) == "actionResult"
+            ? NormalizeActionStatus(trigger.ActionStatus) == "any" ? "ok" : NormalizeActionStatus(trigger.ActionStatus)
+            : "";
+        SetDisplayTriggerPreviewLines(RenderDisplayTriggerLines(
+            trigger,
+            input,
+            sliderValue,
+            percent,
+            actionStatus,
+            "media.playPause",
+            actionStatus == "failed" ? "Action failed" : "Action completed"));
     }
 
     private bool TryCreateEditorDisplayTriggerForPreview(out DisplayTriggerConfig trigger)
@@ -1807,7 +2013,9 @@ public partial class MainWindowViewModel : ViewModelBase
         trigger = NormalizeDisplayTrigger(new DisplayTriggerConfig
         {
             Enabled = DisplayTriggerEditorEnabled,
+            EventType = DisplayTriggerEditorEventType,
             Input = string.IsNullOrWhiteSpace(DisplayTriggerEditorInput) ? "slider:1" : DisplayTriggerEditorInput,
+            ActionStatus = DisplayTriggerEditorActionStatus,
             Condition = DisplayTriggerEditorCondition,
             MinPercent = DisplayTriggerEditorMinPercent,
             MaxPercent = DisplayTriggerEditorMaxPercent,
@@ -1961,7 +2169,9 @@ public partial class MainWindowViewModel : ViewModelBase
 public sealed record DisplayTriggerViewModel(
     int Index,
     bool Enabled,
+    string EventType,
     string Input,
+    string ActionStatus,
     string Condition,
     int MinPercent,
     int MaxPercent,
@@ -1989,4 +2199,8 @@ public sealed record DisplayTriggerViewModel(
     public string ConditionDisplay => Condition == "inRange"
         ? $"{Condition} {MinPercent}-{MaxPercent}%"
         : Condition;
+
+    public string MatchDisplay => EventType == "actionResult"
+        ? $"{Input} / {ActionStatus}"
+        : $"{Input} / {ConditionDisplay}";
 }

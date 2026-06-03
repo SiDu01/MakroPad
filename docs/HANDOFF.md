@@ -1,6 +1,6 @@
 # MakroPad Handoff
 
-Last updated: 2026-06-02
+Last updated: 2026-06-03
 
 ## Current State
 
@@ -82,6 +82,11 @@ MakroPad has a working vertical prototype across firmware and desktop app:
   Slider triggers support `any`, `inRange`, `increasing`, and `decreasing`
   conditions. The editor includes an app-side OLED preview and compact wrapping
   action buttons.
+- Display trigger event types now include `input` and `actionResult`.
+  Action-result triggers support `ok`/`failed` matching and action placeholders.
+  Existing configs without action-result triggers receive configurable default
+  Action/Action failed triggers. The legacy firmware `action-result` screen is
+  only used as a fallback when no matching app-side trigger is available.
 
 ## Known Limitations
 
