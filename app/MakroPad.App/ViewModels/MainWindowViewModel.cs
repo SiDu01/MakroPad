@@ -132,8 +132,29 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty]
     private string displayTriggerEditorEventType = "input";
 
+    public bool IsInputDisplayTrigger =>
+        NormalizeDisplayTriggerEventType(DisplayTriggerEditorEventType) == "input";
+
+    public bool IsSliderInputDisplayTrigger =>
+        IsInputDisplayTrigger
+        && DisplayTriggerEditorInput.StartsWith("slider:", StringComparison.OrdinalIgnoreCase);
+
+    public bool IsActionResultDisplayTrigger =>
+        NormalizeDisplayTriggerEventType(DisplayTriggerEditorEventType) == "actionResult";
+
+    public bool IsConnectionChangedDisplayTrigger =>
+        NormalizeDisplayTriggerEventType(DisplayTriggerEditorEventType) == "connectionChanged";
+
+    public bool ShowsDisplayTriggerInputMatch =>
+        IsInputDisplayTrigger || IsActionResultDisplayTrigger;
+
     partial void OnDisplayTriggerEditorEventTypeChanged(string value)
     {
+        OnPropertyChanged(nameof(IsInputDisplayTrigger));
+        OnPropertyChanged(nameof(IsSliderInputDisplayTrigger));
+        OnPropertyChanged(nameof(IsActionResultDisplayTrigger));
+        OnPropertyChanged(nameof(IsConnectionChangedDisplayTrigger));
+        OnPropertyChanged(nameof(ShowsDisplayTriggerInputMatch));
         RefreshDisplayTriggerPreview();
     }
 
@@ -142,6 +163,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
     partial void OnDisplayTriggerEditorInputChanged(string value)
     {
+        OnPropertyChanged(nameof(IsSliderInputDisplayTrigger));
         RefreshDisplayTriggerPreview();
     }
 
@@ -1862,8 +1884,10 @@ public partial class MainWindowViewModel : ViewModelBase
         trigger = new DisplayTriggerConfig();
         DisplayTriggerEditorValidationMessage = "";
 
-        var input = DisplayTriggerEditorInput.Trim();
         var eventType = NormalizeDisplayTriggerEventType(DisplayTriggerEditorEventType);
+        var input = eventType is "mediaChanged" or "connectionChanged"
+            ? "*"
+            : DisplayTriggerEditorInput.Trim();
         if (input != "*" && !IsSupportedInput(input))
         {
             SetDisplayTriggerEditorError("Input must be * or look like button:1 or slider:1.");

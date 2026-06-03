@@ -760,6 +760,7 @@
                                     <ComboBox Grid.Column="2"
                                               ItemsSource="{Binding AvailableDisplayTriggerInputs}"
                                               SelectedItem="{Binding DisplayTriggerEditorInput}"
+                                              IsVisible="{Binding ShowsDisplayTriggerInputMatch}"
                                               HorizontalAlignment="Stretch" />
                                     <Grid Grid.Column="3"
                                           ColumnDefinitions="*,*,*,*"
@@ -768,17 +769,20 @@
                                                        Value="{Binding DisplayTriggerEditorMinPercent}"
                                                        Minimum="0"
                                                        Maximum="100"
-                                                       Increment="1" />
+                                                       Increment="1"
+                                                       IsVisible="{Binding IsSliderInputDisplayTrigger}" />
                                         <NumericUpDown Grid.Column="1"
                                                        Value="{Binding DisplayTriggerEditorMaxPercent}"
                                                        Minimum="0"
                                                        Maximum="100"
-                                                       Increment="1" />
+                                                       Increment="1"
+                                                       IsVisible="{Binding IsSliderInputDisplayTrigger}" />
                                         <NumericUpDown Grid.Column="2"
                                                        Value="{Binding DisplayTriggerEditorChangePercent}"
                                                        Minimum="0"
                                                        Maximum="100"
-                                                       Increment="1" />
+                                                       Increment="1"
+                                                       IsVisible="{Binding IsSliderInputDisplayTrigger}" />
                                         <NumericUpDown Grid.Column="3"
                                                        Value="{Binding DisplayTriggerEditorDurationMs}"
                                                        Minimum="0"
@@ -829,18 +833,22 @@
                                                    Text="Event type" />
                                         <TextBlock Grid.Column="2"
                                                    Classes="label"
-                                                   Text="Input match" />
+                                                   Text="Input match"
+                                                   IsVisible="{Binding ShowsDisplayTriggerInputMatch}" />
                                         <Grid Grid.Column="3"
                                               ColumnDefinitions="*,*,*,*"
                                               ColumnSpacing="8">
                                             <TextBlock Classes="label"
-                                                       Text="Min %" />
+                                                       Text="Min %"
+                                                       IsVisible="{Binding IsSliderInputDisplayTrigger}" />
                                             <TextBlock Grid.Column="1"
                                                        Classes="label"
-                                                       Text="Max %" />
+                                                       Text="Max %"
+                                                       IsVisible="{Binding IsSliderInputDisplayTrigger}" />
                                             <TextBlock Grid.Column="2"
                                                        Classes="label"
-                                                       Text="Change threshold (%)" />
+                                                       Text="Change threshold (%)"
+                                                       IsVisible="{Binding IsSliderInputDisplayTrigger}" />
                                             <TextBlock Grid.Column="3"
                                                        Classes="label"
                                                        Text="Display duration (ms)" />
@@ -856,6 +864,7 @@
                                               Grid.Column="2"
                                               ItemsSource="{Binding AvailableDisplayTriggerConditions}"
                                               SelectedItem="{Binding DisplayTriggerEditorCondition}"
+                                              IsVisible="{Binding IsSliderInputDisplayTrigger}"
                                               HorizontalAlignment="Stretch" />
                                     <Grid Grid.Row="2"
                                           Grid.Column="3"
@@ -863,10 +872,12 @@
                                           ColumnSpacing="8">
                                         <ComboBox ItemsSource="{Binding AvailableDisplayTriggerActionStatuses}"
                                                   SelectedItem="{Binding DisplayTriggerEditorActionStatus}"
+                                                  IsVisible="{Binding IsActionResultDisplayTrigger}"
                                                   HorizontalAlignment="Stretch" />
                                         <ComboBox Grid.Column="1"
                                                   ItemsSource="{Binding AvailableDisplayTriggerConnectionStatuses}"
                                                   SelectedItem="{Binding DisplayTriggerEditorConnectionStatus}"
+                                                  IsVisible="{Binding IsConnectionChangedDisplayTrigger}"
                                                   HorizontalAlignment="Stretch" />
                                     </Grid>
 
@@ -879,15 +890,18 @@
                                                    Text="Mode" />
                                         <TextBlock Grid.Column="2"
                                                    Classes="label"
-                                                   Text="Slider condition" />
+                                                   Text="Slider condition"
+                                                   IsVisible="{Binding IsSliderInputDisplayTrigger}" />
                                         <Grid Grid.Column="3"
                                               ColumnDefinitions="*,*"
                                               ColumnSpacing="8">
                                             <TextBlock Classes="label"
-                                                       Text="Action status" />
+                                                       Text="Action status"
+                                                       IsVisible="{Binding IsActionResultDisplayTrigger}" />
                                             <TextBlock Grid.Column="1"
                                                        Classes="label"
-                                                       Text="Connection status" />
+                                                       Text="Connection status"
+                                                       IsVisible="{Binding IsConnectionChangedDisplayTrigger}" />
                                         </Grid>
                                     </Grid>
 

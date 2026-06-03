@@ -81,7 +81,8 @@ MakroPad has a working vertical prototype across firmware and desktop app:
   sequence, and the editor has Up/Down controls to reorder that sequence.
   Slider triggers support `any`, `inRange`, `increasing`, and `decreasing`
   conditions. The editor includes an app-side OLED preview and compact wrapping
-  action buttons.
+  action buttons. Match, condition, and status controls are shown only when they
+  apply to the selected trigger event type.
 - Display trigger event types now include `input` and `actionResult`.
   Action-result triggers support `ok`/`failed` matching and action placeholders.
   Existing configs without action-result triggers receive configurable default

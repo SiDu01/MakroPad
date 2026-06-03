@@ -123,7 +123,8 @@ Test button sends the current editor content to the connected OLED immediately.
 The editor also shows an app-side OLED preview and supports slider conditions:
 `any`, `inRange`, `increasing`, and `decreasing`.
 Trigger event types are `input`, `actionResult`, `mediaChanged`, and
-`connectionChanged`.
+`connectionChanged`. The editor only shows match and condition controls that
+are relevant to the selected event type.
 Action-result triggers can match `ok`, `failed`, or both statuses and use `{action.status}`,
 `{action.name}`, and `{action.message}` placeholders. Existing configs without
 action-result triggers receive default configurable Action and Action failed
