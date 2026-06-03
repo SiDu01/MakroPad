@@ -45,6 +45,8 @@ Implemented:
   preview, and normal text or lightweight HTML-like content rendered by the app.
 - Configurable action-result display triggers replace the default hard-coded
   Action/Action failed screens while keeping firmware fallback compatibility.
+- Configurable media-changed display triggers replace the default visible
+  Now Playing screen while preserving firmware media-state synchronization.
 - Initial Spotify Now Playing OLED display via the Spotify window title.
 - Dark sidebar UI with sections for macros, device, simulation, settings, and
   debug.

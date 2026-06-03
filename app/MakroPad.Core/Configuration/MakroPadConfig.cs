@@ -32,6 +32,7 @@ public sealed record MakroPadConfig
             AppSettings = new AppSettingsConfig
             {
                 DisplayTriggerDefaultsInitialized = true,
+                MediaTriggerDefaultsInitialized = true,
                 DisplayTriggers =
                 [
                     new DisplayTriggerConfig
@@ -51,6 +52,14 @@ public sealed record MakroPadConfig
                         ActionStatus = "failed",
                         DurationMs = 3000,
                         Template = "Action failed\n{action.message}"
+                    },
+                    new DisplayTriggerConfig
+                    {
+                        Enabled = true,
+                        EventType = "mediaChanged",
+                        Input = "*",
+                        DurationMs = 0,
+                        Template = "Media\n{media.artist}\n{media.title}"
                     }
                 ]
             },

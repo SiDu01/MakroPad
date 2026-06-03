@@ -296,6 +296,13 @@ Die Desktop-App verwendet inzwischen bevorzugt konfigurierbare
 Kompatibilitaets-Fallback erhalten, wenn kein passender Display-Trigger
 konfiguriert ist oder das Trigger-Senden fehlschlaegt.
 
+Now-Playing-Aenderungen werden ebenfalls bevorzugt ueber konfigurierbare
+`mediaChanged`-Display-Trigger sichtbar gemacht. Die App sendet weiterhin
+`display;mode=media` zur Synchronisierung von Artist/Title in der Firmware,
+setzt dabei aber `preferred=false`, wenn ein aktiver Media-Trigger die sichtbare
+Anzeige uebernimmt. Ohne aktiven Media-Trigger bleibt der dedizierte Media-Screen
+der Fallback.
+
 Aktuell sendet die App `action-result` nach ausgefuehrten Actions. Beispiele:
 
 ```text

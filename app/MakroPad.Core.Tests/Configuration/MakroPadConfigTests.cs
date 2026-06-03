@@ -19,5 +19,12 @@ public sealed class MakroPadConfigTests
         Assert.Contains(actionResultTriggers, trigger => trigger.ActionStatus == "ok");
         Assert.Contains(actionResultTriggers, trigger => trigger.ActionStatus == "failed");
         Assert.All(actionResultTriggers, trigger => Assert.Contains("{action.message}", trigger.Template));
+
+        Assert.True(config.AppSettings.MediaTriggerDefaultsInitialized);
+        var mediaTrigger = Assert.Single(
+            config.AppSettings.DisplayTriggers,
+            trigger => trigger.EventType == "mediaChanged");
+        Assert.Contains("{media.artist}", mediaTrigger.Template);
+        Assert.Contains("{media.title}", mediaTrigger.Template);
     }
 }

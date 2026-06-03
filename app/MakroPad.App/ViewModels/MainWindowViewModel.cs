@@ -452,7 +452,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public IReadOnlyList<string> AvailableDisplayTemplateModes { get; } = ["normal", "html"];
 
-    public IReadOnlyList<string> AvailableDisplayTriggerEventTypes { get; } = ["input", "actionResult"];
+    public IReadOnlyList<string> AvailableDisplayTriggerEventTypes { get; } = ["input", "actionResult", "mediaChanged"];
 
     public IReadOnlyList<string> AvailableDisplayTriggerActionStatuses { get; } = ["any", "ok", "failed"];
 
@@ -490,6 +490,8 @@ public partial class MainWindowViewModel : ViewModelBase
         _ = NowPlayingViewModel.RunLoopAsync(
             () => activeConnection,
             DefaultScreenUsesMediaPlaceholder,
+            HasMediaChangedDisplayTrigger,
+            HandleMediaChangedDisplayTriggerAsync,
             SendDeviceConfigAsync,
             AddLog,
             nowPlayingCancellation.Token);
@@ -585,6 +587,7 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             currentConfig = await configStore.LoadOrCreateDefaultAsync();
             currentConfig = EnsureDefaultActionResultDisplayTriggers(currentConfig);
+            currentConfig = EnsureDefaultMediaChangedDisplayTrigger(currentConfig);
             ActiveProfileName = currentConfig.ActiveProfile;
             AutoConnect = currentConfig.AppSettings.AutoConnect;
             EnableNowPlayingDisplay = currentConfig.AppSettings.EnableNowPlayingDisplay;
@@ -1065,6 +1068,7 @@ public partial class MainWindowViewModel : ViewModelBase
         var actionStatus = NormalizeDisplayTriggerEventType(trigger.EventType) == "actionResult"
             ? NormalizeActionStatus(trigger.ActionStatus) == "any" ? "ok" : NormalizeActionStatus(trigger.ActionStatus)
             : "";
+        var mediaTrack = NowPlayingViewModel.LastSentTrack ?? new NowPlayingTrack("Artist", "Track title");
         var lines = RenderDisplayTriggerLines(
             trigger,
             input,
@@ -1072,7 +1076,9 @@ public partial class MainWindowViewModel : ViewModelBase
             percent,
             actionStatus,
             "media.playPause",
-            actionStatus == "failed" ? "Action failed" : "Action completed");
+            actionStatus == "failed" ? "Action failed" : "Action completed",
+            mediaTrack.Artist,
+            mediaTrack.Title);
 
         if (lines.Count == 0)
         {
@@ -1269,7 +1275,10 @@ public partial class MainWindowViewModel : ViewModelBase
         int? percent,
         string actionStatus = "",
         string actionName = "",
-        string actionMessage = "")
+        string actionMessage = "",
+        string mediaArtist = "",
+        string mediaTitle = "",
+        CancellationToken cancellationToken = default)
     {
         var sentCount = 0;
         for (var index = 0; index < triggers.Count; index++)
@@ -1282,19 +1291,21 @@ public partial class MainWindowViewModel : ViewModelBase
                 percent,
                 actionStatus,
                 actionName,
-                actionMessage);
+                actionMessage,
+                mediaArtist,
+                mediaTitle);
             if (lines.Count == 0)
             {
                 continue;
             }
 
             var durationMs = NormalizeDisplayTriggerDurationMs(trigger.DurationMs);
-            await deviceDisplaySyncService.SendTemporaryTemplateAsync(activeConnection, lines, durationMs);
+            await deviceDisplaySyncService.SendTemporaryTemplateAsync(activeConnection, lines, durationMs, cancellationToken);
             sentCount++;
 
             if (index < triggers.Count - 1 && durationMs > 0)
             {
-                await Task.Delay(durationMs);
+                await Task.Delay(durationMs, cancellationToken);
             }
         }
 
@@ -1371,6 +1382,17 @@ public partial class MainWindowViewModel : ViewModelBase
             return false;
         }
 
+        var mediaTrack = NowPlayingViewModel.LastSentTrack;
+        if (mediaTrack is not null
+            && triggers.Any(trigger => NormalizeDisplayTriggerDurationMs(trigger.DurationMs) > 0))
+        {
+            triggers.AddRange(
+                currentConfig.AppSettings.DisplayTriggers
+                    .Where(trigger => trigger.Enabled
+                        && NormalizeDisplayTriggerEventType(trigger.EventType) == "mediaChanged")
+                    .Select(NormalizeDisplayTrigger));
+        }
+
         try
         {
             await SendDisplayTriggerSequenceAsync(
@@ -1380,13 +1402,54 @@ public partial class MainWindowViewModel : ViewModelBase
                 null,
                 status,
                 actionName,
-                message);
+                message,
+                mediaTrack?.Artist ?? "",
+                mediaTrack?.Title ?? "");
             return true;
         }
         catch (Exception ex)
         {
             AddLog($"Action result display trigger failed: {ex.Message}");
             return false;
+        }
+    }
+
+    private bool HasMediaChangedDisplayTrigger()
+    {
+        return currentConfig.AppSettings.DisplayTriggers.Any(
+            trigger => trigger.Enabled
+                && NormalizeDisplayTriggerEventType(trigger.EventType) == "mediaChanged");
+    }
+
+    private async Task HandleMediaChangedDisplayTriggerAsync(
+        NowPlayingTrack track,
+        CancellationToken cancellationToken)
+    {
+        var triggers = currentConfig.AppSettings.DisplayTriggers
+            .Where(trigger => trigger.Enabled
+                && NormalizeDisplayTriggerEventType(trigger.EventType) == "mediaChanged")
+            .Select(NormalizeDisplayTrigger)
+            .ToList();
+
+        if (triggers.Count == 0)
+        {
+            return;
+        }
+
+        try
+        {
+            await SendDisplayTriggerSequenceAsync(
+                triggers,
+                "*",
+                null,
+                null,
+                mediaArtist: track.Artist,
+                mediaTitle: track.Title,
+                cancellationToken: cancellationToken);
+        }
+        catch (Exception ex)
+        {
+            AddLog($"Media changed display trigger failed: {ex.Message}");
         }
     }
 
@@ -1830,9 +1893,11 @@ public partial class MainWindowViewModel : ViewModelBase
 
     private static string NormalizeDisplayTriggerEventType(string? value)
     {
-        return value?.Equals("actionResult", StringComparison.OrdinalIgnoreCase) == true
-            ? "actionResult"
-            : "input";
+        return value switch
+        {
+            "actionResult" or "mediaChanged" => value,
+            _ => "input"
+        };
     }
 
     private static string NormalizeActionStatus(string? value)
@@ -1906,6 +1971,37 @@ public partial class MainWindowViewModel : ViewModelBase
         };
     }
 
+    private static MakroPadConfig EnsureDefaultMediaChangedDisplayTrigger(MakroPadConfig config)
+    {
+        if (config.AppSettings.MediaTriggerDefaultsInitialized)
+        {
+            return config;
+        }
+
+        var triggers = config.AppSettings.DisplayTriggers.ToList();
+        if (!triggers.Any(trigger => NormalizeDisplayTriggerEventType(trigger.EventType) == "mediaChanged"))
+        {
+            triggers.Add(
+                new DisplayTriggerConfig
+                {
+                    Enabled = true,
+                    EventType = "mediaChanged",
+                    Input = "*",
+                    DurationMs = 0,
+                    Template = "Media\n{media.artist}\n{media.title}"
+                });
+        }
+
+        return config with
+        {
+            AppSettings = config.AppSettings with
+            {
+                MediaTriggerDefaultsInitialized = true,
+                DisplayTriggers = triggers
+            }
+        };
+    }
+
     private static bool TryParseInputId(string input, out int id)
     {
         id = 0;
@@ -1927,7 +2023,9 @@ public partial class MainWindowViewModel : ViewModelBase
         int? percent,
         string actionStatus = "",
         string actionName = "",
-        string actionMessage = "")
+        string actionMessage = "",
+        string mediaArtist = "",
+        string mediaTitle = "")
     {
         var text = ReplaceDisplayTriggerPlaceholders(
             trigger.Template,
@@ -1936,7 +2034,9 @@ public partial class MainWindowViewModel : ViewModelBase
             percent,
             actionStatus,
             actionName,
-            actionMessage);
+            actionMessage,
+            mediaArtist,
+            mediaTitle);
         if (NormalizeDisplayTriggerTemplateMode(trigger.TemplateMode) == "html")
         {
             text = RenderHtmlLikeDisplayText(text);
@@ -1958,7 +2058,9 @@ public partial class MainWindowViewModel : ViewModelBase
         int? percent,
         string actionStatus,
         string actionName,
-        string actionMessage)
+        string actionMessage,
+        string mediaArtist,
+        string mediaTitle)
     {
         var sliderId = TryParseInputId(input, out var id) ? id.ToString() : "";
         return template
@@ -1969,6 +2071,9 @@ public partial class MainWindowViewModel : ViewModelBase
             .Replace("{action.status}", actionStatus, StringComparison.OrdinalIgnoreCase)
             .Replace("{action.name}", actionName, StringComparison.OrdinalIgnoreCase)
             .Replace("{action.message}", actionMessage, StringComparison.OrdinalIgnoreCase)
+            .Replace("{media.artist}", mediaArtist, StringComparison.OrdinalIgnoreCase)
+            .Replace("{media.title}", mediaTitle, StringComparison.OrdinalIgnoreCase)
+            .Replace("{media.track}", string.IsNullOrWhiteSpace(mediaArtist) ? mediaTitle : $"{mediaArtist} - {mediaTitle}", StringComparison.OrdinalIgnoreCase)
             .Replace("{profile}", ActiveProfileName, StringComparison.OrdinalIgnoreCase)
             .Replace("{status}", ConnectionStatus, StringComparison.OrdinalIgnoreCase);
     }
@@ -1998,6 +2103,7 @@ public partial class MainWindowViewModel : ViewModelBase
         var actionStatus = NormalizeDisplayTriggerEventType(trigger.EventType) == "actionResult"
             ? NormalizeActionStatus(trigger.ActionStatus) == "any" ? "ok" : NormalizeActionStatus(trigger.ActionStatus)
             : "";
+        var mediaTrack = NowPlayingViewModel.LastSentTrack ?? new NowPlayingTrack("Artist", "Track title");
         SetDisplayTriggerPreviewLines(RenderDisplayTriggerLines(
             trigger,
             input,
@@ -2005,7 +2111,9 @@ public partial class MainWindowViewModel : ViewModelBase
             percent,
             actionStatus,
             "media.playPause",
-            actionStatus == "failed" ? "Action failed" : "Action completed"));
+            actionStatus == "failed" ? "Action failed" : "Action completed",
+            mediaTrack.Artist,
+            mediaTrack.Title));
     }
 
     private bool TryCreateEditorDisplayTriggerForPreview(out DisplayTriggerConfig trigger)
@@ -2202,5 +2310,7 @@ public sealed record DisplayTriggerViewModel(
 
     public string MatchDisplay => EventType == "actionResult"
         ? $"{Input} / {ActionStatus}"
-        : $"{Input} / {ConditionDisplay}";
+        : EventType == "mediaChanged"
+            ? "*"
+            : $"{Input} / {ConditionDisplay}";
 }

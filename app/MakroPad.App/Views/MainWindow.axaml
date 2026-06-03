@@ -898,7 +898,7 @@
                                         <TextBlock Classes="muted"
                                                    FontSize="12"
                                                    TextWrapping="Wrap"
-                                                   Text="{}Placeholders: {slider.id}, {slider.value}, {slider.percent}, {action.status}, {action.name}, {action.message}, {input}, {profile}, {status}. HTML mode supports simple tags such as h1, p, br and li." />
+                                                   Text="{}Placeholders: {slider.id}, {slider.value}, {slider.percent}, {action.status}, {action.name}, {action.message}, {media.artist}, {media.title}, {media.track}, {input}, {profile}, {status}. HTML mode supports simple tags such as h1, p, br and li." />
                                         <TextBlock Text="{Binding DisplayTriggerEditorValidationMessage}"
                                                    Foreground="#FF7A90"
                                                    FontSize="12"

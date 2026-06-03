@@ -12,5 +12,7 @@ public sealed record AppSettingsConfig
 
     public bool DisplayTriggerDefaultsInitialized { get; init; }
 
+    public bool MediaTriggerDefaultsInitialized { get; init; }
+
     public string? LastPort { get; init; }
 }

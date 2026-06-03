@@ -40,6 +40,8 @@ public partial class NowPlayingViewModel : ViewModelBase
     public async Task RunLoopAsync(
         Func<IMakroPadConnection?> getConnection,
         Func<bool> defaultScreenUsesMediaPlaceholder,
+        Func<bool> hasMediaChangedDisplayTrigger,
+        Func<NowPlayingTrack, CancellationToken, Task> handleMediaChangedDisplayAsync,
         Func<Task> sendDeviceConfigAsync,
         Action<string> addLog,
         CancellationToken cancellationToken)
@@ -54,6 +56,8 @@ public partial class NowPlayingViewModel : ViewModelBase
                 await UpdateAsync(
                     getConnection,
                     defaultScreenUsesMediaPlaceholder,
+                    hasMediaChangedDisplayTrigger,
+                    handleMediaChangedDisplayAsync,
                     sendDeviceConfigAsync,
                     addLog,
                     cancellationToken);
@@ -73,6 +77,8 @@ public partial class NowPlayingViewModel : ViewModelBase
     private async Task UpdateAsync(
         Func<IMakroPadConnection?> getConnection,
         Func<bool> defaultScreenUsesMediaPlaceholder,
+        Func<bool> hasMediaChangedDisplayTrigger,
+        Func<NowPlayingTrack, CancellationToken, Task> handleMediaChangedDisplayAsync,
         Func<Task> sendDeviceConfigAsync,
         Action<string> addLog,
         CancellationToken cancellationToken)
@@ -112,6 +118,7 @@ public partial class NowPlayingViewModel : ViewModelBase
             return;
         }
 
+        var hasMediaChangedTrigger = hasMediaChangedDisplayTrigger();
         var line = ProtocolCodec.Format(
             "display",
             new Dictionary<string, string?>
@@ -119,7 +126,7 @@ public partial class NowPlayingViewModel : ViewModelBase
                 ["mode"] = "media",
                 ["artist"] = track.Artist,
                 ["title"] = track.Title,
-                ["preferred"] = defaultScreenUsesMediaPlaceholder() ? "false" : "true"
+                ["preferred"] = defaultScreenUsesMediaPlaceholder() || hasMediaChangedTrigger ? "false" : "true"
             });
 
         try
@@ -127,6 +134,10 @@ public partial class NowPlayingViewModel : ViewModelBase
             await connection.SendLineAsync(line, cancellationToken);
             LastSentTrack = track;
             TrackChanged?.Invoke(this, EventArgs.Empty);
+            if (hasMediaChangedTrigger)
+            {
+                await handleMediaChangedDisplayAsync(track, cancellationToken);
+            }
         }
         catch (Exception ex)
         {

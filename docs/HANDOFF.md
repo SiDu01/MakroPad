@@ -87,6 +87,13 @@ MakroPad has a working vertical prototype across firmware and desktop app:
   Existing configs without action-result triggers receive configurable default
   Action/Action failed triggers. The legacy firmware `action-result` screen is
   only used as a fallback when no matching app-side trigger is available.
+- Display trigger event types also include `mediaChanged`, with
+  `{media.artist}`, `{media.title}`, and `{media.track}` placeholders. Existing
+  configs receive a persistent default Media trigger once. The dedicated
+  firmware media screen is now only a fallback when no enabled media trigger
+  exists, while media state is still synchronized for default-screen
+  placeholders and return behavior. Temporary action-result trigger sequences
+  append the active media trigger so the configured Media screen returns.
 
 ## Known Limitations
 

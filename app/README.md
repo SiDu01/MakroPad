@@ -122,11 +122,18 @@ text or lightweight HTML-like content for a configured duration. The editor's
 Test button sends the current editor content to the connected OLED immediately.
 The editor also shows an app-side OLED preview and supports slider conditions:
 `any`, `inRange`, `increasing`, and `decreasing`.
-Trigger event types are `input` and `actionResult`. Action-result triggers can
-match `ok`, `failed`, or both statuses and use `{action.status}`,
+Trigger event types are `input`, `actionResult`, and `mediaChanged`.
+Action-result triggers can match `ok`, `failed`, or both statuses and use `{action.status}`,
 `{action.name}`, and `{action.message}` placeholders. Existing configs without
 action-result triggers receive default configurable Action and Action failed
 triggers when loaded.
+The `mediaChanged` event type can use `{media.artist}`, `{media.title}`, and
+`{media.track}`. Existing configs receive a persistent default Media trigger
+once. The app still synchronizes media state to the firmware so default-screen
+media placeholders and return behavior continue to work; the dedicated firmware
+media screen is used only when no enabled `mediaChanged` trigger exists.
+After temporary action-result trigger screens, an active media trigger is
+appended to the sequence so the configured Media screen becomes visible again.
 When multiple enabled triggers match the same input, the app sends their display
 screens in list order and waits each trigger's duration before sending the next
 screen. The editor provides Up/Down controls to change this sequence order.
@@ -142,9 +149,8 @@ automatic OLED reset for action results. The default screen supports
 `{media.track}`, `{volume.system}`, and `{device.uptime}` placeholders.
 
 Now Playing is an initial implementation: it polls the Spotify desktop window
-title on Windows and sends `display;mode=media;artist=...;title=...` when the
-track changes. A later implementation should use Windows Media Session metadata
-directly.
+title on Windows and updates the firmware media state when the track changes.
+A later implementation should use Windows Media Session metadata directly.
 After temporary action-result messages, the firmware returns to the last media
 screen while Now Playing is active. If the default screen template contains a
 `{media.*}` placeholder, Now Playing updates the placeholder values instead of
