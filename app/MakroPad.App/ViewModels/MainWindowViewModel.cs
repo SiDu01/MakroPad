@@ -114,6 +114,7 @@ public partial class MainWindowViewModel : ViewModelBase
         DisplayTriggerEditorEventType = value?.EventType ?? "input";
         DisplayTriggerEditorInput = value?.Input ?? "slider:1";
         DisplayTriggerEditorActionStatus = value?.ActionStatus ?? "any";
+        DisplayTriggerEditorConnectionStatus = value?.ConnectionStatus ?? "any";
         DisplayTriggerEditorCondition = value?.Condition ?? "any";
         DisplayTriggerEditorMinPercent = value?.MinPercent ?? 0;
         DisplayTriggerEditorMaxPercent = value?.MaxPercent ?? 100;
@@ -159,6 +160,14 @@ public partial class MainWindowViewModel : ViewModelBase
     private string displayTriggerEditorActionStatus = "any";
 
     partial void OnDisplayTriggerEditorActionStatusChanged(string value)
+    {
+        RefreshDisplayTriggerPreview();
+    }
+
+    [ObservableProperty]
+    private string displayTriggerEditorConnectionStatus = "any";
+
+    partial void OnDisplayTriggerEditorConnectionStatusChanged(string value)
     {
         RefreshDisplayTriggerPreview();
     }
@@ -388,6 +397,8 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         OnPropertyChanged(nameof(ConnectionStatusBrush));
         RefreshOledPreview();
+        RefreshDisplayTriggerPreview();
+        _ = HandleConnectionStatusDisplayAsync(value);
     }
 
     public string OledPreviewTitle => RenderOledPreview().Title;
@@ -452,9 +463,12 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public IReadOnlyList<string> AvailableDisplayTemplateModes { get; } = ["normal", "html"];
 
-    public IReadOnlyList<string> AvailableDisplayTriggerEventTypes { get; } = ["input", "actionResult", "mediaChanged"];
+    public IReadOnlyList<string> AvailableDisplayTriggerEventTypes { get; } = ["input", "actionResult", "mediaChanged", "connectionChanged"];
 
     public IReadOnlyList<string> AvailableDisplayTriggerActionStatuses { get; } = ["any", "ok", "failed"];
+
+    public IReadOnlyList<string> AvailableDisplayTriggerConnectionStatuses { get; } =
+        ["any", "connected", "connecting", "unresponsive", "disconnected"];
 
     public IReadOnlyList<string> AvailableDisplayTriggerConditions { get; } = ["any", "inRange", "increasing", "decreasing"];
 
@@ -537,10 +551,6 @@ public partial class MainWindowViewModel : ViewModelBase
             await activeConnection.ConnectAsync(SelectedPort);
             ConnectionStatus = activeConnection.State.ToString();
 
-            if (activeConnection.State == DeviceConnectionState.Connected)
-            {
-                await SendDeviceConfigAsync();
-            }
         }
         catch (Exception ex)
         {
@@ -1078,7 +1088,8 @@ public partial class MainWindowViewModel : ViewModelBase
             "media.playPause",
             actionStatus == "failed" ? "Action failed" : "Action completed",
             mediaTrack.Artist,
-            mediaTrack.Title);
+            mediaTrack.Title,
+            ConnectionStatus);
 
         if (lines.Count == 0)
         {
@@ -1278,6 +1289,7 @@ public partial class MainWindowViewModel : ViewModelBase
         string actionMessage = "",
         string mediaArtist = "",
         string mediaTitle = "",
+        string connectionStatus = "",
         CancellationToken cancellationToken = default)
     {
         var sentCount = 0;
@@ -1293,7 +1305,8 @@ public partial class MainWindowViewModel : ViewModelBase
                 actionName,
                 actionMessage,
                 mediaArtist,
-                mediaTitle);
+                mediaTitle,
+                connectionStatus);
             if (lines.Count == 0)
             {
                 continue;
@@ -1451,6 +1464,47 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             AddLog($"Media changed display trigger failed: {ex.Message}");
         }
+    }
+
+    private async Task HandleConnectionChangedDisplayTriggersAsync(string connectionStatus)
+    {
+        var normalizedStatus = NormalizeConnectionStatus(connectionStatus);
+        var triggers = currentConfig.AppSettings.DisplayTriggers
+            .Where(trigger => trigger.Enabled
+                && NormalizeDisplayTriggerEventType(trigger.EventType) == "connectionChanged"
+                && (NormalizeConnectionStatus(trigger.ConnectionStatus) == "any"
+                    || NormalizeConnectionStatus(trigger.ConnectionStatus) == normalizedStatus))
+            .Select(NormalizeDisplayTrigger)
+            .ToList();
+
+        if (triggers.Count == 0)
+        {
+            return;
+        }
+
+        try
+        {
+            await SendDisplayTriggerSequenceAsync(
+                triggers,
+                "*",
+                null,
+                null,
+                connectionStatus: connectionStatus);
+        }
+        catch (Exception ex)
+        {
+            AddLog($"Connection changed display trigger failed: {ex.Message}");
+        }
+    }
+
+    private async Task HandleConnectionStatusDisplayAsync(string connectionStatus)
+    {
+        if (connectionStatus.Equals("Connected", StringComparison.OrdinalIgnoreCase))
+        {
+            await SendDeviceConfigAsync();
+        }
+
+        await HandleConnectionChangedDisplayTriggersAsync(connectionStatus);
     }
 
     private async Task SendDeviceConfigAsync()
@@ -1749,6 +1803,7 @@ public partial class MainWindowViewModel : ViewModelBase
                 trigger.EventType,
                 trigger.Input,
                 trigger.ActionStatus,
+                trigger.ConnectionStatus,
                 trigger.Condition,
                 trigger.MinPercent,
                 trigger.MaxPercent,
@@ -1790,6 +1845,7 @@ public partial class MainWindowViewModel : ViewModelBase
                 EventType = trigger.EventType,
                 Input = trigger.Input,
                 ActionStatus = trigger.ActionStatus,
+                ConnectionStatus = trigger.ConnectionStatus,
                 Condition = trigger.Condition,
                 MinPercent = trigger.MinPercent,
                 MaxPercent = trigger.MaxPercent,
@@ -1834,6 +1890,7 @@ public partial class MainWindowViewModel : ViewModelBase
             EventType = eventType,
             Input = input,
             ActionStatus = DisplayTriggerEditorActionStatus,
+            ConnectionStatus = DisplayTriggerEditorConnectionStatus,
             Condition = DisplayTriggerEditorCondition,
             MinPercent = DisplayTriggerEditorMinPercent,
             MaxPercent = DisplayTriggerEditorMaxPercent,
@@ -1859,6 +1916,7 @@ public partial class MainWindowViewModel : ViewModelBase
             EventType = NormalizeDisplayTriggerEventType(trigger.EventType),
             Input = string.IsNullOrWhiteSpace(trigger.Input) ? "slider:1" : trigger.Input.Trim(),
             ActionStatus = NormalizeActionStatus(trigger.ActionStatus),
+            ConnectionStatus = NormalizeConnectionStatus(trigger.ConnectionStatus),
             Condition = NormalizeDisplayTriggerCondition(trigger.Condition),
             MinPercent = NormalizePercent(trigger.MinPercent),
             MaxPercent = Math.Max(NormalizePercent(trigger.MinPercent), NormalizePercent(trigger.MaxPercent)),
@@ -1895,7 +1953,7 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         return value switch
         {
-            "actionResult" or "mediaChanged" => value,
+            "actionResult" or "mediaChanged" or "connectionChanged" => value,
             _ => "input"
         };
     }
@@ -1905,6 +1963,15 @@ public partial class MainWindowViewModel : ViewModelBase
         return value switch
         {
             "ok" or "failed" => value,
+            _ => "any"
+        };
+    }
+
+    private static string NormalizeConnectionStatus(string? value)
+    {
+        return value?.ToLowerInvariant() switch
+        {
+            "connected" or "connecting" or "unresponsive" or "disconnected" => value.ToLowerInvariant(),
             _ => "any"
         };
     }
@@ -2025,7 +2092,8 @@ public partial class MainWindowViewModel : ViewModelBase
         string actionName = "",
         string actionMessage = "",
         string mediaArtist = "",
-        string mediaTitle = "")
+        string mediaTitle = "",
+        string connectionStatus = "")
     {
         var text = ReplaceDisplayTriggerPlaceholders(
             trigger.Template,
@@ -2036,7 +2104,8 @@ public partial class MainWindowViewModel : ViewModelBase
             actionName,
             actionMessage,
             mediaArtist,
-            mediaTitle);
+            mediaTitle,
+            connectionStatus);
         if (NormalizeDisplayTriggerTemplateMode(trigger.TemplateMode) == "html")
         {
             text = RenderHtmlLikeDisplayText(text);
@@ -2060,7 +2129,8 @@ public partial class MainWindowViewModel : ViewModelBase
         string actionName,
         string actionMessage,
         string mediaArtist,
-        string mediaTitle)
+        string mediaTitle,
+        string connectionStatus)
     {
         var sliderId = TryParseInputId(input, out var id) ? id.ToString() : "";
         return template
@@ -2074,6 +2144,7 @@ public partial class MainWindowViewModel : ViewModelBase
             .Replace("{media.artist}", mediaArtist, StringComparison.OrdinalIgnoreCase)
             .Replace("{media.title}", mediaTitle, StringComparison.OrdinalIgnoreCase)
             .Replace("{media.track}", string.IsNullOrWhiteSpace(mediaArtist) ? mediaTitle : $"{mediaArtist} - {mediaTitle}", StringComparison.OrdinalIgnoreCase)
+            .Replace("{connection.status}", connectionStatus, StringComparison.OrdinalIgnoreCase)
             .Replace("{profile}", ActiveProfileName, StringComparison.OrdinalIgnoreCase)
             .Replace("{status}", ConnectionStatus, StringComparison.OrdinalIgnoreCase);
     }
@@ -2113,7 +2184,8 @@ public partial class MainWindowViewModel : ViewModelBase
             "media.playPause",
             actionStatus == "failed" ? "Action failed" : "Action completed",
             mediaTrack.Artist,
-            mediaTrack.Title));
+            mediaTrack.Title,
+            ConnectionStatus));
     }
 
     private bool TryCreateEditorDisplayTriggerForPreview(out DisplayTriggerConfig trigger)
@@ -2124,6 +2196,7 @@ public partial class MainWindowViewModel : ViewModelBase
             EventType = DisplayTriggerEditorEventType,
             Input = string.IsNullOrWhiteSpace(DisplayTriggerEditorInput) ? "slider:1" : DisplayTriggerEditorInput,
             ActionStatus = DisplayTriggerEditorActionStatus,
+            ConnectionStatus = DisplayTriggerEditorConnectionStatus,
             Condition = DisplayTriggerEditorCondition,
             MinPercent = DisplayTriggerEditorMinPercent,
             MaxPercent = DisplayTriggerEditorMaxPercent,
@@ -2280,6 +2353,7 @@ public sealed record DisplayTriggerViewModel(
     string EventType,
     string Input,
     string ActionStatus,
+    string ConnectionStatus,
     string Condition,
     int MinPercent,
     int MaxPercent,
@@ -2312,5 +2386,7 @@ public sealed record DisplayTriggerViewModel(
         ? $"{Input} / {ActionStatus}"
         : EventType == "mediaChanged"
             ? "*"
-            : $"{Input} / {ConditionDisplay}";
+            : EventType == "connectionChanged"
+                ? ConnectionStatus
+                : $"{Input} / {ConditionDisplay}";
 }

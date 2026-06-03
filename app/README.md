@@ -122,7 +122,8 @@ text or lightweight HTML-like content for a configured duration. The editor's
 Test button sends the current editor content to the connected OLED immediately.
 The editor also shows an app-side OLED preview and supports slider conditions:
 `any`, `inRange`, `increasing`, and `decreasing`.
-Trigger event types are `input`, `actionResult`, and `mediaChanged`.
+Trigger event types are `input`, `actionResult`, `mediaChanged`, and
+`connectionChanged`.
 Action-result triggers can match `ok`, `failed`, or both statuses and use `{action.status}`,
 `{action.name}`, and `{action.message}` placeholders. Existing configs without
 action-result triggers receive default configurable Action and Action failed
@@ -134,6 +135,10 @@ media placeholders and return behavior continue to work; the dedicated firmware
 media screen is used only when no enabled `mediaChanged` trigger exists.
 After temporary action-result trigger screens, an active media trigger is
 appended to the sequence so the configured Media screen becomes visible again.
+Connection-changed triggers can match `connected`, `connecting`, `unresponsive`,
+`disconnected`, or `any`, and use `{connection.status}`. The app can only send a
+screen while the transport is still writable, so firmware screens remain the
+fallback for true offline states.
 When multiple enabled triggers match the same input, the app sends their display
 screens in list order and waits each trigger's duration before sending the next
 screen. The editor provides Up/Down controls to change this sequence order.

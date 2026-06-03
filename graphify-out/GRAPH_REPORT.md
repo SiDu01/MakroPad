@@ -1,16 +1,16 @@
 # Graph Report - MakroPad  (2026-06-03)
 
 ## Corpus Check
-- 76 files · ~21,086 words
+- 76 files · ~21,377 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 787 nodes · 1061 edges · 90 communities (63 shown, 27 thin omitted)
+- 791 nodes · 1075 edges · 90 communities (63 shown, 27 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 13 edges (avg confidence: 0.81)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `72dfac24`
+- Built from commit: `0b3f9aa8`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -71,7 +71,7 @@
 - [[_COMMUNITY_Community 90|Community 90]]
 
 ## God Nodes (most connected - your core abstractions)
-1. `MainWindowViewModel` - 153 edges
+1. `MainWindowViewModel` - 157 edges
 2. `SerialMakroPadConnection` - 28 edges
 3. `ActionExecutor` - 20 edges
 4. `MakroPad Firmware` - 19 edges
@@ -118,8 +118,8 @@ Cohesion: 0.11
 Nodes (22): Build and Test Workflow, German Collaboration Rules, Git Commit Workflow, MakroPad Agent Workflow, Repository Editing Rules, Dual Serial Output, Firmware and Desktop App Architecture, Avalonia UI Technology Choice (+14 more)
 
 ### Community 5 - "Community 5"
-Cohesion: 0.09
-Nodes (7): ISystemMediaController, ISystemVolumeController, NoopSystemVolumeController, ActionPipelineTests, FakeMediaController, FakeVolumeController, WindowsSystemVolumeController
+Cohesion: 0.16
+Nodes (4): ISystemMediaController, ActionPipelineTests, FakeMediaController, FakeVolumeController
 
 ### Community 6 - "Community 6"
 Cohesion: 0.05
@@ -138,8 +138,8 @@ Cohesion: 0.19
 Nodes (4): DeviceConnectionState, IMakroPadConnection, DeviceConnectionState, SimulatedMakroPadConnection
 
 ### Community 12 - "Community 12"
-Cohesion: 0.18
-Nodes (7): Dictionary, uint, ushort, Dictionary, uint, ushort, WindowsKeyboardController
+Cohesion: 0.13
+Nodes (9): Dictionary, uint, ushort, IKeyboardController, NoopKeyboardController, Dictionary, uint, ushort (+1 more)
 
 ### Community 14 - "Community 14"
 Cohesion: 0.20
@@ -166,7 +166,7 @@ Cohesion: 1.00
 Nodes (3): ActionDefinition Metadata Model, Config Editor Parameter Hints, Structured Action Controls
 
 ### Community 45 - "Community 45"
-Cohesion: 0.13
+Cohesion: 0.14
 Nodes (8): IApplicationVolumeController, string, INowPlayingProvider, string, ObservableObject, AudioSessionsViewModel, NowPlayingViewModel, ViewModelBase
 
 ### Community 62 - "Community 62"
@@ -194,8 +194,8 @@ Cohesion: 0.20
 Nodes (9): Abschlussformat, code:powershell (dotnet build app\MakroPad.sln), Entwicklung, Git, graphify, MakroPad Agent Workflow, Projektfokus, Sprache und Zusammenarbeit (+1 more)
 
 ### Community 69 - "Community 69"
-Cohesion: 0.06
-Nodes (10): IKeyboardController, ISystemLauncher, NoopKeyboardController, SystemLauncher, ActionExecutorTests, FakeApplicationVolumeController, FakeKeyboardController, FakeMediaController (+2 more)
+Cohesion: 0.05
+Nodes (11): ISystemLauncher, ISystemVolumeController, NoopSystemVolumeController, SystemLauncher, ActionExecutorTests, FakeApplicationVolumeController, FakeKeyboardController, FakeMediaController (+3 more)
 
 ### Community 70 - "Community 70"
 Cohesion: 0.33
@@ -218,16 +218,16 @@ Nodes (3): ISystemVolumeController, OledDefaultScreenRenderer, DeviceDisplaySync
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `MainWindowViewModel` connect `Community 1` to `Community 2`, `Community 8`, `Community 11`, `Community 13`, `Community 45`, `Community 16`, `Community 21`, `Community 90`?**
-  _High betweenness centrality (0.047) - this node is a cross-community bridge._
+  _High betweenness centrality (0.048) - this node is a cross-community bridge._
 - **Why does `FakeMediaController` connect `Community 69` to `Community 5`?**
   _High betweenness centrality (0.012) - this node is a cross-community bridge._
+- **Why does `FakeKeyboardController` connect `Community 69` to `Community 12`?**
+  _High betweenness centrality (0.008) - this node is a cross-community bridge._
 - **What connects `PreToolUse`, `ISystemMediaController`, `ISystemVolumeController` to the rest of the system?**
   _193 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
   _Cohesion score 0.05551020408163265 - nodes in this community are weakly interconnected._
 - **Should `Community 1` be split into smaller, more focused modules?**
-  _Cohesion score 0.04249871991807476 - nodes in this community are weakly interconnected._
-- **Should `Community 3` be split into smaller, more focused modules?**
-  _Cohesion score 0.12169312169312169 - nodes in this community are weakly interconnected._
-- **Should `Community 4` be split into smaller, more focused modules?**
-  _Cohesion score 0.10822510822510822 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.042162698412698416 - nodes in this community are weakly interconnected._
+- **Should `Community 2` be split into smaller, more focused modules?**
+  _Cohesion score 0.14153846153846153 - nodes in this community are weakly interconnected._

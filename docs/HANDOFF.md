@@ -94,6 +94,10 @@ MakroPad has a working vertical prototype across firmware and desktop app:
   exists, while media state is still synchronized for default-screen
   placeholders and return behavior. Temporary action-result trigger sequences
   append the active media trigger so the configured Media screen returns.
+- Display trigger event types also include `connectionChanged`, with status
+  matching for connected, connecting, unresponsive, disconnected, or any and a
+  `{connection.status}` placeholder. Firmware status screens remain the fallback
+  when the transport is no longer writable.
 
 ## Known Limitations
 

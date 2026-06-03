@@ -864,10 +864,10 @@
                                         <ComboBox ItemsSource="{Binding AvailableDisplayTriggerActionStatuses}"
                                                   SelectedItem="{Binding DisplayTriggerEditorActionStatus}"
                                                   HorizontalAlignment="Stretch" />
-                                        <TextBlock Grid.Column="1"
-                                                   Classes="label"
-                                                   VerticalAlignment="Center"
-                                                   Text="Action status" />
+                                        <ComboBox Grid.Column="1"
+                                                  ItemsSource="{Binding AvailableDisplayTriggerConnectionStatuses}"
+                                                  SelectedItem="{Binding DisplayTriggerEditorConnectionStatus}"
+                                                  HorizontalAlignment="Stretch" />
                                     </Grid>
 
                                     <Grid Grid.Row="3"
@@ -880,6 +880,15 @@
                                         <TextBlock Grid.Column="2"
                                                    Classes="label"
                                                    Text="Slider condition" />
+                                        <Grid Grid.Column="3"
+                                              ColumnDefinitions="*,*"
+                                              ColumnSpacing="8">
+                                            <TextBlock Classes="label"
+                                                       Text="Action status" />
+                                            <TextBlock Grid.Column="1"
+                                                       Classes="label"
+                                                       Text="Connection status" />
+                                        </Grid>
                                     </Grid>
 
                                     <TextBlock Grid.Row="4"
@@ -898,7 +907,7 @@
                                         <TextBlock Classes="muted"
                                                    FontSize="12"
                                                    TextWrapping="Wrap"
-                                                   Text="{}Placeholders: {slider.id}, {slider.value}, {slider.percent}, {action.status}, {action.name}, {action.message}, {media.artist}, {media.title}, {media.track}, {input}, {profile}, {status}. HTML mode supports simple tags such as h1, p, br and li." />
+                                                   Text="{}Placeholders: {slider.id}, {slider.value}, {slider.percent}, {action.status}, {action.name}, {action.message}, {media.artist}, {media.title}, {media.track}, {connection.status}, {input}, {profile}, {status}. HTML mode supports simple tags such as h1, p, br and li." />
                                         <TextBlock Text="{Binding DisplayTriggerEditorValidationMessage}"
                                                    Foreground="#FF7A90"
                                                    FontSize="12"

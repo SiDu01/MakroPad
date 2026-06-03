@@ -303,6 +303,11 @@ setzt dabei aber `preferred=false`, wenn ein aktiver Media-Trigger die sichtbare
 Anzeige uebernimmt. Ohne aktiven Media-Trigger bleibt der dedizierte Media-Screen
 der Fallback.
 
+Verbindungsstatus-Aenderungen koennen appseitig ueber konfigurierbare
+`connectionChanged`-Display-Trigger angezeigt werden. Da bei einem echten
+Disconnect keine serielle Nachricht mehr gesendet werden kann, bleiben die
+Firmware-Statusscreens fuer Offline-Zustaende der notwendige Fallback.
+
 Aktuell sendet die App `action-result` nach ausgefuehrten Actions. Beispiele:
 
 ```text

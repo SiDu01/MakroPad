@@ -10,6 +10,8 @@ public sealed record DisplayTriggerConfig
 
     public string ActionStatus { get; init; } = "any";
 
+    public string ConnectionStatus { get; init; } = "any";
+
     public string Condition { get; init; } = "any";
 
     public int MinPercent { get; init; } = 0;

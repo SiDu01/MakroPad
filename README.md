@@ -47,6 +47,8 @@ Implemented:
   Action/Action failed screens while keeping firmware fallback compatibility.
 - Configurable media-changed display triggers replace the default visible
   Now Playing screen while preserving firmware media-state synchronization.
+- Configurable connection-changed display triggers can react to connected,
+  connecting, unresponsive, and disconnected states.
 - Initial Spotify Now Playing OLED display via the Spotify window title.
 - Dark sidebar UI with sections for macros, device, simulation, settings, and
   debug.
