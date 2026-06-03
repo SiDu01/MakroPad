@@ -40,7 +40,23 @@ public sealed class MakroPadConfigStore
             Directory.CreateDirectory(directory);
         }
 
-        await using var stream = File.Create(ConfigPath);
-        await JsonSerializer.SerializeAsync(stream, config, JsonOptions, cancellationToken);
+        var tempPath = $"{ConfigPath}.{Guid.NewGuid():N}.tmp";
+        try
+        {
+            await using (var stream = File.Create(tempPath))
+            {
+                await JsonSerializer.SerializeAsync(stream, config, JsonOptions, cancellationToken);
+                await stream.FlushAsync(cancellationToken);
+            }
+
+            File.Move(tempPath, ConfigPath, true);
+        }
+        finally
+        {
+            if (File.Exists(tempPath))
+            {
+                File.Delete(tempPath);
+            }
+        }
     }
 }

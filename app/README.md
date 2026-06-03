@@ -122,9 +122,13 @@ text or lightweight HTML-like content for a configured duration. The editor's
 Test button sends the current editor content to the connected OLED immediately.
 The editor also shows an app-side OLED preview and supports slider conditions:
 `any`, `inRange`, `increasing`, and `decreasing`.
-Trigger event types are `input`, `actionResult`, `mediaChanged`, and
-`connectionChanged`. The editor only shows match and condition controls that
-are relevant to the selected event type.
+Trigger event types are `input`, `actionResult`, `mediaChanged`,
+`connectionChanged`, and `profileChanged`. The editor only shows match and
+condition controls that are relevant to the selected event type.
+Built-in presets, trigger duplication, editable event-specific preview values,
+match diagnostics, content warnings, and a device-width preview make trigger
+authoring possible without generating every real hardware event. Saving the
+config also applies the currently selected valid trigger draft.
 Action-result triggers can match `ok`, `failed`, or both statuses and use `{action.status}`,
 `{action.name}`, and `{action.message}` placeholders. Existing configs without
 action-result triggers receive default configurable Action and Action failed
@@ -140,9 +144,15 @@ Connection-changed triggers can match `connected`, `connecting`, `unresponsive`,
 `disconnected`, or `any`, and use `{connection.status}`. The app can only send a
 screen while the transport is still writable, so firmware screens remain the
 fallback for true offline states.
+Profile-changed triggers use `{profile}` and can show a custom temporary screen
+after the active profile changes.
 When multiple enabled triggers match the same input, the app sends their display
 screens in list order and waits each trigger's duration before sending the next
-screen. The editor provides Up/Down controls to change this sequence order.
+screen. A newer display event cancels an older sequence so delayed screens do
+not overwrite newer information. The editor provides Up/Down controls to change
+this sequence order and shows sequence diagnostics for identical matches.
+Slider thresholds are evaluated independently per trigger and accumulate from
+that trigger's last displayed value.
 Supported trigger placeholders are `{slider.id}`, `{slider.value}`,
 `{slider.percent}`, `{input}`, `{profile}`, and `{status}`. HTML-like input is
 rendered app-side to plain OLED text lines before it is sent to the firmware.

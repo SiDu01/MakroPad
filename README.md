@@ -49,6 +49,11 @@ Implemented:
   Now Playing screen while preserving firmware media-state synchronization.
 - Configurable connection-changed display triggers can react to connected,
   connecting, unresponsive, and disconnected states.
+- Configurable profile-changed display triggers can show custom profile switch
+  screens.
+- Display trigger presets, editable preview values, match diagnostics, and
+  independently accumulated slider thresholds make trigger authoring testable
+  without generating every real device event.
 - Initial Spotify Now Playing OLED display via the Spotify window title.
 - Dark sidebar UI with sections for macros, device, simulation, settings, and
   debug.

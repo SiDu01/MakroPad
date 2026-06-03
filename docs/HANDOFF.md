@@ -82,7 +82,9 @@ MakroPad has a working vertical prototype across firmware and desktop app:
   Slider triggers support `any`, `inRange`, `increasing`, and `decreasing`
   conditions. The editor includes an app-side OLED preview and compact wrapping
   action buttons. Match, condition, and status controls are shown only when they
-  apply to the selected trigger event type.
+  apply to the selected trigger event type. Built-in presets, duplication,
+  editable preview values, match diagnostics, content warnings, draft status,
+  and device-width clipping make the editor suitable for normal use.
 - Display trigger event types now include `input` and `actionResult`.
   Action-result triggers support `ok`/`failed` matching and action placeholders.
   Existing configs without action-result triggers receive configurable default
@@ -99,6 +101,15 @@ MakroPad has a working vertical prototype across firmware and desktop app:
   matching for connected, connecting, unresponsive, disconnected, or any and a
   `{connection.status}` placeholder. Firmware status screens remain the fallback
   when the transport is no longer writable.
+- Display trigger event types also include `profileChanged`, which can show a
+  custom screen after the active profile changes.
+- Display trigger normalization, rendering, matching, and slider input tracking
+  now live in `MakroPad.Core.DisplayTriggers` with unit tests. Slider thresholds
+  accumulate independently per trigger, newer display events cancel older
+  delayed sequences, and action-result screens are no longer immediately
+  overwritten by input-trigger screens from the same input event.
+- Legacy display-trigger defaults are persisted immediately after migration,
+  and config writes use a temporary file plus atomic replacement.
 
 ## Known Limitations
 
@@ -136,11 +147,9 @@ the ESP32-S3-DevKitC-1.
 2. Replace Spotify-window-title Now Playing with Windows Media Session metadata.
 3. Improve the config editor UX with action definitions shared between UI,
    validation, and future docs generation.
-4. Expand display trigger editing with reusable templates and richer preview
-   controls.
-5. Split the firmware sketch into protocol, display, buttons, and sliders once
+4. Split the firmware sketch into protocol, display, buttons, and sliders once
    the new sliders have been tested.
-6. Add a small diagnostics screen for current device config, last heartbeat,
+5. Add a small diagnostics screen for current device config, last heartbeat,
    last input, and last OLED message.
 
 Recommendation: continue the `MainWindowViewModel` split with action metadata.

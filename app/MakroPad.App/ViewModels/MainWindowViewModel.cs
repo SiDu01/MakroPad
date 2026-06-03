@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,6 +12,7 @@ using CommunityToolkit.Mvvm.Input;
 using MakroPad.App.Services;
 using MakroPad.Actions;
 using MakroPad.Core.Configuration;
+using MakroPad.Core.DisplayTriggers;
 using MakroPad.Device;
 
 namespace MakroPad.App.ViewModels;
@@ -38,6 +38,17 @@ public partial class MainWindowViewModel : ViewModelBase
     ];
     private static readonly IReadOnlyDictionary<string, ActionDefinition> ActionDefinitionLookup =
         ActionDefinitions.ToDictionary(definition => definition.Id, StringComparer.OrdinalIgnoreCase);
+    private static readonly IReadOnlyList<DisplayTriggerPreset> DisplayTriggerPresets =
+    [
+        new("Slider value", "input", "slider:1", "any", "any", "any", 0, 100, 5, 1500, "normal", "Slider {slider.id}\n{slider.percent}%"),
+        new("Button pressed", "input", "button:1", "any", "any", "any", 0, 100, 0, 1500, "normal", "Input\n{input}"),
+        new("Action completed", "actionResult", "*", "ok", "any", "any", 0, 100, 0, 3000, "normal", "Action\n{action.message}"),
+        new("Action failed", "actionResult", "*", "failed", "any", "any", 0, 100, 0, 3000, "normal", "Action failed\n{action.message}"),
+        new("Now playing", "mediaChanged", "*", "any", "any", "any", 0, 100, 0, 0, "normal", "Media\n{media.artist}\n{media.title}"),
+        new("Connection status", "connectionChanged", "*", "any", "any", "any", 0, 100, 0, 2000, "normal", "MakroPad\n{connection.status}"),
+        new("Profile changed", "profileChanged", "*", "any", "any", "any", 0, 100, 0, 2000, "normal", "Profile\n{profile}"),
+        new("HTML list", "input", "button:1", "any", "any", "any", 0, 100, 0, 2500, "html", "<h1>{profile}</h1><p>{input}</p><ul><li>{status}</li></ul>")
+    ];
 
     private readonly SimulatedMakroPadConnection simulatedConnection = new();
     private readonly SerialMakroPadConnection serialConnection = new();
@@ -51,7 +62,10 @@ public partial class MainWindowViewModel : ViewModelBase
     private MakroPadConfig currentConfig = MakroPadConfig.CreateDefault();
     private bool isRefreshingEditor;
     private bool isRefreshingDisplayTriggerEditor;
-    private readonly Dictionary<string, int> lastDisplayTriggerPercentByInput = new(StringComparer.OrdinalIgnoreCase);
+    private bool isLoadingConfig;
+    private readonly DisplayTriggerInputTracker displayTriggerInputTracker = new();
+    private readonly object displayTriggerSequenceLock = new();
+    private CancellationTokenSource? displayTriggerSequenceCancellation;
 
     [ObservableProperty]
     private string connectionStatus = "Disconnected";
@@ -110,27 +124,50 @@ public partial class MainWindowViewModel : ViewModelBase
             return;
         }
 
-        DisplayTriggerEditorEnabled = value?.Enabled ?? true;
-        DisplayTriggerEditorEventType = value?.EventType ?? "input";
-        DisplayTriggerEditorInput = value?.Input ?? "slider:1";
-        DisplayTriggerEditorActionStatus = value?.ActionStatus ?? "any";
-        DisplayTriggerEditorConnectionStatus = value?.ConnectionStatus ?? "any";
-        DisplayTriggerEditorCondition = value?.Condition ?? "any";
-        DisplayTriggerEditorMinPercent = value?.MinPercent ?? 0;
-        DisplayTriggerEditorMaxPercent = value?.MaxPercent ?? 100;
-        DisplayTriggerEditorChangePercent = value?.ChangePercent ?? 5;
-        DisplayTriggerEditorDurationMs = value?.DurationMs ?? 3000;
-        DisplayTriggerEditorTemplateMode = value?.TemplateMode ?? "normal";
-        DisplayTriggerEditorTemplate = value?.Template ?? "Slider {slider.id}\n{slider.percent}%";
-        DisplayTriggerEditorValidationMessage = "";
+        isRefreshingDisplayTriggerEditor = true;
+        try
+        {
+            DisplayTriggerEditorEnabled = value?.Enabled ?? true;
+            DisplayTriggerEditorEventType = value?.EventType ?? "input";
+            DisplayTriggerEditorInput = value?.Input ?? "slider:1";
+            DisplayTriggerEditorActionStatus = value?.ActionStatus ?? "any";
+            DisplayTriggerEditorConnectionStatus = value?.ConnectionStatus ?? "any";
+            DisplayTriggerEditorCondition = value?.Condition ?? "any";
+            DisplayTriggerEditorMinPercent = value?.MinPercent ?? 0;
+            DisplayTriggerEditorMaxPercent = value?.MaxPercent ?? 100;
+            DisplayTriggerEditorChangePercent = value?.ChangePercent ?? 5;
+            DisplayTriggerEditorDurationMs = value?.DurationMs ?? 3000;
+            DisplayTriggerEditorTemplateMode = value?.TemplateMode ?? "normal";
+            DisplayTriggerEditorTemplate = value?.Template ?? "Slider {slider.id}\n{slider.percent}%";
+            DisplayTriggerEditorValidationMessage = "";
+        }
+        finally
+        {
+            isRefreshingDisplayTriggerEditor = false;
+        }
+
         RefreshDisplayTriggerPreview();
     }
 
     [ObservableProperty]
     private bool displayTriggerEditorEnabled = true;
 
+    partial void OnDisplayTriggerEditorEnabledChanged(bool value)
+    {
+        RefreshDisplayTriggerPreview();
+    }
+
     [ObservableProperty]
     private string displayTriggerEditorEventType = "input";
+
+    public string DisplayTriggerPlaceholderHint => NormalizeDisplayTriggerEventType(DisplayTriggerEditorEventType) switch
+    {
+        "actionResult" => "{}Placeholders: {action.status}, {action.name}, {action.message}, {input}, {profile}, {status}.",
+        "mediaChanged" => "{}Placeholders: {media.artist}, {media.title}, {media.track}, {profile}, {status}.",
+        "connectionChanged" => "{}Placeholders: {connection.status}, {profile}, {status}.",
+        "profileChanged" => "{}Placeholders: {profile}, {status}.",
+        _ => "{}Placeholders: {input}, {slider.id}, {slider.value}, {slider.percent}, {profile}, {status}."
+    };
 
     public bool IsInputDisplayTrigger =>
         NormalizeDisplayTriggerEventType(DisplayTriggerEditorEventType) == "input";
@@ -142,19 +179,31 @@ public partial class MainWindowViewModel : ViewModelBase
     public bool IsActionResultDisplayTrigger =>
         NormalizeDisplayTriggerEventType(DisplayTriggerEditorEventType) == "actionResult";
 
+    public bool IsMediaChangedDisplayTrigger =>
+        NormalizeDisplayTriggerEventType(DisplayTriggerEditorEventType) == "mediaChanged";
+
     public bool IsConnectionChangedDisplayTrigger =>
         NormalizeDisplayTriggerEventType(DisplayTriggerEditorEventType) == "connectionChanged";
 
     public bool ShowsDisplayTriggerInputMatch =>
         IsInputDisplayTrigger || IsActionResultDisplayTrigger;
 
+    public bool ShowsDisplayTriggerPreviewValues =>
+        IsSliderInputDisplayTrigger
+        || IsActionResultDisplayTrigger
+        || IsMediaChangedDisplayTrigger
+        || IsConnectionChangedDisplayTrigger;
+
     partial void OnDisplayTriggerEditorEventTypeChanged(string value)
     {
         OnPropertyChanged(nameof(IsInputDisplayTrigger));
         OnPropertyChanged(nameof(IsSliderInputDisplayTrigger));
         OnPropertyChanged(nameof(IsActionResultDisplayTrigger));
+        OnPropertyChanged(nameof(IsMediaChangedDisplayTrigger));
         OnPropertyChanged(nameof(IsConnectionChangedDisplayTrigger));
         OnPropertyChanged(nameof(ShowsDisplayTriggerInputMatch));
+        OnPropertyChanged(nameof(ShowsDisplayTriggerPreviewValues));
+        OnPropertyChanged(nameof(DisplayTriggerPlaceholderHint));
         RefreshDisplayTriggerPreview();
     }
 
@@ -164,6 +213,7 @@ public partial class MainWindowViewModel : ViewModelBase
     partial void OnDisplayTriggerEditorInputChanged(string value)
     {
         OnPropertyChanged(nameof(IsSliderInputDisplayTrigger));
+        OnPropertyChanged(nameof(ShowsDisplayTriggerPreviewValues));
         RefreshDisplayTriggerPreview();
     }
 
@@ -218,6 +268,11 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty]
     private int displayTriggerEditorDurationMs = 3000;
 
+    partial void OnDisplayTriggerEditorDurationMsChanged(int value)
+    {
+        RefreshDisplayTriggerPreview();
+    }
+
     [ObservableProperty]
     private string displayTriggerEditorTemplateMode = "normal";
 
@@ -236,6 +291,190 @@ public partial class MainWindowViewModel : ViewModelBase
 
     [ObservableProperty]
     private string displayTriggerEditorValidationMessage = "";
+
+    [ObservableProperty]
+    private DisplayTriggerPreset? selectedDisplayTriggerPreset;
+
+    [ObservableProperty]
+    private int displayTriggerPreviewPercent = 50;
+
+    partial void OnDisplayTriggerPreviewPercentChanged(int value)
+    {
+        RefreshDisplayTriggerPreview();
+    }
+
+    [ObservableProperty]
+    private int displayTriggerPreviewPreviousPercent = 40;
+
+    partial void OnDisplayTriggerPreviewPreviousPercentChanged(int value)
+    {
+        RefreshDisplayTriggerPreview();
+    }
+
+    [ObservableProperty]
+    private string displayTriggerPreviewActionStatus = "ok";
+
+    partial void OnDisplayTriggerPreviewActionStatusChanged(string value)
+    {
+        RefreshDisplayTriggerPreview();
+    }
+
+    [ObservableProperty]
+    private string displayTriggerPreviewActionName = "media.playPause";
+
+    partial void OnDisplayTriggerPreviewActionNameChanged(string value)
+    {
+        RefreshDisplayTriggerPreview();
+    }
+
+    [ObservableProperty]
+    private string displayTriggerPreviewActionMessage = "Action completed";
+
+    partial void OnDisplayTriggerPreviewActionMessageChanged(string value)
+    {
+        RefreshDisplayTriggerPreview();
+    }
+
+    [ObservableProperty]
+    private string displayTriggerPreviewMediaArtist = "Artist";
+
+    partial void OnDisplayTriggerPreviewMediaArtistChanged(string value)
+    {
+        RefreshDisplayTriggerPreview();
+    }
+
+    [ObservableProperty]
+    private string displayTriggerPreviewMediaTitle = "Track title";
+
+    partial void OnDisplayTriggerPreviewMediaTitleChanged(string value)
+    {
+        RefreshDisplayTriggerPreview();
+    }
+
+    [ObservableProperty]
+    private string displayTriggerPreviewConnectionStatus = "connected";
+
+    partial void OnDisplayTriggerPreviewConnectionStatusChanged(string value)
+    {
+        RefreshDisplayTriggerPreview();
+    }
+
+    public string DisplayTriggerPreviewMatchStatus
+    {
+        get
+        {
+            if (!TryCreateEditorDisplayTriggerForPreview(out var trigger))
+            {
+                return "Preview unavailable";
+            }
+
+            var preview = CreateDisplayTriggerPreviewContext(trigger);
+            var matches = NormalizeDisplayTriggerEventType(trigger.EventType) switch
+            {
+                "actionResult" => NormalizeActionStatus(trigger.ActionStatus) == "any"
+                    || NormalizeActionStatus(trigger.ActionStatus) == NormalizeActionStatus(preview.ActionStatus),
+                "connectionChanged" => NormalizeConnectionStatus(trigger.ConnectionStatus) == "any"
+                    || NormalizeConnectionStatus(trigger.ConnectionStatus) == NormalizeConnectionStatus(preview.ConnectionStatus),
+                "mediaChanged" => true,
+                _ when preview.Percent is not null =>
+                    DisplayTriggerMatcher.ThresholdMatches(
+                        trigger.ChangePercent,
+                        preview.Percent.Value,
+                        NormalizePercent(DisplayTriggerPreviewPreviousPercent))
+                    && DisplayTriggerConditionMatches(
+                        trigger,
+                        preview.Percent.Value,
+                        NormalizePercent(DisplayTriggerPreviewPreviousPercent)),
+                _ => true
+            };
+
+            return matches ? "Trigger would fire" : "Trigger would not fire";
+        }
+    }
+
+    public string DisplayTriggerEditorContentWarning
+    {
+        get
+        {
+            var placeholders = Regex.Matches(DisplayTriggerEditorTemplate ?? "", "\\{[^{}]+\\}")
+                .Select(match => match.Value.ToLowerInvariant())
+                .Distinct()
+                .ToList();
+            var known = new HashSet<string>(
+            [
+                "{input}", "{slider.id}", "{slider.value}", "{slider.percent}",
+                "{action.status}", "{action.name}", "{action.message}",
+                "{media.artist}", "{media.title}", "{media.track}",
+                "{connection.status}", "{profile}", "{status}"
+            ], StringComparer.OrdinalIgnoreCase);
+            var unknown = placeholders.Where(placeholder => !known.Contains(placeholder)).ToList();
+            if (unknown.Count > 0)
+            {
+                return $"Unknown placeholder: {string.Join(", ", unknown)}";
+            }
+
+            var eventType = NormalizeDisplayTriggerEventType(DisplayTriggerEditorEventType);
+            var foreignPrefixes = eventType switch
+            {
+                "actionResult" => new[] { "{slider.", "{media.", "{connection." },
+                "mediaChanged" => new[] { "{slider.", "{action.", "{connection.", "{input}" },
+                "connectionChanged" => new[] { "{slider.", "{action.", "{media.", "{input}" },
+                "profileChanged" => new[] { "{slider.", "{action.", "{media.", "{connection.", "{input}" },
+                _ => new[] { "{action.", "{media.", "{connection." }
+            };
+            if (placeholders.Any(placeholder => foreignPrefixes.Any(prefix => placeholder.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))))
+            {
+                return "Content uses placeholders that are not populated by this event type.";
+            }
+
+            var renderedLines = DisplayTriggerEditorTemplate?
+                .Replace("\r\n", "\n")
+                .Replace('\r', '\n')
+                .Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+                ?? [];
+            if (renderedLines.Length > 5)
+            {
+                return "Only the first five non-empty display lines are shown.";
+            }
+
+            if (DisplayTriggerNormalizer.NormalizeTemplateMode(DisplayTriggerEditorTemplateMode) == "normal"
+                && renderedLines.Any(line => line.Length > DisplayTriggerRenderer.MaxPreviewCharacters))
+            {
+                return $"OLED preview clips lines longer than {DisplayTriggerRenderer.MaxPreviewCharacters} characters.";
+            }
+
+            return "";
+        }
+    }
+
+    public bool IsDisplayTriggerEditorDirty
+    {
+        get
+        {
+            if (SelectedDisplayTrigger is null || !TryCreateEditorDisplayTriggerForPreview(out var editorTrigger))
+            {
+                return false;
+            }
+
+            var selectedTrigger = NormalizeDisplayTrigger(new DisplayTriggerConfig
+            {
+                Enabled = SelectedDisplayTrigger.Enabled,
+                EventType = SelectedDisplayTrigger.EventType,
+                Input = SelectedDisplayTrigger.Input,
+                ActionStatus = SelectedDisplayTrigger.ActionStatus,
+                ConnectionStatus = SelectedDisplayTrigger.ConnectionStatus,
+                Condition = SelectedDisplayTrigger.Condition,
+                MinPercent = SelectedDisplayTrigger.MinPercent,
+                MaxPercent = SelectedDisplayTrigger.MaxPercent,
+                ChangePercent = SelectedDisplayTrigger.ChangePercent,
+                DurationMs = SelectedDisplayTrigger.DurationMs,
+                TemplateMode = SelectedDisplayTrigger.TemplateMode,
+                Template = SelectedDisplayTrigger.Template
+            });
+
+            return editorTrigger != selectedTrigger;
+        }
+    }
 
     [ObservableProperty]
     private string displayTriggerPreviewLine1 = "";
@@ -398,7 +637,11 @@ public partial class MainWindowViewModel : ViewModelBase
         currentConfig = currentConfig with { ActiveProfile = value };
         RefreshProfileBindings();
         RefreshOledPreview();
-        _ = SendDeviceConfigAsync();
+        RefreshDisplayTriggerPreview();
+        if (!isLoadingConfig)
+        {
+            _ = HandleActiveProfileDisplayAsync(value);
+        }
     }
 
     public string SelectedPortDisplay => string.IsNullOrWhiteSpace(SelectedPort)
@@ -485,7 +728,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public IReadOnlyList<string> AvailableDisplayTemplateModes { get; } = ["normal", "html"];
 
-    public IReadOnlyList<string> AvailableDisplayTriggerEventTypes { get; } = ["input", "actionResult", "mediaChanged", "connectionChanged"];
+    public IReadOnlyList<string> AvailableDisplayTriggerEventTypes { get; } = ["input", "actionResult", "mediaChanged", "connectionChanged", "profileChanged"];
 
     public IReadOnlyList<string> AvailableDisplayTriggerActionStatuses { get; } = ["any", "ok", "failed"];
 
@@ -493,6 +736,34 @@ public partial class MainWindowViewModel : ViewModelBase
         ["any", "connected", "connecting", "unresponsive", "disconnected"];
 
     public IReadOnlyList<string> AvailableDisplayTriggerConditions { get; } = ["any", "inRange", "increasing", "decreasing"];
+
+    public IReadOnlyList<DisplayTriggerPreset> AvailableDisplayTriggerPresets => DisplayTriggerPresets;
+
+    public string DisplayTriggerSequenceInfo
+    {
+        get
+        {
+            if (SelectedDisplayTrigger is null)
+            {
+                return "";
+            }
+
+            var matching = DisplayTriggers
+                .Where(trigger => trigger.Enabled
+                    && trigger.EventType == SelectedDisplayTrigger.EventType
+                    && trigger.MatchDisplay == SelectedDisplayTrigger.MatchDisplay)
+                .ToList();
+            if (matching.Count <= 1)
+            {
+                return SelectedDisplayTrigger.DurationMs == 0
+                    ? "Duration 0 ms keeps this screen visible until another display message arrives."
+                    : "";
+            }
+
+            var totalDuration = matching.Sum(trigger => trigger.DurationMs);
+            return $"{matching.Count} triggers share this match and run in list order. Total configured duration: {totalDuration} ms.";
+        }
+    }
 
     public MainWindowViewModel()
     {
@@ -617,9 +888,12 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         try
         {
+            isLoadingConfig = true;
             currentConfig = await configStore.LoadOrCreateDefaultAsync();
+            var loadedConfig = currentConfig;
             currentConfig = EnsureDefaultActionResultDisplayTriggers(currentConfig);
             currentConfig = EnsureDefaultMediaChangedDisplayTrigger(currentConfig);
+            var migratedDisplayTriggers = !ReferenceEquals(loadedConfig, currentConfig);
             ActiveProfileName = currentConfig.ActiveProfile;
             AutoConnect = currentConfig.AppSettings.AutoConnect;
             EnableNowPlayingDisplay = currentConfig.AppSettings.EnableNowPlayingDisplay;
@@ -637,6 +911,11 @@ public partial class MainWindowViewModel : ViewModelBase
 
             RefreshProfileBindings();
             RefreshPorts();
+            if (migratedDisplayTriggers)
+            {
+                await configStore.SaveAsync(currentConfig);
+                AddLog("Display trigger defaults migrated and saved.");
+            }
             await SendDeviceConfigAsync();
 
             AddLog($"Config loaded: {ConfigPath}");
@@ -650,6 +929,10 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             AddLog($"Config load failed: {ex.Message}");
         }
+        finally
+        {
+            isLoadingConfig = false;
+        }
     }
 
     [RelayCommand]
@@ -657,6 +940,23 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         try
         {
+            var displayTriggers = CreateDisplayTriggerConfigsFromList();
+            if (SelectedDisplayTrigger is not null)
+            {
+                if (!TryCreateEditorDisplayTrigger(out var editorTrigger))
+                {
+                    AddLog("Config save stopped because the selected display trigger is invalid.");
+                    return;
+                }
+
+                if (SelectedDisplayTrigger.Index >= 0 && SelectedDisplayTrigger.Index < displayTriggers.Count)
+                {
+                    displayTriggers[SelectedDisplayTrigger.Index] = editorTrigger;
+                    UpdateDisplayTriggers(displayTriggers, SelectedDisplayTrigger.Index);
+                    displayTriggers = CreateDisplayTriggerConfigsFromList();
+                }
+            }
+
             currentConfig = currentConfig with
             {
                 ActiveProfile = ActiveProfileName,
@@ -678,7 +978,7 @@ public partial class MainWindowViewModel : ViewModelBase
                     AutoConnect = AutoConnect,
                     EnableNowPlayingDisplay = EnableNowPlayingDisplay,
                     VolumeSliderDeadbandPercent = NormalizeVolumeSliderDeadbandPercent(VolumeSliderDeadbandPercent),
-                    DisplayTriggers = CreateDisplayTriggerConfigsFromList(),
+                    DisplayTriggers = displayTriggers,
                     LastPort = SelectedPort == SimulatorPort ? currentConfig.AppSettings.LastPort : SelectedPort
                 }
             };
@@ -1026,6 +1326,13 @@ public partial class MainWindowViewModel : ViewModelBase
     }
 
     [RelayCommand]
+    private void ResetDisplayTriggerEditor()
+    {
+        OnSelectedDisplayTriggerChanged(SelectedDisplayTrigger);
+        AddLog("Display trigger editor reset.");
+    }
+
+    [RelayCommand]
     private void AddDisplayTrigger()
     {
         if (!TryCreateEditorDisplayTrigger(out var trigger))
@@ -1037,6 +1344,50 @@ public partial class MainWindowViewModel : ViewModelBase
         triggers.Add(trigger);
         UpdateDisplayTriggers(triggers, triggers.Count - 1);
         AddLog($"Display trigger added: {trigger.Input}");
+    }
+
+    [RelayCommand]
+    private void DuplicateDisplayTrigger()
+    {
+        if (SelectedDisplayTrigger is null
+            || SelectedDisplayTrigger.Index < 0
+            || SelectedDisplayTrigger.Index >= DisplayTriggers.Count)
+        {
+            AddLog("No display trigger selected.");
+            return;
+        }
+
+        var triggers = CreateDisplayTriggerConfigsFromList();
+        var insertIndex = SelectedDisplayTrigger.Index + 1;
+        triggers.Insert(insertIndex, triggers[SelectedDisplayTrigger.Index] with { });
+        UpdateDisplayTriggers(triggers, insertIndex);
+        AddLog($"Display trigger duplicated: {triggers[insertIndex].Input}");
+    }
+
+    [RelayCommand]
+    private void ApplyDisplayTriggerPreset()
+    {
+        if (SelectedDisplayTriggerPreset is null)
+        {
+            AddLog("No display trigger preset selected.");
+            return;
+        }
+
+        var preset = SelectedDisplayTriggerPreset;
+        DisplayTriggerEditorEnabled = true;
+        DisplayTriggerEditorEventType = preset.EventType;
+        DisplayTriggerEditorInput = preset.Input;
+        DisplayTriggerEditorActionStatus = preset.ActionStatus;
+        DisplayTriggerEditorConnectionStatus = preset.ConnectionStatus;
+        DisplayTriggerEditorCondition = preset.Condition;
+        DisplayTriggerEditorMinPercent = preset.MinPercent;
+        DisplayTriggerEditorMaxPercent = preset.MaxPercent;
+        DisplayTriggerEditorChangePercent = preset.ChangePercent;
+        DisplayTriggerEditorDurationMs = preset.DurationMs;
+        DisplayTriggerEditorTemplateMode = preset.TemplateMode;
+        DisplayTriggerEditorTemplate = preset.Template;
+        DisplayTriggerEditorValidationMessage = "";
+        AddLog($"Display trigger preset applied: {preset.Name}");
     }
 
     [RelayCommand]
@@ -1092,26 +1443,18 @@ public partial class MainWindowViewModel : ViewModelBase
             return;
         }
 
-        var input = trigger.Input;
-        var sliderValue = input.StartsWith("slider:", StringComparison.OrdinalIgnoreCase)
-            ? LastSliderValue
-            : (int?)null;
-        var percent = sliderValue is null ? (int?)null : MapSliderValueToPercent(sliderValue.Value);
-        var actionStatus = NormalizeDisplayTriggerEventType(trigger.EventType) == "actionResult"
-            ? NormalizeActionStatus(trigger.ActionStatus) == "any" ? "ok" : NormalizeActionStatus(trigger.ActionStatus)
-            : "";
-        var mediaTrack = NowPlayingViewModel.LastSentTrack ?? new NowPlayingTrack("Artist", "Track title");
+        var preview = CreateDisplayTriggerPreviewContext(trigger);
         var lines = RenderDisplayTriggerLines(
             trigger,
-            input,
-            sliderValue,
-            percent,
-            actionStatus,
-            "media.playPause",
-            actionStatus == "failed" ? "Action failed" : "Action completed",
-            mediaTrack.Artist,
-            mediaTrack.Title,
-            ConnectionStatus);
+            preview.Input,
+            preview.SliderValue,
+            preview.Percent,
+            preview.ActionStatus,
+            preview.ActionName,
+            preview.ActionMessage,
+            preview.MediaArtist,
+            preview.MediaTitle,
+            preview.ConnectionStatus);
 
         if (lines.Count == 0)
         {
@@ -1206,8 +1549,11 @@ public partial class MainWindowViewModel : ViewModelBase
             }
 
             var input = $"button:{id}";
-            await HandleConfiguredInputAsync(input);
-            await HandleDisplayTriggersAsync(input);
+            var showedActionResult = await HandleConfiguredInputAsync(input);
+            if (!showedActionResult)
+            {
+                await HandleDisplayTriggersAsync(input);
+            }
             return;
         }
 
@@ -1225,8 +1571,8 @@ public partial class MainWindowViewModel : ViewModelBase
             if (id is not null)
             {
                 var input = $"slider:{id}";
-                await HandleConfiguredInputAsync(input, value);
-                if (hasSliderValue)
+                var showedActionResult = await HandleConfiguredInputAsync(input, value);
+                if (hasSliderValue && !showedActionResult)
                 {
                     await HandleDisplayTriggersAsync(input, sliderValue);
                 }
@@ -1237,42 +1583,33 @@ public partial class MainWindowViewModel : ViewModelBase
     private async Task HandleDisplayTriggersAsync(string input, int? sliderValue = null)
     {
         var allTriggers = currentConfig.AppSettings.DisplayTriggers
-            .Where(candidate => candidate.Enabled
-                && NormalizeDisplayTriggerEventType(candidate.EventType) == "input"
-                && (candidate.Input == "*"
-                    || candidate.Input.Equals(input, StringComparison.OrdinalIgnoreCase)))
-            .Select(NormalizeDisplayTrigger)
+            .Select((candidate, index) => (Trigger: NormalizeDisplayTrigger(candidate), Index: index))
+            .Where(candidate => candidate.Trigger.Enabled
+                && NormalizeDisplayTriggerEventType(candidate.Trigger.EventType) == "input"
+                && (candidate.Trigger.Input == "*"
+                    || candidate.Trigger.Input.Equals(input, StringComparison.OrdinalIgnoreCase)))
             .ToList();
 
         if (allTriggers.Count == 0)
         {
-            if (sliderValue is not null)
-            {
-                lastDisplayTriggerPercentByInput[input] = MapSliderValueToPercent(sliderValue.Value);
-            }
             return;
         }
 
         var percent = sliderValue is null ? (int?)null : MapSliderValueToPercent(sliderValue.Value);
         if (percent is not null)
         {
-            if (!lastDisplayTriggerPercentByInput.TryGetValue(input, out var previousPercent))
+            var triggers = new List<DisplayTriggerConfig>();
+            foreach (var candidate in allTriggers)
             {
-                lastDisplayTriggerPercentByInput[input] = percent.Value;
-                return;
-            }
+                var trigger = candidate.Trigger;
+                var trackerKey = $"{input}|{candidate.Index}";
+                if (!displayTriggerInputTracker.ShouldTrigger(trackerKey, trigger, percent.Value))
+                {
+                    continue;
+                }
 
-            var threshold = allTriggers.Min(trigger => NormalizeDisplayTriggerChangePercent(trigger.ChangePercent));
-            if ((threshold == 0 && percent == previousPercent)
-                || (threshold > 0 && Math.Abs(percent.Value - previousPercent) < threshold))
-            {
-                return;
+                triggers.Add(trigger);
             }
-
-            lastDisplayTriggerPercentByInput[input] = percent.Value;
-            var triggers = allTriggers
-                .Where(trigger => DisplayTriggerConditionMatches(trigger, percent.Value, previousPercent))
-                .ToList();
 
             if (triggers.Count == 0)
             {
@@ -1293,7 +1630,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
         try
         {
-            await SendDisplayTriggerSequenceAsync(allTriggers, input, sliderValue, percent);
+            await SendDisplayTriggerSequenceAsync(allTriggers.Select(candidate => candidate.Trigger).ToList(), input, sliderValue, percent);
         }
         catch (Exception ex)
         {
@@ -1314,49 +1651,68 @@ public partial class MainWindowViewModel : ViewModelBase
         string connectionStatus = "",
         CancellationToken cancellationToken = default)
     {
-        var sentCount = 0;
-        for (var index = 0; index < triggers.Count; index++)
+        var sequenceToken = BeginDisplayTriggerSequence(cancellationToken);
+        try
         {
-            var trigger = triggers[index];
-            var lines = RenderDisplayTriggerLines(
-                trigger,
-                input,
-                sliderValue,
-                percent,
-                actionStatus,
-                actionName,
-                actionMessage,
-                mediaArtist,
-                mediaTitle,
-                connectionStatus);
-            if (lines.Count == 0)
+            var sentCount = 0;
+            for (var index = 0; index < triggers.Count; index++)
             {
-                continue;
+                var trigger = triggers[index];
+                var lines = RenderDisplayTriggerLines(
+                    trigger,
+                    input,
+                    sliderValue,
+                    percent,
+                    actionStatus,
+                    actionName,
+                    actionMessage,
+                    mediaArtist,
+                    mediaTitle,
+                    connectionStatus);
+                if (lines.Count == 0)
+                {
+                    continue;
+                }
+
+                var durationMs = NormalizeDisplayTriggerDurationMs(trigger.DurationMs);
+                await deviceDisplaySyncService.SendTemporaryTemplateAsync(activeConnection, lines, durationMs, sequenceToken);
+                sentCount++;
+
+                if (index < triggers.Count - 1 && durationMs > 0)
+                {
+                    await Task.Delay(durationMs, sequenceToken);
+                }
             }
 
-            var durationMs = NormalizeDisplayTriggerDurationMs(trigger.DurationMs);
-            await deviceDisplaySyncService.SendTemporaryTemplateAsync(activeConnection, lines, durationMs, cancellationToken);
-            sentCount++;
-
-            if (index < triggers.Count - 1 && durationMs > 0)
+            if (sentCount > 1)
             {
-                await Task.Delay(durationMs, cancellationToken);
+                AddLog($"Display trigger sequence sent: {input} ({sentCount} screens)");
             }
         }
-
-        if (sentCount > 1)
+        catch (OperationCanceledException) when (sequenceToken.IsCancellationRequested)
         {
-            AddLog($"Display trigger sequence sent: {input} ({sentCount} screens)");
+            // A newer display event superseded this sequence.
         }
     }
 
-    private async Task HandleConfiguredInputAsync(string input, string? value = null)
+    private CancellationToken BeginDisplayTriggerSequence(CancellationToken cancellationToken)
+    {
+        lock (displayTriggerSequenceLock)
+        {
+            displayTriggerSequenceCancellation?.Cancel();
+            displayTriggerSequenceCancellation?.Dispose();
+            displayTriggerSequenceCancellation = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+            return displayTriggerSequenceCancellation.Token;
+        }
+    }
+
+    private async Task<bool> HandleConfiguredInputAsync(string input, string? value = null)
     {
         var result = await actionPipeline.HandleInputAsync(currentConfig, input, value);
 
         if (result.Kind == ActionPipelineResultKind.Throttled)
         {
-            return;
+            return false;
         }
 
         AddLog(FormatActionResult(result));
@@ -1373,7 +1729,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
             if (handledByDisplayTrigger)
             {
-                return;
+                return true;
             }
 
             var line = MakroPad.Core.Protocol.ProtocolCodec.Format(
@@ -1388,12 +1744,15 @@ public partial class MainWindowViewModel : ViewModelBase
             try
             {
                 await activeConnection.SendLineAsync(line);
+                return true;
             }
             catch (Exception ex)
             {
                 AddLog($"Action feedback failed: {ex.Message}");
             }
         }
+
+        return false;
     }
 
     private async Task<bool> HandleActionResultDisplayTriggersAsync(
@@ -1403,13 +1762,12 @@ public partial class MainWindowViewModel : ViewModelBase
         string message)
     {
         var triggers = currentConfig.AppSettings.DisplayTriggers
+            .Select(NormalizeDisplayTrigger)
             .Where(candidate => candidate.Enabled
                 && NormalizeDisplayTriggerEventType(candidate.EventType) == "actionResult"
                 && (candidate.Input == "*"
                     || candidate.Input.Equals(input, StringComparison.OrdinalIgnoreCase))
-                && (NormalizeActionStatus(candidate.ActionStatus) == "any"
-                    || NormalizeActionStatus(candidate.ActionStatus) == status))
-            .Select(NormalizeDisplayTrigger)
+                && DisplayTriggerMatcher.ActionStatusMatches(candidate, status))
             .ToList();
 
         if (triggers.Count == 0)
@@ -1423,9 +1781,9 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             triggers.AddRange(
                 currentConfig.AppSettings.DisplayTriggers
+                    .Select(NormalizeDisplayTrigger)
                     .Where(trigger => trigger.Enabled
-                        && NormalizeDisplayTriggerEventType(trigger.EventType) == "mediaChanged")
-                    .Select(NormalizeDisplayTrigger));
+                        && NormalizeDisplayTriggerEventType(trigger.EventType) == "mediaChanged"));
         }
 
         try
@@ -1452,8 +1810,12 @@ public partial class MainWindowViewModel : ViewModelBase
     private bool HasMediaChangedDisplayTrigger()
     {
         return currentConfig.AppSettings.DisplayTriggers.Any(
-            trigger => trigger.Enabled
-                && NormalizeDisplayTriggerEventType(trigger.EventType) == "mediaChanged");
+            trigger =>
+            {
+                var normalized = NormalizeDisplayTrigger(trigger);
+                return normalized.Enabled
+                    && NormalizeDisplayTriggerEventType(normalized.EventType) == "mediaChanged";
+            });
     }
 
     private async Task HandleMediaChangedDisplayTriggerAsync(
@@ -1461,9 +1823,9 @@ public partial class MainWindowViewModel : ViewModelBase
         CancellationToken cancellationToken)
     {
         var triggers = currentConfig.AppSettings.DisplayTriggers
+            .Select(NormalizeDisplayTrigger)
             .Where(trigger => trigger.Enabled
                 && NormalizeDisplayTriggerEventType(trigger.EventType) == "mediaChanged")
-            .Select(NormalizeDisplayTrigger)
             .ToList();
 
         if (triggers.Count == 0)
@@ -1492,11 +1854,10 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         var normalizedStatus = NormalizeConnectionStatus(connectionStatus);
         var triggers = currentConfig.AppSettings.DisplayTriggers
+            .Select(NormalizeDisplayTrigger)
             .Where(trigger => trigger.Enabled
                 && NormalizeDisplayTriggerEventType(trigger.EventType) == "connectionChanged"
-                && (NormalizeConnectionStatus(trigger.ConnectionStatus) == "any"
-                    || NormalizeConnectionStatus(trigger.ConnectionStatus) == normalizedStatus))
-            .Select(NormalizeDisplayTrigger)
+                && DisplayTriggerMatcher.ConnectionStatusMatches(trigger, normalizedStatus))
             .ToList();
 
         if (triggers.Count == 0)
@@ -1527,6 +1888,30 @@ public partial class MainWindowViewModel : ViewModelBase
         }
 
         await HandleConnectionChangedDisplayTriggersAsync(connectionStatus);
+    }
+
+    private async Task HandleActiveProfileDisplayAsync(string profileName)
+    {
+        await SendDeviceConfigAsync();
+
+        var triggers = currentConfig.AppSettings.DisplayTriggers
+            .Select(NormalizeDisplayTrigger)
+            .Where(trigger => trigger.Enabled
+                && NormalizeDisplayTriggerEventType(trigger.EventType) == "profileChanged")
+            .ToList();
+        if (triggers.Count == 0)
+        {
+            return;
+        }
+
+        try
+        {
+            await SendDisplayTriggerSequenceAsync(triggers, "*", null, null);
+        }
+        catch (Exception ex)
+        {
+            AddLog($"Profile changed display trigger failed for {profileName}: {ex.Message}");
+        }
     }
 
     private async Task SendDeviceConfigAsync()
@@ -1842,7 +2227,7 @@ public partial class MainWindowViewModel : ViewModelBase
         isRefreshingDisplayTriggerEditor = false;
 
         OnSelectedDisplayTriggerChanged(SelectedDisplayTrigger);
-        lastDisplayTriggerPercentByInput.Clear();
+        displayTriggerInputTracker.Clear();
     }
 
     private void UpdateDisplayTriggers(List<DisplayTriggerConfig> triggers, int selectedIndex)
@@ -1885,7 +2270,7 @@ public partial class MainWindowViewModel : ViewModelBase
         DisplayTriggerEditorValidationMessage = "";
 
         var eventType = NormalizeDisplayTriggerEventType(DisplayTriggerEditorEventType);
-        var input = eventType is "mediaChanged" or "connectionChanged"
+        var input = eventType is "mediaChanged" or "connectionChanged" or "profileChanged"
             ? "*"
             : DisplayTriggerEditorInput.Trim();
         if (input != "*" && !IsSupportedInput(input))
@@ -1897,6 +2282,14 @@ public partial class MainWindowViewModel : ViewModelBase
         if (string.IsNullOrWhiteSpace(DisplayTriggerEditorTemplate))
         {
             SetDisplayTriggerEditorError("Display content is required.");
+            return false;
+        }
+
+        if (eventType == "input"
+            && input.StartsWith("slider:", StringComparison.OrdinalIgnoreCase)
+            && DisplayTriggerEditorMinPercent > DisplayTriggerEditorMaxPercent)
+        {
+            SetDisplayTriggerEditorError("Min % must not be greater than Max %.");
             return false;
         }
 
@@ -1935,89 +2328,47 @@ public partial class MainWindowViewModel : ViewModelBase
 
     private static DisplayTriggerConfig NormalizeDisplayTrigger(DisplayTriggerConfig trigger)
     {
-        return trigger with
-        {
-            EventType = NormalizeDisplayTriggerEventType(trigger.EventType),
-            Input = string.IsNullOrWhiteSpace(trigger.Input) ? "slider:1" : trigger.Input.Trim(),
-            ActionStatus = NormalizeActionStatus(trigger.ActionStatus),
-            ConnectionStatus = NormalizeConnectionStatus(trigger.ConnectionStatus),
-            Condition = NormalizeDisplayTriggerCondition(trigger.Condition),
-            MinPercent = NormalizePercent(trigger.MinPercent),
-            MaxPercent = Math.Max(NormalizePercent(trigger.MinPercent), NormalizePercent(trigger.MaxPercent)),
-            ChangePercent = NormalizeDisplayTriggerChangePercent(trigger.ChangePercent),
-            DurationMs = NormalizeDisplayTriggerDurationMs(trigger.DurationMs),
-            TemplateMode = NormalizeDisplayTriggerTemplateMode(trigger.TemplateMode),
-            Template = string.IsNullOrWhiteSpace(trigger.Template)
-                ? "Slider {slider.id}\n{slider.percent}%"
-                : trigger.Template.Trim()
-        };
+        return DisplayTriggerNormalizer.Normalize(trigger);
     }
 
     private static int NormalizeDisplayTriggerChangePercent(int value)
     {
-        return Math.Clamp(value, 0, 100);
+        return DisplayTriggerNormalizer.NormalizeChangePercent(value);
     }
 
     private static int NormalizeDisplayTriggerDurationMs(int value)
     {
-        return Math.Clamp(value, 0, 60000);
+        return DisplayTriggerNormalizer.NormalizeDurationMs(value);
     }
 
     private static int NormalizePercent(int value)
     {
-        return Math.Clamp(value, 0, 100);
-    }
-
-    private static string NormalizeDisplayTriggerTemplateMode(string? value)
-    {
-        return value?.Equals("html", StringComparison.OrdinalIgnoreCase) == true ? "html" : "normal";
+        return DisplayTriggerNormalizer.NormalizePercent(value);
     }
 
     private static string NormalizeDisplayTriggerEventType(string? value)
     {
-        return value switch
-        {
-            "actionResult" or "mediaChanged" or "connectionChanged" => value,
-            _ => "input"
-        };
+        return DisplayTriggerNormalizer.NormalizeEventType(value);
     }
 
     private static string NormalizeActionStatus(string? value)
     {
-        return value switch
-        {
-            "ok" or "failed" => value,
-            _ => "any"
-        };
+        return DisplayTriggerNormalizer.NormalizeActionStatus(value);
     }
 
     private static string NormalizeConnectionStatus(string? value)
     {
-        return value?.ToLowerInvariant() switch
-        {
-            "connected" or "connecting" or "unresponsive" or "disconnected" => value.ToLowerInvariant(),
-            _ => "any"
-        };
+        return DisplayTriggerNormalizer.NormalizeConnectionStatus(value);
     }
 
     private static string NormalizeDisplayTriggerCondition(string? value)
     {
-        return value switch
-        {
-            "inRange" or "increasing" or "decreasing" => value,
-            _ => "any"
-        };
+        return DisplayTriggerNormalizer.NormalizeCondition(value);
     }
 
     private static bool DisplayTriggerConditionMatches(DisplayTriggerConfig trigger, int percent, int previousPercent)
     {
-        return NormalizeDisplayTriggerCondition(trigger.Condition) switch
-        {
-            "inRange" => percent >= trigger.MinPercent && percent <= trigger.MaxPercent,
-            "increasing" => percent > previousPercent,
-            "decreasing" => percent < previousPercent,
-            _ => true
-        };
+        return DisplayTriggerMatcher.ConditionMatches(trigger, percent, previousPercent);
     }
 
     private static MakroPadConfig EnsureDefaultActionResultDisplayTriggers(MakroPadConfig config)
@@ -2093,18 +2444,9 @@ public partial class MainWindowViewModel : ViewModelBase
         };
     }
 
-    private static bool TryParseInputId(string input, out int id)
-    {
-        id = 0;
-        var separatorIndex = input.IndexOf(':');
-        return separatorIndex >= 0
-            && int.TryParse(input[(separatorIndex + 1)..], out id)
-            && id > 0;
-    }
-
     private static int MapSliderValueToPercent(int sliderValue)
     {
-        return Math.Clamp((int)Math.Round(Math.Clamp(sliderValue, 0, 4095) / 4095.0 * 100), 0, 100);
+        return DisplayTriggerRenderer.MapSliderValueToPercent(sliderValue);
     }
 
     private List<string> RenderDisplayTriggerLines(
@@ -2119,97 +2461,82 @@ public partial class MainWindowViewModel : ViewModelBase
         string mediaTitle = "",
         string connectionStatus = "")
     {
-        var text = ReplaceDisplayTriggerPlaceholders(
-            trigger.Template,
-            input,
-            sliderValue,
-            percent,
-            actionStatus,
-            actionName,
-            actionMessage,
-            mediaArtist,
-            mediaTitle,
-            connectionStatus);
-        if (NormalizeDisplayTriggerTemplateMode(trigger.TemplateMode) == "html")
-        {
-            text = RenderHtmlLikeDisplayText(text);
-        }
-
-        return text
-            .Replace("\r\n", "\n")
-            .Replace('\r', '\n')
-            .Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
-            .Where(line => line.Length > 0)
-            .Take(5)
-            .ToList();
-    }
-
-    private string ReplaceDisplayTriggerPlaceholders(
-        string template,
-        string input,
-        int? sliderValue,
-        int? percent,
-        string actionStatus,
-        string actionName,
-        string actionMessage,
-        string mediaArtist,
-        string mediaTitle,
-        string connectionStatus)
-    {
-        var sliderId = TryParseInputId(input, out var id) ? id.ToString() : "";
-        return template
-            .Replace("{input}", input, StringComparison.OrdinalIgnoreCase)
-            .Replace("{slider.id}", sliderId, StringComparison.OrdinalIgnoreCase)
-            .Replace("{slider.value}", sliderValue?.ToString() ?? "", StringComparison.OrdinalIgnoreCase)
-            .Replace("{slider.percent}", percent?.ToString() ?? "", StringComparison.OrdinalIgnoreCase)
-            .Replace("{action.status}", actionStatus, StringComparison.OrdinalIgnoreCase)
-            .Replace("{action.name}", actionName, StringComparison.OrdinalIgnoreCase)
-            .Replace("{action.message}", actionMessage, StringComparison.OrdinalIgnoreCase)
-            .Replace("{media.artist}", mediaArtist, StringComparison.OrdinalIgnoreCase)
-            .Replace("{media.title}", mediaTitle, StringComparison.OrdinalIgnoreCase)
-            .Replace("{media.track}", string.IsNullOrWhiteSpace(mediaArtist) ? mediaTitle : $"{mediaArtist} - {mediaTitle}", StringComparison.OrdinalIgnoreCase)
-            .Replace("{connection.status}", connectionStatus, StringComparison.OrdinalIgnoreCase)
-            .Replace("{profile}", ActiveProfileName, StringComparison.OrdinalIgnoreCase)
-            .Replace("{status}", ConnectionStatus, StringComparison.OrdinalIgnoreCase);
-    }
-
-    private static string RenderHtmlLikeDisplayText(string html)
-    {
-        var text = Regex.Replace(html, "(?i)<\\s*br\\s*/?\\s*>", "\n");
-        text = Regex.Replace(text, "(?i)</\\s*(p|div|h[1-6]|li|tr)\\s*>", "\n");
-        text = Regex.Replace(text, "(?i)<\\s*li\\s*>", "- ");
-        text = Regex.Replace(text, "<[^>]+>", "");
-        return WebUtility.HtmlDecode(text);
+        return DisplayTriggerRenderer.RenderLines(
+            trigger,
+            new DisplayTriggerRenderContext
+            {
+                Input = input,
+                SliderValue = sliderValue,
+                SliderPercent = percent,
+                ActionStatus = actionStatus,
+                ActionName = actionName,
+                ActionMessage = actionMessage,
+                MediaArtist = mediaArtist,
+                MediaTitle = mediaTitle,
+                ConnectionStatus = connectionStatus,
+                Profile = ActiveProfileName,
+                Status = ConnectionStatus
+            }).ToList();
     }
 
     private void RefreshDisplayTriggerPreview()
     {
+        OnPropertyChanged(nameof(DisplayTriggerPreviewMatchStatus));
+        OnPropertyChanged(nameof(DisplayTriggerEditorContentWarning));
+        OnPropertyChanged(nameof(IsDisplayTriggerEditorDirty));
+        OnPropertyChanged(nameof(DisplayTriggerSequenceInfo));
+
         if (!TryCreateEditorDisplayTriggerForPreview(out var trigger))
         {
             SetDisplayTriggerPreviewLines([]);
             return;
         }
 
-        var input = trigger.Input;
-        var sliderValue = input.StartsWith("slider:", StringComparison.OrdinalIgnoreCase)
-            ? LastSliderValue
+        var preview = CreateDisplayTriggerPreviewContext(trigger);
+        SetDisplayTriggerPreviewLines(
+            DisplayTriggerRenderer.FitPreviewLines(
+                RenderDisplayTriggerLines(
+                    trigger,
+                    preview.Input,
+                    preview.SliderValue,
+                    preview.Percent,
+                    preview.ActionStatus,
+                    preview.ActionName,
+                    preview.ActionMessage,
+                    preview.MediaArtist,
+                    preview.MediaTitle,
+                    preview.ConnectionStatus)));
+    }
+
+    private DisplayTriggerPreviewContext CreateDisplayTriggerPreviewContext(DisplayTriggerConfig trigger)
+    {
+        var eventType = NormalizeDisplayTriggerEventType(trigger.EventType);
+        var input = trigger.Input == "*" && eventType == "input" ? "slider:1" : trigger.Input;
+        var percent = input.StartsWith("slider:", StringComparison.OrdinalIgnoreCase)
+            ? NormalizePercent(DisplayTriggerPreviewPercent)
             : (int?)null;
-        var percent = sliderValue is null ? (int?)null : MapSliderValueToPercent(sliderValue.Value);
-        var actionStatus = NormalizeDisplayTriggerEventType(trigger.EventType) == "actionResult"
-            ? NormalizeActionStatus(trigger.ActionStatus) == "any" ? "ok" : NormalizeActionStatus(trigger.ActionStatus)
+        var sliderValue = percent is null
+            ? (int?)null
+            : (int)Math.Round(percent.Value / 100.0 * 4095);
+        var actionStatus = eventType == "actionResult"
+            ? NormalizeActionStatus(DisplayTriggerPreviewActionStatus) == "any"
+                ? "ok"
+                : NormalizeActionStatus(DisplayTriggerPreviewActionStatus)
             : "";
-        var mediaTrack = NowPlayingViewModel.LastSentTrack ?? new NowPlayingTrack("Artist", "Track title");
-        SetDisplayTriggerPreviewLines(RenderDisplayTriggerLines(
-            trigger,
+        var connectionStatus = NormalizeConnectionStatus(DisplayTriggerPreviewConnectionStatus) == "any"
+            ? "connected"
+            : NormalizeConnectionStatus(DisplayTriggerPreviewConnectionStatus);
+
+        return new DisplayTriggerPreviewContext(
             input,
             sliderValue,
             percent,
             actionStatus,
-            "media.playPause",
-            actionStatus == "failed" ? "Action failed" : "Action completed",
-            mediaTrack.Artist,
-            mediaTrack.Title,
-            ConnectionStatus));
+            DisplayTriggerPreviewActionName,
+            DisplayTriggerPreviewActionMessage,
+            DisplayTriggerPreviewMediaArtist,
+            DisplayTriggerPreviewMediaTitle,
+            connectionStatus);
     }
 
     private bool TryCreateEditorDisplayTriggerForPreview(out DisplayTriggerConfig trigger)
@@ -2386,7 +2713,14 @@ public sealed record DisplayTriggerViewModel(
     string TemplateMode,
     string Template)
 {
+    public string SequenceDisplay => (Index + 1).ToString();
+
     public string EnabledDisplay => Enabled ? "Yes" : "No";
+
+    public string ChangeDisplay => EventType == "input"
+        && Input.StartsWith("slider:", StringComparison.OrdinalIgnoreCase)
+            ? $"{ChangePercent}%"
+            : "-";
 
     public string TemplateSummary
     {
@@ -2412,5 +2746,32 @@ public sealed record DisplayTriggerViewModel(
             ? "*"
             : EventType == "connectionChanged"
                 ? ConnectionStatus
-                : $"{Input} / {ConditionDisplay}";
+                : EventType == "profileChanged"
+                    ? "*"
+                    : $"{Input} / {ConditionDisplay}";
 }
+
+public sealed record DisplayTriggerPreset(
+    string Name,
+    string EventType,
+    string Input,
+    string ActionStatus,
+    string ConnectionStatus,
+    string Condition,
+    int MinPercent,
+    int MaxPercent,
+    int ChangePercent,
+    int DurationMs,
+    string TemplateMode,
+    string Template);
+
+public sealed record DisplayTriggerPreviewContext(
+    string Input,
+    int? SliderValue,
+    int? Percent,
+    string ActionStatus,
+    string ActionName,
+    string ActionMessage,
+    string MediaArtist,
+    string MediaTitle,
+    string ConnectionStatus);

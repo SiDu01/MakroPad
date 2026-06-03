@@ -308,6 +308,14 @@ Verbindungsstatus-Aenderungen koennen appseitig ueber konfigurierbare
 Disconnect keine serielle Nachricht mehr gesendet werden kann, bleiben die
 Firmware-Statusscreens fuer Offline-Zustaende der notwendige Fallback.
 
+Profilwechsel koennen appseitig ueber `profileChanged`-Display-Trigger sichtbar
+gemacht werden. Diese Trigger werden ebenfalls als `display;mode=template`
+gesendet und verwenden den bereits synchronisierten `{profile}`-Wert.
+
+Display-Trigger-Sequenzen werden in der App koordiniert. Ein neueres
+Display-Ereignis bricht eine noch wartende aeltere Sequenz ab, damit veraltete
+Screens nicht spaeter neuere Informationen ueberschreiben.
+
 Aktuell sendet die App `action-result` nach ausgefuehrten Actions. Beispiele:
 
 ```text
