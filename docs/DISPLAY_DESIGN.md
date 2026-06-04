@@ -19,7 +19,8 @@ display;mode=layout;layout=volume;durationMs=1500;title=Volume;line1=System;valu
 
 Der Modus ist kein Bitmap-Streaming. Die App sendet semantische Felder wie
 `layout`, `title`, `line1`, `line2`, `value` und `icon`. Die Firmware zeichnet
-daraus Header, Text, Statussymbol und bei Bedarf einen Fortschrittsbalken.
+daraus Header, Text, kleine Symbol-Primitives und bei Bedarf einen
+Fortschrittsbalken.
 
 ## Unterstuetzte Layouts
 
@@ -57,18 +58,22 @@ Die App leitet den Screen-Typ aus dem Event ab:
 - `connectionChanged` -> `status`.
 - `profileChanged` -> `profile`.
 
+Der Display-Trigger-Editor zeigt fuer `templateMode=layout` eine strukturierte
+Preview mit Header, Iconbereich, Text und Prozentbalken. Der Test-Button sendet
+Layout-Trigger ebenfalls als `display;mode=layout`.
+
 ## Aktuelle Grenzen
 
-- Layout-Screens scrollen noch nicht horizontal. Lange Texte werden im
-  Firmware-Renderer gekuerzt.
-- Icons sind einfache OLED-Labels (`OK`, `!`, `X`, `~`), keine Bitmaps.
+- Layout-Screens nutzen firmwareseitiges horizontales Textscrolling fuer ihre
+  Textfelder. Der Balken und Icons bleiben statisch.
+- Icons sind einfache firmwareseitig gezeichnete Primitives, keine Bitmaps.
 - Freie Elementlisten wie `e1=header:...;e2=bar:...` sind noch nicht umgesetzt.
 - Defaultscreen-Konfiguration nutzt weiterhin den bestehenden Zeilenmodus.
 
 ## Naechste Ausbaustufen
 
-1. Layout-Preview in der App visuell an den Firmware-Renderer angleichen.
-2. `custom`-Layout oder freie Elemente einfuehren, wenn die festen Layouts
+1. `custom`-Layout oder freie Elemente einfuehren, wenn die festen Layouts
    nicht reichen.
-3. Kleine Bitmap-Icons firmwareseitig hinterlegen.
-4. Layout-Screens mit kontrolliertem Textscrolling erweitern.
+2. Kleine Bitmap-Icons firmwareseitig hinterlegen, falls die gezeichneten
+   Primitives nicht ausreichen.
+3. Defaultscreen optional ebenfalls auf das Layout-System migrieren.

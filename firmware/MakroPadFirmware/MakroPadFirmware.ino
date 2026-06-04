@@ -92,6 +92,10 @@ uint8_t activeDisplayLineCount = 0;
 uint16_t activeDisplayScrollStep = 0;
 uint32_t lastDisplayScrollMs = 0;
 bool activeDisplayScrollNeeded = false;
+bool activeLayoutScreen = false;
+String activeLayoutMode;
+String activeLayoutIcon;
+int activeLayoutValue = 0;
 
 String percentDecode(const String& value) {
   String decoded;
@@ -178,6 +182,7 @@ void drawLayoutScreen(
   const String& line2,
   int value,
   const String& icon);
+void renderActiveLayoutScreen();
 
 void drawStatusMessage(
   const String& line1,
@@ -305,6 +310,10 @@ void renderActiveDisplayLines() {
 }
 
 void clearActiveDisplayLineState() {
+  activeLayoutScreen = false;
+  activeLayoutMode = "";
+  activeLayoutIcon = "";
+  activeLayoutValue = 0;
   activeDisplayLineCount = 0;
   activeDisplayScrollStep = 0;
   activeDisplayScrollNeeded = false;
@@ -326,34 +335,36 @@ void drawHeader(const String& title) {
   display.setTextSize(1);
   display.setTextColor(SSD1306_BLACK);
   display.setCursor(2, 2);
-  display.print(clippedText(title, 1));
+  display.print(title);
   display.setTextColor(SSD1306_WHITE);
 }
 
-void drawTextAt(int x, int y, const String& text, uint8_t textSize = 1) {
+void drawTextAt(int x, int y, const String& text, uint8_t textSize = 1, bool clip = true) {
   display.setTextSize(textSize);
   display.setCursor(x, y);
-  display.print(clippedText(text, textSize));
+  display.print(clip ? clippedText(text, textSize) : text);
 }
 
-void drawIconLabel(const String& icon, int x, int y) {
-  String label;
+void drawIcon(const String& icon, int x, int y) {
   if (icon == "check") {
-    label = "OK";
+    display.drawCircle(x + 9, y + 9, 8, SSD1306_WHITE);
+    display.drawLine(x + 5, y + 9, x + 8, y + 12, SSD1306_WHITE);
+    display.drawLine(x + 8, y + 12, x + 14, y + 5, SSD1306_WHITE);
   } else if (icon == "warn") {
-    label = "!";
+    display.drawTriangle(x + 9, y + 1, x + 1, y + 17, x + 17, y + 17, SSD1306_WHITE);
+    display.drawLine(x + 9, y + 6, x + 9, y + 11, SSD1306_WHITE);
+    display.drawPixel(x + 9, y + 14, SSD1306_WHITE);
   } else if (icon == "x") {
-    label = "X";
+    display.drawRect(x + 1, y + 1, 17, 17, SSD1306_WHITE);
+    display.drawLine(x + 5, y + 5, x + 13, y + 13, SSD1306_WHITE);
+    display.drawLine(x + 13, y + 5, x + 5, y + 13, SSD1306_WHITE);
   } else if (icon == "sync") {
-    label = "~";
-  } else {
-    return;
+    display.drawCircle(x + 9, y + 9, 7, SSD1306_WHITE);
+    display.drawLine(x + 13, y + 3, x + 17, y + 3, SSD1306_WHITE);
+    display.drawLine(x + 17, y + 3, x + 15, y + 1, SSD1306_WHITE);
+    display.drawLine(x + 5, y + 15, x + 1, y + 15, SSD1306_WHITE);
+    display.drawLine(x + 1, y + 15, x + 3, y + 17, SSD1306_WHITE);
   }
-
-  display.drawRect(x, y, 18, 18, SSD1306_WHITE);
-  display.setTextSize(1);
-  display.setCursor(x + 5, y + 5);
-  display.print(label);
 }
 
 void drawProgressBar(int x, int y, int width, int height, int value) {
@@ -366,8 +377,8 @@ void drawProgressBar(int x, int y, int width, int height, int value) {
 }
 
 void drawVolumeLayout(const String& title, const String& line1, int value) {
-  drawHeader(title.length() > 0 ? title : "Volume");
-  drawTextAt(0, 18, line1, 1);
+  drawHeader(renderDisplayLine(title.length() > 0 ? title : "Volume", 1));
+  drawTextAt(0, 18, renderDisplayLine(line1, 1), 1, false);
   display.setTextSize(2);
   display.setCursor(0, 31);
   display.print(constrain(value, 0, 100));
@@ -376,9 +387,9 @@ void drawVolumeLayout(const String& title, const String& line1, int value) {
 }
 
 void drawMediaLayout(const String& title, const String& line1, const String& line2) {
-  drawHeader(title.length() > 0 ? title : "Now Playing");
-  drawTextAt(0, 18, line1, 1);
-  drawTextAt(0, 32, line2, 1);
+  drawHeader(renderDisplayLine(title.length() > 0 ? title : "Now Playing", 1));
+  drawTextAt(0, 18, renderDisplayLine(line1, 1), 1, false);
+  drawTextAt(0, 32, renderDisplayLine(line2, 1), 1, false);
 }
 
 void drawStatusLayout(
@@ -386,10 +397,33 @@ void drawStatusLayout(
   const String& line1,
   const String& line2,
   const String& icon) {
-  drawHeader(title.length() > 0 ? title : "Status");
-  drawIconLabel(icon, 0, 21);
-  drawTextAt(icon.length() > 0 ? 24 : 0, 20, line1, 1);
-  drawTextAt(icon.length() > 0 ? 24 : 0, 34, line2, 1);
+  drawHeader(renderDisplayLine(title.length() > 0 ? title : "Status", 1));
+  drawIcon(icon, 0, 21);
+  drawTextAt(icon.length() > 0 ? 24 : 0, 20, renderDisplayLine(line1, 1), 1, false);
+  drawTextAt(icon.length() > 0 ? 24 : 0, 34, renderDisplayLine(line2, 1), 1, false);
+}
+
+void renderActiveLayoutScreen() {
+  if (!displayAvailable) {
+    return;
+  }
+
+  display.clearDisplay();
+  display.setTextColor(SSD1306_WHITE);
+
+  const String title = activeDisplayLineCount > 0 ? activeDisplayLines[0] : "";
+  const String line1 = activeDisplayLineCount > 1 ? activeDisplayLines[1] : "";
+  const String line2 = activeDisplayLineCount > 2 ? activeDisplayLines[2] : "";
+
+  if (activeLayoutMode == "volume") {
+    drawVolumeLayout(title, line1, activeLayoutValue);
+  } else if (activeLayoutMode == "media") {
+    drawMediaLayout(title, line1, line2);
+  } else {
+    drawStatusLayout(title, line1, line2, activeLayoutIcon);
+  }
+
+  display.display();
 }
 
 void drawLayoutScreen(
@@ -400,22 +434,24 @@ void drawLayoutScreen(
   int value,
   const String& icon) {
   clearActiveDisplayLineState();
-  if (!displayAvailable) {
-    return;
-  }
-
-  display.clearDisplay();
-  display.setTextColor(SSD1306_WHITE);
-
-  if (layout == "volume") {
-    drawVolumeLayout(title, line1, value);
-  } else if (layout == "media") {
-    drawMediaLayout(title, line1, line2);
-  } else {
-    drawStatusLayout(title, line1, line2, icon);
-  }
-
-  display.display();
+  activeLayoutScreen = true;
+  activeLayoutMode = layout;
+  activeLayoutIcon = icon;
+  activeLayoutValue = constrain(value, 0, 100);
+  activeDisplayLines[0] = title;
+  activeDisplayLines[1] = line1;
+  activeDisplayLines[2] = line2;
+  activeDisplayLineSizes[0] = 1;
+  activeDisplayLineSizes[1] = 1;
+  activeDisplayLineSizes[2] = 1;
+  activeDisplayLineCount = 3;
+  activeDisplayScrollNeeded = displayNeedsScroll(
+    activeDisplayLines,
+    activeDisplayLineSizes,
+    activeDisplayLineCount);
+  activeDisplayScrollStep = 0;
+  lastDisplayScrollMs = millis();
+  renderActiveLayoutScreen();
 }
 
 void setDisplayLines(const String lines[], uint8_t count) {
@@ -428,6 +464,10 @@ void setDisplayLines(const String lines[], uint8_t count) {
 }
 
 void setDisplayLines(const String lines[], const uint8_t lineSizes[], uint8_t count) {
+  activeLayoutScreen = false;
+  activeLayoutMode = "";
+  activeLayoutIcon = "";
+  activeLayoutValue = 0;
   const uint8_t cappedCount = min(count, static_cast<uint8_t>(MaxDisplayLines));
   const bool changed = displayLinesChanged(lines, lineSizes, cappedCount);
 
@@ -880,7 +920,11 @@ void updateDisplayScroll() {
   }
 
   lastDisplayScrollMs = now;
-  renderActiveDisplayLines();
+  if (activeLayoutScreen) {
+    renderActiveLayoutScreen();
+  } else {
+    renderActiveDisplayLines();
+  }
 }
 
 void updateHostTimeout() {

@@ -9,7 +9,8 @@ public static class DisplayTriggerConfigMigrator
         ArgumentNullException.ThrowIfNull(config);
 
         config = EnsureDefaultActionResultTriggers(config);
-        return EnsureDefaultMediaChangedTrigger(config);
+        config = EnsureDefaultMediaChangedTrigger(config);
+        return UpgradeLegacyDefaultTriggerModes(config);
     }
 
     private static MakroPadConfig EnsureDefaultActionResultTriggers(MakroPadConfig config)
@@ -88,5 +89,59 @@ public static class DisplayTriggerConfigMigrator
                 DisplayTriggers = triggers
             }
         };
+    }
+
+    private static MakroPadConfig UpgradeLegacyDefaultTriggerModes(MakroPadConfig config)
+    {
+        var changed = false;
+        var triggers = config.AppSettings.DisplayTriggers
+            .Select(trigger =>
+            {
+                if (IsLegacyDefaultTrigger(trigger))
+                {
+                    changed = true;
+                    return trigger with { TemplateMode = "layout" };
+                }
+
+                return trigger;
+            })
+            .ToList();
+
+        return changed
+            ? config with
+            {
+                AppSettings = config.AppSettings with { DisplayTriggers = triggers }
+            }
+            : config;
+    }
+
+    private static bool IsLegacyDefaultTrigger(DisplayTriggerConfig trigger)
+    {
+        var eventType = DisplayTriggerNormalizer.NormalizeEventType(trigger.EventType);
+        var templateMode = DisplayTriggerNormalizer.NormalizeTemplateMode(trigger.TemplateMode);
+        if (templateMode != "normal")
+        {
+            return false;
+        }
+
+        if (eventType == "actionResult"
+            && trigger.Input == "*"
+            && DisplayTriggerNormalizer.NormalizeActionStatus(trigger.ActionStatus) is "ok"
+            && trigger.Template == "Action\n{action.message}")
+        {
+            return true;
+        }
+
+        if (eventType == "actionResult"
+            && trigger.Input == "*"
+            && DisplayTriggerNormalizer.NormalizeActionStatus(trigger.ActionStatus) is "failed"
+            && trigger.Template == "Action failed\n{action.message}")
+        {
+            return true;
+        }
+
+        return eventType == "mediaChanged"
+            && trigger.Input == "*"
+            && trigger.Template == "Media\n{media.artist}\n{media.title}";
     }
 }

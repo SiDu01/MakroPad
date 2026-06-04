@@ -154,8 +154,9 @@ Temporary `display;mode=template` messages can provide optional
 `line1Size`..`line5Size` values. Supported text sizes are `1` and `2`; missing
 or invalid values fall back to `1`.
 Structured `display;mode=layout` messages render small OLED screens with a
-header, text, optional icon, and for `layout=volume` a progress bar. Supported
-layouts are `volume`, `media`, `action`, `profile`, and `status`.
+header, text, optional drawn icon, and for `layout=volume` a progress bar.
+Supported layouts are `volume`, `media`, `action`, `profile`, and `status`.
+Long layout text fields scroll horizontally on the OLED.
 
 Button and slider events should appear as:
 

@@ -476,10 +476,31 @@ public partial class MainWindowViewModel : ViewModelBase
 
         try
         {
-            await deviceDisplaySyncService.SendTemporaryTemplateAsync(
-                activeConnection,
-                lines,
-                DisplayTriggerNormalizer.NormalizeDurationMs(trigger.DurationMs));
+            if (DisplayTriggerNormalizer.NormalizeTemplateMode(trigger.TemplateMode) == "layout")
+            {
+                await deviceDisplaySyncService.SendTemporaryLayoutAsync(
+                    activeConnection,
+                    DisplayTriggerRenderer.RenderLayoutScreen(
+                        trigger,
+                        new DisplayTriggerRenderContext
+                        {
+                            Input = trigger.Input,
+                            Profile = ActiveProfileName,
+                            Status = ConnectionStatus,
+                            ConnectionStatus = ConnectionStatus,
+                            MediaArtist = NowPlayingViewModel.LastSentTrack?.Artist ?? "",
+                            MediaTitle = NowPlayingViewModel.LastSentTrack?.Title ?? ""
+                        }),
+                    DisplayTriggerNormalizer.NormalizeDurationMs(trigger.DurationMs));
+            }
+            else
+            {
+                await deviceDisplaySyncService.SendTemporaryTemplateAsync(
+                    activeConnection,
+                    lines,
+                    DisplayTriggerNormalizer.NormalizeDurationMs(trigger.DurationMs));
+            }
+
             AddLog($"Display trigger tested: {trigger.Input}");
         }
         catch (Exception ex)

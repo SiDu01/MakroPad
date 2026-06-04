@@ -216,6 +216,34 @@ public partial class DisplayTriggersEditorViewModel : ViewModelBase
     [ObservableProperty]
     private string displayTriggerPreviewLine5 = "";
 
+    [ObservableProperty]
+    private bool usesLayoutDisplayPreview;
+
+    public bool UsesTextDisplayPreview => !UsesLayoutDisplayPreview;
+
+    [ObservableProperty]
+    private string displayTriggerLayoutPreviewTitle = "";
+
+    [ObservableProperty]
+    private string displayTriggerLayoutPreviewLine1 = "";
+
+    [ObservableProperty]
+    private string displayTriggerLayoutPreviewLine2 = "";
+
+    [ObservableProperty]
+    private string displayTriggerLayoutPreviewIcon = "";
+
+    public bool HasDisplayTriggerLayoutPreviewIcon => !string.IsNullOrWhiteSpace(DisplayTriggerLayoutPreviewIcon);
+
+    [ObservableProperty]
+    private int displayTriggerLayoutPreviewValue;
+
+    [ObservableProperty]
+    private string displayTriggerLayoutPreviewValueText = "";
+
+    [ObservableProperty]
+    private bool showsDisplayTriggerLayoutPreviewValue;
+
     public string DisplayTriggerPlaceholderHint => NormalizeEventType(DisplayTriggerEditorEventType) switch
     {
         "actionResult" => "Placeholders: {action.status}, {action.name}, {action.message}, {input}, {profile}, {status}.",
@@ -691,8 +719,15 @@ public partial class DisplayTriggersEditorViewModel : ViewModelBase
 
         var trigger = CreateEditorTriggerForPreview();
         var preview = CreatePreviewContext(trigger);
+        var renderContext = CreateRenderContext(preview);
+        if (DisplayTriggerNormalizer.NormalizeTemplateMode(trigger.TemplateMode) == "layout")
+        {
+            SetLayoutPreview(DisplayTriggerRenderer.RenderLayoutScreen(trigger, renderContext));
+            return;
+        }
+
         var lines = DisplayTriggerRenderer.FitPreviewLines(
-            DisplayTriggerRenderer.RenderTemplateLines(trigger, CreateRenderContext(preview)));
+            DisplayTriggerRenderer.RenderTemplateLines(trigger, renderContext));
         SetPreviewLines(lines);
     }
 
@@ -747,11 +782,62 @@ public partial class DisplayTriggersEditorViewModel : ViewModelBase
 
     private void SetPreviewLines(IReadOnlyList<string> lines)
     {
+        UsesLayoutDisplayPreview = false;
+        OnPropertyChanged(nameof(UsesTextDisplayPreview));
         DisplayTriggerPreviewLine1 = lines.Count > 0 ? lines[0] : "";
         DisplayTriggerPreviewLine2 = lines.Count > 1 ? lines[1] : "";
         DisplayTriggerPreviewLine3 = lines.Count > 2 ? lines[2] : "";
         DisplayTriggerPreviewLine4 = lines.Count > 3 ? lines[3] : "";
         DisplayTriggerPreviewLine5 = lines.Count > 4 ? lines[4] : "";
+        DisplayTriggerLayoutPreviewTitle = "";
+        DisplayTriggerLayoutPreviewLine1 = "";
+        DisplayTriggerLayoutPreviewLine2 = "";
+        DisplayTriggerLayoutPreviewIcon = "";
+        OnPropertyChanged(nameof(HasDisplayTriggerLayoutPreviewIcon));
+        DisplayTriggerLayoutPreviewValue = 0;
+        DisplayTriggerLayoutPreviewValueText = "";
+        ShowsDisplayTriggerLayoutPreviewValue = false;
+    }
+
+    private void SetLayoutPreview(DisplayLayoutScreen screen)
+    {
+        UsesLayoutDisplayPreview = true;
+        OnPropertyChanged(nameof(UsesTextDisplayPreview));
+        DisplayTriggerPreviewLine1 = "";
+        DisplayTriggerPreviewLine2 = "";
+        DisplayTriggerPreviewLine3 = "";
+        DisplayTriggerPreviewLine4 = "";
+        DisplayTriggerPreviewLine5 = "";
+        DisplayTriggerLayoutPreviewTitle = FitLayoutPreviewText(screen.Title, 21);
+        DisplayTriggerLayoutPreviewLine1 = FitLayoutPreviewText(screen.Line1, screen.Icon.Length > 0 ? 17 : 21);
+        DisplayTriggerLayoutPreviewLine2 = FitLayoutPreviewText(screen.Line2, screen.Icon.Length > 0 ? 17 : 21);
+        DisplayTriggerLayoutPreviewIcon = IconPreviewLabel(screen.Icon);
+        OnPropertyChanged(nameof(HasDisplayTriggerLayoutPreviewIcon));
+        DisplayTriggerLayoutPreviewValue = screen.NormalizedValuePercent ?? 0;
+        DisplayTriggerLayoutPreviewValueText = screen.NormalizedValuePercent is null
+            ? ""
+            : $"{screen.NormalizedValuePercent}%";
+        ShowsDisplayTriggerLayoutPreviewValue = screen.NormalizedValuePercent is not null;
+    }
+
+    private static string FitLayoutPreviewText(string value, int maxCharacters)
+    {
+        var trimmed = (value ?? "").Trim();
+        return trimmed.Length <= maxCharacters
+            ? trimmed
+            : trimmed[..Math.Max(1, maxCharacters - 2)] + "..";
+    }
+
+    private static string IconPreviewLabel(string icon)
+    {
+        return icon switch
+        {
+            "check" => "OK",
+            "warn" => "!",
+            "x" => "X",
+            "sync" => "~",
+            _ => ""
+        };
     }
 
     private static DisplayTriggerViewModel ToViewModel(int index, DisplayTriggerConfig trigger)

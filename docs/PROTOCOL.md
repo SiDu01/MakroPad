@@ -268,7 +268,9 @@ Firmware-Hinweis:
   Unterstuetzte Layouts sind aktuell `volume`, `media`, `action`, `profile`
   und `status`. Die Firmware zeichnet daraus Header, Text, einfache Icons und
   bei `volume` einen Fortschrittsbalken. `value` ist ein Prozentwert von `0`
-  bis `100`; `icon` unterstuetzt `check`, `warn`, `x` und `sync`.
+  bis `100`; `icon` unterstuetzt `check`, `warn`, `x` und `sync`. Lange
+  Textfelder duerfen vollstaendig gesendet werden und scrollen horizontal auf
+  dem OLED.
 
 ### config
 

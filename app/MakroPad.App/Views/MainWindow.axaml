@@ -841,7 +841,9 @@
                                             Padding="12"
                                             HorizontalAlignment="Left"
                                             VerticalAlignment="Top">
-                                        <StackPanel Spacing="6">
+                                        <Grid>
+                                        <StackPanel Spacing="6"
+                                                    IsVisible="{Binding DisplayTriggersEditor.UsesTextDisplayPreview}">
                                             <TextBlock Text="{Binding DisplayTriggersEditor.DisplayTriggerPreviewLine1}"
                                                        FontFamily="Consolas"
                                                        FontSize="16"
@@ -863,6 +865,55 @@
                                                        FontSize="16"
                                                        TextWrapping="NoWrap" />
                                         </StackPanel>
+                                        <Grid RowDefinitions="18,*,16"
+                                              IsVisible="{Binding DisplayTriggersEditor.UsesLayoutDisplayPreview}">
+                                            <Border Background="#DDEBFF"
+                                                    CornerRadius="2"
+                                                    Padding="4,1">
+                                                <TextBlock Text="{Binding DisplayTriggersEditor.DisplayTriggerLayoutPreviewTitle}"
+                                                           Foreground="#02060C"
+                                                           FontFamily="Consolas"
+                                                           FontSize="12"
+                                                           TextWrapping="NoWrap" />
+                                            </Border>
+                                            <Grid Grid.Row="1"
+                                                  ColumnDefinitions="28,*"
+                                                  Margin="0,8,0,0">
+                                                <Border Width="22"
+                                                        Height="22"
+                                                        BorderBrush="#DDEBFF"
+                                                        BorderThickness="1"
+                                                        IsVisible="{Binding DisplayTriggersEditor.HasDisplayTriggerLayoutPreviewIcon}">
+                                                    <TextBlock Text="{Binding DisplayTriggersEditor.DisplayTriggerLayoutPreviewIcon}"
+                                                               Foreground="#DDEBFF"
+                                                               FontFamily="Consolas"
+                                                               FontSize="11"
+                                                               HorizontalAlignment="Center"
+                                                               VerticalAlignment="Center" />
+                                                </Border>
+                                                <StackPanel Grid.Column="1"
+                                                            Spacing="4">
+                                                    <TextBlock Text="{Binding DisplayTriggersEditor.DisplayTriggerLayoutPreviewLine1}"
+                                                               FontFamily="Consolas"
+                                                               FontSize="15"
+                                                               TextWrapping="NoWrap" />
+                                                    <TextBlock Text="{Binding DisplayTriggersEditor.DisplayTriggerLayoutPreviewLine2}"
+                                                               FontFamily="Consolas"
+                                                               FontSize="15"
+                                                               TextWrapping="NoWrap" />
+                                                    <TextBlock Text="{Binding DisplayTriggersEditor.DisplayTriggerLayoutPreviewValueText}"
+                                                               FontFamily="Consolas"
+                                                               FontSize="22"
+                                                               IsVisible="{Binding DisplayTriggersEditor.ShowsDisplayTriggerLayoutPreviewValue}" />
+                                                </StackPanel>
+                                            </Grid>
+                                            <ProgressBar Grid.Row="2"
+                                                         Minimum="0"
+                                                         Maximum="100"
+                                                         Value="{Binding DisplayTriggersEditor.DisplayTriggerLayoutPreviewValue}"
+                                                         IsVisible="{Binding DisplayTriggersEditor.ShowsDisplayTriggerLayoutPreviewValue}" />
+                                        </Grid>
+                                        </Grid>
                                     </Border>
 
                                     <Grid Grid.Row="1"

@@ -23,12 +23,14 @@ public sealed class DisplayTriggerConfigMigratorTests
         Assert.True(successTrigger.Enabled);
         Assert.Equal("*", successTrigger.Input);
         Assert.Equal(4321, successTrigger.DurationMs);
+        Assert.Equal("layout", successTrigger.TemplateMode);
         Assert.Equal("Action\n{action.message}", successTrigger.Template);
 
         var failedTrigger = Assert.Single(actionTriggers, trigger => trigger.ActionStatus == "failed");
         Assert.True(failedTrigger.Enabled);
         Assert.Equal("*", failedTrigger.Input);
         Assert.Equal(4321, failedTrigger.DurationMs);
+        Assert.Equal("layout", failedTrigger.TemplateMode);
         Assert.Equal("Action failed\n{action.message}", failedTrigger.Template);
 
         var mediaTrigger = Assert.Single(
@@ -37,6 +39,7 @@ public sealed class DisplayTriggerConfigMigratorTests
         Assert.True(mediaTrigger.Enabled);
         Assert.Equal("*", mediaTrigger.Input);
         Assert.Equal(0, mediaTrigger.DurationMs);
+        Assert.Equal("layout", mediaTrigger.TemplateMode);
         Assert.Equal("Media\n{media.artist}\n{media.title}", mediaTrigger.Template);
     }
 
@@ -151,6 +154,39 @@ public sealed class DisplayTriggerConfigMigratorTests
         var result = DisplayTriggerConfigMigrator.MigrateDefaults(config);
 
         Assert.Same(config, result);
+    }
+
+    [Fact]
+    public void MigrateDefaultsUpgradesOnlyUnchangedLegacyDefaultsToLayout()
+    {
+        var oldSuccess = new DisplayTriggerConfig
+        {
+            Enabled = true,
+            EventType = "actionResult",
+            Input = "*",
+            ActionStatus = "ok",
+            TemplateMode = "normal",
+            Template = "Action\n{action.message}"
+        };
+        var customAction = new DisplayTriggerConfig
+        {
+            Enabled = true,
+            EventType = "actionResult",
+            Input = "*",
+            ActionStatus = "ok",
+            TemplateMode = "normal",
+            Template = "Custom\n{action.message}"
+        };
+        var config = CreateConfig(
+            actionInitialized: true,
+            mediaInitialized: true,
+            triggers: [oldSuccess, customAction]);
+
+        var result = DisplayTriggerConfigMigrator.MigrateDefaults(config);
+
+        Assert.NotSame(config, result);
+        Assert.Equal("layout", result.AppSettings.DisplayTriggers[0].TemplateMode);
+        Assert.Equal("normal", result.AppSettings.DisplayTriggers[1].TemplateMode);
     }
 
     [Fact]

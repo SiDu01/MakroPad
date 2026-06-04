@@ -27,6 +27,31 @@ public sealed class DisplayTriggersEditorViewModelTests
     }
 
     [Fact]
+    public void LayoutModePopulatesStructuredPreview()
+    {
+        var viewModel = new DisplayTriggersEditorViewModel();
+
+        viewModel.Load(
+        [
+            new DisplayTriggerConfig
+            {
+                Enabled = true,
+                EventType = "input",
+                Input = "slider:1",
+                TemplateMode = "layout",
+                Template = "Volume\nSystem"
+            }
+        ]);
+
+        Assert.True(viewModel.UsesLayoutDisplayPreview);
+        Assert.False(viewModel.UsesTextDisplayPreview);
+        Assert.Equal("Volume", viewModel.DisplayTriggerLayoutPreviewTitle);
+        Assert.Equal("System", viewModel.DisplayTriggerLayoutPreviewLine1);
+        Assert.Equal("50%", viewModel.DisplayTriggerLayoutPreviewValueText);
+        Assert.True(viewModel.ShowsDisplayTriggerLayoutPreviewValue);
+    }
+
+    [Fact]
     public void TryCommitPendingEditUpdatesExportAndRaisesChanged()
     {
         var viewModel = new DisplayTriggersEditorViewModel();
