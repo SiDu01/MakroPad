@@ -39,4 +39,22 @@ public sealed class DeviceDisplayTriggerSink : IDisplayTriggerSink
             durationMs,
             cancellationToken);
     }
+
+    public Task SendTemporaryLayoutAsync(
+        DisplayLayoutScreen screen,
+        int durationMs,
+        CancellationToken cancellationToken = default)
+    {
+        var connection = connectionProvider();
+        if (connection is null || connection.State != DeviceConnectionState.Connected)
+        {
+            throw new InvalidOperationException("No active device connection.");
+        }
+
+        return displaySyncService.SendTemporaryLayoutAsync(
+            connection,
+            screen,
+            durationMs,
+            cancellationToken);
+    }
 }

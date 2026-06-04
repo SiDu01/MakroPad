@@ -31,6 +31,7 @@ public static class DisplayTriggerConfigMigrator
                     Input = "*",
                     ActionStatus = "ok",
                     DurationMs = config.Hardware.Display.ActionResultTimeoutMs,
+                    TemplateMode = "layout",
                     Template = "Action\n{action.message}"
                 });
             triggers.Add(
@@ -41,6 +42,7 @@ public static class DisplayTriggerConfigMigrator
                     Input = "*",
                     ActionStatus = "failed",
                     DurationMs = config.Hardware.Display.ActionResultTimeoutMs,
+                    TemplateMode = "layout",
                     Template = "Action failed\n{action.message}"
                 });
         }
@@ -73,6 +75,7 @@ public static class DisplayTriggerConfigMigrator
                     EventType = "mediaChanged",
                     Input = "*",
                     DurationMs = 0,
+                    TemplateMode = "layout",
                     Template = "Media\n{media.artist}\n{media.title}"
                 });
         }

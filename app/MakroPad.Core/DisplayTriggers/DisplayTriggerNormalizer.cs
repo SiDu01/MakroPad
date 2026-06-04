@@ -70,7 +70,12 @@ public static class DisplayTriggerNormalizer
 
     public static string NormalizeTemplateMode(string? value)
     {
-        return value?.Equals("html", StringComparison.OrdinalIgnoreCase) == true ? "html" : "normal";
+        return value?.ToLowerInvariant() switch
+        {
+            "html" => "html",
+            "layout" => "layout",
+            _ => "normal"
+        };
     }
 
     public static int NormalizePercent(int value) => Math.Clamp(value, 0, 100);

@@ -16,13 +16,13 @@ public partial class DisplayTriggersEditorViewModel : ViewModelBase
 {
     private static readonly IReadOnlyList<DisplayTriggerPreset> DisplayTriggerPresets =
     [
-        new("Slider value", "input", "slider:1", "any", "any", "any", 0, 100, 5, 1500, "normal", "Slider {slider.id}\n{slider.percent}%"),
+        new("Slider value", "input", "slider:1", "any", "any", "any", 0, 100, 5, 1500, "layout", "Volume\nSlider {slider.id}"),
         new("Button pressed", "input", "button:1", "any", "any", "any", 0, 100, 0, 1500, "normal", "Input\n{input}"),
-        new("Action completed", "actionResult", "*", "ok", "any", "any", 0, 100, 0, 3000, "normal", "Action\n{action.message}"),
-        new("Action failed", "actionResult", "*", "failed", "any", "any", 0, 100, 0, 3000, "normal", "Action failed\n{action.message}"),
-        new("Now playing", "mediaChanged", "*", "any", "any", "any", 0, 100, 0, 0, "normal", "Media\n{media.artist}\n{media.title}"),
-        new("Connection status", "connectionChanged", "*", "any", "any", "any", 0, 100, 0, 2000, "normal", "MakroPad\n{connection.status}"),
-        new("Profile changed", "profileChanged", "*", "any", "any", "any", 0, 100, 0, 2000, "normal", "Profile\n{profile}"),
+        new("Action completed", "actionResult", "*", "ok", "any", "any", 0, 100, 0, 3000, "layout", "Action\n{action.message}"),
+        new("Action failed", "actionResult", "*", "failed", "any", "any", 0, 100, 0, 3000, "layout", "Action failed\n{action.message}"),
+        new("Now playing", "mediaChanged", "*", "any", "any", "any", 0, 100, 0, 0, "layout", "Media\n{media.artist}\n{media.title}"),
+        new("Connection status", "connectionChanged", "*", "any", "any", "any", 0, 100, 0, 2000, "layout", "MakroPad\n{connection.status}"),
+        new("Profile changed", "profileChanged", "*", "any", "any", "any", 0, 100, 0, 2000, "layout", "Profile\n{profile}"),
         new("HTML list", "input", "button:1", "any", "any", "any", 0, 100, 0, 2500, "html", "<h1>{profile}</h1><p>{input}</p><ul><li>{status}</li></ul>")
     ];
 
@@ -51,7 +51,7 @@ public partial class DisplayTriggersEditorViewModel : ViewModelBase
         ..Enumerable.Range(1, 3).Select(id => $"slider:{id}")
     ];
 
-    public IReadOnlyList<string> AvailableDisplayTemplateModes { get; } = ["normal", "html"];
+    public IReadOnlyList<string> AvailableDisplayTemplateModes { get; } = ["normal", "html", "layout"];
 
     public IReadOnlyList<string> AvailableDisplayTriggerEventTypes { get; } =
         ["input", "actionResult", "mediaChanged", "connectionChanged", "profileChanged"];

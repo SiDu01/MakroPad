@@ -257,7 +257,16 @@ public sealed class DisplayTriggerOrchestrator : IDisposable
                     continue;
                 }
 
-                await sink.SendTemporaryTemplateAsync(lines, trigger.DurationMs, sequenceToken);
+                if (DisplayTriggerNormalizer.NormalizeTemplateMode(trigger.TemplateMode) == "layout")
+                {
+                    var screen = DisplayTriggerRenderer.RenderLayoutScreen(trigger, eventContext);
+                    await sink.SendTemporaryLayoutAsync(screen, trigger.DurationMs, sequenceToken);
+                }
+                else
+                {
+                    await sink.SendTemporaryTemplateAsync(lines, trigger.DurationMs, sequenceToken);
+                }
+
                 sentCount++;
 
                 if (index < triggers.Count - 1 && trigger.DurationMs > 0)

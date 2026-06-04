@@ -11,4 +11,9 @@ public interface IDisplayTriggerSink
         IReadOnlyList<DisplayTemplateLine> lines,
         int durationMs,
         CancellationToken cancellationToken = default);
+
+    Task SendTemporaryLayoutAsync(
+        DisplayLayoutScreen screen,
+        int durationMs,
+        CancellationToken cancellationToken = default);
 }

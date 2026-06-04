@@ -74,6 +74,11 @@ MakroPad has a working vertical prototype across firmware and desktop app:
   HTML to text/default size fields before sending `config`, with `h1`/`h2`
   mapped to OLED size `2`; firmware scrolling now bases its cycle on each
   line's effective visible width so size `2` text scrolls when needed.
+- Added the first structured OLED layout mode. Display triggers can now use
+  `templateMode=layout`; the app sends `display;mode=layout` with semantic
+  fields, and firmware renders `volume`, `media`, `action`, `profile`, and
+  `status` screens with a header, simple icon labels, and a progress bar for
+  volume-style screens. The design notes live in `docs/DISPLAY_DESIGN.md`.
 
 ## Supported Actions
 
@@ -157,6 +162,8 @@ MakroPad has a working vertical prototype across firmware and desktop app:
   orchestration keeps growing.
 - Firmware is still a single Arduino sketch. That is fine for prototyping, but
   display/protocol/input modules should be split once behavior stabilizes.
+- Layout screens currently clip long text instead of using the older
+  horizontal scrolling line renderer.
 - Slider quality is still being validated with replacement hardware.
 - App UI is functional after the first redesign, but not yet a polished final
   editor experience.
@@ -178,13 +185,13 @@ the ESP32-S3-DevKitC-1.
 1. Continue refactoring `MainWindowViewModel` only where it still removes a
    real responsibility. Next best target: small device/simulator command
    grouping or an app coordinator if more runtime orchestration is added.
-2. Replace Spotify-window-title Now Playing with Windows Media Session metadata.
-3. Improve the config editor UX with action definitions shared between UI,
+2. Add a visual app preview for `templateMode=layout` that mirrors the firmware
+   header/icon/bar rendering.
+3. Replace Spotify-window-title Now Playing with Windows Media Session metadata.
+4. Improve the config editor UX with action definitions shared between UI,
    validation, and future docs generation.
-4. Split the firmware sketch into protocol, display, buttons, and sliders once
+5. Split the firmware sketch into protocol, display, buttons, and sliders once
    the new sliders have been tested.
-5. Add a small diagnostics screen for current device config, last heartbeat,
-   last input, and last OLED message.
 
 Recommendation: pause broad refactoring unless a new feature touches the
 remaining root orchestration. Most editor state and background loop ownership

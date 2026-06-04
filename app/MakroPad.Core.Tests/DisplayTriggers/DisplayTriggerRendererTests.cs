@@ -193,4 +193,50 @@ public sealed class DisplayTriggerRendererTests
 
         Assert.Equal(["<b>Value</b>"], result);
     }
+
+    [Fact]
+    public void RenderLayoutScreenMapsSliderInputToVolumeLayout()
+    {
+        var trigger = new DisplayTriggerConfig
+        {
+            EventType = "input",
+            Input = "slider:1",
+            TemplateMode = "layout",
+            Template = "Volume\nSystem"
+        };
+        var context = new DisplayTriggerRenderContext
+        {
+            Input = "slider:1",
+            SliderPercent = 72
+        };
+
+        var result = DisplayTriggerRenderer.RenderLayoutScreen(trigger, context);
+
+        Assert.Equal("volume", result.NormalizedLayout);
+        Assert.Equal("Volume", result.Title);
+        Assert.Equal("System", result.Line1);
+        Assert.Equal(72, result.NormalizedValuePercent);
+    }
+
+    [Fact]
+    public void RenderLayoutScreenMapsFailedActionToWarningIcon()
+    {
+        var trigger = new DisplayTriggerConfig
+        {
+            EventType = "actionResult",
+            ActionStatus = "failed",
+            TemplateMode = "layout",
+            Template = "Action failed\nOBS missing"
+        };
+        var context = new DisplayTriggerRenderContext
+        {
+            ActionStatus = "failed"
+        };
+
+        var result = DisplayTriggerRenderer.RenderLayoutScreen(trigger, context);
+
+        Assert.Equal("action", result.NormalizedLayout);
+        Assert.Equal("warn", result.Icon);
+        Assert.Equal("OBS missing", result.Line1);
+    }
 }

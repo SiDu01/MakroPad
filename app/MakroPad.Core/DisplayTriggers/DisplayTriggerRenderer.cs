@@ -33,6 +33,33 @@ public static partial class DisplayTriggerRenderer
             .ToList();
     }
 
+    public static DisplayLayoutScreen RenderLayoutScreen(
+        DisplayTriggerConfig trigger,
+        DisplayTriggerRenderContext context)
+    {
+        ArgumentNullException.ThrowIfNull(trigger);
+        ArgumentNullException.ThrowIfNull(context);
+
+        var normalized = DisplayTriggerNormalizer.Normalize(trigger);
+        var lines = RenderTemplateLines(
+                normalized with { TemplateMode = "normal" },
+                context)
+            .Select(line => line.Text)
+            .ToList();
+        var layout = InferLayout(normalized, context);
+        var title = lines.Count > 0 ? lines[0] : DefaultTitleForLayout(layout, normalized);
+        var line1 = lines.Count > 1 ? lines[1] : DefaultLine1ForLayout(layout, context);
+        var line2 = lines.Count > 2 ? lines[2] : "";
+
+        return new DisplayLayoutScreen(
+            layout,
+            title,
+            line1,
+            line2,
+            layout == "volume" ? context.SliderPercent : null,
+            IconForLayout(layout, normalized, context));
+    }
+
     private static IReadOnlyList<string> SplitDisplayTextLines(string text)
     {
         return text
@@ -148,6 +175,75 @@ public static partial class DisplayTriggerRenderer
         return trimmed.Length <= maxCharacters
             ? trimmed
             : $"{trimmed[..Math.Max(1, maxCharacters - 2)]}..";
+    }
+
+    private static string InferLayout(DisplayTriggerConfig trigger, DisplayTriggerRenderContext context)
+    {
+        if (trigger.EventType == "input"
+            && context.SliderPercent is not null
+            && trigger.Input.StartsWith("slider:", StringComparison.OrdinalIgnoreCase))
+        {
+            return "volume";
+        }
+
+        return trigger.EventType switch
+        {
+            "actionResult" => "action",
+            "mediaChanged" => "media",
+            "connectionChanged" => "status",
+            "profileChanged" => "profile",
+            _ => "status"
+        };
+    }
+
+    private static string DefaultTitleForLayout(string layout, DisplayTriggerConfig trigger)
+    {
+        return layout switch
+        {
+            "action" when trigger.ActionStatus == "failed" => "Action failed",
+            "action" => "Action",
+            "media" => "Now Playing",
+            "volume" => "Volume",
+            "profile" => "Profile",
+            _ => "Status"
+        };
+    }
+
+    private static string DefaultLine1ForLayout(string layout, DisplayTriggerRenderContext context)
+    {
+        return layout switch
+        {
+            "media" => context.MediaArtist,
+            "profile" => context.Profile,
+            "status" => context.ConnectionStatus,
+            "volume" => context.Input,
+            _ => ""
+        };
+    }
+
+    private static string IconForLayout(string layout, DisplayTriggerConfig trigger, DisplayTriggerRenderContext context)
+    {
+        if (layout == "action")
+        {
+            return trigger.ActionStatus == "failed"
+                || context.ActionStatus.Equals("failed", StringComparison.OrdinalIgnoreCase)
+                    ? "warn"
+                    : "check";
+        }
+
+        if (layout == "status")
+        {
+            return context.ConnectionStatus.ToLowerInvariant() switch
+            {
+                "connected" => "check",
+                "connecting" => "sync",
+                "unresponsive" => "warn",
+                "disconnected" => "x",
+                _ => ""
+            };
+        }
+
+        return "";
     }
 
     private static string StripHtml(string html)

@@ -171,6 +171,13 @@ String renderDisplayLine(const String& line, uint8_t textSize);
 void renderActiveDisplayLines();
 void setDisplayLines(const String lines[], uint8_t count);
 void setDisplayLines(const String lines[], const uint8_t lineSizes[], uint8_t count);
+void drawLayoutScreen(
+  const String& layout,
+  const String& title,
+  const String& line1,
+  const String& line2,
+  int value,
+  const String& icon);
 
 void drawStatusMessage(
   const String& line1,
@@ -292,6 +299,120 @@ void renderActiveDisplayLines() {
     display.setCursor(0, y);
     display.println(renderDisplayLine(activeDisplayLines[index], textSize));
     y += DisplayLineHeight * textSize;
+  }
+
+  display.display();
+}
+
+void clearActiveDisplayLineState() {
+  activeDisplayLineCount = 0;
+  activeDisplayScrollStep = 0;
+  activeDisplayScrollNeeded = false;
+  for (uint8_t index = 0; index < MaxDisplayLines; index++) {
+    activeDisplayLines[index] = "";
+    activeDisplayLineSizes[index] = 1;
+  }
+}
+
+String clippedText(const String& text, uint8_t textSize) {
+  const int maxCharacters = visibleCharactersForTextSize(textSize);
+  return text.length() <= maxCharacters
+    ? text
+    : text.substring(0, maxCharacters);
+}
+
+void drawHeader(const String& title) {
+  display.fillRect(0, 0, ScreenWidth, 13, SSD1306_WHITE);
+  display.setTextSize(1);
+  display.setTextColor(SSD1306_BLACK);
+  display.setCursor(2, 2);
+  display.print(clippedText(title, 1));
+  display.setTextColor(SSD1306_WHITE);
+}
+
+void drawTextAt(int x, int y, const String& text, uint8_t textSize = 1) {
+  display.setTextSize(textSize);
+  display.setCursor(x, y);
+  display.print(clippedText(text, textSize));
+}
+
+void drawIconLabel(const String& icon, int x, int y) {
+  String label;
+  if (icon == "check") {
+    label = "OK";
+  } else if (icon == "warn") {
+    label = "!";
+  } else if (icon == "x") {
+    label = "X";
+  } else if (icon == "sync") {
+    label = "~";
+  } else {
+    return;
+  }
+
+  display.drawRect(x, y, 18, 18, SSD1306_WHITE);
+  display.setTextSize(1);
+  display.setCursor(x + 5, y + 5);
+  display.print(label);
+}
+
+void drawProgressBar(int x, int y, int width, int height, int value) {
+  const int clampedValue = constrain(value, 0, 100);
+  display.drawRect(x, y, width, height, SSD1306_WHITE);
+  const int fillWidth = max(0, (width - 2) * clampedValue / 100);
+  if (fillWidth > 0) {
+    display.fillRect(x + 1, y + 1, fillWidth, height - 2, SSD1306_WHITE);
+  }
+}
+
+void drawVolumeLayout(const String& title, const String& line1, int value) {
+  drawHeader(title.length() > 0 ? title : "Volume");
+  drawTextAt(0, 18, line1, 1);
+  display.setTextSize(2);
+  display.setCursor(0, 31);
+  display.print(constrain(value, 0, 100));
+  display.print("%");
+  drawProgressBar(0, 54, ScreenWidth, 10, value);
+}
+
+void drawMediaLayout(const String& title, const String& line1, const String& line2) {
+  drawHeader(title.length() > 0 ? title : "Now Playing");
+  drawTextAt(0, 18, line1, 1);
+  drawTextAt(0, 32, line2, 1);
+}
+
+void drawStatusLayout(
+  const String& title,
+  const String& line1,
+  const String& line2,
+  const String& icon) {
+  drawHeader(title.length() > 0 ? title : "Status");
+  drawIconLabel(icon, 0, 21);
+  drawTextAt(icon.length() > 0 ? 24 : 0, 20, line1, 1);
+  drawTextAt(icon.length() > 0 ? 24 : 0, 34, line2, 1);
+}
+
+void drawLayoutScreen(
+  const String& layout,
+  const String& title,
+  const String& line1,
+  const String& line2,
+  int value,
+  const String& icon) {
+  clearActiveDisplayLineState();
+  if (!displayAvailable) {
+    return;
+  }
+
+  display.clearDisplay();
+  display.setTextColor(SSD1306_WHITE);
+
+  if (layout == "volume") {
+    drawVolumeLayout(title, line1, value);
+  } else if (layout == "media") {
+    drawMediaLayout(title, line1, line2);
+  } else {
+    drawStatusLayout(title, line1, line2, icon);
   }
 
   display.display();
@@ -439,18 +560,28 @@ void handleDisplayCommand(const String& line) {
   temporaryDisplayUntilMs = 0;
 
   if (mode == "clear") {
-    activeDisplayLineCount = 0;
-    activeDisplayScrollStep = 0;
-    activeDisplayScrollNeeded = false;
-    for (uint8_t index = 0; index < MaxDisplayLines; index++) {
-      activeDisplayLines[index] = "";
-      activeDisplayLineSizes[index] = 1;
-    }
+    clearActiveDisplayLineState();
 
     if (displayAvailable) {
       display.clearDisplay();
       display.display();
     }
+    return;
+  }
+
+  if (mode == "layout") {
+    drawLayoutScreen(
+      protocolValue(line, "layout"),
+      protocolValue(line, "title"),
+      protocolValue(line, "line1"),
+      protocolValue(line, "line2"),
+      protocolValue(line, "value").toInt(),
+      protocolValue(line, "icon"));
+
+    const String duration = protocolValue(line, "durationMs");
+    temporaryDisplayUntilMs = duration.length() > 0 && duration.toInt() > 0
+      ? millis() + static_cast<uint32_t>(duration.toInt())
+      : 0;
     return;
   }
 

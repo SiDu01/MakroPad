@@ -164,6 +164,15 @@ public sealed class ActionFeedbackCoordinatorTests
             SendAttempts++;
             throw new InvalidOperationException("Display feedback must not be sent without a connection.");
         }
+
+        public Task SendTemporaryLayoutAsync(
+            DisplayLayoutScreen screen,
+            int durationMs,
+            CancellationToken cancellationToken = default)
+        {
+            SendAttempts++;
+            throw new InvalidOperationException("Display feedback must not be sent without a connection.");
+        }
     }
 
     private sealed class FakeSystemLauncher : ISystemLauncher

@@ -237,6 +237,7 @@ display;mode=media;artist=Daft Punk;title=Digital Love
 display;mode=message;text=Connected
 display;mode=template;durationMs=3000;line1=Slider%201;line2=75%25
 display;mode=template;durationMs=3000;line1=Track;line1Size=2;line2=Artist
+display;mode=layout;layout=volume;durationMs=1500;title=Volume;line1=System;value=72
 ```
 
 Unterstuetzte Modi fuer Version 1:
@@ -247,6 +248,7 @@ Unterstuetzte Modi fuer Version 1:
 | `media` | `artist`, `title` | Aktuellen Track anzeigen |
 | `message` | `text` | Freie Statusnachricht anzeigen |
 | `template` | `durationMs`, `line1`..`line5`, optional `line1Size`..`line5Size` | App-gerenderte OLED-Zeilen temporaer anzeigen |
+| `layout` | `durationMs`, `layout`, `title`, `line1`, `line2`, `value`, `icon` | Semantischen OLED-Screen mit Firmware-Primitives anzeigen |
 | `clear` | keine | Display leeren |
 
 Firmware-Hinweis:
@@ -262,6 +264,11 @@ Firmware-Hinweis:
 - Bei `template` setzt `durationMs > 0` das Display nach Ablauf wieder auf die
   bevorzugte Anzeige zurueck. `0` zeigt den Inhalt ohne automatisches
   Zuruecksetzen.
+- `layout` ist der neue bevorzugte Modus fuer visuell strukturierte Screens.
+  Unterstuetzte Layouts sind aktuell `volume`, `media`, `action`, `profile`
+  und `status`. Die Firmware zeichnet daraus Header, Text, einfache Icons und
+  bei `volume` einen Fortschrittsbalken. `value` ist ein Prozentwert von `0`
+  bis `100`; `icon` unterstuetzt `check`, `warn`, `x` und `sync`.
 
 ### config
 

@@ -110,6 +110,35 @@ public sealed class DisplayTriggerOrchestratorTests
         Assert.Equal("Connected", sink.Sends.Single().Lines.Single().Text);
     }
 
+    [Fact]
+    public async Task LayoutModeSendsLayoutScreenInsteadOfTemplate()
+    {
+        var sink = new RecordingDisplayTriggerSink();
+        using var orchestrator = new DisplayTriggerOrchestrator(sink);
+        var triggers = new[]
+        {
+            Trigger(
+                eventType: "input",
+                input: "slider:1",
+                changePercent: 0,
+                durationMs: 1500,
+                template: "Volume\nSystem") with
+            {
+                TemplateMode = "layout"
+            }
+        };
+
+        var result = await orchestrator.HandleInputAsync(triggers, DefaultState, "slider:1", 3071);
+
+        Assert.True(result.Handled);
+        var send = sink.LayoutSends.Single();
+        Assert.Equal("volume", send.Screen.NormalizedLayout);
+        Assert.Equal("Volume", send.Screen.Title);
+        Assert.Equal(75, send.Screen.NormalizedValuePercent);
+        Assert.Equal(1500, send.DurationMs);
+        Assert.Empty(sink.Sends);
+    }
+
     private static DisplayTriggerConfig Trigger(
         string eventType,
         string input,
@@ -136,6 +165,8 @@ public sealed class DisplayTriggerOrchestratorTests
 
         public List<Send> Sends { get; } = [];
 
+        public List<LayoutSend> LayoutSends { get; } = [];
+
         public TaskCompletionSource FirstSend { get; } =
             new(TaskCreationOptions.RunContinuationsAsynchronously);
 
@@ -152,7 +183,23 @@ public sealed class DisplayTriggerOrchestratorTests
             FirstSend.TrySetResult();
             return Task.CompletedTask;
         }
+
+        public Task SendTemporaryLayoutAsync(
+            DisplayLayoutScreen screen,
+            int durationMs,
+            CancellationToken cancellationToken = default)
+        {
+            lock (syncRoot)
+            {
+                LayoutSends.Add(new LayoutSend(screen, durationMs));
+            }
+
+            FirstSend.TrySetResult();
+            return Task.CompletedTask;
+        }
     }
 
     private sealed record Send(IReadOnlyList<DisplayTemplateLine> Lines, int DurationMs);
+
+    private sealed record LayoutSend(DisplayLayoutScreen Screen, int DurationMs);
 }

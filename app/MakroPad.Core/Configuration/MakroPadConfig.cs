@@ -42,6 +42,7 @@ public sealed record MakroPadConfig
                         Input = "*",
                         ActionStatus = "ok",
                         DurationMs = 3000,
+                        TemplateMode = "layout",
                         Template = "Action\n{action.message}"
                     },
                     new DisplayTriggerConfig
@@ -51,6 +52,7 @@ public sealed record MakroPadConfig
                         Input = "*",
                         ActionStatus = "failed",
                         DurationMs = 3000,
+                        TemplateMode = "layout",
                         Template = "Action failed\n{action.message}"
                     },
                     new DisplayTriggerConfig
@@ -59,6 +61,7 @@ public sealed record MakroPadConfig
                         EventType = "mediaChanged",
                         Input = "*",
                         DurationMs = 0,
+                        TemplateMode = "layout",
                         Template = "Media\n{media.artist}\n{media.title}"
                     }
                 ]

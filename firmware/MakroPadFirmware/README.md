@@ -117,6 +117,8 @@ display;mode=message;text=Hello%20MakroPad
 display;mode=profile;name=Default
 display;mode=media;artist=Daft%20Punk;title=Digital%20Love
 display;mode=media;artist=Daft%20Punk;title=Digital%20Love;preferred=false
+display;mode=layout;layout=volume;durationMs=1500;title=Volume;line1=System;value=72
+display;mode=layout;layout=action;durationMs=2000;title=Action;line1=Muted;icon=check
 display;mode=clear
 ```
 
@@ -151,6 +153,9 @@ current text size.
 Temporary `display;mode=template` messages can provide optional
 `line1Size`..`line5Size` values. Supported text sizes are `1` and `2`; missing
 or invalid values fall back to `1`.
+Structured `display;mode=layout` messages render small OLED screens with a
+header, text, optional icon, and for `layout=volume` a progress bar. Supported
+layouts are `volume`, `media`, `action`, `profile`, and `status`.
 
 Button and slider events should appear as:
 

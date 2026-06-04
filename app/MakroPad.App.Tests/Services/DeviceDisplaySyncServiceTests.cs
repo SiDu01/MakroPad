@@ -32,6 +32,28 @@ public sealed class DeviceDisplaySyncServiceTests
         Assert.False(message.Values.ContainsKey("line2Size"));
     }
 
+    [Fact]
+    public async Task SendTemporaryLayoutAsyncSendsLayoutFields()
+    {
+        var connection = new RecordingConnection();
+        var service = new DeviceDisplaySyncService(new FakeSystemVolumeController());
+
+        await service.SendTemporaryLayoutAsync(
+            connection,
+            new DisplayLayoutScreen("volume", "Volume", "System", ValuePercent: 72, Icon: "check"),
+            1500);
+
+        var message = ProtocolCodec.Parse(connection.SentLines.Single());
+        Assert.Equal("display", message.Type);
+        Assert.Equal("layout", message.Values["mode"]);
+        Assert.Equal("volume", message.Values["layout"]);
+        Assert.Equal("1500", message.Values["durationMs"]);
+        Assert.Equal("Volume", message.Values["title"]);
+        Assert.Equal("System", message.Values["line1"]);
+        Assert.Equal("72", message.Values["value"]);
+        Assert.Equal("check", message.Values["icon"]);
+    }
+
     private sealed class RecordingConnection : IMakroPadConnection
     {
         public DeviceConnectionState State { get; private set; } = DeviceConnectionState.Connected;

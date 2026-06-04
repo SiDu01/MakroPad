@@ -20,7 +20,7 @@ public sealed class DisplayTriggerNormalizerTests
             MaxPercent = -10,
             ChangePercent = 101,
             DurationMs = -1,
-            TemplateMode = "HTML",
+            TemplateMode = "layout",
             Template = "  "
         };
 
@@ -36,7 +36,7 @@ public sealed class DisplayTriggerNormalizerTests
         Assert.Equal(100, result.MaxPercent);
         Assert.Equal(100, result.ChangePercent);
         Assert.Equal(0, result.DurationMs);
-        Assert.Equal("html", result.TemplateMode);
+        Assert.Equal("layout", result.TemplateMode);
         Assert.Equal(DisplayTriggerNormalizer.DefaultTemplate, result.Template);
     }
 
@@ -139,5 +139,16 @@ public sealed class DisplayTriggerNormalizerTests
     public void NormalizeDurationClampsToSupportedRange(int value, int expected)
     {
         Assert.Equal(expected, DisplayTriggerNormalizer.NormalizeDurationMs(value));
+    }
+
+    [Theory]
+    [InlineData("normal", "normal")]
+    [InlineData("HTML", "html")]
+    [InlineData("Layout", "layout")]
+    [InlineData("unknown", "normal")]
+    [InlineData(null, "normal")]
+    public void NormalizeTemplateModeUsesSupportedValues(string? value, string expected)
+    {
+        Assert.Equal(expected, DisplayTriggerNormalizer.NormalizeTemplateMode(value));
     }
 }

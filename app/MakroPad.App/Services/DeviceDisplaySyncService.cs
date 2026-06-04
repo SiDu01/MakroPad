@@ -83,6 +83,34 @@ public sealed class DeviceDisplaySyncService
         await connection.SendLineAsync(ProtocolCodec.Format("display", values), cancellationToken);
     }
 
+    public async Task SendTemporaryLayoutAsync(
+        IMakroPadConnection? connection,
+        DisplayLayoutScreen screen,
+        int durationMs,
+        CancellationToken cancellationToken = default)
+    {
+        if (connection is null || connection.State != DeviceConnectionState.Connected)
+        {
+            return;
+        }
+
+        await connection.SendLineAsync(
+            ProtocolCodec.Format(
+                "display",
+                new Dictionary<string, string?>
+                {
+                    ["mode"] = "layout",
+                    ["layout"] = screen.NormalizedLayout,
+                    ["durationMs"] = Math.Max(0, durationMs).ToString(),
+                    ["title"] = screen.Title,
+                    ["line1"] = screen.Line1,
+                    ["line2"] = screen.Line2,
+                    ["value"] = screen.NormalizedValuePercent?.ToString(),
+                    ["icon"] = string.IsNullOrWhiteSpace(screen.Icon) ? null : screen.Icon
+                }),
+            cancellationToken);
+    }
+
     public OledDefaultScreenPreview RenderPreview(DeviceDisplayState state)
     {
         return oledDefaultScreenRenderer.RenderPreview(
