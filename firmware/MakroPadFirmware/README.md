@@ -69,7 +69,7 @@ the intended settings:
 - Board: `ESP32S3 Dev Module` or the matching ESP32-S3-DevKitC-1 entry if
   available.
 - USB CDC On Boot: `Enabled`.
-- USB Mode: USB CDC or USB-OTG mode suitable for Serial over native USB.
+- USB Mode: native USB/TinyUSB mode suitable for composite CDC + HID.
 - Upload Mode: use the port that works for your board, usually the USB-to-UART
   port first.
 - Serial Monitor baud: `115200`.
@@ -172,6 +172,28 @@ low-pass filter, snaps near-endpoint values to `0`/`4095`, and only sends when
 the value moved beyond the configured deadband and send interval. If a wired
 slider still jitters, add a 100 nF capacitor from the slider wiper/GPIO to GND
 near the ESP32 pin.
+
+## App-disconnected HID fallback
+
+When the companion app has not acknowledged the firmware for a short grace
+period, the firmware enters a simple HID fallback mode. Serial protocol events
+are still emitted, but the firmware also sends USB HID consumer-control events:
+
+| Input | HID fallback |
+| --- | --- |
+| Button 1 | Play/Pause |
+| Button 2 | Next track |
+| Button 3 | Previous track |
+| Button 4 | Stop |
+| Button 5 | Mute |
+| Button 6 | Volume down |
+| Button 7 | Volume up |
+| Slider 1 | Relative system volume |
+
+Slider 1 uses relative volume up/down HID events, so it cannot set an exact OS
+volume percentage without the app. Per-application volume, active-application
+volume, and "all except active application" volume require host OS process and
+audio-session information and therefore remain app-side features.
 
 Additional buttons use the same protocol with their numeric IDs:
 

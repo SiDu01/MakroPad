@@ -1,4 +1,6 @@
 #include <Arduino.h>
+#include <USB.h>
+#include <USBHIDConsumerControl.h>
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
@@ -30,6 +32,9 @@ constexpr uint8_t SliderSampleCount = 9;
 constexpr uint8_t SliderKeptSampleCount = 5;
 constexpr uint8_t SliderSmoothingDivisor = 16;
 constexpr uint32_t SliderMinSendIntervalMs = 35;
+constexpr uint32_t HidFallbackStartupGraceMs = 2500;
+constexpr uint8_t HidFallbackVolumePercentPerStep = 2;
+constexpr uint8_t HidFallbackMaxVolumeStepsPerEvent = 50;
 constexpr size_t MaxLineLength = 512;
 constexpr size_t ActiveButtonCount = sizeof(ButtonPins) / sizeof(ButtonPins[0]);
 constexpr size_t ActiveSliderCount = 1;
@@ -47,6 +52,7 @@ constexpr uint32_t DisplayScrollStepMs = 220;
 constexpr uint32_t DisplayScrollPauseMs = 900;
 
 Adafruit_SSD1306 display(ScreenWidth, ScreenHeight, &Wire, OledResetPin);
+USBHIDConsumerControl hidConsumerControl;
 
 struct ButtonState {
   uint8_t id;
@@ -66,10 +72,12 @@ struct SliderState {
 
 ButtonState buttons[ActiveButtonCount];
 SliderState sliders[ActiveSliderCount];
+int hidFallbackSliderPercents[ActiveSliderCount];
 
 String usbSerialLine;
 String uartSerialLine;
 bool hostAcknowledged = false;
+bool hidFallbackWasActive = false;
 bool displayAvailable = false;
 uint32_t lastHelloMs = 0;
 uint32_t lastHostSeenMs = 0;
@@ -580,10 +588,117 @@ void drawPreferredDisplay() {
   drawIdleStatus();
 }
 
+int mapSliderValueToPercent(int value) {
+  const int clamped = constrain(value, 0, SliderAdcMax);
+  return static_cast<int>((static_cast<long>(clamped) * 100L + (SliderAdcMax / 2)) / SliderAdcMax);
+}
+
+bool isHidFallbackActive() {
+  return !hostAcknowledged && millis() >= HidFallbackStartupGraceMs;
+}
+
+void resetHidFallbackSliderState() {
+  for (size_t index = 0; index < ActiveSliderCount; index++) {
+    hidFallbackSliderPercents[index] = sliders[index].smoothedValue >= 0
+      ? mapSliderValueToPercent(sliders[index].smoothedValue)
+      : -1;
+  }
+}
+
+void sendHidConsumerControl(uint16_t usage) {
+  hidConsumerControl.press(usage);
+  delay(2);
+  hidConsumerControl.release();
+}
+
+uint16_t hidFallbackButtonUsage(uint8_t buttonId) {
+  switch (buttonId) {
+    case 1:
+      return CONSUMER_CONTROL_PLAY_PAUSE;
+    case 2:
+      return CONSUMER_CONTROL_SCAN_NEXT;
+    case 3:
+      return CONSUMER_CONTROL_SCAN_PREVIOUS;
+    case 4:
+      return CONSUMER_CONTROL_STOP;
+    case 5:
+      return CONSUMER_CONTROL_MUTE;
+    case 6:
+      return CONSUMER_CONTROL_VOLUME_DECREMENT;
+    case 7:
+      return CONSUMER_CONTROL_VOLUME_INCREMENT;
+    default:
+      return 0;
+  }
+}
+
+void handleHidFallbackButton(uint8_t buttonId, bool pressed) {
+  if (!isHidFallbackActive() || pressed) {
+    return;
+  }
+
+  const uint16_t usage = hidFallbackButtonUsage(buttonId);
+  if (usage == 0) {
+    return;
+  }
+
+  sendHidConsumerControl(usage);
+}
+
+void handleHidFallbackSlider(const SliderState& slider) {
+  if (!isHidFallbackActive() || slider.id != 1 || slider.id > ActiveSliderCount) {
+    return;
+  }
+
+  const int percent = mapSliderValueToPercent(slider.smoothedValue);
+  int& lastPercent = hidFallbackSliderPercents[slider.id - 1];
+  if (lastPercent < 0) {
+    lastPercent = percent;
+    return;
+  }
+
+  const int delta = percent - lastPercent;
+  if (delta == 0) {
+    return;
+  }
+
+  const uint16_t usage = delta > 0
+    ? CONSUMER_CONTROL_VOLUME_INCREMENT
+    : CONSUMER_CONTROL_VOLUME_DECREMENT;
+  const int steps = min(
+    static_cast<int>(HidFallbackMaxVolumeStepsPerEvent),
+    max(1, (abs(delta) + HidFallbackVolumePercentPerStep - 1) / HidFallbackVolumePercentPerStep));
+
+  for (int step = 0; step < steps; step++) {
+    sendHidConsumerControl(usage);
+  }
+
+  lastPercent = percent;
+}
+
+void updateHidFallbackState() {
+  const bool active = isHidFallbackActive();
+  if (active == hidFallbackWasActive) {
+    return;
+  }
+
+  hidFallbackWasActive = active;
+  resetHidFallbackSliderState();
+
+  if (active) {
+    temporaryDisplayUntilMs = 0;
+    drawStatusMessage("HID Fallback", "System volume");
+  } else {
+    drawPreferredDisplay();
+  }
+}
+
 void markHostSeen() {
   const bool wasAcknowledged = hostAcknowledged;
   hostAcknowledged = true;
   lastHostSeenMs = millis();
+  hidFallbackWasActive = false;
+  resetHidFallbackSliderState();
 
   if (!wasAcknowledged) {
     temporaryDisplayUntilMs = 0;
@@ -831,6 +946,7 @@ void pollButton(ButtonState& button) {
 
   button.stablePressed = pressed;
   sendLine("button;id=" + String(button.id) + ";state=" + String(pressed ? "down" : "up"));
+  handleHidFallbackButton(button.id, pressed);
 }
 
 int snapSliderValue(int value) {
@@ -899,6 +1015,7 @@ void pollSlider(SliderState& slider) {
   slider.lastSentValue = slider.smoothedValue;
   slider.lastSentMs = now;
   sendLine("slider;id=" + String(slider.id) + ";value=" + String(slider.smoothedValue) + ";raw=" + String(raw));
+  handleHidFallbackSlider(slider);
 }
 
 void initDisplay() {
@@ -939,7 +1056,13 @@ void initSliders() {
       -1,
       0
     };
+    hidFallbackSliderPercents[index] = -1;
   }
+}
+
+void initHidFallback() {
+  hidConsumerControl.begin();
+  USB.begin();
 }
 
 void updateDisplayTimeout() {
@@ -1002,6 +1125,7 @@ void setup() {
   Serial.begin(SerialBaud);
   Serial0.begin(SerialBaud);
 
+  initHidFallback();
   initButtons();
   initSliders();
   analogReadResolution(12);
@@ -1021,6 +1145,7 @@ void loop() {
   }
 
   updateHostTimeout();
+  updateHidFallbackState();
   updateDisplayTimeout();
   updateDisplayScroll();
 

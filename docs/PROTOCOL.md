@@ -388,4 +388,6 @@ JSON Lines wechseln oder JSON als Value in ausgewaehlten Nachrichten erlauben.
   fuer Actions gemappt.
 - Ob App-seitige Konfiguration spaeter vollstaendig an den ESP uebertragen und
   dort persistent gespeichert wird.
-- Wie HID-Aktionen mit dem Serial-Protokoll koordiniert werden.
+- Der Firmware-HID-Fallback deckt nur systemweite Consumer-Control-Aktionen ab,
+  wenn die App nicht verbunden ist. App-spezifische Lautstaerke bleibt
+  appseitig, weil die Firmware keine aktive Anwendung oder Audio-Sessions kennt.

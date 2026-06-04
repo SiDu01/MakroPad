@@ -93,6 +93,9 @@ MakroPad has a working vertical prototype across firmware and desktop app:
   stronger low-pass filtering, deadband hysteresis, endpoint snapping, and a
   minimum send interval. Hardware docs now recommend a 100 nF wiper-to-GND
   capacitor if a physical slider still jitters.
+- Added a firmware HID fallback for app-disconnected operation. Without an app
+  ACK, buttons 1-7 send basic media/volume consumer-control events and slider 1
+  sends relative system-volume HID events. App-specific volume remains app-side.
 
 ## Supported Actions
 
@@ -181,6 +184,9 @@ MakroPad has a working vertical prototype across firmware and desktop app:
 - Slider quality is still being validated with replacement hardware. Firmware
   filtering has been improved, but the latest filter still needs a flash and
   real-slider test; add a 100 nF wiper-to-GND capacitor if jitter remains.
+- HID fallback needs a flash test with the Arduino ESP32 USB mode set for
+  composite CDC + HID. Slider 1 is relative system volume only; active-app and
+  "all except active app" volume still require the companion app.
 - App UI is functional after the display-editor redesign and now guards dense
   editor forms against small-window overlap, but the new Display tab still
   needs hardware-driven usability feedback.
