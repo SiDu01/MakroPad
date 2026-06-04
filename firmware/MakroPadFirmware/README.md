@@ -190,10 +190,11 @@ are still emitted, but the firmware also sends USB HID consumer-control events:
 | Button 7 | Volume up |
 | Slider 1 | Relative system volume |
 
-Slider 1 uses relative volume up/down HID events, so it cannot set an exact OS
-volume percentage without the app. Per-application volume, active-application
-volume, and "all except active application" volume require host OS process and
-audio-session information and therefore remain app-side features.
+Slider 1 uses throttled relative volume up/down HID nudges, so it cannot set an
+exact OS volume percentage or mirror the physical slider position without the
+app. Per-application volume, active-application volume, and "all except active
+application" volume require host OS process and audio-session information and
+therefore remain app-side features.
 
 For fallback debugging, every HID fallback action also writes a
 `hid-fallback;...` protocol line and shows a short OLED status. If the OLED/log

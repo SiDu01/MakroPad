@@ -34,8 +34,8 @@ constexpr uint8_t SliderSmoothingDivisor = 16;
 constexpr uint32_t SliderMinSendIntervalMs = 35;
 constexpr uint32_t HidFallbackStartupGraceMs = 2500;
 constexpr uint32_t HidFallbackPressMs = 30;
-constexpr uint8_t HidFallbackVolumePercentPerStep = 2;
-constexpr uint8_t HidFallbackMaxVolumeStepsPerEvent = 50;
+constexpr uint32_t HidFallbackVolumeIntervalMs = 120;
+constexpr uint8_t HidFallbackVolumeNudgeThresholdPercent = 4;
 constexpr size_t MaxLineLength = 512;
 constexpr size_t ActiveButtonCount = sizeof(ButtonPins) / sizeof(ButtonPins[0]);
 constexpr size_t ActiveSliderCount = 1;
@@ -74,6 +74,7 @@ struct SliderState {
 ButtonState buttons[ActiveButtonCount];
 SliderState sliders[ActiveSliderCount];
 int hidFallbackSliderPercents[ActiveSliderCount];
+uint32_t hidFallbackSliderLastSendMs[ActiveSliderCount];
 
 String usbSerialLine;
 String uartSerialLine;
@@ -603,6 +604,7 @@ void resetHidFallbackSliderState() {
     hidFallbackSliderPercents[index] = sliders[index].smoothedValue >= 0
       ? mapSliderValueToPercent(sliders[index].smoothedValue)
       : -1;
+    hidFallbackSliderLastSendMs[index] = 0;
   }
 }
 
@@ -662,23 +664,24 @@ void handleHidFallbackSlider(const SliderState& slider) {
   }
 
   const int delta = percent - lastPercent;
-  if (delta == 0) {
+  if (abs(delta) < HidFallbackVolumeNudgeThresholdPercent) {
+    return;
+  }
+
+  const uint32_t now = millis();
+  uint32_t& lastSendMs = hidFallbackSliderLastSendMs[slider.id - 1];
+  if (lastSendMs > 0 && now - lastSendMs < HidFallbackVolumeIntervalMs) {
     return;
   }
 
   const uint16_t usage = delta > 0
     ? CONSUMER_CONTROL_VOLUME_INCREMENT
     : CONSUMER_CONTROL_VOLUME_DECREMENT;
-  const int steps = min(
-    static_cast<int>(HidFallbackMaxVolumeStepsPerEvent),
-    max(1, (abs(delta) + HidFallbackVolumePercentPerStep - 1) / HidFallbackVolumePercentPerStep));
 
-  for (int step = 0; step < steps; step++) {
-    sendHidConsumerControl(usage);
-  }
-
+  sendHidConsumerControl(usage);
   lastPercent = percent;
-  sendLine("hid-fallback;input=slider:" + String(slider.id) + ";percent=" + String(percent) + ";steps=" + String(steps));
+  lastSendMs = now;
+  sendLine("hid-fallback;input=slider:" + String(slider.id) + ";percent=" + String(percent) + ";steps=1");
   drawStatusMessage("HID Volume", String(percent) + "%");
 }
 
@@ -1063,6 +1066,7 @@ void initSliders() {
       0
     };
     hidFallbackSliderPercents[index] = -1;
+    hidFallbackSliderLastSendMs[index] = 0;
   }
 }
 

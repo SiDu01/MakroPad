@@ -8901,7 +8901,7 @@
       "label": "Supported Actions",
       "file_type": "document",
       "source_file": "docs/HANDOFF.md",
-      "source_location": "L100",
+      "source_location": "L101",
       "id": "docs_handoff_supported_actions",
       "community": 66,
       "norm_label": "supported actions"
@@ -8910,7 +8910,7 @@
       "label": "OLED Behavior",
       "file_type": "document",
       "source_file": "docs/HANDOFF.md",
-      "source_location": "L118",
+      "source_location": "L119",
       "id": "docs_handoff_oled_behavior",
       "community": 66,
       "norm_label": "oled behavior"
@@ -8919,7 +8919,7 @@
       "label": "Known Limitations",
       "file_type": "document",
       "source_file": "docs/HANDOFF.md",
-      "source_location": "L166",
+      "source_location": "L167",
       "id": "docs_handoff_known_limitations",
       "community": 66,
       "norm_label": "known limitations"
@@ -8928,7 +8928,7 @@
       "label": "Verification Baseline",
       "file_type": "document",
       "source_file": "docs/HANDOFF.md",
-      "source_location": "L194",
+      "source_location": "L196",
       "id": "docs_handoff_verification_baseline",
       "community": 66,
       "norm_label": "verification baseline"
@@ -8937,7 +8937,7 @@
       "label": "code:powershell (dotnet build app\\MakroPad.sln)",
       "file_type": "document",
       "source_file": "docs/HANDOFF.md",
-      "source_location": "L198",
+      "source_location": "L200",
       "id": "docs_handoff_codeblock_1",
       "community": 66,
       "norm_label": "code:powershell (dotnet build app\\makropad.sln)"
@@ -8946,7 +8946,7 @@
       "label": "Recommended Next Steps",
       "file_type": "document",
       "source_file": "docs/HANDOFF.md",
-      "source_location": "L206",
+      "source_location": "L208",
       "id": "docs_handoff_recommended_next_steps",
       "community": 66,
       "norm_label": "recommended next steps"
@@ -8955,7 +8955,7 @@
       "label": "Graphify Notes",
       "file_type": "document",
       "source_file": "docs/HANDOFF.md",
-      "source_location": "L226",
+      "source_location": "L228",
       "id": "docs_handoff_graphify_notes",
       "community": 66,
       "norm_label": "graphify notes"
@@ -9792,7 +9792,7 @@
       "label": "code:text (button;id=12;state=down)",
       "file_type": "document",
       "source_file": "firmware/MakroPadFirmware/README.md",
-      "source_location": "L205",
+      "source_location": "L206",
       "id": "makropadfirmware_readme_codeblock_8",
       "community": 65,
       "norm_label": "code:text (button;id=12;state=down)"
@@ -33336,5 +33336,5 @@
       "source_file": "app/README.md"
     }
   ],
-  "built_at_commit": "504a0303e48218af8e56591e9b34e48d19490d04"
+  "built_at_commit": "87d52122bf9373af4bc111f6d2cd840b89d494d4"
 }
