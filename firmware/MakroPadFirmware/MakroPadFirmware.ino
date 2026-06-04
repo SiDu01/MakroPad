@@ -33,6 +33,7 @@ constexpr uint8_t SliderKeptSampleCount = 5;
 constexpr uint8_t SliderSmoothingDivisor = 16;
 constexpr uint32_t SliderMinSendIntervalMs = 35;
 constexpr uint32_t HidFallbackStartupGraceMs = 2500;
+constexpr uint32_t HidFallbackPressMs = 30;
 constexpr uint8_t HidFallbackVolumePercentPerStep = 2;
 constexpr uint8_t HidFallbackMaxVolumeStepsPerEvent = 50;
 constexpr size_t MaxLineLength = 512;
@@ -607,8 +608,9 @@ void resetHidFallbackSliderState() {
 
 void sendHidConsumerControl(uint16_t usage) {
   hidConsumerControl.press(usage);
-  delay(2);
+  delay(HidFallbackPressMs);
   hidConsumerControl.release();
+  delay(2);
 }
 
 uint16_t hidFallbackButtonUsage(uint8_t buttonId) {
@@ -643,6 +645,8 @@ void handleHidFallbackButton(uint8_t buttonId, bool pressed) {
   }
 
   sendHidConsumerControl(usage);
+  sendLine("hid-fallback;input=button:" + String(buttonId) + ";usage=" + String(usage));
+  drawStatusMessage("HID Button " + String(buttonId), "Usage " + String(usage));
 }
 
 void handleHidFallbackSlider(const SliderState& slider) {
@@ -674,6 +678,8 @@ void handleHidFallbackSlider(const SliderState& slider) {
   }
 
   lastPercent = percent;
+  sendLine("hid-fallback;input=slider:" + String(slider.id) + ";percent=" + String(percent) + ";steps=" + String(steps));
+  drawStatusMessage("HID Volume", String(percent) + "%");
 }
 
 void updateHidFallbackState() {

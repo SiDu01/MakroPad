@@ -1,7 +1,7 @@
 # Graph Report - MakroPad  (2026-06-04)
 
 ## Corpus Check
-- 131 files · ~34,081 words
+- 131 files · ~34,127 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `4c7f3cca`
+- Built from commit: `504a0303`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 

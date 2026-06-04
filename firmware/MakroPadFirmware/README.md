@@ -195,6 +195,11 @@ volume percentage without the app. Per-application volume, active-application
 volume, and "all except active application" volume require host OS process and
 audio-session information and therefore remain app-side features.
 
+For fallback debugging, every HID fallback action also writes a
+`hid-fallback;...` protocol line and shows a short OLED status. If the OLED/log
+changes but the operating system does not react, check that the board was
+flashed in a USB/TinyUSB mode that enumerates composite CDC + HID.
+
 Additional buttons use the same protocol with their numeric IDs:
 
 ```text
