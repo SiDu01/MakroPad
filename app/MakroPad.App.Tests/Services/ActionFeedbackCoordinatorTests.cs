@@ -67,6 +67,52 @@ public sealed class ActionFeedbackCoordinatorTests
         Assert.Null(deviceSessionService.ActiveConnection);
     }
 
+    [Fact]
+    public async Task HandleAsyncFallsBackToFirmwareFeedbackWhenDisplayTriggerSendFails()
+    {
+        var sink = new RejectingDisplayTriggerSink();
+        using var orchestrator = new DisplayTriggerOrchestrator(sink);
+        var deviceSessionService = new DeviceSessionService();
+        var sentLines = new List<string>();
+        deviceSessionService.EventReceived += (_, deviceEvent) =>
+        {
+            if (deviceEvent.Direction == "App -> ESP")
+            {
+                sentLines.Add(deviceEvent.Line);
+            }
+        };
+        await deviceSessionService.ConnectAsync(DeviceSessionService.SimulatorPort);
+        var coordinator = new ActionFeedbackCoordinator(
+            CreatePipeline(),
+            orchestrator,
+            deviceSessionService);
+        var config = CreateLogActionConfig() with
+        {
+            AppSettings = MakroPadConfig.CreateDefault().AppSettings with
+            {
+                DisplayTriggers =
+                [
+                    new DisplayTriggerConfig
+                    {
+                        Enabled = true,
+                        EventType = "actionResult",
+                        Input = "*",
+                        Template = "{action.message}"
+                    }
+                ]
+            }
+        };
+
+        var result = await coordinator.HandleAsync(
+            config,
+            new DisplayTriggerRuntimeState("Default", "Connected"),
+            "button:1");
+
+        Assert.True(result.SuppressInputDisplayTriggers);
+        Assert.Contains("Action result display trigger failed", result.ErrorMessage);
+        Assert.Contains(sentLines, line => line.StartsWith("action-result;", StringComparison.Ordinal));
+    }
+
     private static ActionPipeline CreatePipeline()
     {
         return new ActionPipeline(

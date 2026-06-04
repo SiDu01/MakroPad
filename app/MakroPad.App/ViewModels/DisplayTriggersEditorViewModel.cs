@@ -218,11 +218,11 @@ public partial class DisplayTriggersEditorViewModel : ViewModelBase
 
     public string DisplayTriggerPlaceholderHint => NormalizeEventType(DisplayTriggerEditorEventType) switch
     {
-        "actionResult" => "{}Placeholders: {action.status}, {action.name}, {action.message}, {input}, {profile}, {status}.",
-        "mediaChanged" => "{}Placeholders: {media.artist}, {media.title}, {media.track}, {profile}, {status}.",
-        "connectionChanged" => "{}Placeholders: {connection.status}, {profile}, {status}.",
-        "profileChanged" => "{}Placeholders: {profile}, {status}.",
-        _ => "{}Placeholders: {input}, {slider.id}, {slider.value}, {slider.percent}, {profile}, {status}."
+        "actionResult" => "Placeholders: {action.status}, {action.name}, {action.message}, {input}, {profile}, {status}.",
+        "mediaChanged" => "Placeholders: {media.artist}, {media.title}, {media.track}, {profile}, {status}.",
+        "connectionChanged" => "Placeholders: {connection.status}, {profile}, {status}.",
+        "profileChanged" => "Placeholders: {profile}, {status}.",
+        _ => "Placeholders: {input}, {slider.id}, {slider.value}, {slider.percent}, {profile}, {status}."
     };
 
     public bool IsInputDisplayTrigger => NormalizeEventType(DisplayTriggerEditorEventType) == "input";
@@ -407,14 +407,14 @@ public partial class DisplayTriggersEditorViewModel : ViewModelBase
         string activeProfile,
         string connectionStatus,
         int lastSliderValue,
-        string mediaTrack)
+        NowPlayingTrack? mediaTrack)
     {
         this.activeProfile = activeProfile ?? "";
         runtimeConnectionStatus = connectionStatus ?? "";
         DisplayTriggerPreviewPercent = DisplayTriggerRenderer.MapSliderValueToPercent(lastSliderValue);
         DisplayTriggerPreviewConnectionStatus = NormalizeConnectionStatus(connectionStatus);
-        DisplayTriggerPreviewMediaArtist = "";
-        DisplayTriggerPreviewMediaTitle = mediaTrack ?? "";
+        DisplayTriggerPreviewMediaArtist = mediaTrack?.Artist ?? "";
+        DisplayTriggerPreviewMediaTitle = mediaTrack?.Title ?? "";
         RefreshPreview();
     }
 

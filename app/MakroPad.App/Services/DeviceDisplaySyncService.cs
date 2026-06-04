@@ -12,6 +12,7 @@ public sealed class DeviceDisplaySyncService
 {
     private readonly ISystemVolumeController systemVolumeController;
     private readonly OledDefaultScreenRenderer oledDefaultScreenRenderer = new();
+    private readonly DeviceConfigMessageBuilder configMessageBuilder = new();
 
     public int? LastKnownSystemVolumePercent { get; private set; }
 
@@ -32,29 +33,9 @@ public sealed class DeviceDisplaySyncService
 
         var now = DateTime.Now;
         LastKnownSystemVolumePercent = await systemVolumeController.GetMasterVolumePercentAsync(cancellationToken);
-        var line = ProtocolCodec.Format(
-            "config",
-            new Dictionary<string, string?>
-            {
-                ["profile"] = state.ActiveProfileName,
-                ["actionResultTimeoutMs"] = Math.Max(0, state.ActionResultTimeoutMs).ToString(),
-                ["defaultRows"] = OledDefaultScreenRenderer.NormalizeRows(state.DefaultScreenRows).ToString(),
-                ["defaultTitle"] = OledDefaultScreenRenderer.NormalizeLine(state.DefaultScreenTitle, "MakroPad"),
-                ["defaultLine1"] = OledDefaultScreenRenderer.NormalizeLine(state.DefaultScreenLine1, "{profile}"),
-                ["defaultLine2"] = OledDefaultScreenRenderer.NormalizeLine(state.DefaultScreenLine2, "{status}"),
-                ["defaultLine3"] = state.DefaultScreenLine3.Trim(),
-                ["defaultLine4"] = state.DefaultScreenLine4.Trim(),
-                ["time"] = now.ToString("HH:mm"),
-                ["date"] = now.ToString("dd.MM.yyyy"),
-                ["volumeSystem"] = LastKnownSystemVolumePercent is null ? null : $"{LastKnownSystemVolumePercent}%",
-                ["preferredDisplay"] = state.EnableNowPlayingDisplay
-                    && state.NowPlayingTrack is not null
-                    && !UsesMediaPlaceholder(state)
-                        ? "media"
-                        : "profile"
-            });
-
-        await connection.SendLineAsync(line, cancellationToken);
+        await connection.SendLineAsync(
+            configMessageBuilder.Build(state, now, LastKnownSystemVolumePercent),
+            cancellationToken);
     }
 
     public async Task SendTemporaryTemplateAsync(
@@ -100,11 +81,6 @@ public sealed class DeviceDisplaySyncService
 
     public bool UsesMediaPlaceholder(DeviceDisplayState state)
     {
-        return OledDefaultScreenRenderer.UsesMediaPlaceholder(
-            state.DefaultScreenTitle,
-            state.DefaultScreenLine1,
-            state.DefaultScreenLine2,
-            state.DefaultScreenLine3,
-            state.DefaultScreenLine4);
+        return configMessageBuilder.UsesMediaPlaceholder(state);
     }
 }
