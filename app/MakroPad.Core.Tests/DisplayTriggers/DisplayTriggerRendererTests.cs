@@ -114,6 +114,20 @@ public sealed class DisplayTriggerRendererTests
     }
 
     [Fact]
+    public void RenderLinesKeepsLongLinesForFirmwareScrolling()
+    {
+        const string longLine = "This line should scroll across the OLED instead of being clipped";
+        var trigger = new DisplayTriggerConfig
+        {
+            Template = longLine
+        };
+
+        var result = DisplayTriggerRenderer.RenderLines(trigger, new DisplayTriggerRenderContext());
+
+        Assert.Equal([longLine], result);
+    }
+
+    [Fact]
     public void RenderLinesAppliesHtmlModeAfterPlaceholderReplacement()
     {
         var trigger = new DisplayTriggerConfig

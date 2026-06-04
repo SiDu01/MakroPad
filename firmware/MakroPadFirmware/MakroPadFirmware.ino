@@ -33,6 +33,12 @@ static_assert(ActiveSliderCount <= sizeof(SliderPins) / sizeof(SliderPins[0]), "
 constexpr int ScreenWidth = 128;
 constexpr int ScreenHeight = 64;
 constexpr int OledResetPin = -1;
+constexpr int MaxTextSizeOneCharacters = 21;
+constexpr int MaxDisplayLines = 5;
+constexpr int DisplayLineHeight = 10;
+constexpr int DisplayScrollGapCharacters = 3;
+constexpr uint32_t DisplayScrollStepMs = 220;
+constexpr uint32_t DisplayScrollPauseMs = 900;
 
 Adafruit_SSD1306 display(ScreenWidth, ScreenHeight, &Wire, OledResetPin);
 
@@ -75,6 +81,11 @@ String defaultScreenLine4;
 String currentTime;
 String currentDate;
 String currentSystemVolume;
+String activeDisplayLines[MaxDisplayLines];
+uint8_t activeDisplayLineCount = 0;
+uint16_t activeDisplayScrollStep = 0;
+uint32_t lastDisplayScrollMs = 0;
+bool activeDisplayScrollNeeded = false;
 
 String percentDecode(const String& value) {
   String decoded;
@@ -150,7 +161,9 @@ void sendError(const char* code, const char* message) {
   sendLine("error;code=" + String(code) + ";message=" + String(message));
 }
 
-String fitDisplayLine(const String& line);
+String renderDisplayLine(const String& line);
+void renderActiveDisplayLines();
+void setDisplayLines(const String lines[], uint8_t count);
 
 void drawStatusMessage(
   const String& line1,
@@ -158,6 +171,90 @@ void drawStatusMessage(
   const String& line3 = "",
   const String& line4 = "",
   const String& line5 = "") {
+  String lines[MaxDisplayLines];
+  uint8_t count = 0;
+
+  lines[count++] = line1;
+  if (line2.length() > 0) {
+    lines[count++] = line2;
+  }
+
+  if (line3.length() > 0) {
+    lines[count++] = line3;
+  }
+
+  if (line4.length() > 0) {
+    lines[count++] = line4;
+  }
+
+  if (line5.length() > 0) {
+    lines[count++] = line5;
+  }
+
+  setDisplayLines(lines, count);
+}
+
+void drawMedia(const String& artist, const String& title);
+
+bool displayLinesChanged(const String lines[], uint8_t count) {
+  if (activeDisplayLineCount != count) {
+    return true;
+  }
+
+  for (uint8_t index = 0; index < count; index++) {
+    if (activeDisplayLines[index] != lines[index]) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+bool displayNeedsScroll(const String lines[], uint8_t count) {
+  for (uint8_t index = 0; index < count; index++) {
+    if (lines[index].length() > MaxTextSizeOneCharacters) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+uint16_t displayScrollCycleLength() {
+  uint16_t longest = 0;
+
+  for (uint8_t index = 0; index < activeDisplayLineCount; index++) {
+    if (activeDisplayLines[index].length() > longest) {
+      longest = activeDisplayLines[index].length();
+    }
+  }
+
+  return longest > MaxTextSizeOneCharacters
+    ? longest + DisplayScrollGapCharacters
+    : 0;
+}
+
+String renderDisplayLine(const String& line) {
+  if (line.length() <= MaxTextSizeOneCharacters) {
+    return line;
+  }
+
+  const uint16_t cycleLength = line.length() + DisplayScrollGapCharacters;
+  const uint16_t start = activeDisplayScrollStep % cycleLength;
+  String visible;
+  visible.reserve(MaxTextSizeOneCharacters);
+
+  for (int offset = 0; offset < MaxTextSizeOneCharacters; offset++) {
+    const uint16_t sourceIndex = (start + offset) % cycleLength;
+    visible += sourceIndex < line.length()
+      ? line[sourceIndex]
+      : ' ';
+  }
+
+  return visible;
+}
+
+void renderActiveDisplayLines() {
   if (!displayAvailable) {
     return;
   }
@@ -165,38 +262,36 @@ void drawStatusMessage(
   display.clearDisplay();
   display.setTextSize(1);
   display.setTextColor(SSD1306_WHITE);
-  display.setCursor(0, 0);
-  display.println(fitDisplayLine(line1));
 
-  if (line2.length() > 0) {
-    display.println(fitDisplayLine(line2));
-  }
-
-  if (line3.length() > 0) {
-    display.println(fitDisplayLine(line3));
-  }
-
-  if (line4.length() > 0) {
-    display.println(fitDisplayLine(line4));
-  }
-
-  if (line5.length() > 0) {
-    display.println(fitDisplayLine(line5));
+  for (uint8_t index = 0; index < activeDisplayLineCount && index < MaxDisplayLines; index++) {
+    display.setCursor(0, index * DisplayLineHeight);
+    display.println(renderDisplayLine(activeDisplayLines[index]));
   }
 
   display.display();
 }
 
-void drawMedia(const String& artist, const String& title);
+void setDisplayLines(const String lines[], uint8_t count) {
+  const uint8_t cappedCount = min(count, static_cast<uint8_t>(MaxDisplayLines));
+  const bool changed = displayLinesChanged(lines, cappedCount);
 
-String fitDisplayLine(const String& line) {
-  constexpr int MaxTextSizeOneCharacters = 21;
-
-  if (line.length() <= MaxTextSizeOneCharacters) {
-    return line;
+  for (uint8_t index = 0; index < cappedCount; index++) {
+    activeDisplayLines[index] = lines[index];
   }
 
-  return line.substring(0, MaxTextSizeOneCharacters - 2) + "..";
+  for (uint8_t index = cappedCount; index < MaxDisplayLines; index++) {
+    activeDisplayLines[index] = "";
+  }
+
+  activeDisplayLineCount = cappedCount;
+  activeDisplayScrollNeeded = displayNeedsScroll(activeDisplayLines, activeDisplayLineCount);
+
+  if (changed) {
+    activeDisplayScrollStep = 0;
+    lastDisplayScrollMs = millis();
+  }
+
+  renderActiveDisplayLines();
 }
 
 String formatUptime() {
@@ -269,19 +364,14 @@ void markHostSeen() {
 }
 
 void drawMedia(const String& artist, const String& title) {
-  if (!displayAvailable) {
-    return;
-  }
-
-  display.clearDisplay();
-  display.setTextSize(1);
-  display.setTextColor(SSD1306_WHITE);
-  display.setCursor(0, 0);
-  display.println("Media");
-  display.println();
-  display.println(fitDisplayLine(artist));
-  display.println(fitDisplayLine(title));
-  display.display();
+  String lines[MaxDisplayLines] = {
+    "Media",
+    "",
+    artist,
+    title,
+    ""
+  };
+  setDisplayLines(lines, 4);
 }
 
 void handleDisplayCommand(const String& line) {
@@ -289,6 +379,9 @@ void handleDisplayCommand(const String& line) {
   temporaryDisplayUntilMs = 0;
 
   if (mode == "clear") {
+    activeDisplayLineCount = 0;
+    activeDisplayScrollStep = 0;
+    activeDisplayScrollNeeded = false;
     if (displayAvailable) {
       display.clearDisplay();
       display.display();
@@ -550,6 +643,35 @@ void updateDisplayTimeout() {
   }
 }
 
+void updateDisplayScroll() {
+  if (!activeDisplayScrollNeeded) {
+    return;
+  }
+
+  const uint32_t now = millis();
+  const uint32_t interval = activeDisplayScrollStep == 0
+    ? DisplayScrollPauseMs
+    : DisplayScrollStepMs;
+
+  if (static_cast<uint32_t>(now - lastDisplayScrollMs) < interval) {
+    return;
+  }
+
+  const uint16_t cycleLength = displayScrollCycleLength();
+  if (cycleLength == 0) {
+    activeDisplayScrollNeeded = false;
+    return;
+  }
+
+  activeDisplayScrollStep++;
+  if (activeDisplayScrollStep >= cycleLength) {
+    activeDisplayScrollStep = 0;
+  }
+
+  lastDisplayScrollMs = now;
+  renderActiveDisplayLines();
+}
+
 void updateHostTimeout() {
   if (!hostAcknowledged) {
     return;
@@ -586,6 +708,7 @@ void loop() {
 
   updateHostTimeout();
   updateDisplayTimeout();
+  updateDisplayScroll();
 
   for (size_t index = 0; index < ActiveButtonCount; index++) {
     pollButton(buttons[index]);

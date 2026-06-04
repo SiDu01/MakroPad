@@ -250,7 +250,9 @@ Unterstuetzte Modi fuer Version 1:
 
 Firmware-Hinweis:
 
-- Lange Texte sollen abgeschnitten oder ueber mehrere Zeilen verteilt werden.
+- Lange Textzeilen werden von der Firmware auf dem OLED horizontal gescrollt.
+  Die App kann daher vollstaendige Textzeilen senden; die Desktop-Preview zeigt
+  nur den sichtbaren Startausschnitt.
 - Die App sollte keine pixelgenauen Layoutdaten senden. `template` sendet
   bereits gerenderte Textzeilen, aber keine Bitmap- oder Browser-Daten.
 - Bei `template` setzt `durationMs > 0` das Display nach Ablauf wieder auf die

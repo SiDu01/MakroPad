@@ -112,8 +112,9 @@ deadband, defaulting to 2 percentage points, so small analog jitter does not
 bounce between adjacent values like 99% and 100%.
 
 The OLED default screen editor shows a small 128x64-style preview. Long lines
-are clipped to match the firmware's current text fitting behavior. The editor
-supports 3-line and 5-line layouts.
+scroll horizontally on the firmware when they exceed the visible OLED width;
+the app preview shows the first visible segment. The editor supports 3-line
+and 5-line layouts.
 
 The settings UI also includes a display trigger editor similar to the macro
 binding editor. It can manage multiple button and slider triggers, require a
@@ -127,8 +128,9 @@ Trigger event types are `input`, `actionResult`, `mediaChanged`,
 condition controls that are relevant to the selected event type.
 Built-in presets, trigger duplication, editable event-specific preview values,
 match diagnostics, content warnings, and a device-width preview make trigger
-authoring possible without generating every real hardware event. Saving the
-config also applies the currently selected valid trigger draft.
+authoring possible without generating every real hardware event. Long trigger
+lines are sent to the device unchanged so the firmware can scroll them. Saving
+the config also applies the currently selected valid trigger draft.
 Action-result triggers can match `ok`, `failed`, or both statuses and use `{action.status}`,
 `{action.name}`, and `{action.message}` placeholders. Existing configs without
 action-result triggers receive default configurable Action and Action failed

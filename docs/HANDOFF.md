@@ -1,6 +1,6 @@
 # MakroPad Handoff
 
-Last updated: 2026-06-03
+Last updated: 2026-06-04
 
 ## Current State
 
@@ -60,6 +60,10 @@ MakroPad has a working vertical prototype across firmware and desktop app:
 - Added configurable OLED display triggers for button and slider inputs. The
   app can render normal text or lightweight HTML-like content to OLED text lines
   and sends them as temporary `display;mode=template` messages.
+- Added firmware-side horizontal scrolling for OLED text lines longer than the
+  visible 21-character width. Display triggers and their Test button now send
+  full rendered lines so long content can scroll on the device while the app
+  preview remains a fixed-width snapshot.
 
 ## Supported Actions
 

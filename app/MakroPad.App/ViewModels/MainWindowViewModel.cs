@@ -456,18 +456,17 @@ public partial class MainWindowViewModel : ViewModelBase
             return;
         }
 
-        var lines = DisplayTriggerRenderer.FitPreviewLines(
-            DisplayTriggerRenderer.RenderLines(
-                trigger,
-                new DisplayTriggerRenderContext
-                {
-                    Input = trigger.Input,
-                    Profile = ActiveProfileName,
-                    Status = ConnectionStatus,
-                    ConnectionStatus = ConnectionStatus,
-                    MediaArtist = NowPlayingViewModel.LastSentTrack?.Artist ?? "",
-                    MediaTitle = NowPlayingViewModel.LastSentTrack?.Title ?? ""
-                }));
+        var lines = DisplayTriggerRenderer.RenderLines(
+            trigger,
+            new DisplayTriggerRenderContext
+            {
+                Input = trigger.Input,
+                Profile = ActiveProfileName,
+                Status = ConnectionStatus,
+                ConnectionStatus = ConnectionStatus,
+                MediaArtist = NowPlayingViewModel.LastSentTrack?.Artist ?? "",
+                MediaTitle = NowPlayingViewModel.LastSentTrack?.Title ?? ""
+            });
 
         if (lines.Count == 0)
         {

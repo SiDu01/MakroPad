@@ -314,7 +314,7 @@ public partial class DisplayTriggersEditorViewModel : ViewModelBase
             if (DisplayTriggerNormalizer.NormalizeTemplateMode(DisplayTriggerEditorTemplateMode) == "normal"
                 && renderedLines.Any(line => line.Length > DisplayTriggerRenderer.MaxPreviewCharacters))
             {
-                return $"OLED preview clips lines longer than {DisplayTriggerRenderer.MaxPreviewCharacters} characters.";
+                return $"Long OLED lines scroll on the device; preview shows the first {DisplayTriggerRenderer.MaxPreviewCharacters} characters.";
             }
 
             return "";

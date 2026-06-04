@@ -141,7 +141,8 @@ configured lines. The firmware supports these placeholders:
 `{media.track}`, `{volume.system}`, and `{device.uptime}`.
 Use `preferred=false` on `display;mode=media` to update media placeholder
 values without switching the idle screen to the dedicated media display.
-Long display lines are clipped to 21 characters for the current text size.
+Long display lines scroll horizontally when they exceed 21 characters at the
+current text size.
 
 Button and slider events should appear as:
 
