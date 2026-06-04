@@ -20,11 +20,21 @@ public sealed record DisplayHardwareConfig
 
     public string DefaultTitle { get; init; } = "MakroPad";
 
+    public int DefaultTitleSize { get; init; } = 1;
+
     public string DefaultLine1 { get; init; } = "{profile}";
+
+    public int DefaultLine1Size { get; init; } = 1;
 
     public string DefaultLine2 { get; init; } = "{status}";
 
+    public int DefaultLine2Size { get; init; } = 1;
+
     public string DefaultLine3 { get; init; } = "";
 
+    public int DefaultLine3Size { get; init; } = 1;
+
     public string DefaultLine4 { get; init; } = "";
+
+    public int DefaultLine4Size { get; init; } = 1;
 }

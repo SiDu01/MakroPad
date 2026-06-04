@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using MakroPad.Core.DisplayTriggers;
 
 namespace MakroPad.App.Services;
 
@@ -21,6 +22,22 @@ public sealed class OledDefaultScreenRenderer
             FitPreviewLine(RenderTemplate(line2, context)),
             FitPreviewLine(RenderTemplate(line3, context)),
             FitPreviewLine(RenderTemplate(line4, context)));
+    }
+
+    public OledDefaultScreenPreview RenderPreview(
+        DisplayTemplateLine title,
+        DisplayTemplateLine line1,
+        DisplayTemplateLine line2,
+        DisplayTemplateLine line3,
+        DisplayTemplateLine line4,
+        OledDefaultScreenRenderContext context)
+    {
+        return new OledDefaultScreenPreview(
+            FitPreviewLine(RenderTemplate(title.Text, context), title.NormalizedTextSize),
+            FitPreviewLine(RenderTemplate(line1.Text, context), line1.NormalizedTextSize),
+            FitPreviewLine(RenderTemplate(line2.Text, context), line2.NormalizedTextSize),
+            FitPreviewLine(RenderTemplate(line3.Text, context), line3.NormalizedTextSize),
+            FitPreviewLine(RenderTemplate(line4.Text, context), line4.NormalizedTextSize));
     }
 
     public string RenderTemplate(string template, OledDefaultScreenRenderContext context)
@@ -53,16 +70,23 @@ public sealed class OledDefaultScreenRenderer
         return rows == 5 ? 5 : 3;
     }
 
+    public static int NormalizeTextSize(int textSize)
+    {
+        return Math.Clamp(textSize, 1, 2);
+    }
+
     public static string NormalizeLine(string value, string fallback)
     {
         return string.IsNullOrWhiteSpace(value) ? fallback : value.Trim();
     }
 
-    private static string FitPreviewLine(string line)
+    private static string FitPreviewLine(string line, int textSize = 1)
     {
         var trimmed = line.Trim();
-        return trimmed.Length <= MaxPreviewCharacters
+        var maxCharacters = Math.Max(1, MaxPreviewCharacters / NormalizeTextSize(textSize));
+
+        return trimmed.Length <= maxCharacters
             ? trimmed
-            : trimmed[..(MaxPreviewCharacters - 2)] + "..";
+            : trimmed[..Math.Max(1, maxCharacters - 2)] + "..";
     }
 }

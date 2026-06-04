@@ -269,6 +269,7 @@ Sendet einfache Laufzeitkonfiguration.
 
 ```text
 config;profile=Default;actionResultTimeoutMs=3000;preferredDisplay=profile
+config;profile=Default;defaultTitle=MakroPad;defaultTitleSize=2;defaultLine1=%7Bprofile%7D
 ```
 
 Fuer Version 1 bleibt `config` bewusst klein. Vollstaendige Hardware- und
@@ -281,6 +282,7 @@ Felder:
 | `profile` | nein | Aktives Profil fuer den Idle-Screen |
 | `actionResultTimeoutMs` | nein | Dauer fuer `action-result` OLED-Meldungen in Millisekunden; `0` bedeutet ohne automatisches Zuruecksetzen |
 | `preferredDisplay` | nein | `profile` oder `media`; bestimmt, wohin die Firmware nach temporaeren Action-Meldungen zurueckkehrt |
+| `defaultTitleSize`, `defaultLine1Size`..`defaultLine4Size` | nein | OLED-Textgroesse `1` oder `2` fuer die Defaultscreen-Zeilen; fehlt das Feld, wird `1` verwendet |
 
 ### action-result
 

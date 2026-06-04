@@ -124,8 +124,8 @@ You can manually configure the OLED action-result timeout:
 
 ```text
 config;profile=Default;actionResultTimeoutMs=3000;preferredDisplay=profile
-config;profile=Default;defaultRows=3;defaultTitle=MakroPad;defaultLine1=%7Bprofile%7D;defaultLine2=%7Bstatus%7D;time=18:42;date=01.06.2026;volumeSystem=40%25
-config;profile=Default;defaultRows=5;defaultTitle=%7Btime%7D;defaultLine1=%7Bmedia.track%7D;defaultLine2=Vol%20%7Bvolume.system%7D;defaultLine3=%7Bdate%7D;defaultLine4=Up%20%7Bdevice.uptime%7D
+config;profile=Default;defaultRows=3;defaultTitle=MakroPad;defaultTitleSize=2;defaultLine1=%7Bprofile%7D;defaultLine2=%7Bstatus%7D;time=18:42;date=01.06.2026;volumeSystem=40%25
+config;profile=Default;defaultRows=5;defaultTitle=%7Btime%7D;defaultLine1=%7Bmedia.track%7D;defaultLine1Size=2;defaultLine2=Vol%20%7Bvolume.system%7D;defaultLine3=%7Bdate%7D;defaultLine4=Up%20%7Bdevice.uptime%7D
 ```
 
 `action-result` messages are shown temporarily and then return to the idle
@@ -139,6 +139,9 @@ The default profile screen can be customized with `defaultRows`, `defaultTitle`,
 configured lines. The firmware supports these placeholders:
 `{profile}`, `{status}`, `{time}`, `{date}`, `{media.artist}`, `{media.title}`,
 `{media.track}`, `{volume.system}`, and `{device.uptime}`.
+Default screen lines can use optional `defaultTitleSize` and
+`defaultLine1Size`..`defaultLine4Size` values. Supported text sizes are `1` and
+`2`; missing or invalid values fall back to `1`.
 Use `preferred=false` on `display;mode=media` to update media placeholder
 values without switching the idle screen to the dedicated media display.
 Long display lines scroll horizontally when they exceed 21 characters at the

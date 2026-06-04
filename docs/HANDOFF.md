@@ -67,6 +67,9 @@ MakroPad has a working vertical prototype across firmware and desktop app:
 - Added per-line OLED text sizes for temporary display templates via optional
   `lineXSize` protocol fields. App-side HTML display triggers map `h1`/`h2`
   content to size `2`; normal text and other HTML lines remain size `1`.
+- Added per-line OLED text sizes for the configurable default screen. Settings
+  can store size `1` or `2` for title and lines 1-4, and `config` sends
+  optional `defaultTitleSize`/`defaultLineXSize` fields to firmware.
 
 ## Supported Actions
 

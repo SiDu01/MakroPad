@@ -17,10 +17,15 @@ public sealed class DeviceConfigMessageBuilder
                 ["actionResultTimeoutMs"] = Math.Max(0, state.ActionResultTimeoutMs).ToString(),
                 ["defaultRows"] = OledDefaultScreenRenderer.NormalizeRows(state.DefaultScreenRows).ToString(),
                 ["defaultTitle"] = OledDefaultScreenRenderer.NormalizeLine(state.DefaultScreenTitle, "MakroPad"),
+                ["defaultTitleSize"] = FormatTextSize(state.DefaultScreenTitleSize),
                 ["defaultLine1"] = OledDefaultScreenRenderer.NormalizeLine(state.DefaultScreenLine1, "{profile}"),
+                ["defaultLine1Size"] = FormatTextSize(state.DefaultScreenLine1Size),
                 ["defaultLine2"] = OledDefaultScreenRenderer.NormalizeLine(state.DefaultScreenLine2, "{status}"),
+                ["defaultLine2Size"] = FormatTextSize(state.DefaultScreenLine2Size),
                 ["defaultLine3"] = state.DefaultScreenLine3.Trim(),
+                ["defaultLine3Size"] = FormatTextSize(state.DefaultScreenLine3Size),
                 ["defaultLine4"] = state.DefaultScreenLine4.Trim(),
+                ["defaultLine4Size"] = FormatTextSize(state.DefaultScreenLine4Size),
                 ["time"] = timestamp.ToString("HH:mm"),
                 ["date"] = timestamp.ToString("dd.MM.yyyy"),
                 ["volumeSystem"] = systemVolumePercent is null ? null : $"{systemVolumePercent}%",
@@ -40,5 +45,11 @@ public sealed class DeviceConfigMessageBuilder
             state.DefaultScreenLine2,
             state.DefaultScreenLine3,
             state.DefaultScreenLine4);
+    }
+
+    private static string? FormatTextSize(int textSize)
+    {
+        var normalized = OledDefaultScreenRenderer.NormalizeTextSize(textSize);
+        return normalized > 1 ? normalized.ToString() : null;
     }
 }

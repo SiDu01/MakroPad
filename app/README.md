@@ -114,7 +114,7 @@ bounce between adjacent values like 99% and 100%.
 The OLED default screen editor shows a small 128x64-style preview. Long lines
 scroll horizontally on the firmware when they exceed the visible OLED width;
 the app preview shows the first visible segment. The editor supports 3-line
-and 5-line layouts.
+and 5-line layouts and OLED text sizes `1` or `2` per defaultscreen line.
 
 The settings UI also includes a display trigger editor similar to the macro
 binding editor. It can manage multiple button and slider triggers, require a
@@ -162,7 +162,7 @@ Supported trigger placeholders are `{slider.id}`, `{slider.value}`,
 rendered app-side to plain OLED text lines before it is sent to the firmware.
 
 The app sends
-`config;profile=...;actionResultTimeoutMs=...;defaultRows=...;defaultTitle=...;defaultLine1=...;defaultLine2=...;defaultLine3=...;defaultLine4=...;time=...;date=...;volumeSystem=...;preferredDisplay=...`
+`config;profile=...;actionResultTimeoutMs=...;defaultRows=...;defaultTitle=...;defaultTitleSize=...;defaultLine1=...;defaultLine1Size=...;defaultLine2=...;defaultLine2Size=...;defaultLine3=...;defaultLine3Size=...;defaultLine4=...;defaultLine4Size=...;time=...;date=...;volumeSystem=...;preferredDisplay=...`
 to the device after connecting and when saving the config. `0` disables the
 automatic OLED reset for action results. The default screen supports
 `{profile}`, `{status}`, `{time}`, `{date}`, `{media.artist}`, `{media.title}`,

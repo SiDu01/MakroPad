@@ -15,10 +15,15 @@ public sealed class DeviceConfigMessageBuilderTests
             3000,
             3,
             "MakroPad",
+            2,
             "{profile}",
+            1,
             "{status}",
+            1,
             "",
+            1,
             "",
+            1,
             true,
             new NowPlayingTrack("Artist", "Title"));
 
@@ -28,6 +33,8 @@ public sealed class DeviceConfigMessageBuilderTests
         Assert.Equal("14:05", message.GetValue("time"));
         Assert.Equal("03.06.2026", message.GetValue("date"));
         Assert.Equal("42%", message.GetValue("volumeSystem"));
+        Assert.Equal("2", message.GetValue("defaultTitleSize"));
+        Assert.Null(message.GetValue("defaultLine1Size"));
         Assert.Equal("media", message.GetValue("preferredDisplay"));
     }
 
@@ -41,10 +48,15 @@ public sealed class DeviceConfigMessageBuilderTests
             3000,
             3,
             "MakroPad",
+            1,
             "{media.track}",
+            1,
             "{status}",
+            1,
             "",
+            1,
             "",
+            1,
             true,
             new NowPlayingTrack("Artist", "Title"));
 

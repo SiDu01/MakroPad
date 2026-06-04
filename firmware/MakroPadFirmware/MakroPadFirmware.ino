@@ -74,10 +74,15 @@ String currentMediaArtist;
 String currentMediaTitle;
 uint8_t defaultScreenRows = 3;
 String defaultScreenTitle = "MakroPad";
+uint8_t defaultScreenTitleSize = 1;
 String defaultScreenLine1 = "{profile}";
+uint8_t defaultScreenLine1Size = 1;
 String defaultScreenLine2 = "{status}";
+uint8_t defaultScreenLine2Size = 1;
 String defaultScreenLine3;
+uint8_t defaultScreenLine3Size = 1;
 String defaultScreenLine4;
+uint8_t defaultScreenLine4Size = 1;
 String currentTime;
 String currentDate;
 String currentSystemVolume;
@@ -361,19 +366,39 @@ String renderDefaultScreenLine(String line, const String& status) {
 void drawIdleStatus() {
   const String status = hostAcknowledged ? "Connected" : "Waiting for app";
   if (defaultScreenRows == 5) {
-    drawStatusMessage(
+    String lines[MaxDisplayLines] = {
       renderDefaultScreenLine(defaultScreenTitle, status),
       renderDefaultScreenLine(defaultScreenLine1, status),
       renderDefaultScreenLine(defaultScreenLine2, status),
       renderDefaultScreenLine(defaultScreenLine3, status),
-      renderDefaultScreenLine(defaultScreenLine4, status));
+      renderDefaultScreenLine(defaultScreenLine4, status)
+    };
+    uint8_t lineSizes[MaxDisplayLines] = {
+      defaultScreenTitleSize,
+      defaultScreenLine1Size,
+      defaultScreenLine2Size,
+      defaultScreenLine3Size,
+      defaultScreenLine4Size
+    };
+    setDisplayLines(lines, lineSizes, 5);
     return;
   }
 
-  drawStatusMessage(
+  String lines[MaxDisplayLines] = {
     renderDefaultScreenLine(defaultScreenTitle, status),
     renderDefaultScreenLine(defaultScreenLine1, status),
-    renderDefaultScreenLine(defaultScreenLine2, status));
+    renderDefaultScreenLine(defaultScreenLine2, status),
+    "",
+    ""
+  };
+  uint8_t lineSizes[MaxDisplayLines] = {
+    defaultScreenTitleSize,
+    defaultScreenLine1Size,
+    defaultScreenLine2Size,
+    1,
+    1
+  };
+  setDisplayLines(lines, lineSizes, 3);
 }
 
 void drawPreferredDisplay() {
@@ -538,19 +563,24 @@ void handleProtocolLine(String line) {
     if (configuredDefaultTitle.length() > 0) {
       defaultScreenTitle = configuredDefaultTitle;
     }
+    defaultScreenTitleSize = normalizeDisplayTextSize(protocolValue(line, "defaultTitleSize").toInt());
 
     const String configuredDefaultLine1 = protocolValue(line, "defaultLine1");
     if (configuredDefaultLine1.length() > 0) {
       defaultScreenLine1 = configuredDefaultLine1;
     }
+    defaultScreenLine1Size = normalizeDisplayTextSize(protocolValue(line, "defaultLine1Size").toInt());
 
     const String configuredDefaultLine2 = protocolValue(line, "defaultLine2");
     if (configuredDefaultLine2.length() > 0) {
       defaultScreenLine2 = configuredDefaultLine2;
     }
+    defaultScreenLine2Size = normalizeDisplayTextSize(protocolValue(line, "defaultLine2Size").toInt());
 
     defaultScreenLine3 = protocolValue(line, "defaultLine3");
+    defaultScreenLine3Size = normalizeDisplayTextSize(protocolValue(line, "defaultLine3Size").toInt());
     defaultScreenLine4 = protocolValue(line, "defaultLine4");
+    defaultScreenLine4Size = normalizeDisplayTextSize(protocolValue(line, "defaultLine4Size").toInt());
 
     currentTime = protocolValue(line, "time");
     currentDate = protocolValue(line, "date");

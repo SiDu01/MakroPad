@@ -86,11 +86,11 @@ public sealed class DeviceDisplaySyncService
     public OledDefaultScreenPreview RenderPreview(DeviceDisplayState state)
     {
         return oledDefaultScreenRenderer.RenderPreview(
-            state.DefaultScreenTitle,
-            state.DefaultScreenLine1,
-            state.DefaultScreenLine2,
-            state.DefaultScreenLine3,
-            state.DefaultScreenLine4,
+            new DisplayTemplateLine(state.DefaultScreenTitle, state.DefaultScreenTitleSize),
+            new DisplayTemplateLine(state.DefaultScreenLine1, state.DefaultScreenLine1Size),
+            new DisplayTemplateLine(state.DefaultScreenLine2, state.DefaultScreenLine2Size),
+            new DisplayTemplateLine(state.DefaultScreenLine3, state.DefaultScreenLine3Size),
+            new DisplayTemplateLine(state.DefaultScreenLine4, state.DefaultScreenLine4Size),
             new OledDefaultScreenRenderContext(
                 state.ActiveProfileName,
                 state.ConnectionStatus,
