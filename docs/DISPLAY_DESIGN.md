@@ -62,6 +62,15 @@ Der Display-Trigger-Editor zeigt fuer `templateMode=layout` eine strukturierte
 Preview mit Header, Iconbereich, Text und Prozentbalken. Der Test-Button sendet
 Layout-Trigger ebenfalls als `display;mode=layout`.
 
+Die App-Oberflaeche hat keinen getrennten `OLED Default`- und
+`Display Trigger`-Editor mehr. Beide Bereiche wurden in einem gemeinsamen
+`Display`-Tab zusammengefuehrt:
+
+- `Idle Screen` bearbeitet die dauerhafte Default-Anzeige.
+- `Display Rules` listet ereignisgesteuerte Screens.
+- `Selected Screen Rule` bearbeitet das ausgewaehlte Ereignis.
+- Rechts stehen Idle-Preview, Rule-Preview und Runtime-Optionen zusammen.
+
 ## Aktuelle Grenzen
 
 - Layout-Screens nutzen firmwareseitiges horizontales Textscrolling fuer ihre

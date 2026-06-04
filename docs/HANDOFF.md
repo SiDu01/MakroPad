@@ -83,6 +83,9 @@ MakroPad has a working vertical prototype across firmware and desktop app:
   layout protocol path, and unchanged legacy default action/media triggers are
   migrated to `templateMode=layout`. The design notes live in
   `docs/DISPLAY_DESIGN.md`.
+- Replaced the separate `OLED Default` and `Display Trigger` settings tabs with
+  a unified `Display` editor. Idle-screen settings, display rules, selected
+  rule editing, previews, and runtime display options now live in one workflow.
 
 ## Supported Actions
 
@@ -169,8 +172,8 @@ MakroPad has a working vertical prototype across firmware and desktop app:
 - Layout screens currently support only fixed built-in layouts. A free element
   list or custom layout mode is still open.
 - Slider quality is still being validated with replacement hardware.
-- App UI is functional after the first redesign, but not yet a polished final
-  editor experience.
+- App UI is functional after the display-editor redesign, but the new Display
+  tab still needs hardware-driven usability feedback.
 
 ## Verification Baseline
 
@@ -189,12 +192,14 @@ the ESP32-S3-DevKitC-1.
 1. Continue refactoring `MainWindowViewModel` only where it still removes a
    real responsibility. Next best target: small device/simulator command
    grouping or an app coordinator if more runtime orchestration is added.
-2. Add a `custom` layout or free element list if the built-in layouts are too
+2. Hardware-test the unified Display editor flow against the OLED and adjust
+   field grouping/order based on real authoring pain.
+3. Add a `custom` layout or free element list if the built-in layouts are too
    restrictive after hardware testing.
-3. Replace Spotify-window-title Now Playing with Windows Media Session metadata.
-4. Improve the config editor UX with action definitions shared between UI,
+4. Replace Spotify-window-title Now Playing with Windows Media Session metadata.
+5. Improve the config editor UX with action definitions shared between UI,
    validation, and future docs generation.
-5. Split the firmware sketch into protocol, display, buttons, and sliders once
+6. Split the firmware sketch into protocol, display, buttons, and sliders once
    the new sliders have been tested.
 
 Recommendation: pause broad refactoring unless a new feature touches the

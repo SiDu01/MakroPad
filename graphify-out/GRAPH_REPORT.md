@@ -1,7 +1,7 @@
 # Graph Report - MakroPad  (2026-06-04)
 
 ## Corpus Check
-- 131 files · ~33,537 words
+- 131 files · ~33,639 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `fe8420ef`
+- Built from commit: `af2c0ba2`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -332,9 +332,9 @@ _Questions this graph is uniquely positioned to answer:_
 - **What connects `PreToolUse`, `ISystemMediaController`, `ISystemVolumeController` to the rest of the system?**
   _257 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 1` be split into smaller, more focused modules?**
-  _Cohesion score 0.034299034299034296 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.03495495495495495 - nodes in this community are weakly interconnected._
 - **Should `Community 2` be split into smaller, more focused modules?**
-  _Cohesion score 0.12878787878787878 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.11428571428571428 - nodes in this community are weakly interconnected._
 - **Should `Community 3` be split into smaller, more focused modules?**
   _Cohesion score 0.05026300409117475 - nodes in this community are weakly interconnected._
 - **Should `Community 5` be split into smaller, more focused modules?**

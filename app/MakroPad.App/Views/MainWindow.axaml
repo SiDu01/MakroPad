@@ -545,7 +545,7 @@
                 </Grid>
             </TabItem>
 
-            <TabItem Header="OLED Default"
+            <TabItem Header="Display"
                      Classes="settingsSub">
                 <Grid RowDefinitions="Auto,*"
                       RowSpacing="16"
@@ -553,9 +553,9 @@
                     <Grid ColumnDefinitions="*,Auto"
                           ColumnSpacing="16">
                         <StackPanel>
-                            <TextBlock Classes="sectionTitle" Text="Einstellungen" />
+                            <TextBlock Classes="sectionTitle" Text="Display" />
                             <TextBlock Classes="muted"
-                                       Text="OLED-Startanzeige konfigurieren." />
+                                       Text="Idle-Screen und ereignisgesteuerte OLED-Screens gemeinsam konfigurieren." />
                         </StackPanel>
                         <StackPanel Grid.Column="1"
                                     Orientation="Horizontal"
@@ -570,590 +570,224 @@
 
                     <ScrollViewer Grid.Row="1"
                                   VerticalScrollBarVisibility="Auto">
-                        <Grid ColumnDefinitions="*,300"
+                        <Grid ColumnDefinitions="320,*,300"
                               ColumnSpacing="16">
-                            <Border Classes="panel">
-                                <StackPanel Spacing="12">
-                                    <TextBlock Text="OLED Default Screen"
-                                               FontSize="16"
-                                               FontWeight="SemiBold" />
-                                    <TextBlock Classes="label" Text="Layout rows" />
-                                    <ComboBox ItemsSource="{Binding DisplaySettings.AvailableOledLayoutRows}"
-                                              SelectedItem="{Binding DisplaySettings.DefaultScreenRows}"
-                                              HorizontalAlignment="Stretch" />
-                                    <TextBlock Classes="label" Text="Content mode" />
-                                    <ComboBox ItemsSource="{Binding DisplaySettings.AvailableOledTemplateModes}"
-                                              SelectedItem="{Binding DisplaySettings.DefaultScreenTemplateMode}"
-                                              HorizontalAlignment="Stretch" />
-                                    <TextBlock Classes="label" Text="Title" />
-                                    <Grid ColumnDefinitions="*,80"
-                                          ColumnSpacing="8">
-                                        <TextBox Text="{Binding DisplaySettings.DefaultScreenTitle}" />
-                                        <ComboBox Grid.Column="1"
-                                                  ItemsSource="{Binding DisplaySettings.AvailableOledTextSizes}"
-                                                  SelectedItem="{Binding DisplaySettings.DefaultScreenTitleSize}" />
-                                    </Grid>
-                                    <TextBlock Classes="label" Text="Line 1" />
-                                    <Grid ColumnDefinitions="*,80"
-                                          ColumnSpacing="8">
-                                        <TextBox Text="{Binding DisplaySettings.DefaultScreenLine1}" />
-                                        <ComboBox Grid.Column="1"
-                                                  ItemsSource="{Binding DisplaySettings.AvailableOledTextSizes}"
-                                                  SelectedItem="{Binding DisplaySettings.DefaultScreenLine1Size}" />
-                                    </Grid>
-                                    <TextBlock Classes="label" Text="Line 2" />
-                                    <Grid ColumnDefinitions="*,80"
-                                          ColumnSpacing="8">
-                                        <TextBox Text="{Binding DisplaySettings.DefaultScreenLine2}" />
-                                        <ComboBox Grid.Column="1"
-                                                  ItemsSource="{Binding DisplaySettings.AvailableOledTextSizes}"
-                                                  SelectedItem="{Binding DisplaySettings.DefaultScreenLine2Size}" />
-                                    </Grid>
-                                    <TextBlock IsVisible="{Binding DisplaySettings.UsesFiveLineOledLayout}"
-                                               Classes="label"
-                                               Text="Line 3" />
-                                    <Grid IsVisible="{Binding DisplaySettings.UsesFiveLineOledLayout}"
-                                          ColumnDefinitions="*,80"
-                                          ColumnSpacing="8">
-                                        <TextBox Text="{Binding DisplaySettings.DefaultScreenLine3}" />
-                                        <ComboBox Grid.Column="1"
-                                                  ItemsSource="{Binding DisplaySettings.AvailableOledTextSizes}"
-                                                  SelectedItem="{Binding DisplaySettings.DefaultScreenLine3Size}" />
-                                    </Grid>
-                                    <TextBlock IsVisible="{Binding DisplaySettings.UsesFiveLineOledLayout}"
-                                               Classes="label"
-                                               Text="Line 4" />
-                                    <Grid IsVisible="{Binding DisplaySettings.UsesFiveLineOledLayout}"
-                                          ColumnDefinitions="*,80"
-                                          ColumnSpacing="8">
-                                        <TextBox Text="{Binding DisplaySettings.DefaultScreenLine4}" />
-                                        <ComboBox Grid.Column="1"
-                                                  ItemsSource="{Binding DisplaySettings.AvailableOledTextSizes}"
-                                                  SelectedItem="{Binding DisplaySettings.DefaultScreenLine4Size}" />
-                                    </Grid>
-                                    <TextBlock Classes="muted"
-                                               FontSize="12"
-                                               TextWrapping="Wrap"
-                                               Text="{}HTML mode supports h1/h2 as size 2 lines. Size controls use OLED text size 1 or 2. Placeholders: {profile}, {status}, {time}, {date}, {media.artist}, {media.title}, {media.track}, {volume.system}, {device.uptime}" />
-                                </StackPanel>
-                            </Border>
-
-                            <Border Grid.Column="1"
-                                    Background="#02060C"
-                                    BorderBrush="#2D5C88"
-                                    BorderThickness="1"
-                                    CornerRadius="4"
-                                    Width="256"
-                                    Height="128"
-                                    Padding="12"
-                                    HorizontalAlignment="Left"
-                                    VerticalAlignment="Top">
-                                <StackPanel Spacing="6"
-                                            VerticalAlignment="Top">
-                                    <TextBlock Text="{Binding DisplaySettings.OledPreviewTitle}"
-                                               FontFamily="Consolas"
-                                               FontSize="{Binding DisplaySettings.OledPreviewTitleFontSize}"
-                                               TextWrapping="NoWrap" />
-                                    <TextBlock Text="{Binding DisplaySettings.OledPreviewLine1}"
-                                               FontFamily="Consolas"
-                                               FontSize="{Binding DisplaySettings.OledPreviewLine1FontSize}"
-                                               TextWrapping="NoWrap" />
-                                    <TextBlock Text="{Binding DisplaySettings.OledPreviewLine2}"
-                                               FontFamily="Consolas"
-                                               FontSize="{Binding DisplaySettings.OledPreviewLine2FontSize}"
-                                               TextWrapping="NoWrap" />
-                                    <TextBlock IsVisible="{Binding DisplaySettings.UsesFiveLineOledLayout}"
-                                               Text="{Binding DisplaySettings.OledPreviewLine3}"
-                                               FontFamily="Consolas"
-                                               FontSize="{Binding DisplaySettings.OledPreviewLine3FontSize}"
-                                               TextWrapping="NoWrap" />
-                                    <TextBlock IsVisible="{Binding DisplaySettings.UsesFiveLineOledLayout}"
-                                               Text="{Binding DisplaySettings.OledPreviewLine4}"
-                                               FontFamily="Consolas"
-                                               FontSize="{Binding DisplaySettings.OledPreviewLine4FontSize}"
-                                               TextWrapping="NoWrap" />
-                                </StackPanel>
-                            </Border>
-                        </Grid>
-                    </ScrollViewer>
-                </Grid>
-            </TabItem>
-
-            <TabItem Header="Display Trigger"
-                     Classes="settingsSub">
-                <Grid RowDefinitions="Auto,*"
-                      RowSpacing="16"
-                      Margin="18,0,0,0">
-                    <Grid ColumnDefinitions="*,Auto"
-                          ColumnSpacing="16">
-                        <StackPanel>
-                            <TextBlock Classes="sectionTitle" Text="Einstellungen" />
-                            <TextBlock Classes="muted"
-                                       Text="Trigger fuer temporaere OLED-Anzeigen konfigurieren." />
-                        </StackPanel>
-                        <StackPanel Grid.Column="1"
-                                    Orientation="Horizontal"
-                                    Spacing="8"
-                                    VerticalAlignment="Center">
-                            <Button Content="Load"
-                                    Command="{Binding LoadConfigCommand}" />
-                            <Button Content="Save"
-                                    Command="{Binding SaveConfigCommand}" />
-                        </StackPanel>
-                    </Grid>
-
-                    <ScrollViewer Grid.Row="1"
-                                  VerticalScrollBarVisibility="Auto">
-                        <Grid RowDefinitions="*,Auto"
-                              RowSpacing="16">
-                            <Border Classes="panel">
-                                <Grid RowDefinitions="Auto,*"
-                                      RowSpacing="10">
-                                    <Grid ColumnDefinitions="34,54,130,150,90,96,78,*"
-                                          ColumnSpacing="12">
-                                        <TextBlock Text="#"
-                                                   FontWeight="SemiBold"
-                                                   Classes="label" />
-                                        <TextBlock Grid.Column="1"
-                                                   Text="On"
-                                                   FontWeight="SemiBold"
-                                                   Classes="label" />
-                                        <TextBlock Grid.Column="2"
-                                                   Text="Event"
-                                                   FontWeight="SemiBold"
-                                                   Classes="label" />
-                                        <TextBlock Grid.Column="3"
-                                                   Text="Match"
-                                                   FontWeight="SemiBold"
-                                                   Classes="label" />
-                                        <TextBlock Grid.Column="4"
-                                                   Text="Change"
-                                                   FontWeight="SemiBold"
-                                                   Classes="label" />
-                                        <TextBlock Grid.Column="5"
-                                                   Text="Duration"
-                                                   FontWeight="SemiBold"
-                                                   Classes="label" />
-                                        <TextBlock Grid.Column="6"
-                                                   Text="Mode"
-                                                   FontWeight="SemiBold"
-                                                   Classes="label" />
-                                        <TextBlock Grid.Column="7"
-                                                   Text="Content"
-                                                   FontWeight="SemiBold"
-                                                   Classes="label" />
-                                    </Grid>
-
-                                    <ListBox Grid.Row="1"
-                                             ItemsSource="{Binding DisplayTriggersEditor.DisplayTriggers}"
-                                             SelectedItem="{Binding DisplayTriggersEditor.SelectedDisplayTrigger}"
-                                             MinHeight="220">
-                                        <ListBox.ItemTemplate>
-                                            <DataTemplate>
-                                                <Grid ColumnDefinitions="34,54,130,150,90,96,78,*"
-                                                      ColumnSpacing="12">
-                                                    <TextBlock Text="{Binding SequenceDisplay}"
-                                                               FontFamily="Consolas" />
-                                                    <TextBlock Grid.Column="1"
-                                                               Text="{Binding EnabledDisplay}"
-                                                               FontFamily="Consolas" />
-                                                    <TextBlock Grid.Column="2"
-                                                               Text="{Binding EventType}"
-                                                               FontFamily="Consolas"
-                                                               TextTrimming="CharacterEllipsis" />
-                                                    <TextBlock Grid.Column="3"
-                                                               Text="{Binding MatchDisplay}"
-                                                               FontFamily="Consolas" />
-                                                    <TextBlock Grid.Column="4"
-                                                               Text="{Binding ChangeDisplay}"
-                                                               FontFamily="Consolas" />
-                                                    <TextBlock Grid.Column="5"
-                                                               Text="{Binding DurationMs, StringFormat='{}{0} ms'}"
-                                                               FontFamily="Consolas" />
-                                                    <TextBlock Grid.Column="6"
-                                                               Text="{Binding TemplateMode}"
-                                                               FontFamily="Consolas" />
-                                                    <TextBlock Grid.Column="7"
-                                                               Text="{Binding TemplateSummary}"
-                                                               FontFamily="Consolas"
-                                                               TextTrimming="CharacterEllipsis" />
-                                                </Grid>
-                                            </DataTemplate>
-                                        </ListBox.ItemTemplate>
-                                    </ListBox>
-                                </Grid>
-                            </Border>
-
-                            <Border Grid.Row="1"
-                                    Classes="panel">
-                                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto"
-                                      ColumnDefinitions="120,140,140,*,256"
-                                      RowSpacing="10"
-                                      ColumnSpacing="12">
-                                    <CheckBox Grid.Column="0"
-                                              Content="Enabled"
-                                              IsChecked="{Binding DisplayTriggersEditor.DisplayTriggerEditorEnabled}"
-                                              VerticalAlignment="Center" />
-                                    <ComboBox Grid.Column="1"
-                                              ItemsSource="{Binding DisplayTriggersEditor.AvailableDisplayTriggerEventTypes}"
-                                              SelectedItem="{Binding DisplayTriggersEditor.DisplayTriggerEditorEventType}"
-                                              HorizontalAlignment="Stretch" />
-                                    <ComboBox Grid.Column="2"
-                                              ItemsSource="{Binding DisplayTriggersEditor.AvailableDisplayTriggerInputs}"
-                                              SelectedItem="{Binding DisplayTriggersEditor.DisplayTriggerEditorInput}"
-                                              IsVisible="{Binding DisplayTriggersEditor.ShowsDisplayTriggerInputMatch}"
-                                              HorizontalAlignment="Stretch" />
-                                    <Grid Grid.Column="3"
-                                          ColumnDefinitions="*,*,*,*"
-                                          ColumnSpacing="8">
-                                        <NumericUpDown Grid.Column="0"
-                                                       Value="{Binding DisplayTriggersEditor.DisplayTriggerEditorMinPercent}"
-                                                       Minimum="0"
-                                                       Maximum="100"
-                                                       Increment="1"
-                                                       IsVisible="{Binding DisplayTriggersEditor.IsSliderInputDisplayTrigger}" />
-                                        <NumericUpDown Grid.Column="1"
-                                                       Value="{Binding DisplayTriggersEditor.DisplayTriggerEditorMaxPercent}"
-                                                       Minimum="0"
-                                                       Maximum="100"
-                                                       Increment="1"
-                                                       IsVisible="{Binding DisplayTriggersEditor.IsSliderInputDisplayTrigger}" />
-                                        <NumericUpDown Grid.Column="2"
-                                                       Value="{Binding DisplayTriggersEditor.DisplayTriggerEditorChangePercent}"
-                                                       Minimum="0"
-                                                       Maximum="100"
-                                                       Increment="1"
-                                                       IsVisible="{Binding DisplayTriggersEditor.IsSliderInputDisplayTrigger}" />
-                                        <NumericUpDown Grid.Column="3"
-                                                       Value="{Binding DisplayTriggersEditor.DisplayTriggerEditorDurationMs}"
-                                                       Minimum="0"
-                                                       Maximum="60000"
-                                                       Increment="500" />
-                                    </Grid>
-                                    <Border Grid.Column="4"
-                                            Grid.RowSpan="4"
-                                            Background="#02060C"
-                                            BorderBrush="#2D5C88"
-                                            BorderThickness="1"
-                                            CornerRadius="4"
-                                            Width="256"
-                                            Height="128"
-                                            Padding="12"
-                                            HorizontalAlignment="Left"
-                                            VerticalAlignment="Top">
-                                        <Grid>
-                                        <StackPanel Spacing="6"
-                                                    IsVisible="{Binding DisplayTriggersEditor.UsesTextDisplayPreview}">
-                                            <TextBlock Text="{Binding DisplayTriggersEditor.DisplayTriggerPreviewLine1}"
-                                                       FontFamily="Consolas"
-                                                       FontSize="16"
-                                                       TextWrapping="NoWrap" />
-                                            <TextBlock Text="{Binding DisplayTriggersEditor.DisplayTriggerPreviewLine2}"
-                                                       FontFamily="Consolas"
-                                                       FontSize="16"
-                                                       TextWrapping="NoWrap" />
-                                            <TextBlock Text="{Binding DisplayTriggersEditor.DisplayTriggerPreviewLine3}"
-                                                       FontFamily="Consolas"
-                                                       FontSize="16"
-                                                       TextWrapping="NoWrap" />
-                                            <TextBlock Text="{Binding DisplayTriggersEditor.DisplayTriggerPreviewLine4}"
-                                                       FontFamily="Consolas"
-                                                       FontSize="16"
-                                                       TextWrapping="NoWrap" />
-                                            <TextBlock Text="{Binding DisplayTriggersEditor.DisplayTriggerPreviewLine5}"
-                                                       FontFamily="Consolas"
-                                                       FontSize="16"
-                                                       TextWrapping="NoWrap" />
-                                        </StackPanel>
-                                        <Grid RowDefinitions="18,*,16"
-                                              IsVisible="{Binding DisplayTriggersEditor.UsesLayoutDisplayPreview}">
-                                            <Border Background="#DDEBFF"
-                                                    CornerRadius="2"
-                                                    Padding="4,1">
-                                                <TextBlock Text="{Binding DisplayTriggersEditor.DisplayTriggerLayoutPreviewTitle}"
-                                                           Foreground="#02060C"
-                                                           FontFamily="Consolas"
-                                                           FontSize="12"
-                                                           TextWrapping="NoWrap" />
-                                            </Border>
-                                            <Grid Grid.Row="1"
-                                                  ColumnDefinitions="28,*"
-                                                  Margin="0,8,0,0">
-                                                <Border Width="22"
-                                                        Height="22"
-                                                        BorderBrush="#DDEBFF"
-                                                        BorderThickness="1"
-                                                        IsVisible="{Binding DisplayTriggersEditor.HasDisplayTriggerLayoutPreviewIcon}">
-                                                    <TextBlock Text="{Binding DisplayTriggersEditor.DisplayTriggerLayoutPreviewIcon}"
-                                                               Foreground="#DDEBFF"
-                                                               FontFamily="Consolas"
-                                                               FontSize="11"
-                                                               HorizontalAlignment="Center"
-                                                               VerticalAlignment="Center" />
-                                                </Border>
-                                                <StackPanel Grid.Column="1"
-                                                            Spacing="4">
-                                                    <TextBlock Text="{Binding DisplayTriggersEditor.DisplayTriggerLayoutPreviewLine1}"
-                                                               FontFamily="Consolas"
-                                                               FontSize="15"
-                                                               TextWrapping="NoWrap" />
-                                                    <TextBlock Text="{Binding DisplayTriggersEditor.DisplayTriggerLayoutPreviewLine2}"
-                                                               FontFamily="Consolas"
-                                                               FontSize="15"
-                                                               TextWrapping="NoWrap" />
-                                                    <TextBlock Text="{Binding DisplayTriggersEditor.DisplayTriggerLayoutPreviewValueText}"
-                                                               FontFamily="Consolas"
-                                                               FontSize="22"
-                                                               IsVisible="{Binding DisplayTriggersEditor.ShowsDisplayTriggerLayoutPreviewValue}" />
-                                                </StackPanel>
-                                            </Grid>
-                                            <ProgressBar Grid.Row="2"
-                                                         Minimum="0"
-                                                         Maximum="100"
-                                                         Value="{Binding DisplayTriggersEditor.DisplayTriggerLayoutPreviewValue}"
-                                                         IsVisible="{Binding DisplayTriggersEditor.ShowsDisplayTriggerLayoutPreviewValue}" />
-                                        </Grid>
-                                        </Grid>
-                                    </Border>
-
-                                    <Grid Grid.Row="1"
-                                          Grid.ColumnSpan="4"
-                                          ColumnDefinitions="120,140,140,*"
-                                          ColumnSpacing="12">
-                                        <TextBlock Grid.Column="1"
-                                                   Classes="label"
-                                                   Text="Event type" />
-                                        <TextBlock Grid.Column="2"
-                                                   Classes="label"
-                                                   Text="Input match"
-                                                   IsVisible="{Binding DisplayTriggersEditor.ShowsDisplayTriggerInputMatch}" />
-                                        <Grid Grid.Column="3"
-                                              ColumnDefinitions="*,*,*,*"
+                            <StackPanel Spacing="16">
+                                <Border Classes="panel">
+                                    <StackPanel Spacing="10">
+                                        <TextBlock Text="Idle Screen"
+                                                   FontSize="16"
+                                                   FontWeight="SemiBold" />
+                                        <Grid ColumnDefinitions="*,96"
                                               ColumnSpacing="8">
-                                            <TextBlock Classes="label"
-                                                       Text="Min %"
-                                                       IsVisible="{Binding DisplayTriggersEditor.IsSliderInputDisplayTrigger}" />
-                                            <TextBlock Grid.Column="1"
-                                                       Classes="label"
-                                                       Text="Max %"
-                                                       IsVisible="{Binding DisplayTriggersEditor.IsSliderInputDisplayTrigger}" />
-                                            <TextBlock Grid.Column="2"
-                                                       Classes="label"
-                                                       Text="Change threshold (%)"
-                                                       IsVisible="{Binding DisplayTriggersEditor.IsSliderInputDisplayTrigger}" />
-                                            <TextBlock Grid.Column="3"
-                                                       Classes="label"
-                                                       Text="Display duration (ms)" />
+                                            <StackPanel Spacing="4">
+                                                <TextBlock Classes="label" Text="Mode" />
+                                                <ComboBox ItemsSource="{Binding DisplaySettings.AvailableOledTemplateModes}"
+                                                          SelectedItem="{Binding DisplaySettings.DefaultScreenTemplateMode}" />
+                                            </StackPanel>
+                                            <StackPanel Grid.Column="1" Spacing="4">
+                                                <TextBlock Classes="label" Text="Rows" />
+                                                <ComboBox ItemsSource="{Binding DisplaySettings.AvailableOledLayoutRows}"
+                                                          SelectedItem="{Binding DisplaySettings.DefaultScreenRows}" />
+                                            </StackPanel>
                                         </Grid>
-                                    </Grid>
-
-                                    <ComboBox Grid.Row="2"
-                                              Grid.Column="1"
-                                              ItemsSource="{Binding DisplayTriggersEditor.AvailableDisplayTemplateModes}"
-                                              SelectedItem="{Binding DisplayTriggersEditor.DisplayTriggerEditorTemplateMode}"
-                                              HorizontalAlignment="Stretch" />
-                                    <ComboBox Grid.Row="2"
-                                              Grid.Column="2"
-                                              ItemsSource="{Binding DisplayTriggersEditor.AvailableDisplayTriggerConditions}"
-                                              SelectedItem="{Binding DisplayTriggersEditor.DisplayTriggerEditorCondition}"
-                                              IsVisible="{Binding DisplayTriggersEditor.IsSliderInputDisplayTrigger}"
-                                              HorizontalAlignment="Stretch" />
-                                    <Grid Grid.Row="2"
-                                          Grid.Column="3"
-                                          ColumnDefinitions="*,*"
-                                          ColumnSpacing="8">
-                                        <ComboBox ItemsSource="{Binding DisplayTriggersEditor.AvailableDisplayTriggerActionStatuses}"
-                                                  SelectedItem="{Binding DisplayTriggersEditor.DisplayTriggerEditorActionStatus}"
-                                                  IsVisible="{Binding DisplayTriggersEditor.IsActionResultDisplayTrigger}"
-                                                  HorizontalAlignment="Stretch" />
-                                        <ComboBox Grid.Column="1"
-                                                  ItemsSource="{Binding DisplayTriggersEditor.AvailableDisplayTriggerConnectionStatuses}"
-                                                  SelectedItem="{Binding DisplayTriggersEditor.DisplayTriggerEditorConnectionStatus}"
-                                                  IsVisible="{Binding DisplayTriggersEditor.IsConnectionChangedDisplayTrigger}"
-                                                  HorizontalAlignment="Stretch" />
-                                    </Grid>
-
-                                    <Grid Grid.Row="3"
-                                          Grid.ColumnSpan="4"
-                                          ColumnDefinitions="120,140,140,*"
-                                          ColumnSpacing="12">
-                                        <TextBlock Grid.Column="1"
-                                                   Classes="label"
-                                                   Text="Mode" />
-                                        <TextBlock Grid.Column="2"
-                                                   Classes="label"
-                                                   Text="Slider condition"
-                                                   IsVisible="{Binding DisplayTriggersEditor.IsSliderInputDisplayTrigger}" />
-                                        <Grid Grid.Column="3"
-                                              ColumnDefinitions="*,*"
-                                              ColumnSpacing="8">
-                                            <TextBlock Classes="label"
-                                                       Text="Action status"
-                                                       IsVisible="{Binding DisplayTriggersEditor.IsActionResultDisplayTrigger}" />
-                                            <TextBlock Grid.Column="1"
-                                                       Classes="label"
-                                                       Text="Connection status"
-                                                       IsVisible="{Binding DisplayTriggersEditor.IsConnectionChangedDisplayTrigger}" />
+                                        <TextBlock Classes="label" Text="Title" />
+                                        <Grid ColumnDefinitions="*,70" ColumnSpacing="8">
+                                            <TextBox Text="{Binding DisplaySettings.DefaultScreenTitle}" />
+                                            <ComboBox Grid.Column="1"
+                                                      ItemsSource="{Binding DisplaySettings.AvailableOledTextSizes}"
+                                                      SelectedItem="{Binding DisplaySettings.DefaultScreenTitleSize}" />
                                         </Grid>
-                                    </Grid>
+                                        <TextBlock Classes="label" Text="Line 1" />
+                                        <Grid ColumnDefinitions="*,70" ColumnSpacing="8">
+                                            <TextBox Text="{Binding DisplaySettings.DefaultScreenLine1}" />
+                                            <ComboBox Grid.Column="1"
+                                                      ItemsSource="{Binding DisplaySettings.AvailableOledTextSizes}"
+                                                      SelectedItem="{Binding DisplaySettings.DefaultScreenLine1Size}" />
+                                        </Grid>
+                                        <TextBlock Classes="label" Text="Line 2" />
+                                        <Grid ColumnDefinitions="*,70" ColumnSpacing="8">
+                                            <TextBox Text="{Binding DisplaySettings.DefaultScreenLine2}" />
+                                            <ComboBox Grid.Column="1"
+                                                      ItemsSource="{Binding DisplaySettings.AvailableOledTextSizes}"
+                                                      SelectedItem="{Binding DisplaySettings.DefaultScreenLine2Size}" />
+                                        </Grid>
+                                        <TextBox Text="{Binding DisplaySettings.DefaultScreenLine3}"
+                                                 PlaceholderText="Line 3"
+                                                 IsVisible="{Binding DisplaySettings.UsesFiveLineOledLayout}" />
+                                        <TextBox Text="{Binding DisplaySettings.DefaultScreenLine4}"
+                                                 PlaceholderText="Line 4"
+                                                 IsVisible="{Binding DisplaySettings.UsesFiveLineOledLayout}" />
+                                    </StackPanel>
+                                </Border>
 
-                                    <TextBlock Grid.Row="4"
-                                               Grid.Column="0"
-                                               Classes="label"
-                                               Text="Preset" />
-                                    <Grid Grid.Row="4"
-                                          Grid.Column="1"
-                                          Grid.ColumnSpan="3"
-                                          ColumnDefinitions="*,Auto"
-                                          ColumnSpacing="8">
+                                <Border Classes="panel">
+                                    <StackPanel Spacing="10">
+                                        <TextBlock Text="Display Rules"
+                                                   FontSize="16"
+                                                   FontWeight="SemiBold" />
                                         <ComboBox ItemsSource="{Binding DisplayTriggersEditor.AvailableDisplayTriggerPresets}"
                                                   SelectedItem="{Binding DisplayTriggersEditor.SelectedDisplayTriggerPreset}"
-                                                  DisplayMemberBinding="{Binding Name}"
-                                                  HorizontalAlignment="Stretch" />
-                                        <Button Grid.Column="1"
-                                                Content="Use preset"
-                                                Command="{Binding DisplayTriggersEditor.ApplyDisplayTriggerPresetCommand}"
-                                                MinWidth="96" />
-                                    </Grid>
-
-                                    <TextBlock Grid.Row="5"
-                                               Grid.ColumnSpan="4"
-                                               Classes="label"
-                                               Text="Display content" />
-                                    <TextBox Grid.Row="6"
-                                             Grid.ColumnSpan="4"
-                                             Text="{Binding DisplayTriggersEditor.DisplayTriggerEditorTemplate}"
-                                             AcceptsReturn="True"
-                                             MinHeight="160"
-                                             TextWrapping="Wrap" />
-
-                                    <Grid Grid.Row="7"
-                                          Grid.ColumnSpan="4"
-                                          ColumnDefinitions="120,*,*,*"
-                                          ColumnSpacing="12">
-                                        <TextBlock Classes="label"
-                                                   Text="Preview values"
-                                                   IsVisible="{Binding DisplayTriggersEditor.ShowsDisplayTriggerPreviewValues}"
-                                                   VerticalAlignment="Center" />
-                                        <StackPanel Grid.Column="1"
-                                                    Spacing="4"
-                                                    IsVisible="{Binding DisplayTriggersEditor.IsSliderInputDisplayTrigger}">
-                                            <TextBlock Classes="label"
-                                                       Text="Current %" />
-                                            <NumericUpDown Value="{Binding DisplayTriggersEditor.DisplayTriggerPreviewPercent}"
-                                                           Minimum="0"
-                                                           Maximum="100"
-                                                           Increment="1" />
-                                        </StackPanel>
-                                        <StackPanel Grid.Column="2"
-                                                    Spacing="4"
-                                                    IsVisible="{Binding DisplayTriggersEditor.IsSliderInputDisplayTrigger}">
-                                            <TextBlock Classes="label"
-                                                       Text="Previous %" />
-                                            <NumericUpDown Value="{Binding DisplayTriggersEditor.DisplayTriggerPreviewPreviousPercent}"
-                                                           Minimum="0"
-                                                           Maximum="100"
-                                                           Increment="1" />
-                                        </StackPanel>
-                                        <ComboBox Grid.Column="1"
-                                                  ItemsSource="{Binding DisplayTriggersEditor.AvailableDisplayTriggerActionStatuses}"
-                                                  SelectedItem="{Binding DisplayTriggersEditor.DisplayTriggerPreviewActionStatus}"
-                                                  IsVisible="{Binding DisplayTriggersEditor.IsActionResultDisplayTrigger}" />
-                                        <TextBox Grid.Column="2"
-                                                 Text="{Binding DisplayTriggersEditor.DisplayTriggerPreviewActionName}"
-                                                 PlaceholderText="Action name"
-                                                 IsVisible="{Binding DisplayTriggersEditor.IsActionResultDisplayTrigger}" />
-                                        <TextBox Grid.Column="3"
-                                                 Text="{Binding DisplayTriggersEditor.DisplayTriggerPreviewActionMessage}"
-                                                 PlaceholderText="Action message"
-                                                  IsVisible="{Binding DisplayTriggersEditor.IsActionResultDisplayTrigger}" />
-                                        <TextBox Grid.Column="1"
-                                                 Text="{Binding DisplayTriggersEditor.DisplayTriggerPreviewMediaArtist}"
-                                                 PlaceholderText="Artist"
-                                                 IsVisible="{Binding DisplayTriggersEditor.IsMediaChangedDisplayTrigger}" />
-                                        <TextBox Grid.Column="2"
-                                                 Text="{Binding DisplayTriggersEditor.DisplayTriggerPreviewMediaTitle}"
-                                                 PlaceholderText="Track title"
-                                                 IsVisible="{Binding DisplayTriggersEditor.IsMediaChangedDisplayTrigger}" />
-                                        <ComboBox Grid.Column="1"
-                                                  ItemsSource="{Binding DisplayTriggersEditor.AvailableDisplayTriggerConnectionStatuses}"
-                                                  SelectedItem="{Binding DisplayTriggersEditor.DisplayTriggerPreviewConnectionStatus}"
-                                                  IsVisible="{Binding DisplayTriggersEditor.IsConnectionChangedDisplayTrigger}" />
-                                    </Grid>
-
-                                    <StackPanel Grid.Row="8"
-                                                Grid.ColumnSpan="4"
-                                                Spacing="8">
-                                        <TextBlock Classes="muted"
-                                                   FontSize="12"
-                                                   TextWrapping="Wrap"
-                                                   Text="{Binding DisplayTriggersEditor.DisplayTriggerPlaceholderHint}" />
-                                        <TextBlock Classes="muted"
-                                                   FontSize="12"
-                                                   TextWrapping="Wrap"
-                                                   Text="HTML mode supports simple tags such as h1, p, br and li." />
-                                        <TextBlock Text="{Binding DisplayTriggersEditor.DisplayTriggerPreviewMatchStatus}"
-                                                   Foreground="#78D6A3"
-                                                   FontSize="12"
-                                                   TextWrapping="Wrap" />
-                                        <TextBlock Text="Unsaved editor changes"
-                                                   Foreground="#F0B55A"
-                                                   FontSize="12"
-                                                   IsVisible="{Binding DisplayTriggersEditor.IsDisplayTriggerEditorDirty}" />
-                                        <TextBlock Text="{Binding DisplayTriggersEditor.DisplayTriggerEditorContentWarning}"
-                                                   Foreground="#F0B55A"
-                                                   FontSize="12"
-                                                   TextWrapping="Wrap" />
-                                        <TextBlock Text="{Binding DisplayTriggersEditor.DisplayTriggerSequenceInfo}"
-                                                   Foreground="#F0B55A"
-                                                   FontSize="12"
-                                                   TextWrapping="Wrap" />
-                                        <TextBlock Text="{Binding DisplayTriggersEditor.DisplayTriggerEditorValidationMessage}"
-                                                   Foreground="#FF7A90"
-                                                   FontSize="12"
-                                                   TextWrapping="Wrap" />
+                                                  DisplayMemberBinding="{Binding Name}" />
+                                        <Button Content="Use preset"
+                                                Command="{Binding DisplayTriggersEditor.ApplyDisplayTriggerPresetCommand}" />
+                                        <ListBox ItemsSource="{Binding DisplayTriggersEditor.DisplayTriggers}"
+                                                 SelectedItem="{Binding DisplayTriggersEditor.SelectedDisplayTrigger}"
+                                                 MinHeight="260">
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel Spacing="2">
+                                                        <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="8">
+                                                            <TextBlock Text="{Binding SequenceDisplay}" FontFamily="Consolas" Classes="muted" />
+                                                            <TextBlock Grid.Column="1" Text="{Binding EventType}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" />
+                                                            <TextBlock Grid.Column="2" Text="{Binding EnabledDisplay}" FontFamily="Consolas" Classes="muted" />
+                                                        </Grid>
+                                                        <TextBlock Text="{Binding MatchDisplay}" Classes="muted" TextTrimming="CharacterEllipsis" />
+                                                        <TextBlock Text="{Binding TemplateSummary}" FontFamily="Consolas" Classes="muted" TextTrimming="CharacterEllipsis" />
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+                                        </ListBox>
                                         <WrapPanel>
-                                            <Button Content="Apply"
-                                                    Command="{Binding DisplayTriggersEditor.ApplyDisplayTriggerCommand}"
-                                                    MinWidth="72"
-                                                    Margin="0,0,8,8" />
-                                            <Button Content="Reset"
-                                                    Command="{Binding DisplayTriggersEditor.ResetDisplayTriggerEditorCommand}"
-                                                    MinWidth="72"
-                                                    Margin="0,0,8,8" />
-                                            <Button Content="Add"
-                                                    Command="{Binding DisplayTriggersEditor.AddDisplayTriggerCommand}"
-                                                    MinWidth="72"
-                                                    Margin="0,0,8,8" />
-                                            <Button Content="Duplicate"
-                                                    Command="{Binding DisplayTriggersEditor.DuplicateDisplayTriggerCommand}"
-                                                    MinWidth="88"
-                                                    Margin="0,0,8,8" />
-                                            <Button Content="Remove"
-                                                    Command="{Binding DisplayTriggersEditor.RemoveDisplayTriggerCommand}"
-                                                    MinWidth="72"
-                                                    Margin="0,0,8,8" />
-                                            <Button Content="Test"
-                                                    Command="{Binding DisplayTriggersEditor.TestDisplayTriggerCommand}"
-                                                    MinWidth="72"
-                                                    Margin="0,0,8,8" />
-                                            <Button Content="Up"
-                                                    Command="{Binding DisplayTriggersEditor.MoveDisplayTriggerUpCommand}"
-                                                    MinWidth="64"
-                                                    Margin="0,0,8,8" />
-                                            <Button Content="Down"
-                                                    Command="{Binding DisplayTriggersEditor.MoveDisplayTriggerDownCommand}"
-                                                    MinWidth="72"
-                                                    Margin="0,0,8,8" />
+                                            <Button Content="Add" Command="{Binding DisplayTriggersEditor.AddDisplayTriggerCommand}" MinWidth="72" Margin="0,0,8,8" />
+                                            <Button Content="Duplicate" Command="{Binding DisplayTriggersEditor.DuplicateDisplayTriggerCommand}" MinWidth="92" Margin="0,0,8,8" />
+                                            <Button Content="Remove" Command="{Binding DisplayTriggersEditor.RemoveDisplayTriggerCommand}" MinWidth="84" Margin="0,0,8,8" />
+                                            <Button Content="Up" Command="{Binding DisplayTriggersEditor.MoveDisplayTriggerUpCommand}" MinWidth="56" Margin="0,0,8,8" />
+                                            <Button Content="Down" Command="{Binding DisplayTriggersEditor.MoveDisplayTriggerDownCommand}" MinWidth="68" Margin="0,0,8,8" />
                                         </WrapPanel>
                                     </StackPanel>
+                                </Border>
+                            </StackPanel>
+
+                            <Border Grid.Column="1" Classes="panel">
+                                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,*" RowSpacing="12">
+                                    <TextBlock Text="Selected Screen Rule" FontSize="16" FontWeight="SemiBold" />
+                                    <Grid Grid.Row="1" ColumnDefinitions="Auto,*,*,*" ColumnSpacing="10">
+                                        <CheckBox Content="Enabled" IsChecked="{Binding DisplayTriggersEditor.DisplayTriggerEditorEnabled}" VerticalAlignment="Center" />
+                                        <StackPanel Grid.Column="1" Spacing="4">
+                                            <TextBlock Classes="label" Text="Event" />
+                                            <ComboBox ItemsSource="{Binding DisplayTriggersEditor.AvailableDisplayTriggerEventTypes}" SelectedItem="{Binding DisplayTriggersEditor.DisplayTriggerEditorEventType}" />
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="2" Spacing="4" IsVisible="{Binding DisplayTriggersEditor.ShowsDisplayTriggerInputMatch}">
+                                            <TextBlock Classes="label" Text="Input" />
+                                            <ComboBox ItemsSource="{Binding DisplayTriggersEditor.AvailableDisplayTriggerInputs}" SelectedItem="{Binding DisplayTriggersEditor.DisplayTriggerEditorInput}" />
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="3" Spacing="4">
+                                            <TextBlock Classes="label" Text="Display mode" />
+                                            <ComboBox ItemsSource="{Binding DisplayTriggersEditor.AvailableDisplayTemplateModes}" SelectedItem="{Binding DisplayTriggersEditor.DisplayTriggerEditorTemplateMode}" />
+                                        </StackPanel>
+                                    </Grid>
+
+                                    <Grid Grid.Row="2" ColumnDefinitions="*,*,*,*" ColumnSpacing="10">
+                                        <StackPanel Spacing="4" IsVisible="{Binding DisplayTriggersEditor.IsSliderInputDisplayTrigger}">
+                                            <TextBlock Classes="label" Text="Min %" />
+                                            <NumericUpDown Value="{Binding DisplayTriggersEditor.DisplayTriggerEditorMinPercent}" Minimum="0" Maximum="100" Increment="1" />
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="1" Spacing="4" IsVisible="{Binding DisplayTriggersEditor.IsSliderInputDisplayTrigger}">
+                                            <TextBlock Classes="label" Text="Max %" />
+                                            <NumericUpDown Value="{Binding DisplayTriggersEditor.DisplayTriggerEditorMaxPercent}" Minimum="0" Maximum="100" Increment="1" />
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="2" Spacing="4" IsVisible="{Binding DisplayTriggersEditor.IsSliderInputDisplayTrigger}">
+                                            <TextBlock Classes="label" Text="Change %" />
+                                            <NumericUpDown Value="{Binding DisplayTriggersEditor.DisplayTriggerEditorChangePercent}" Minimum="0" Maximum="100" Increment="1" />
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="3" Spacing="4">
+                                            <TextBlock Classes="label" Text="Duration" />
+                                            <NumericUpDown Value="{Binding DisplayTriggersEditor.DisplayTriggerEditorDurationMs}" Minimum="0" Maximum="60000" Increment="500" />
+                                        </StackPanel>
+                                    </Grid>
+
+                                    <Grid Grid.Row="3" ColumnDefinitions="*,*" ColumnSpacing="10">
+                                        <ComboBox ItemsSource="{Binding DisplayTriggersEditor.AvailableDisplayTriggerConditions}" SelectedItem="{Binding DisplayTriggersEditor.DisplayTriggerEditorCondition}" IsVisible="{Binding DisplayTriggersEditor.IsSliderInputDisplayTrigger}" />
+                                        <ComboBox ItemsSource="{Binding DisplayTriggersEditor.AvailableDisplayTriggerActionStatuses}" SelectedItem="{Binding DisplayTriggersEditor.DisplayTriggerEditorActionStatus}" IsVisible="{Binding DisplayTriggersEditor.IsActionResultDisplayTrigger}" />
+                                        <ComboBox Grid.Column="1" ItemsSource="{Binding DisplayTriggersEditor.AvailableDisplayTriggerConnectionStatuses}" SelectedItem="{Binding DisplayTriggersEditor.DisplayTriggerEditorConnectionStatus}" IsVisible="{Binding DisplayTriggersEditor.IsConnectionChangedDisplayTrigger}" />
+                                    </Grid>
+
+                                    <TextBlock Grid.Row="4" Classes="label" Text="Content" />
+                                    <Grid Grid.Row="5" RowDefinitions="*,Auto,Auto" RowSpacing="10">
+                                        <TextBox Text="{Binding DisplayTriggersEditor.DisplayTriggerEditorTemplate}" AcceptsReturn="True" MinHeight="220" TextWrapping="Wrap" />
+                                        <Grid Grid.Row="1" ColumnDefinitions="Auto,*,*,*" ColumnSpacing="10" IsVisible="{Binding DisplayTriggersEditor.ShowsDisplayTriggerPreviewValues}">
+                                            <TextBlock Classes="label" Text="Preview values" VerticalAlignment="Center" />
+                                            <NumericUpDown Grid.Column="1" Value="{Binding DisplayTriggersEditor.DisplayTriggerPreviewPercent}" Minimum="0" Maximum="100" Increment="1" IsVisible="{Binding DisplayTriggersEditor.IsSliderInputDisplayTrigger}" />
+                                            <NumericUpDown Grid.Column="2" Value="{Binding DisplayTriggersEditor.DisplayTriggerPreviewPreviousPercent}" Minimum="0" Maximum="100" Increment="1" IsVisible="{Binding DisplayTriggersEditor.IsSliderInputDisplayTrigger}" />
+                                            <ComboBox Grid.Column="1" ItemsSource="{Binding DisplayTriggersEditor.AvailableDisplayTriggerActionStatuses}" SelectedItem="{Binding DisplayTriggersEditor.DisplayTriggerPreviewActionStatus}" IsVisible="{Binding DisplayTriggersEditor.IsActionResultDisplayTrigger}" />
+                                            <TextBox Grid.Column="2" Text="{Binding DisplayTriggersEditor.DisplayTriggerPreviewActionName}" PlaceholderText="Action" IsVisible="{Binding DisplayTriggersEditor.IsActionResultDisplayTrigger}" />
+                                            <TextBox Grid.Column="3" Text="{Binding DisplayTriggersEditor.DisplayTriggerPreviewActionMessage}" PlaceholderText="Message" IsVisible="{Binding DisplayTriggersEditor.IsActionResultDisplayTrigger}" />
+                                            <TextBox Grid.Column="1" Text="{Binding DisplayTriggersEditor.DisplayTriggerPreviewMediaArtist}" PlaceholderText="Artist" IsVisible="{Binding DisplayTriggersEditor.IsMediaChangedDisplayTrigger}" />
+                                            <TextBox Grid.Column="2" Text="{Binding DisplayTriggersEditor.DisplayTriggerPreviewMediaTitle}" PlaceholderText="Track" IsVisible="{Binding DisplayTriggersEditor.IsMediaChangedDisplayTrigger}" />
+                                            <ComboBox Grid.Column="1" ItemsSource="{Binding DisplayTriggersEditor.AvailableDisplayTriggerConnectionStatuses}" SelectedItem="{Binding DisplayTriggersEditor.DisplayTriggerPreviewConnectionStatus}" IsVisible="{Binding DisplayTriggersEditor.IsConnectionChangedDisplayTrigger}" />
+                                        </Grid>
+                                        <StackPanel Grid.Row="2" Spacing="7">
+                                            <TextBlock Classes="muted" FontSize="12" TextWrapping="Wrap" Text="{Binding DisplayTriggersEditor.DisplayTriggerPlaceholderHint}" />
+                                            <TextBlock Text="{Binding DisplayTriggersEditor.DisplayTriggerPreviewMatchStatus}" Foreground="#78D6A3" FontSize="12" TextWrapping="Wrap" />
+                                            <TextBlock Text="Unsaved editor changes" Foreground="#F0B55A" FontSize="12" IsVisible="{Binding DisplayTriggersEditor.IsDisplayTriggerEditorDirty}" />
+                                            <TextBlock Text="{Binding DisplayTriggersEditor.DisplayTriggerEditorContentWarning}" Foreground="#F0B55A" FontSize="12" TextWrapping="Wrap" />
+                                            <TextBlock Text="{Binding DisplayTriggersEditor.DisplayTriggerSequenceInfo}" Foreground="#89B9E6" FontSize="12" TextWrapping="Wrap" />
+                                            <TextBlock Text="{Binding DisplayTriggersEditor.DisplayTriggerEditorValidationMessage}" Foreground="#E86D6D" FontSize="12" TextWrapping="Wrap" />
+                                            <WrapPanel>
+                                                <Button Content="Apply" Command="{Binding DisplayTriggersEditor.ApplyDisplayTriggerCommand}" MinWidth="78" Margin="0,0,8,8" />
+                                                <Button Content="Reset" Command="{Binding DisplayTriggersEditor.ResetDisplayTriggerEditorCommand}" MinWidth="78" Margin="0,0,8,8" />
+                                                <Button Content="Test" Command="{Binding DisplayTriggersEditor.TestDisplayTriggerCommand}" MinWidth="78" Margin="0,0,8,8" />
+                                            </WrapPanel>
+                                        </StackPanel>
+                                    </Grid>
                                 </Grid>
                             </Border>
+
+                            <StackPanel Grid.Column="2" Spacing="16">
+                                <Border Background="#02060C" BorderBrush="#2D5C88" BorderThickness="1" CornerRadius="4" Width="256" Height="128" Padding="12" HorizontalAlignment="Left">
+                                    <StackPanel Spacing="6" VerticalAlignment="Top">
+                                        <TextBlock Text="{Binding DisplaySettings.OledPreviewTitle}" FontFamily="Consolas" FontSize="{Binding DisplaySettings.OledPreviewTitleFontSize}" TextWrapping="NoWrap" />
+                                        <TextBlock Text="{Binding DisplaySettings.OledPreviewLine1}" FontFamily="Consolas" FontSize="{Binding DisplaySettings.OledPreviewLine1FontSize}" TextWrapping="NoWrap" />
+                                        <TextBlock Text="{Binding DisplaySettings.OledPreviewLine2}" FontFamily="Consolas" FontSize="{Binding DisplaySettings.OledPreviewLine2FontSize}" TextWrapping="NoWrap" />
+                                        <TextBlock IsVisible="{Binding DisplaySettings.UsesFiveLineOledLayout}" Text="{Binding DisplaySettings.OledPreviewLine3}" FontFamily="Consolas" FontSize="{Binding DisplaySettings.OledPreviewLine3FontSize}" TextWrapping="NoWrap" />
+                                        <TextBlock IsVisible="{Binding DisplaySettings.UsesFiveLineOledLayout}" Text="{Binding DisplaySettings.OledPreviewLine4}" FontFamily="Consolas" FontSize="{Binding DisplaySettings.OledPreviewLine4FontSize}" TextWrapping="NoWrap" />
+                                    </StackPanel>
+                                </Border>
+
+                                <Border Background="#02060C" BorderBrush="#2D5C88" BorderThickness="1" CornerRadius="4" Width="256" Height="128" Padding="12" HorizontalAlignment="Left">
+                                    <Grid>
+                                        <StackPanel Spacing="6" IsVisible="{Binding DisplayTriggersEditor.UsesTextDisplayPreview}">
+                                            <TextBlock Text="{Binding DisplayTriggersEditor.DisplayTriggerPreviewLine1}" FontFamily="Consolas" FontSize="16" TextWrapping="NoWrap" />
+                                            <TextBlock Text="{Binding DisplayTriggersEditor.DisplayTriggerPreviewLine2}" FontFamily="Consolas" FontSize="16" TextWrapping="NoWrap" />
+                                            <TextBlock Text="{Binding DisplayTriggersEditor.DisplayTriggerPreviewLine3}" FontFamily="Consolas" FontSize="16" TextWrapping="NoWrap" />
+                                            <TextBlock Text="{Binding DisplayTriggersEditor.DisplayTriggerPreviewLine4}" FontFamily="Consolas" FontSize="16" TextWrapping="NoWrap" />
+                                            <TextBlock Text="{Binding DisplayTriggersEditor.DisplayTriggerPreviewLine5}" FontFamily="Consolas" FontSize="16" TextWrapping="NoWrap" />
+                                        </StackPanel>
+                                        <Grid RowDefinitions="18,*,16" IsVisible="{Binding DisplayTriggersEditor.UsesLayoutDisplayPreview}">
+                                            <Border Background="#DDEBFF" CornerRadius="2" Padding="4,1">
+                                                <TextBlock Text="{Binding DisplayTriggersEditor.DisplayTriggerLayoutPreviewTitle}" Foreground="#02060C" FontFamily="Consolas" FontSize="12" TextWrapping="NoWrap" />
+                                            </Border>
+                                            <Grid Grid.Row="1" ColumnDefinitions="28,*" Margin="0,8,0,0">
+                                                <Border Width="22" Height="22" BorderBrush="#DDEBFF" BorderThickness="1" IsVisible="{Binding DisplayTriggersEditor.HasDisplayTriggerLayoutPreviewIcon}">
+                                                    <TextBlock Text="{Binding DisplayTriggersEditor.DisplayTriggerLayoutPreviewIcon}" Foreground="#DDEBFF" FontFamily="Consolas" FontSize="11" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                                </Border>
+                                                <StackPanel Grid.Column="1" Spacing="4">
+                                                    <TextBlock Text="{Binding DisplayTriggersEditor.DisplayTriggerLayoutPreviewLine1}" FontFamily="Consolas" FontSize="15" TextWrapping="NoWrap" />
+                                                    <TextBlock Text="{Binding DisplayTriggersEditor.DisplayTriggerLayoutPreviewLine2}" FontFamily="Consolas" FontSize="15" TextWrapping="NoWrap" />
+                                                    <TextBlock Text="{Binding DisplayTriggersEditor.DisplayTriggerLayoutPreviewValueText}" FontFamily="Consolas" FontSize="22" IsVisible="{Binding DisplayTriggersEditor.ShowsDisplayTriggerLayoutPreviewValue}" />
+                                                </StackPanel>
+                                            </Grid>
+                                            <ProgressBar Grid.Row="2" Minimum="0" Maximum="100" Value="{Binding DisplayTriggersEditor.DisplayTriggerLayoutPreviewValue}" IsVisible="{Binding DisplayTriggersEditor.ShowsDisplayTriggerLayoutPreviewValue}" />
+                                        </Grid>
+                                    </Grid>
+                                </Border>
+
+                                <Border Classes="panel">
+                                    <StackPanel Spacing="10">
+                                        <TextBlock Text="Runtime" FontWeight="SemiBold" />
+                                        <CheckBox Content="Show Now Playing" IsChecked="{Binding DisplaySettings.EnableNowPlayingDisplay}" />
+                                        <TextBlock Classes="label" Text="Action result timeout" />
+                                        <NumericUpDown Value="{Binding DisplaySettings.ActionResultTimeoutMs}" Minimum="0" Maximum="60000" Increment="500" />
+                                        <TextBlock Classes="label" Text="Volume deadband" />
+                                        <NumericUpDown Value="{Binding DisplaySettings.VolumeSliderDeadbandPercent}" Minimum="0" Maximum="25" Increment="1" />
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
                         </Grid>
                     </ScrollViewer>
                 </Grid>
             </TabItem>
-
             <TabItem Header="Debug">
                 <Grid RowDefinitions="Auto,*"
                       RowSpacing="16"

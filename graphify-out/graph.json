@@ -4673,7 +4673,7 @@
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
       "source_location": "L435",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_ondisplaysettingschanged",
-      "community": 62,
+      "community": 102,
       "norm_label": ".ondisplaysettingschanged()"
     },
     {
@@ -4736,7 +4736,7 @@
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
       "source_location": "L544",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_handleprotocolmessageasync",
-      "community": 2,
+      "community": 16,
       "norm_label": ".handleprotocolmessageasync()"
     },
     {
@@ -4754,7 +4754,7 @@
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
       "source_location": "L589",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_handleconfiguredinputasync",
-      "community": 2,
+      "community": 16,
       "norm_label": ".handleconfiguredinputasync()"
     },
     {
@@ -4826,7 +4826,7 @@
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
       "source_location": "L693",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_senddeviceconfigasync",
-      "community": 62,
+      "community": 102,
       "norm_label": ".senddeviceconfigasync()"
     },
     {
@@ -4880,7 +4880,7 @@
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
       "source_location": "L738",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_defaultscreenusesmediaplaceholder",
-      "community": 62,
+      "community": 102,
       "norm_label": ".defaultscreenusesmediaplaceholder()"
     },
     {
@@ -8847,7 +8847,7 @@
       "label": "Aktuelle Grenzen",
       "file_type": "document",
       "source_file": "docs/DISPLAY_DESIGN.md",
-      "source_location": "L65",
+      "source_location": "L74",
       "id": "docs_display_design_aktuelle_grenzen",
       "community": 69,
       "norm_label": "aktuelle grenzen"
@@ -8856,7 +8856,7 @@
       "label": "Naechste Ausbaustufen",
       "file_type": "document",
       "source_file": "docs/DISPLAY_DESIGN.md",
-      "source_location": "L73",
+      "source_location": "L82",
       "id": "docs_display_design_naechste_ausbaustufen",
       "community": 69,
       "norm_label": "naechste ausbaustufen"
@@ -8901,7 +8901,7 @@
       "label": "Supported Actions",
       "file_type": "document",
       "source_file": "docs/HANDOFF.md",
-      "source_location": "L87",
+      "source_location": "L90",
       "id": "docs_handoff_supported_actions",
       "community": 66,
       "norm_label": "supported actions"
@@ -8910,7 +8910,7 @@
       "label": "OLED Behavior",
       "file_type": "document",
       "source_file": "docs/HANDOFF.md",
-      "source_location": "L105",
+      "source_location": "L108",
       "id": "docs_handoff_oled_behavior",
       "community": 66,
       "norm_label": "oled behavior"
@@ -8919,7 +8919,7 @@
       "label": "Known Limitations",
       "file_type": "document",
       "source_file": "docs/HANDOFF.md",
-      "source_location": "L153",
+      "source_location": "L156",
       "id": "docs_handoff_known_limitations",
       "community": 66,
       "norm_label": "known limitations"
@@ -8928,7 +8928,7 @@
       "label": "Verification Baseline",
       "file_type": "document",
       "source_file": "docs/HANDOFF.md",
-      "source_location": "L175",
+      "source_location": "L178",
       "id": "docs_handoff_verification_baseline",
       "community": 66,
       "norm_label": "verification baseline"
@@ -8937,7 +8937,7 @@
       "label": "code:powershell (dotnet build app\\MakroPad.sln)",
       "file_type": "document",
       "source_file": "docs/HANDOFF.md",
-      "source_location": "L179",
+      "source_location": "L182",
       "id": "docs_handoff_codeblock_1",
       "community": 66,
       "norm_label": "code:powershell (dotnet build app\\makropad.sln)"
@@ -8946,7 +8946,7 @@
       "label": "Recommended Next Steps",
       "file_type": "document",
       "source_file": "docs/HANDOFF.md",
-      "source_location": "L187",
+      "source_location": "L190",
       "id": "docs_handoff_recommended_next_steps",
       "community": 66,
       "norm_label": "recommended next steps"
@@ -8955,7 +8955,7 @@
       "label": "Graphify Notes",
       "file_type": "document",
       "source_file": "docs/HANDOFF.md",
-      "source_location": "L205",
+      "source_location": "L210",
       "id": "docs_handoff_graphify_notes",
       "community": 66,
       "norm_label": "graphify notes"
@@ -10018,7 +10018,7 @@
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
       "source_location": "L1058",
-      "community": 62,
+      "community": 102,
       "norm_label": ".renderoledpreview()",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_renderoledpreview"
     },
@@ -10027,7 +10027,7 @@
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
       "source_location": "L1063",
-      "community": 62,
+      "community": 102,
       "norm_label": ".createdevicedisplaystate()",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_createdevicedisplaystate"
     },
@@ -10099,7 +10099,7 @@
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
       "source_location": "L104",
-      "community": 1,
+      "community": 13,
       "norm_label": ".onselecteddisplaytriggerchanged()",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_onselecteddisplaytriggerchanged"
     },
@@ -10369,7 +10369,7 @@
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
       "source_location": "L1247",
-      "community": 1,
+      "community": 13,
       "norm_label": ".resetdisplaytriggereditor()",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_resetdisplaytriggereditor"
     },
@@ -10468,7 +10468,7 @@
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
       "source_location": "L1829",
-      "community": 2,
+      "community": 16,
       "norm_label": ".formatactionresult()",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_formatactionresult"
     },
@@ -10513,7 +10513,7 @@
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
       "source_location": "L2040",
-      "community": 13,
+      "community": 2,
       "norm_label": ".trycreateeditordisplaytrigger()",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_trycreateeditordisplaytrigger"
     },
@@ -10522,7 +10522,7 @@
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
       "source_location": "L2096",
-      "community": 13,
+      "community": 2,
       "norm_label": ".setdisplaytriggereditorerror()",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_setdisplaytriggereditorerror"
     },
@@ -10648,7 +10648,7 @@
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
       "source_location": "L2242",
-      "community": 1,
+      "community": 2,
       "norm_label": ".trycreateeditordisplaytriggerforpreview()",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_trycreateeditordisplaytriggerforpreview"
     },
@@ -10720,7 +10720,7 @@
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
       "source_location": "L2118",
-      "community": 13,
+      "community": 2,
       "norm_label": ".issupportedinput()",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_issupportedinput"
     },
@@ -10747,7 +10747,7 @@
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
       "source_location": "L2374",
-      "community": 102,
+      "community": 2,
       "norm_label": ".ensuredefaultactionresultdisplaytriggers()",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_ensuredefaultactionresultdisplaytriggers"
     },
@@ -10756,7 +10756,7 @@
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
       "source_location": "L2416",
-      "community": 102,
+      "community": 2,
       "norm_label": ".ensuredefaultmediachangeddisplaytrigger()",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_ensuredefaultmediachangeddisplaytrigger"
     },
@@ -10900,7 +10900,7 @@
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
       "source_location": "L949",
-      "community": 62,
+      "community": 102,
       "norm_label": ".runnowplayingloopasync()",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_runnowplayingloopasync"
     },
@@ -10909,7 +10909,7 @@
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
       "source_location": "L972",
-      "community": 62,
+      "community": 102,
       "norm_label": ".updatenowplayingasync()",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_updatenowplayingasync"
     },
@@ -19142,9 +19142,9 @@
       "source_file": "app/MakroPad.App/ViewModels/DisplayTriggersEditorViewModel.cs",
       "source_location": "L802",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_displaytriggerseditorviewmodel_displaytriggerseditorviewmodel",
-      "target": "viewmodels_displaytriggerseditorviewmodel_displaytriggerseditorviewmodel_setlayoutpreview",
-      "confidence_score": 1.0
+      "target": "viewmodels_displaytriggerseditorviewmodel_displaytriggerseditorviewmodel_setlayoutpreview"
     },
     {
       "relation": "method",
@@ -19152,9 +19152,9 @@
       "source_file": "app/MakroPad.App/ViewModels/DisplayTriggersEditorViewModel.cs",
       "source_location": "L823",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_displaytriggerseditorviewmodel_displaytriggerseditorviewmodel",
-      "target": "viewmodels_displaytriggerseditorviewmodel_displaytriggerseditorviewmodel_fitlayoutpreviewtext",
-      "confidence_score": 1.0
+      "target": "viewmodels_displaytriggerseditorviewmodel_displaytriggerseditorviewmodel_fitlayoutpreviewtext"
     },
     {
       "relation": "method",
@@ -19162,9 +19162,9 @@
       "source_file": "app/MakroPad.App/ViewModels/DisplayTriggersEditorViewModel.cs",
       "source_location": "L831",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_displaytriggerseditorviewmodel_displaytriggerseditorviewmodel",
-      "target": "viewmodels_displaytriggerseditorviewmodel_displaytriggerseditorviewmodel_iconpreviewlabel",
-      "confidence_score": 1.0
+      "target": "viewmodels_displaytriggerseditorviewmodel_displaytriggerseditorviewmodel_iconpreviewlabel"
     },
     {
       "relation": "method",
@@ -19881,9 +19881,9 @@
       "source_file": "app/MakroPad.App/ViewModels/DisplayTriggersEditorViewModel.cs",
       "source_location": "L725",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_displaytriggerseditorviewmodel_displaytriggerseditorviewmodel_refreshpreview",
-      "target": "viewmodels_displaytriggerseditorviewmodel_displaytriggerseditorviewmodel_setlayoutpreview",
-      "confidence_score": 1.0
+      "target": "viewmodels_displaytriggerseditorviewmodel_displaytriggerseditorviewmodel_setlayoutpreview"
     },
     {
       "relation": "calls",
@@ -19947,9 +19947,9 @@
       "source_file": "app/MakroPad.App/ViewModels/DisplayTriggersEditorViewModel.cs",
       "source_location": "L811",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_displaytriggerseditorviewmodel_displaytriggerseditorviewmodel_setlayoutpreview",
-      "target": "viewmodels_displaytriggerseditorviewmodel_displaytriggerseditorviewmodel_fitlayoutpreviewtext",
-      "confidence_score": 1.0
+      "target": "viewmodels_displaytriggerseditorviewmodel_displaytriggerseditorviewmodel_fitlayoutpreviewtext"
     },
     {
       "relation": "calls",
@@ -19958,9 +19958,9 @@
       "source_file": "app/MakroPad.App/ViewModels/DisplayTriggersEditorViewModel.cs",
       "source_location": "L814",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_displaytriggerseditorviewmodel_displaytriggerseditorviewmodel_setlayoutpreview",
-      "target": "viewmodels_displaytriggerseditorviewmodel_displaytriggerseditorviewmodel_iconpreviewlabel",
-      "confidence_score": 1.0
+      "target": "viewmodels_displaytriggerseditorviewmodel_displaytriggerseditorviewmodel_iconpreviewlabel"
     },
     {
       "relation": "calls",
@@ -25441,9 +25441,9 @@
       "source_file": "app/MakroPad.App.Tests/ViewModels/DisplayTriggersEditorViewModelTests.cs",
       "source_location": "L29",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_displaytriggerseditorviewmodeltests_displaytriggerseditorviewmodeltests",
-      "target": "viewmodels_displaytriggerseditorviewmodeltests_displaytriggerseditorviewmodeltests_layoutmodepopulatesstructuredpreview",
-      "confidence_score": 1.0
+      "target": "viewmodels_displaytriggerseditorviewmodeltests_displaytriggerseditorviewmodeltests_layoutmodepopulatesstructuredpreview"
     },
     {
       "relation": "method",
@@ -25711,9 +25711,9 @@
       "source_file": "app/MakroPad.Core/Configuration/DisplayTriggerConfigMigrator.cs",
       "source_location": "L94",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "configuration_displaytriggerconfigmigrator_displaytriggerconfigmigrator",
-      "target": "configuration_displaytriggerconfigmigrator_displaytriggerconfigmigrator_upgradelegacydefaulttriggermodes",
-      "confidence_score": 1.0
+      "target": "configuration_displaytriggerconfigmigrator_displaytriggerconfigmigrator_upgradelegacydefaulttriggermodes"
     },
     {
       "relation": "method",
@@ -25721,9 +25721,9 @@
       "source_file": "app/MakroPad.Core/Configuration/DisplayTriggerConfigMigrator.cs",
       "source_location": "L118",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "configuration_displaytriggerconfigmigrator_displaytriggerconfigmigrator",
-      "target": "configuration_displaytriggerconfigmigrator_displaytriggerconfigmigrator_islegacydefaulttrigger",
-      "confidence_score": 1.0
+      "target": "configuration_displaytriggerconfigmigrator_displaytriggerconfigmigrator_islegacydefaulttrigger"
     },
     {
       "relation": "calls",
@@ -25754,9 +25754,9 @@
       "source_file": "app/MakroPad.Core/Configuration/DisplayTriggerConfigMigrator.cs",
       "source_location": "L13",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "configuration_displaytriggerconfigmigrator_displaytriggerconfigmigrator_migratedefaults",
-      "target": "configuration_displaytriggerconfigmigrator_displaytriggerconfigmigrator_upgradelegacydefaulttriggermodes",
-      "confidence_score": 1.0
+      "target": "configuration_displaytriggerconfigmigrator_displaytriggerconfigmigrator_upgradelegacydefaulttriggermodes"
     },
     {
       "relation": "calls",
@@ -25765,9 +25765,9 @@
       "source_file": "app/MakroPad.Core/Configuration/DisplayTriggerConfigMigrator.cs",
       "source_location": "L100",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "configuration_displaytriggerconfigmigrator_displaytriggerconfigmigrator_upgradelegacydefaulttriggermodes",
-      "target": "configuration_displaytriggerconfigmigrator_displaytriggerconfigmigrator_islegacydefaulttrigger",
-      "confidence_score": 1.0
+      "target": "configuration_displaytriggerconfigmigrator_displaytriggerconfigmigrator_islegacydefaulttrigger"
     },
     {
       "relation": "contains",
@@ -27139,9 +27139,9 @@
       "source_file": "app/MakroPad.Core.Tests/Configuration/DisplayTriggerConfigMigratorTests.cs",
       "source_location": "L159",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "configuration_displaytriggerconfigmigratortests_displaytriggerconfigmigratortests",
-      "target": "configuration_displaytriggerconfigmigratortests_displaytriggerconfigmigratortests_migratedefaultsupgradesonlyunchangedlegacydefaultstolayout",
-      "confidence_score": 1.0
+      "target": "configuration_displaytriggerconfigmigratortests_displaytriggerconfigmigratortests_migratedefaultsupgradesonlyunchangedlegacydefaultstolayout"
     },
     {
       "relation": "method",
@@ -27267,9 +27267,9 @@
       "source_file": "app/MakroPad.Core.Tests/Configuration/DisplayTriggerConfigMigratorTests.cs",
       "source_location": "L180",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "configuration_displaytriggerconfigmigratortests_displaytriggerconfigmigratortests_migratedefaultsupgradesonlyunchangedlegacydefaultstolayout",
-      "target": "configuration_displaytriggerconfigmigratortests_displaytriggerconfigmigratortests_createconfig",
-      "confidence_score": 1.0
+      "target": "configuration_displaytriggerconfigmigratortests_displaytriggerconfigmigratortests_createconfig"
     },
     {
       "relation": "calls",
@@ -33269,5 +33269,5 @@
       "source_file": "app/README.md"
     }
   ],
-  "built_at_commit": "fe8420efdc44e6e6ce319694f0af3dc3f4eec199"
+  "built_at_commit": "af2c0ba2e7c0ce77b9937c00f56d734b75e0f579"
 }
