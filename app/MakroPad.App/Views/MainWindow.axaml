@@ -51,6 +51,9 @@
             <Setter Property="MinWidth" Value="120" />
             <Setter Property="MinHeight" Value="32" />
         </Style>
+        <Style Selector="ComboBox.compact">
+            <Setter Property="MinWidth" Value="70" />
+        </Style>
         <Style Selector="NumericUpDown">
             <Setter Property="MinWidth" Value="96" />
             <Setter Property="MinHeight" Value="32" />
@@ -622,6 +625,7 @@
                                             <StackPanel Grid.Column="1" Spacing="4">
                                                 <TextBlock Classes="label" Text="Rows" />
                                                 <ComboBox ItemsSource="{Binding DisplaySettings.AvailableOledLayoutRows}"
+                                                          Classes="compact"
                                                           SelectedItem="{Binding DisplaySettings.DefaultScreenRows}" />
                                             </StackPanel>
                                         </Grid>
@@ -629,6 +633,7 @@
                                         <Grid ColumnDefinitions="*,70" ColumnSpacing="8">
                                             <TextBox Text="{Binding DisplaySettings.DefaultScreenTitle}" />
                                             <ComboBox Grid.Column="1"
+                                                      Classes="compact"
                                                       ItemsSource="{Binding DisplaySettings.AvailableOledTextSizes}"
                                                       SelectedItem="{Binding DisplaySettings.DefaultScreenTitleSize}" />
                                         </Grid>
@@ -636,6 +641,7 @@
                                         <Grid ColumnDefinitions="*,70" ColumnSpacing="8">
                                             <TextBox Text="{Binding DisplaySettings.DefaultScreenLine1}" />
                                             <ComboBox Grid.Column="1"
+                                                      Classes="compact"
                                                       ItemsSource="{Binding DisplaySettings.AvailableOledTextSizes}"
                                                       SelectedItem="{Binding DisplaySettings.DefaultScreenLine1Size}" />
                                         </Grid>
@@ -643,6 +649,7 @@
                                         <Grid ColumnDefinitions="*,70" ColumnSpacing="8">
                                             <TextBox Text="{Binding DisplaySettings.DefaultScreenLine2}" />
                                             <ComboBox Grid.Column="1"
+                                                      Classes="compact"
                                                       ItemsSource="{Binding DisplaySettings.AvailableOledTextSizes}"
                                                       SelectedItem="{Binding DisplaySettings.DefaultScreenLine2Size}" />
                                         </Grid>
