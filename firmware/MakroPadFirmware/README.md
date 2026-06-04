@@ -166,6 +166,13 @@ button;id=1;state=up
 slider;id=1;value=1834;raw=1841
 ```
 
+Slider readings are filtered in firmware before they are sent. Each poll takes
+multiple ADC samples, sorts them, averages the middle samples, applies a slow
+low-pass filter, snaps near-endpoint values to `0`/`4095`, and only sends when
+the value moved beyond the configured deadband and send interval. If a wired
+slider still jitters, add a 100 nF capacitor from the slider wiper/GPIO to GND
+near the ESP32 pin.
+
 Additional buttons use the same protocol with their numeric IDs:
 
 ```text

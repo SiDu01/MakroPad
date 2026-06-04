@@ -199,8 +199,9 @@ Felder:
 Firmware-Hinweis:
 
 - Nicht jede minimale ADC-Aenderung senden.
-- Fuer Version 1 reicht ein Deadband, z. B. nur senden ab 8 bis 16 ADC-Schritten
-  Unterschied.
+- Die Firmware liest mehrere ADC-Samples, verwirft Ausreisser, glaettet den
+  Wert, snappt nahe Endpunkte auf `0`/`4095` und sendet nur bei relevanter
+  Aenderung oder nach einem Mindestintervall.
 
 ### error
 

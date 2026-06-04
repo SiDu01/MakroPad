@@ -1,16 +1,16 @@
 # Graph Report - MakroPad  (2026-06-04)
 
 ## Corpus Check
-- 131 files · ~33,678 words
+- 131 files · ~33,846 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1360 nodes · 1982 edges · 142 communities (92 shown, 50 thin omitted)
+- 1362 nodes · 1984 edges · 141 communities (91 shown, 50 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 13 edges (avg confidence: 0.81)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `cbc31ecc`
+- Built from commit: `f38e5b8b`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -99,7 +99,6 @@
 - [[_COMMUNITY_Community 127|Community 127]]
 - [[_COMMUNITY_Community 130|Community 130]]
 - [[_COMMUNITY_Community 131|Community 131]]
-- [[_COMMUNITY_Community 132|Community 132]]
 - [[_COMMUNITY_Community 133|Community 133]]
 - [[_COMMUNITY_Community 134|Community 134]]
 - [[_COMMUNITY_Community 135|Community 135]]
@@ -139,7 +138,7 @@
 - **Input to Action Flow** — hardware_buttons_gpio_pullup, hardware_sliders_adc1, protocol_button_message, protocol_slider_message, app_readme_action_pipeline [EXTRACTED 1.00]
 - **OLED Display Configuration Flow** — hardware_oled_i2c_ssd1306, protocol_display_message, protocol_config_message, protocol_action_result_message, app_readme_oled_default_screen [EXTRACTED 1.00]
 
-## Communities (142 total, 50 thin omitted)
+## Communities (141 total, 50 thin omitted)
 
 ### Community 0 - "Community 0"
 Cohesion: 0.18
@@ -170,12 +169,12 @@ Cohesion: 0.15
 Nodes (11): IApplicationVolumeController, IKeyboardController, ISystemLauncher, ISystemMediaController, ISystemVolumeController, ActionExecutor, IApplicationVolumeController, IKeyboardController (+3 more)
 
 ### Community 11 - "Community 11"
-Cohesion: 0.07
-Nodes (8): ISystemLauncher, SystemLauncher, ActionExecutorTests, FakeApplicationVolumeController, FakeKeyboardController, FakeMediaController, FakeSystemLauncher, FakeVolumeController
+Cohesion: 0.05
+Nodes (11): IApplicationVolumeController, IKeyboardController, NoopApplicationVolumeController, NoopKeyboardController, ActionExecutorTests, FakeApplicationVolumeController, FakeKeyboardController, FakeMediaController (+3 more)
 
 ### Community 12 - "Community 12"
-Cohesion: 0.13
-Nodes (9): Dictionary, uint, ushort, IKeyboardController, NoopKeyboardController, Dictionary, uint, ushort (+1 more)
+Cohesion: 0.18
+Nodes (7): Dictionary, uint, ushort, Dictionary, uint, ushort, WindowsKeyboardController
 
 ### Community 14 - "Community 14"
 Cohesion: 0.20
@@ -194,8 +193,8 @@ Cohesion: 0.16
 Nodes (10): BindingEditorService, bool, MakroPadConfig, ProfileConfigService, string, BindingViewModel, EventArgs, DisplayTriggerTestRequestedEventArgs (+2 more)
 
 ### Community 22 - "Community 22"
-Cohesion: 0.07
-Nodes (11): DeviceDisplaySyncService, object, DisplayTriggerRuntimeState, Func, IDisplayTriggerSink, ActionFeedbackCoordinatorTests, FakeSystemLauncher, RejectingDisplayTriggerSink (+3 more)
+Cohesion: 0.06
+Nodes (13): DeviceDisplaySyncService, object, DisplayTriggerRuntimeState, Func, IDisplayTriggerSink, ISystemLauncher, SystemLauncher, ActionFeedbackCoordinatorTests (+5 more)
 
 ### Community 23 - "Community 23"
 Cohesion: 0.31
@@ -218,8 +217,8 @@ Cohesion: 0.07
 Nodes (13): ActionDefinitionCatalog, BindingEditorService, bool, string, IApplicationVolumeController, string, INowPlayingProvider, string (+5 more)
 
 ### Community 63 - "Community 63"
-Cohesion: 0.11
-Nodes (18): Board-Revision pruefen, Buttons, Buttons, code:text (GPIO ---- Switch ---- GND), code:text (3V3 ---- Potentiometer Ende 1), code:text (OLED VCC -> 3V3), Elektrisches Grundprinzip, Erster Prototyp (+10 more)
+Cohesion: 0.10
+Nodes (20): Board-Revision pruefen, Buttons, Buttons, Buttons, code:text (GPIO ---- Switch ---- GND), code:text (3V3 ---- Potentiometer Ende 1), code:text (OLED VCC -> 3V3), Elektrisches Grundprinzip (+12 more)
 
 ### Community 64 - "Community 64"
 Cohesion: 0.12
@@ -293,10 +292,6 @@ Nodes (15): Build, code:text (%APPDATA%\MakroPad\config.json), code:text (hello-
 Cohesion: 0.33
 Nodes (4): ActionPipeline, DeviceSessionService, DisplayTriggerOrchestrator, ActionFeedbackCoordinator
 
-### Community 132 - "Community 132"
-Cohesion: 0.20
-Nodes (3): IApplicationVolumeController, NoopApplicationVolumeController, WindowsApplicationVolumeController
-
 ### Community 138 - "Community 138"
 Cohesion: 0.29
 Nodes (7): Dual Serial Output, USB CDC Serial Role, error Message, JSON Lines Alternative, Version 1 Key-Value Protocol Format, Protocol Percent-Encoding, USB CDC Serial Transport
@@ -318,24 +313,24 @@ Cohesion: 0.67
 Nodes (4): Serial Heartbeat, Waiting for app Display State, ping Message, pong Message
 
 ## Knowledge Gaps
-- **257 isolated node(s):** `PreToolUse`, `ISystemMediaController`, `ISystemVolumeController`, `IApplicationVolumeController`, `IKeyboardController` (+252 more)
+- **259 isolated node(s):** `PreToolUse`, `ISystemMediaController`, `ISystemVolumeController`, `IApplicationVolumeController`, `IKeyboardController` (+254 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **50 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `MainWindowViewModel` connect `Community 1` to `Community 2`, `Community 100`, `Community 102`, `Community 107`, `Community 108`, `Community 45`, `Community 13`, `Community 16`, `Community 124`, `Community 18`, `Community 21`, `Community 90`, `Community 92`, `Community 125`, `Community 62`?**
+- **Why does `MainWindowViewModel` connect `Community 1` to `Community 2`, `Community 100`, `Community 102`, `Community 107`, `Community 108`, `Community 13`, `Community 45`, `Community 16`, `Community 124`, `Community 18`, `Community 21`, `Community 90`, `Community 92`, `Community 125`, `Community 62`?**
   _High betweenness centrality (0.194) - this node is a cross-community bridge._
 - **Why does `DisplayTriggerInputTracker` connect `Community 18` to `Community 1`?**
   _High betweenness centrality (0.121) - this node is a cross-community bridge._
 - **What connects `PreToolUse`, `ISystemMediaController`, `ISystemVolumeController` to the rest of the system?**
-  _257 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _259 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 1` be split into smaller, more focused modules?**
-  _Cohesion score 0.03495495495495495 - nodes in this community are weakly interconnected._
-- **Should `Community 2` be split into smaller, more focused modules?**
-  _Cohesion score 0.11428571428571428 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.034299034299034296 - nodes in this community are weakly interconnected._
 - **Should `Community 3` be split into smaller, more focused modules?**
   _Cohesion score 0.05026300409117475 - nodes in this community are weakly interconnected._
 - **Should `Community 5` be split into smaller, more focused modules?**
   _Cohesion score 0.08392603129445235 - nodes in this community are weakly interconnected._
+- **Should `Community 6` be split into smaller, more focused modules?**
+  _Cohesion score 0.04878048780487805 - nodes in this community are weakly interconnected._

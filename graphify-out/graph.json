@@ -704,7 +704,7 @@
       "source_file": "app/MakroPad.Actions/NoopApplicationVolumeController.cs",
       "source_location": "L1",
       "id": "app_makropad_actions_noopapplicationvolumecontroller_cs",
-      "community": 132,
+      "community": 11,
       "norm_label": "noopapplicationvolumecontroller.cs"
     },
     {
@@ -713,7 +713,7 @@
       "source_file": "app/MakroPad.Actions/NoopApplicationVolumeController.cs",
       "source_location": "L3",
       "id": "makropad_actions_noopapplicationvolumecontroller_noopapplicationvolumecontroller",
-      "community": 132,
+      "community": 11,
       "norm_label": "noopapplicationvolumecontroller"
     },
     {
@@ -722,7 +722,7 @@
       "source_file": "",
       "source_location": "",
       "id": "iapplicationvolumecontroller",
-      "community": 132,
+      "community": 11,
       "norm_label": "iapplicationvolumecontroller"
     },
     {
@@ -731,7 +731,7 @@
       "source_file": "app/MakroPad.Actions/NoopApplicationVolumeController.cs",
       "source_location": "L5",
       "id": "makropad_actions_noopapplicationvolumecontroller_noopapplicationvolumecontroller_setapplicationvolumeasync",
-      "community": 132,
+      "community": 11,
       "norm_label": ".setapplicationvolumeasync()"
     },
     {
@@ -740,7 +740,7 @@
       "source_file": "app/MakroPad.Actions/NoopApplicationVolumeController.cs",
       "source_location": "L16",
       "id": "makropad_actions_noopapplicationvolumecontroller_noopapplicationvolumecontroller_getaudiosessionsasync",
-      "community": 132,
+      "community": 11,
       "norm_label": ".getaudiosessionsasync()"
     },
     {
@@ -749,7 +749,7 @@
       "source_file": "app/MakroPad.Actions/NoopKeyboardController.cs",
       "source_location": "L1",
       "id": "app_makropad_actions_noopkeyboardcontroller_cs",
-      "community": 12,
+      "community": 11,
       "norm_label": "noopkeyboardcontroller.cs"
     },
     {
@@ -758,7 +758,7 @@
       "source_file": "app/MakroPad.Actions/NoopKeyboardController.cs",
       "source_location": "L3",
       "id": "makropad_actions_noopkeyboardcontroller_noopkeyboardcontroller",
-      "community": 12,
+      "community": 11,
       "norm_label": "noopkeyboardcontroller"
     },
     {
@@ -767,7 +767,7 @@
       "source_file": "",
       "source_location": "",
       "id": "ikeyboardcontroller",
-      "community": 12,
+      "community": 11,
       "norm_label": "ikeyboardcontroller"
     },
     {
@@ -776,7 +776,7 @@
       "source_file": "app/MakroPad.Actions/NoopKeyboardController.cs",
       "source_location": "L5",
       "id": "makropad_actions_noopkeyboardcontroller_noopkeyboardcontroller_sendshortcutasync",
-      "community": 12,
+      "community": 11,
       "norm_label": ".sendshortcutasync()"
     },
     {
@@ -929,7 +929,7 @@
       "source_file": "app/MakroPad.Actions/SystemLauncher.cs",
       "source_location": "L1",
       "id": "app_makropad_actions_systemlauncher_cs",
-      "community": 11,
+      "community": 22,
       "norm_label": "systemlauncher.cs"
     },
     {
@@ -938,7 +938,7 @@
       "source_file": "app/MakroPad.Actions/SystemLauncher.cs",
       "source_location": "L5",
       "id": "makropad_actions_systemlauncher_systemlauncher",
-      "community": 11,
+      "community": 22,
       "norm_label": "systemlauncher"
     },
     {
@@ -947,7 +947,7 @@
       "source_file": "",
       "source_location": "",
       "id": "isystemlauncher",
-      "community": 11,
+      "community": 22,
       "norm_label": "isystemlauncher"
     },
     {
@@ -956,7 +956,7 @@
       "source_file": "app/MakroPad.Actions/SystemLauncher.cs",
       "source_location": "L7",
       "id": "makropad_actions_systemlauncher_systemlauncher_openurlasync",
-      "community": 11,
+      "community": 22,
       "norm_label": ".openurlasync()"
     },
     {
@@ -965,7 +965,7 @@
       "source_file": "app/MakroPad.Actions/SystemLauncher.cs",
       "source_location": "L22",
       "id": "makropad_actions_systemlauncher_systemlauncher_openappasync",
-      "community": 11,
+      "community": 22,
       "norm_label": ".openappasync()"
     },
     {
@@ -974,7 +974,7 @@
       "source_file": "app/MakroPad.Actions/SystemLauncher.cs",
       "source_location": "L36",
       "id": "makropad_actions_systemlauncher_systemlauncher_startprocessasync",
-      "community": 11,
+      "community": 22,
       "norm_label": ".startprocessasync()"
     },
     {
@@ -1064,7 +1064,7 @@
       "source_file": "app/MakroPad.Actions/WindowsApplicationVolumeController.cs",
       "source_location": "L1",
       "id": "app_makropad_actions_windowsapplicationvolumecontroller_cs",
-      "community": 132,
+      "community": 11,
       "norm_label": "windowsapplicationvolumecontroller.cs"
     },
     {
@@ -1073,7 +1073,7 @@
       "source_file": "app/MakroPad.Actions/WindowsApplicationVolumeController.cs",
       "source_location": "L8",
       "id": "makropad_actions_windowsapplicationvolumecontroller_windowsapplicationvolumecontroller",
-      "community": 132,
+      "community": 11,
       "norm_label": "windowsapplicationvolumecontroller"
     },
     {
@@ -1082,7 +1082,7 @@
       "source_file": "app/MakroPad.Actions/WindowsApplicationVolumeController.cs",
       "source_location": "L10",
       "id": "makropad_actions_windowsapplicationvolumecontroller_windowsapplicationvolumecontroller_setapplicationvolumeasync",
-      "community": 132,
+      "community": 11,
       "norm_label": ".setapplicationvolumeasync()"
     },
     {
@@ -1091,7 +1091,7 @@
       "source_file": "app/MakroPad.Actions/WindowsApplicationVolumeController.cs",
       "source_location": "L58",
       "id": "makropad_actions_windowsapplicationvolumecontroller_windowsapplicationvolumecontroller_getaudiosessionsasync",
-      "community": 132,
+      "community": 11,
       "norm_label": ".getaudiosessionsasync()"
     },
     {
@@ -1100,7 +1100,7 @@
       "source_file": "app/MakroPad.Actions/WindowsApplicationVolumeController.cs",
       "source_location": "L108",
       "id": "makropad_actions_windowsapplicationvolumecontroller_windowsapplicationvolumecontroller_sessionmatchesprocess",
-      "community": 132,
+      "community": 11,
       "norm_label": ".sessionmatchesprocess()"
     },
     {
@@ -1109,7 +1109,7 @@
       "source_file": "app/MakroPad.Actions/WindowsApplicationVolumeController.cs",
       "source_location": "L128",
       "id": "makropad_actions_windowsapplicationvolumecontroller_windowsapplicationvolumecontroller_normalizeprocessname",
-      "community": 132,
+      "community": 11,
       "norm_label": ".normalizeprocessname()"
     },
     {
@@ -1118,7 +1118,7 @@
       "source_file": "app/MakroPad.Actions/WindowsApplicationVolumeController.cs",
       "source_location": "L136",
       "id": "makropad_actions_windowsapplicationvolumecontroller_windowsapplicationvolumecontroller_trygetprocessname",
-      "community": 132,
+      "community": 11,
       "norm_label": ".trygetprocessname()"
     },
     {
@@ -4619,7 +4619,7 @@
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
       "source_location": "L302",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_saveconfigasync",
-      "community": 102,
+      "community": 13,
       "norm_label": ".saveconfigasync()"
     },
     {
@@ -4673,7 +4673,7 @@
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
       "source_location": "L435",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_ondisplaysettingschanged",
-      "community": 102,
+      "community": 62,
       "norm_label": ".ondisplaysettingschanged()"
     },
     {
@@ -4763,7 +4763,7 @@
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
       "source_location": "L610",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_hasmediachangeddisplaytrigger",
-      "community": 2,
+      "community": 45,
       "norm_label": ".hasmediachangeddisplaytrigger()"
     },
     {
@@ -4826,7 +4826,7 @@
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
       "source_location": "L693",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_senddeviceconfigasync",
-      "community": 102,
+      "community": 62,
       "norm_label": ".senddeviceconfigasync()"
     },
     {
@@ -4880,7 +4880,7 @@
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
       "source_location": "L738",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_defaultscreenusesmediaplaceholder",
-      "community": 102,
+      "community": 62,
       "norm_label": ".defaultscreenusesmediaplaceholder()"
     },
     {
@@ -8901,7 +8901,7 @@
       "label": "Supported Actions",
       "file_type": "document",
       "source_file": "docs/HANDOFF.md",
-      "source_location": "L93",
+      "source_location": "L97",
       "id": "docs_handoff_supported_actions",
       "community": 66,
       "norm_label": "supported actions"
@@ -8910,7 +8910,7 @@
       "label": "OLED Behavior",
       "file_type": "document",
       "source_file": "docs/HANDOFF.md",
-      "source_location": "L111",
+      "source_location": "L115",
       "id": "docs_handoff_oled_behavior",
       "community": 66,
       "norm_label": "oled behavior"
@@ -8919,7 +8919,7 @@
       "label": "Known Limitations",
       "file_type": "document",
       "source_file": "docs/HANDOFF.md",
-      "source_location": "L159",
+      "source_location": "L163",
       "id": "docs_handoff_known_limitations",
       "community": 66,
       "norm_label": "known limitations"
@@ -8928,7 +8928,7 @@
       "label": "Verification Baseline",
       "file_type": "document",
       "source_file": "docs/HANDOFF.md",
-      "source_location": "L182",
+      "source_location": "L188",
       "id": "docs_handoff_verification_baseline",
       "community": 66,
       "norm_label": "verification baseline"
@@ -8937,7 +8937,7 @@
       "label": "code:powershell (dotnet build app\\MakroPad.sln)",
       "file_type": "document",
       "source_file": "docs/HANDOFF.md",
-      "source_location": "L186",
+      "source_location": "L192",
       "id": "docs_handoff_codeblock_1",
       "community": 66,
       "norm_label": "code:powershell (dotnet build app\\makropad.sln)"
@@ -8946,7 +8946,7 @@
       "label": "Recommended Next Steps",
       "file_type": "document",
       "source_file": "docs/HANDOFF.md",
-      "source_location": "L194",
+      "source_location": "L200",
       "id": "docs_handoff_recommended_next_steps",
       "community": 66,
       "norm_label": "recommended next steps"
@@ -8955,7 +8955,7 @@
       "label": "Graphify Notes",
       "file_type": "document",
       "source_file": "docs/HANDOFF.md",
-      "source_location": "L214",
+      "source_location": "L220",
       "id": "docs_handoff_graphify_notes",
       "community": 66,
       "norm_label": "graphify notes"
@@ -9045,7 +9045,7 @@
       "label": "OLED",
       "file_type": "document",
       "source_file": "docs/HARDWARE.md",
-      "source_location": "L82",
+      "source_location": "L86",
       "id": "docs_hardware_oled",
       "community": 63,
       "norm_label": "oled"
@@ -9054,7 +9054,7 @@
       "label": "code:text (OLED VCC -> 3V3)",
       "file_type": "document",
       "source_file": "docs/HARDWARE.md",
-      "source_location": "L86",
+      "source_location": "L90",
       "id": "docs_hardware_codeblock_3",
       "community": 63,
       "norm_label": "code:text (oled vcc -> 3v3)"
@@ -9063,7 +9063,7 @@
       "label": "Vorgeschlagener Pinout-Entwurf",
       "file_type": "document",
       "source_file": "docs/HARDWARE.md",
-      "source_location": "L100",
+      "source_location": "L104",
       "id": "docs_hardware_vorgeschlagener_pinout_entwurf",
       "community": 63,
       "norm_label": "vorgeschlagener pinout-entwurf"
@@ -9072,8 +9072,8 @@
       "label": "Slider",
       "file_type": "document",
       "source_file": "docs/HARDWARE.md",
-      "source_location": "L105",
-      "id": "docs_hardware_slider_105",
+      "source_location": "L109",
+      "id": "docs_hardware_slider_109",
       "community": 63,
       "norm_label": "slider"
     },
@@ -9081,7 +9081,7 @@
       "label": "OLED I2C",
       "file_type": "document",
       "source_file": "docs/HARDWARE.md",
-      "source_location": "L113",
+      "source_location": "L117",
       "id": "docs_hardware_oled_i2c",
       "community": 63,
       "norm_label": "oled i2c"
@@ -9090,8 +9090,8 @@
       "label": "Buttons",
       "file_type": "document",
       "source_file": "docs/HARDWARE.md",
-      "source_location": "L123",
-      "id": "docs_hardware_buttons_123",
+      "source_location": "L127",
+      "id": "docs_hardware_buttons_127",
       "community": 63,
       "norm_label": "buttons"
     },
@@ -9099,7 +9099,7 @@
       "label": "Pins, die vorerst frei bleiben sollten",
       "file_type": "document",
       "source_file": "docs/HARDWARE.md",
-      "source_location": "L148",
+      "source_location": "L152",
       "id": "docs_hardware_pins_die_vorerst_frei_bleiben_sollten",
       "community": 63,
       "norm_label": "pins, die vorerst frei bleiben sollten"
@@ -9108,7 +9108,7 @@
       "label": "Board-Revision pruefen",
       "file_type": "document",
       "source_file": "docs/HARDWARE.md",
-      "source_location": "L164",
+      "source_location": "L168",
       "id": "docs_hardware_board_revision_pruefen",
       "community": 63,
       "norm_label": "board-revision pruefen"
@@ -9117,7 +9117,7 @@
       "label": "Erster Prototyp",
       "file_type": "document",
       "source_file": "docs/HARDWARE.md",
-      "source_location": "L185",
+      "source_location": "L189",
       "id": "docs_hardware_erster_prototyp",
       "community": 63,
       "norm_label": "erster prototyp"
@@ -9126,7 +9126,7 @@
       "label": "Offene Hardware-Aufgaben",
       "file_type": "document",
       "source_file": "docs/HARDWARE.md",
-      "source_location": "L205",
+      "source_location": "L209",
       "id": "docs_hardware_offene_hardware_aufgaben",
       "community": 63,
       "norm_label": "offene hardware-aufgaben"
@@ -9495,7 +9495,7 @@
       "label": "error",
       "file_type": "document",
       "source_file": "docs/PROTOCOL.md",
-      "source_location": "L205",
+      "source_location": "L206",
       "id": "docs_protocol_error",
       "community": 6,
       "norm_label": "error"
@@ -9504,7 +9504,7 @@
       "label": "code:text (error;code=display_init_failed;message=OLED%20not%20found)",
       "file_type": "document",
       "source_file": "docs/PROTOCOL.md",
-      "source_location": "L209",
+      "source_location": "L210",
       "id": "docs_protocol_codeblock_12",
       "community": 6,
       "norm_label": "code:text (error;code=display_init_failed;message=oled%20not%20found)"
@@ -9513,7 +9513,7 @@
       "label": "App -> ESP Nachrichten",
       "file_type": "document",
       "source_file": "docs/PROTOCOL.md",
-      "source_location": "L220",
+      "source_location": "L221",
       "id": "docs_protocol_app_esp_nachrichten",
       "community": 6,
       "norm_label": "app -> esp nachrichten"
@@ -9522,7 +9522,7 @@
       "label": "hello-ack",
       "file_type": "document",
       "source_file": "docs/PROTOCOL.md",
-      "source_location": "L222",
+      "source_location": "L223",
       "id": "docs_protocol_hello_ack",
       "community": 6,
       "norm_label": "hello-ack"
@@ -9531,7 +9531,7 @@
       "label": "code:text (hello-ack;proto=1;app=0.1.0)",
       "file_type": "document",
       "source_file": "docs/PROTOCOL.md",
-      "source_location": "L226",
+      "source_location": "L227",
       "id": "docs_protocol_codeblock_13",
       "community": 6,
       "norm_label": "code:text (hello-ack;proto=1;app=0.1.0)"
@@ -9540,7 +9540,7 @@
       "label": "display",
       "file_type": "document",
       "source_file": "docs/PROTOCOL.md",
-      "source_location": "L230",
+      "source_location": "L231",
       "id": "docs_protocol_display",
       "community": 6,
       "norm_label": "display"
@@ -9549,7 +9549,7 @@
       "label": "code:text (display;mode=profile;name=Gaming)",
       "file_type": "document",
       "source_file": "docs/PROTOCOL.md",
-      "source_location": "L234",
+      "source_location": "L235",
       "id": "docs_protocol_codeblock_14",
       "community": 6,
       "norm_label": "code:text (display;mode=profile;name=gaming)"
@@ -9558,7 +9558,7 @@
       "label": "config",
       "file_type": "document",
       "source_file": "docs/PROTOCOL.md",
-      "source_location": "L275",
+      "source_location": "L276",
       "id": "docs_protocol_config",
       "community": 6,
       "norm_label": "config"
@@ -9567,7 +9567,7 @@
       "label": "code:text (config;profile=Default;actionResultTimeoutMs=3000;preferredD)",
       "file_type": "document",
       "source_file": "docs/PROTOCOL.md",
-      "source_location": "L279",
+      "source_location": "L280",
       "id": "docs_protocol_codeblock_15",
       "community": 6,
       "norm_label": "code:text (config;profile=default;actionresulttimeoutms=3000;preferredd)"
@@ -9576,7 +9576,7 @@
       "label": "action-result",
       "file_type": "document",
       "source_file": "docs/PROTOCOL.md",
-      "source_location": "L298",
+      "source_location": "L299",
       "id": "docs_protocol_action_result",
       "community": 6,
       "norm_label": "action-result"
@@ -9585,7 +9585,7 @@
       "label": "code:text (action-result;input=button:1;status=ok;message=Muted)",
       "file_type": "document",
       "source_file": "docs/PROTOCOL.md",
-      "source_location": "L302",
+      "source_location": "L303",
       "id": "docs_protocol_codeblock_16",
       "community": 6,
       "norm_label": "code:text (action-result;input=button:1;status=ok;message=muted)"
@@ -9594,7 +9594,7 @@
       "label": "code:text (action-result;input=button:1;status=ok;message=Play%2FPause)",
       "file_type": "document",
       "source_file": "docs/PROTOCOL.md",
-      "source_location": "L340",
+      "source_location": "L341",
       "id": "docs_protocol_codeblock_17",
       "community": 6,
       "norm_label": "code:text (action-result;input=button:1;status=ok;message=play%2fpause)"
@@ -9603,7 +9603,7 @@
       "label": "Fehlerbehandlung",
       "file_type": "document",
       "source_file": "docs/PROTOCOL.md",
-      "source_location": "L345",
+      "source_location": "L346",
       "id": "docs_protocol_fehlerbehandlung",
       "community": 6,
       "norm_label": "fehlerbehandlung"
@@ -9612,7 +9612,7 @@
       "label": "code:text (error;code=unsupported_protocol;message=Expected%20proto%3D1)",
       "file_type": "document",
       "source_file": "docs/PROTOCOL.md",
-      "source_location": "L356",
+      "source_location": "L357",
       "id": "docs_protocol_codeblock_18",
       "community": 6,
       "norm_label": "code:text (error;code=unsupported_protocol;message=expected%20proto%3d1)"
@@ -9621,7 +9621,7 @@
       "label": "Beispielablauf",
       "file_type": "document",
       "source_file": "docs/PROTOCOL.md",
-      "source_location": "L360",
+      "source_location": "L361",
       "id": "docs_protocol_beispielablauf",
       "community": 6,
       "norm_label": "beispielablauf"
@@ -9630,7 +9630,7 @@
       "label": "code:text (ESP -> App: hello;proto=1;fw=0.1.0;device=makropad-s3;button)",
       "file_type": "document",
       "source_file": "docs/PROTOCOL.md",
-      "source_location": "L362",
+      "source_location": "L363",
       "id": "docs_protocol_codeblock_19",
       "community": 6,
       "norm_label": "code:text (esp -> app: hello;proto=1;fw=0.1.0;device=makropad-s3;button)"
@@ -9639,7 +9639,7 @@
       "label": "Warum nicht direkt JSON?",
       "file_type": "document",
       "source_file": "docs/PROTOCOL.md",
-      "source_location": "L374",
+      "source_location": "L375",
       "id": "docs_protocol_warum_nicht_direkt_json",
       "community": 6,
       "norm_label": "warum nicht direkt json?"
@@ -9648,7 +9648,7 @@
       "label": "Offene Entscheidungen",
       "file_type": "document",
       "source_file": "docs/PROTOCOL.md",
-      "source_location": "L384",
+      "source_location": "L385",
       "id": "docs_protocol_offene_entscheidungen",
       "community": 6,
       "norm_label": "offene entscheidungen"
@@ -9783,10 +9783,28 @@
       "label": "code:text (button;id=12;state=down)",
       "file_type": "document",
       "source_file": "firmware/MakroPadFirmware/README.md",
-      "source_location": "L171",
+      "source_location": "L178",
       "id": "makropadfirmware_readme_codeblock_8",
       "community": 65,
       "norm_label": "code:text (button;id=12;state=down)"
+    },
+    {
+      "label": "Slider",
+      "file_type": "document",
+      "source_file": "docs/HARDWARE.md",
+      "source_location": "L105",
+      "community": 63,
+      "norm_label": "slider",
+      "id": "docs_hardware_slider_105"
+    },
+    {
+      "label": "Buttons",
+      "file_type": "document",
+      "source_file": "docs/HARDWARE.md",
+      "source_location": "L123",
+      "community": 63,
+      "norm_label": "buttons",
+      "id": "docs_hardware_buttons_123"
     },
     {
       "label": "CancellationTokenSource",
@@ -10018,7 +10036,7 @@
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
       "source_location": "L1058",
-      "community": 102,
+      "community": 62,
       "norm_label": ".renderoledpreview()",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_renderoledpreview"
     },
@@ -10027,7 +10045,7 @@
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
       "source_location": "L1063",
-      "community": 102,
+      "community": 62,
       "norm_label": ".createdevicedisplaystate()",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_createdevicedisplaystate"
     },
@@ -10099,7 +10117,7 @@
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
       "source_location": "L104",
-      "community": 13,
+      "community": 1,
       "norm_label": ".onselecteddisplaytriggerchanged()",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_onselecteddisplaytriggerchanged"
     },
@@ -10369,7 +10387,7 @@
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
       "source_location": "L1247",
-      "community": 13,
+      "community": 1,
       "norm_label": ".resetdisplaytriggereditor()",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_resetdisplaytriggereditor"
     },
@@ -10513,7 +10531,7 @@
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
       "source_location": "L2040",
-      "community": 2,
+      "community": 13,
       "norm_label": ".trycreateeditordisplaytrigger()",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_trycreateeditordisplaytrigger"
     },
@@ -10522,7 +10540,7 @@
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
       "source_location": "L2096",
-      "community": 2,
+      "community": 16,
       "norm_label": ".setdisplaytriggereditorerror()",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_setdisplaytriggereditorerror"
     },
@@ -10648,7 +10666,7 @@
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
       "source_location": "L2242",
-      "community": 2,
+      "community": 1,
       "norm_label": ".trycreateeditordisplaytriggerforpreview()",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_trycreateeditordisplaytriggerforpreview"
     },
@@ -10720,7 +10738,7 @@
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
       "source_location": "L2118",
-      "community": 2,
+      "community": 16,
       "norm_label": ".issupportedinput()",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_issupportedinput"
     },
@@ -10747,7 +10765,7 @@
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
       "source_location": "L2374",
-      "community": 2,
+      "community": 102,
       "norm_label": ".ensuredefaultactionresultdisplaytriggers()",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_ensuredefaultactionresultdisplaytriggers"
     },
@@ -10756,7 +10774,7 @@
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
       "source_location": "L2416",
-      "community": 2,
+      "community": 102,
       "norm_label": ".ensuredefaultmediachangeddisplaytrigger()",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_ensuredefaultmediachangeddisplaytrigger"
     },
@@ -10900,7 +10918,7 @@
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
       "source_location": "L949",
-      "community": 102,
+      "community": 62,
       "norm_label": ".runnowplayingloopasync()",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_runnowplayingloopasync"
     },
@@ -10909,7 +10927,7 @@
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
       "source_location": "L972",
-      "community": 102,
+      "community": 62,
       "norm_label": ".updatenowplayingasync()",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_updatenowplayingasync"
     },
@@ -11116,7 +11134,7 @@
       "file_type": "code",
       "source_file": "MakroPad.Actions/NoopApplicationVolumeController.cs",
       "source_location": "L1",
-      "community": 132,
+      "community": 11,
       "norm_label": "noopapplicationvolumecontroller.cs",
       "id": "makropad_actions_noopapplicationvolumecontroller_cs"
     },
@@ -11125,7 +11143,7 @@
       "file_type": "code",
       "source_file": "MakroPad.Actions/NoopKeyboardController.cs",
       "source_location": "L1",
-      "community": 12,
+      "community": 11,
       "norm_label": "noopkeyboardcontroller.cs",
       "id": "makropad_actions_noopkeyboardcontroller_cs"
     },
@@ -11152,7 +11170,7 @@
       "file_type": "code",
       "source_file": "MakroPad.Actions/SystemLauncher.cs",
       "source_location": "L1",
-      "community": 11,
+      "community": 22,
       "norm_label": "systemlauncher.cs",
       "id": "makropad_actions_systemlauncher_cs"
     },
@@ -11188,7 +11206,7 @@
       "file_type": "code",
       "source_file": "MakroPad.Actions/WindowsApplicationVolumeController.cs",
       "source_location": "L1",
-      "community": 132,
+      "community": 11,
       "norm_label": "windowsapplicationvolumecontroller.cs",
       "id": "makropad_actions_windowsapplicationvolumecontroller_cs"
     },
@@ -11467,7 +11485,7 @@
       "file_type": "code",
       "source_file": "MakroPad.App/ViewModels/MainWindowViewModel.cs",
       "source_location": "L1327",
-      "community": 102,
+      "community": 62,
       "norm_label": ".normalizedisplayline()",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_normalizedisplayline"
     },
@@ -11476,7 +11494,7 @@
       "file_type": "code",
       "source_file": "MakroPad.App/ViewModels/MainWindowViewModel.cs",
       "source_location": "L1350",
-      "community": 102,
+      "community": 62,
       "norm_label": ".renderdefaultscreentemplate()",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_renderdefaultscreentemplate"
     },
@@ -11494,7 +11512,7 @@
       "file_type": "code",
       "source_file": "MakroPad.App/ViewModels/MainWindowViewModel.cs",
       "source_location": "L1464",
-      "community": 102,
+      "community": 62,
       "norm_label": ".normalizedefaultscreenrows()",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_normalizedefaultscreenrows"
     },
@@ -30202,11 +30220,11 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/HARDWARE.md",
-      "source_location": "L105",
+      "source_location": "L109",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "docs_hardware_vorgeschlagener_pinout_entwurf",
-      "target": "docs_hardware_slider_105"
+      "target": "docs_hardware_slider_109",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -30217,6 +30235,26 @@
       "confidence_score": 1.0,
       "source": "docs_hardware_vorgeschlagener_pinout_entwurf",
       "target": "docs_hardware_oled_i2c"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/HARDWARE.md",
+      "source_location": "L127",
+      "weight": 1.0,
+      "source": "docs_hardware_vorgeschlagener_pinout_entwurf",
+      "target": "docs_hardware_buttons_127",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/HARDWARE.md",
+      "source_location": "L105",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_hardware_vorgeschlagener_pinout_entwurf",
+      "target": "docs_hardware_slider_105"
     },
     {
       "relation": "contains",
@@ -33269,5 +33307,5 @@
       "source_file": "app/README.md"
     }
   ],
-  "built_at_commit": "cbc31ecc123d8f37bf851a1199bfb7e6b4e30f53"
+  "built_at_commit": "f38e5b8beb804210a41d4780aa41de128bb8043d"
 }

@@ -89,6 +89,10 @@ MakroPad has a working vertical prototype across firmware and desktop app:
 - Added defensive minimum sizes and horizontal scroll behavior to the main
   Avalonia UI so dense editor forms keep controls readable instead of
   overlapping when the window is made small.
+- Hardened firmware slider reading with multi-sample trimmed averaging,
+  stronger low-pass filtering, deadband hysteresis, endpoint snapping, and a
+  minimum send interval. Hardware docs now recommend a 100 nF wiper-to-GND
+  capacitor if a physical slider still jitters.
 
 ## Supported Actions
 
@@ -174,7 +178,9 @@ MakroPad has a working vertical prototype across firmware and desktop app:
   display/protocol/input modules should be split once behavior stabilizes.
 - Layout screens currently support only fixed built-in layouts. A free element
   list or custom layout mode is still open.
-- Slider quality is still being validated with replacement hardware.
+- Slider quality is still being validated with replacement hardware. Firmware
+  filtering has been improved, but the latest filter still needs a flash and
+  real-slider test; add a 100 nF wiper-to-GND capacitor if jitter remains.
 - App UI is functional after the display-editor redesign and now guards dense
   editor forms against small-window overlap, but the new Display tab still
   needs hardware-driven usability feedback.

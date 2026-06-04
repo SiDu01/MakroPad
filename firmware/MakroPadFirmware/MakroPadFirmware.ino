@@ -23,7 +23,13 @@ constexpr uint32_t HelloIntervalMs = 1000;
 constexpr uint32_t HostTimeoutMs = 6000;
 constexpr uint32_t DefaultActionResultTimeoutMs = 3000;
 constexpr uint32_t DebounceMs = 25;
-constexpr int SliderDeadband = 16;
+constexpr int SliderAdcMax = 4095;
+constexpr int SliderDeadband = 32;
+constexpr int SliderSnapThreshold = 24;
+constexpr uint8_t SliderSampleCount = 9;
+constexpr uint8_t SliderKeptSampleCount = 5;
+constexpr uint8_t SliderSmoothingDivisor = 16;
+constexpr uint32_t SliderMinSendIntervalMs = 35;
 constexpr size_t MaxLineLength = 512;
 constexpr size_t ActiveButtonCount = sizeof(ButtonPins) / sizeof(ButtonPins[0]);
 constexpr size_t ActiveSliderCount = 1;
@@ -55,6 +61,7 @@ struct SliderState {
   uint8_t pin;
   int smoothedValue;
   int lastSentValue;
+  uint32_t lastSentMs;
 };
 
 ButtonState buttons[ActiveButtonCount];
@@ -826,20 +833,71 @@ void pollButton(ButtonState& button) {
   sendLine("button;id=" + String(button.id) + ";state=" + String(pressed ? "down" : "up"));
 }
 
+int snapSliderValue(int value) {
+  if (value <= SliderSnapThreshold) {
+    return 0;
+  }
+
+  if (value >= SliderAdcMax - SliderSnapThreshold) {
+    return SliderAdcMax;
+  }
+
+  return constrain(value, 0, SliderAdcMax);
+}
+
+void sortSliderSamples(int samples[], uint8_t count) {
+  for (uint8_t index = 1; index < count; index++) {
+    const int current = samples[index];
+    int previous = index - 1;
+
+    while (previous >= 0 && samples[previous] > current) {
+      samples[previous + 1] = samples[previous];
+      previous--;
+    }
+
+    samples[previous + 1] = current;
+  }
+}
+
+int readSliderRaw(uint8_t pin) {
+  int samples[SliderSampleCount];
+  for (uint8_t index = 0; index < SliderSampleCount; index++) {
+    samples[index] = analogRead(pin);
+    delayMicroseconds(150);
+  }
+
+  sortSliderSamples(samples, SliderSampleCount);
+
+  const uint8_t firstKeptIndex = (SliderSampleCount - SliderKeptSampleCount) / 2;
+  long total = 0;
+  for (uint8_t index = 0; index < SliderKeptSampleCount; index++) {
+    total += samples[firstKeptIndex + index];
+  }
+
+  return static_cast<int>(total / SliderKeptSampleCount);
+}
+
 void pollSlider(SliderState& slider) {
-  const int raw = analogRead(slider.pin);
+  const uint32_t now = millis();
+  const int raw = readSliderRaw(slider.pin);
 
   if (slider.smoothedValue < 0) {
-    slider.smoothedValue = raw;
+    slider.smoothedValue = snapSliderValue(raw);
   } else {
-    slider.smoothedValue = ((slider.smoothedValue * 7) + raw) / 8;
+    const int filtered = ((slider.smoothedValue * (SliderSmoothingDivisor - 1)) + raw) / SliderSmoothingDivisor;
+    slider.smoothedValue = snapSliderValue(filtered);
   }
 
   if (slider.lastSentValue >= 0 && abs(slider.smoothedValue - slider.lastSentValue) < SliderDeadband) {
     return;
   }
 
+  if (slider.lastSentValue >= 0 && now - slider.lastSentMs < SliderMinSendIntervalMs) {
+    return;
+  }
+
   slider.lastSentValue = slider.smoothedValue;
+  slider.lastSentMs = now;
   sendLine("slider;id=" + String(slider.id) + ";value=" + String(slider.smoothedValue) + ";raw=" + String(raw));
 }
 
@@ -878,7 +936,8 @@ void initSliders() {
       static_cast<uint8_t>(index + 1),
       SliderPins[index],
       -1,
-      -1
+      -1,
+      0
     };
   }
 }

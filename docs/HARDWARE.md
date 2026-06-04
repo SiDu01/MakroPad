@@ -78,6 +78,10 @@ Wichtig:
 - Fuer Slider bevorzugt ADC1-Pins verwenden.
 - Firmware-seitig Werte glaetten und kleine Aenderungen ignorieren, damit nicht
   permanent unnoetige Events gesendet werden.
+- Falls ein Slider trotz Firmware-Filter sichtbar jittert: einen 100 nF
+  Keramikkondensator vom Wiper/GPIO nach GND setzen, moeglichst nah am
+  ESP32-Pin. Das bildet mit dem Potentiometer einen einfachen Tiefpass gegen
+  ADC-Rauschen.
 
 ### OLED
 
