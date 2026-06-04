@@ -15,6 +15,7 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
         AddHandler(KeyDownEvent, OnKeyDown, RoutingStrategies.Tunnel);
+        Closed += (_, _) => ViewModel?.Shutdown();
     }
 
     private MainWindowViewModel? ViewModel => DataContext as MainWindowViewModel;

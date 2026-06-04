@@ -30,8 +30,7 @@ public partial class MainWindowViewModel : ViewModelBase
     private readonly DisplayTriggerOrchestrator displayTriggerOrchestrator;
     private readonly ActionPipeline actionPipeline = new(new ActionResolver(), new ActionExecutor());
     private readonly ActionFeedbackCoordinator actionFeedbackCoordinator;
-    private readonly CancellationTokenSource nowPlayingCancellation = new();
-    private readonly CancellationTokenSource audioSessionsCancellation = new();
+    private readonly AppRuntimeLoopService runtimeLoopService = new();
     private IMakroPadConnection? activeConnection => deviceSessionService.ActiveConnection;
     private MakroPadConfig currentConfig = MakroPadConfig.CreateDefault();
     private bool isLoadingConfig;
@@ -173,17 +172,22 @@ public partial class MainWindowViewModel : ViewModelBase
             RefreshDisplayTriggerEditorRuntime();
         };
         RefreshPorts();
-        _ = AudioSessionsViewModel.RefreshAudioSessionsAsync();
-        _ = AudioSessionsViewModel.RunRefreshLoopAsync(audioSessionsCancellation.Token);
-        _ = NowPlayingViewModel.RunLoopAsync(
+        runtimeLoopService.Start(
+            AudioSessionsViewModel,
+            NowPlayingViewModel,
             () => activeConnection,
             DefaultScreenUsesMediaPlaceholder,
             HasMediaChangedDisplayTrigger,
             HandleMediaChangedDisplayTriggerAsync,
             SendDeviceConfigAsync,
-            AddLog,
-            nowPlayingCancellation.Token);
+            AddLog);
         _ = LoadConfigAsync();
+    }
+
+    public void Shutdown()
+    {
+        runtimeLoopService.Dispose();
+        displayTriggerOrchestrator.Dispose();
     }
 
     [RelayCommand]

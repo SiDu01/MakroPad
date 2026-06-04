@@ -48,8 +48,9 @@ MakroPad has a working vertical prototype across firmware and desktop app:
   `ProfilesEditorViewModel`, display/OLED settings in
   `DisplaySettingsViewModel`, display-trigger editor state in
   `DisplayTriggersEditorViewModel`, and bounded diagnostics in
-  `EventLogService`. `MainWindowViewModel` is now primarily the UI/application
-  coordinator.
+  `EventLogService`. Background audio/Now Playing loop startup and cancellation
+  are owned by `AppRuntimeLoopService`. `MainWindowViewModel` is now primarily
+  the UI/application coordinator.
 - Added `MakroPad.App.Tests` to cover app services and extracted view models,
   including display-trigger orchestration, config lifecycle, action feedback,
   device-session state, and editor validation.
@@ -137,9 +138,9 @@ MakroPad has a working vertical prototype across firmware and desktop app:
   flow, config lifecycle, action helper UI, display-trigger editing/runtime,
   event logging, audio sessions, OLED/default display settings, Now Playing
   orchestration, and device config/OLED sync are now split out. The remaining
-  useful decomposition targets are startup/lifetime wiring, command groups for
-  simulator/device actions, and possibly a thin app coordinator service if the
-  remaining root orchestration keeps growing.
+  useful decomposition targets are small command groups for simulator/device
+  actions and possibly a thin app coordinator service if the remaining root
+  orchestration keeps growing.
 - Firmware is still a single Arduino sketch. That is fine for prototyping, but
   display/protocol/input modules should be split once behavior stabilizes.
 - Slider quality is still being validated with replacement hardware.
@@ -161,8 +162,8 @@ the ESP32-S3-DevKitC-1.
 ## Recommended Next Steps
 
 1. Continue refactoring `MainWindowViewModel` only where it still removes a
-   real responsibility. Next best target: startup/lifetime wiring for background
-   loops and async initialization.
+   real responsibility. Next best target: small device/simulator command
+   grouping or an app coordinator if more runtime orchestration is added.
 2. Replace Spotify-window-title Now Playing with Windows Media Session metadata.
 3. Improve the config editor UX with action definitions shared between UI,
    validation, and future docs generation.
@@ -171,9 +172,10 @@ the ESP32-S3-DevKitC-1.
 5. Add a small diagnostics screen for current device config, last heartbeat,
    last input, and last OLED message.
 
-Recommendation: extract startup/lifetime wiring next. Most editor state is now
-out of `MainWindowViewModel`; the constructor still owns background loop startup
-and async initialization, which is the clearest remaining responsibility.
+Recommendation: pause broad refactoring unless a new feature touches the
+remaining root orchestration. Most editor state and background loop ownership
+are now out of `MainWindowViewModel`; future extraction should be driven by
+concrete changes.
 
 ## Graphify Notes
 
