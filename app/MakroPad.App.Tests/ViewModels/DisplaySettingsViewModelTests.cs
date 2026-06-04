@@ -17,6 +17,7 @@ public sealed class DisplaySettingsViewModelTests
             {
                 Display = MakroPadConfig.CreateDefault().Hardware.Display with
                 {
+                    DefaultTemplateMode = "html",
                     DefaultTitle = "Pad",
                     DefaultTitleSize = 2,
                     DefaultLine1 = "{profile}",
@@ -35,6 +36,7 @@ public sealed class DisplaySettingsViewModelTests
         viewModel.Load(config);
 
         Assert.Equal("Pad", viewModel.OledPreviewTitle);
+        Assert.Equal("html", viewModel.DefaultScreenTemplateMode);
         Assert.Equal(2, viewModel.DefaultScreenTitleSize);
         Assert.Equal("Studio", viewModel.OledPreviewLine1);
         Assert.Equal("Connected", viewModel.OledPreviewLine2);
@@ -63,6 +65,7 @@ public sealed class DisplaySettingsViewModelTests
         var viewModel = CreateViewModel();
         viewModel.ActionResultTimeoutMs = 1234;
         viewModel.DefaultScreenRows = 5;
+        viewModel.DefaultScreenTemplateMode = "html";
         viewModel.DefaultScreenTitle = " Studio ";
         viewModel.DefaultScreenTitleSize = 2;
         viewModel.DefaultScreenLine1 = "";
@@ -78,6 +81,7 @@ public sealed class DisplaySettingsViewModelTests
 
         Assert.Equal(1234, config.Hardware.Display.ActionResultTimeoutMs);
         Assert.Equal(5, config.Hardware.Display.DefaultLayoutRows);
+        Assert.Equal("html", config.Hardware.Display.DefaultTemplateMode);
         Assert.Equal("Studio", config.Hardware.Display.DefaultTitle);
         Assert.Equal(2, config.Hardware.Display.DefaultTitleSize);
         Assert.Equal("{profile}", config.Hardware.Display.DefaultLine1);

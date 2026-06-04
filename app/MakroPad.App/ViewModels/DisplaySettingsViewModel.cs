@@ -108,7 +108,24 @@ public partial class DisplaySettingsViewModel : ViewModelBase
 
     public IReadOnlyList<int> AvailableOledLayoutRows { get; } = [3, 5];
 
+    public IReadOnlyList<string> AvailableOledTemplateModes { get; } = ["normal", "html"];
+
     public IReadOnlyList<int> AvailableOledTextSizes { get; } = [1, 2];
+
+    [ObservableProperty]
+    private string defaultScreenTemplateMode = "normal";
+
+    partial void OnDefaultScreenTemplateModeChanged(string value)
+    {
+        var normalized = OledDefaultScreenRenderer.NormalizeTemplateMode(value);
+        if (normalized != value)
+        {
+            DefaultScreenTemplateMode = normalized;
+            return;
+        }
+
+        NotifyChanged();
+    }
 
     public bool UsesFiveLineOledLayout => DefaultScreenRows == 5;
 
@@ -138,6 +155,7 @@ public partial class DisplaySettingsViewModel : ViewModelBase
         VolumeSliderDeadbandPercent = NormalizeVolumeSliderDeadbandPercent(config.AppSettings.VolumeSliderDeadbandPercent);
         ActionResultTimeoutMs = Math.Max(0, config.Hardware.Display.ActionResultTimeoutMs);
         DefaultScreenRows = OledDefaultScreenRenderer.NormalizeRows(config.Hardware.Display.DefaultLayoutRows);
+        DefaultScreenTemplateMode = OledDefaultScreenRenderer.NormalizeTemplateMode(config.Hardware.Display.DefaultTemplateMode);
         DefaultScreenTitle = config.Hardware.Display.DefaultTitle;
         DefaultScreenTitleSize = OledDefaultScreenRenderer.NormalizeTextSize(config.Hardware.Display.DefaultTitleSize);
         DefaultScreenLine1 = config.Hardware.Display.DefaultLine1;
@@ -161,6 +179,7 @@ public partial class DisplaySettingsViewModel : ViewModelBase
                 {
                     ActionResultTimeoutMs = Math.Max(0, ActionResultTimeoutMs),
                     DefaultLayoutRows = OledDefaultScreenRenderer.NormalizeRows(DefaultScreenRows),
+                    DefaultTemplateMode = OledDefaultScreenRenderer.NormalizeTemplateMode(DefaultScreenTemplateMode),
                     DefaultTitle = OledDefaultScreenRenderer.NormalizeLine(DefaultScreenTitle, "MakroPad"),
                     DefaultTitleSize = OledDefaultScreenRenderer.NormalizeTextSize(DefaultScreenTitleSize),
                     DefaultLine1 = OledDefaultScreenRenderer.NormalizeLine(DefaultScreenLine1, "{profile}"),
@@ -207,6 +226,7 @@ public partial class DisplaySettingsViewModel : ViewModelBase
             connectionStatus,
             ActionResultTimeoutMs,
             DefaultScreenRows,
+            DefaultScreenTemplateMode,
             DefaultScreenTitle,
             DefaultScreenTitleSize,
             DefaultScreenLine1,

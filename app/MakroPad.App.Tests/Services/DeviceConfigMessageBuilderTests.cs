@@ -14,6 +14,7 @@ public sealed class DeviceConfigMessageBuilderTests
             "Connected",
             3000,
             3,
+            "normal",
             "MakroPad",
             2,
             "{profile}",
@@ -47,6 +48,7 @@ public sealed class DeviceConfigMessageBuilderTests
             "Connected",
             3000,
             3,
+            "normal",
             "MakroPad",
             1,
             "{media.track}",
@@ -64,5 +66,37 @@ public sealed class DeviceConfigMessageBuilderTests
 
         Assert.Equal("profile", message.GetValue("preferredDisplay"));
         Assert.Null(message.GetValue("volumeSystem"));
+    }
+
+    [Fact]
+    public void HtmlDefaultScreenRendersHeadingSizesIntoConfigLines()
+    {
+        var builder = new DeviceConfigMessageBuilder();
+        var state = new DeviceDisplayState(
+            "Default",
+            "Connected",
+            3000,
+            3,
+            "html",
+            "<h1>{profile}</h1>",
+            1,
+            "<div>{status}</div>",
+            1,
+            "",
+            1,
+            "",
+            1,
+            "",
+            1,
+            false,
+            null);
+
+        var message = ProtocolCodec.Parse(builder.Build(state, DateTime.Now, null));
+
+        Assert.Equal("html", message.GetValue("defaultTemplateMode"));
+        Assert.Equal("{profile}", message.GetValue("defaultTitle"));
+        Assert.Equal("2", message.GetValue("defaultTitleSize"));
+        Assert.Equal("{status}", message.GetValue("defaultLine1"));
+        Assert.Null(message.GetValue("defaultLine1Size"));
     }
 }

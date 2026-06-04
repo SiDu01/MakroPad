@@ -142,6 +142,8 @@ configured lines. The firmware supports these placeholders:
 Default screen lines can use optional `defaultTitleSize` and
 `defaultLine1Size`..`defaultLine4Size` values. Supported text sizes are `1` and
 `2`; missing or invalid values fall back to `1`.
+When the app is configured for HTML defaultscreen content, it strips the
+lightweight HTML tags before sending `config` and maps `h1`/`h2` to size `2`.
 Use `preferred=false` on `display;mode=media` to update media placeholder
 values without switching the idle screen to the dedicated media display.
 Long display lines scroll horizontally when they exceed 21 characters at the

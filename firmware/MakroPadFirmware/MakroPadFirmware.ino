@@ -237,17 +237,19 @@ bool displayNeedsScroll(const String lines[], const uint8_t lineSizes[], uint8_t
 }
 
 uint16_t displayScrollCycleLength() {
-  uint16_t longest = 0;
+  uint16_t longestCycle = 0;
 
   for (uint8_t index = 0; index < activeDisplayLineCount; index++) {
-    if (activeDisplayLines[index].length() > longest) {
-      longest = activeDisplayLines[index].length();
+    const uint16_t lineLength = activeDisplayLines[index].length();
+    if (lineLength > visibleCharactersForTextSize(activeDisplayLineSizes[index])) {
+      const uint16_t cycleLength = lineLength + DisplayScrollGapCharacters;
+      if (cycleLength > longestCycle) {
+        longestCycle = cycleLength;
+      }
     }
   }
 
-  return longest > MaxTextSizeOneCharacters
-    ? longest + DisplayScrollGapCharacters
-    : 0;
+  return longestCycle;
 }
 
 String renderDisplayLine(const String& line, uint8_t textSize) {

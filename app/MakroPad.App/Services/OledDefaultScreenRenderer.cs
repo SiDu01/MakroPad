@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using MakroPad.Core.DisplayTriggers;
 
@@ -7,6 +8,25 @@ namespace MakroPad.App.Services;
 public sealed class OledDefaultScreenRenderer
 {
     private const int MaxPreviewCharacters = 21;
+
+    public OledDefaultScreenPreview RenderPreview(
+        DeviceDisplayState state,
+        OledDefaultScreenRenderContext context)
+    {
+        var lines = RenderDeviceLines(state);
+        var previewLines = lines
+            .Select(line => FitPreviewLine(RenderTemplate(line.Text, context), line.NormalizedTextSize))
+            .Concat(Enumerable.Repeat("", 5))
+            .Take(5)
+            .ToList();
+
+        return new OledDefaultScreenPreview(
+            previewLines[0],
+            previewLines[1],
+            previewLines[2],
+            previewLines[3],
+            previewLines[4]);
+    }
 
     public OledDefaultScreenPreview RenderPreview(
         string title,
@@ -40,6 +60,30 @@ public sealed class OledDefaultScreenRenderer
             FitPreviewLine(RenderTemplate(line4.Text, context), line4.NormalizedTextSize));
     }
 
+    public static IReadOnlyList<DisplayTemplateLine> RenderDeviceLines(DeviceDisplayState state)
+    {
+        var sourceLines = new[]
+        {
+            new DisplayTemplateLine(NormalizeLine(state.DefaultScreenTitle, "MakroPad"), state.DefaultScreenTitleSize),
+            new DisplayTemplateLine(NormalizeLine(state.DefaultScreenLine1, "{profile}"), state.DefaultScreenLine1Size),
+            new DisplayTemplateLine(NormalizeLine(state.DefaultScreenLine2, "{status}"), state.DefaultScreenLine2Size),
+            new DisplayTemplateLine(state.DefaultScreenLine3.Trim(), state.DefaultScreenLine3Size),
+            new DisplayTemplateLine(state.DefaultScreenLine4.Trim(), state.DefaultScreenLine4Size)
+        };
+        var rowCount = NormalizeRows(state.DefaultScreenRows);
+
+        if (NormalizeTemplateMode(state.DefaultScreenTemplateMode) != "html")
+        {
+            return sourceLines.Take(rowCount).ToList();
+        }
+
+        return sourceLines
+            .Take(rowCount)
+            .SelectMany(line => RenderHtmlField(line))
+            .Take(rowCount)
+            .ToList();
+    }
+
     public string RenderTemplate(string template, OledDefaultScreenRenderContext context)
     {
         var artist = context.NowPlayingTrack?.Artist ?? "";
@@ -70,6 +114,13 @@ public sealed class OledDefaultScreenRenderer
         return rows == 5 ? 5 : 3;
     }
 
+    public static string NormalizeTemplateMode(string? templateMode)
+    {
+        return string.Equals(templateMode, "html", StringComparison.OrdinalIgnoreCase)
+            ? "html"
+            : "normal";
+    }
+
     public static int NormalizeTextSize(int textSize)
     {
         return Math.Clamp(textSize, 1, 2);
@@ -88,5 +139,15 @@ public sealed class OledDefaultScreenRenderer
         return trimmed.Length <= maxCharacters
             ? trimmed
             : trimmed[..Math.Max(1, maxCharacters - 2)] + "..";
+    }
+
+    private static IEnumerable<DisplayTemplateLine> RenderHtmlField(DisplayTemplateLine source)
+    {
+        return DisplayTriggerRenderer.RenderHtmlLikeLines(source.Text)
+            .Select(line => new DisplayTemplateLine(
+                line.Text,
+                line.NormalizedTextSize > 1
+                    ? line.NormalizedTextSize
+                    : source.NormalizedTextSize));
     }
 }

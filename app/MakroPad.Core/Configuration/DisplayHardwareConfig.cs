@@ -18,6 +18,8 @@ public sealed record DisplayHardwareConfig
 
     public int DefaultLayoutRows { get; init; } = 3;
 
+    public string DefaultTemplateMode { get; init; } = "normal";
+
     public string DefaultTitle { get; init; } = "MakroPad";
 
     public int DefaultTitleSize { get; init; } = 1;

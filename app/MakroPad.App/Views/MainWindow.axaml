@@ -581,6 +581,10 @@
                                     <ComboBox ItemsSource="{Binding DisplaySettings.AvailableOledLayoutRows}"
                                               SelectedItem="{Binding DisplaySettings.DefaultScreenRows}"
                                               HorizontalAlignment="Stretch" />
+                                    <TextBlock Classes="label" Text="Content mode" />
+                                    <ComboBox ItemsSource="{Binding DisplaySettings.AvailableOledTemplateModes}"
+                                              SelectedItem="{Binding DisplaySettings.DefaultScreenTemplateMode}"
+                                              HorizontalAlignment="Stretch" />
                                     <TextBlock Classes="label" Text="Title" />
                                     <Grid ColumnDefinitions="*,80"
                                           ColumnSpacing="8">
@@ -630,7 +634,7 @@
                                     <TextBlock Classes="muted"
                                                FontSize="12"
                                                TextWrapping="Wrap"
-                                               Text="{}Size controls use OLED text size 1 or 2. Placeholders: {profile}, {status}, {time}, {date}, {media.artist}, {media.title}, {media.track}, {volume.system}, {device.uptime}" />
+                                               Text="{}HTML mode supports h1/h2 as size 2 lines. Size controls use OLED text size 1 or 2. Placeholders: {profile}, {status}, {time}, {date}, {media.artist}, {media.title}, {media.track}, {volume.system}, {device.uptime}" />
                                 </StackPanel>
                             </Border>
 

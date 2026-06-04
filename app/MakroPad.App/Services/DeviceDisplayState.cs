@@ -5,6 +5,7 @@ public sealed record DeviceDisplayState(
     string ConnectionStatus,
     int ActionResultTimeoutMs,
     int DefaultScreenRows,
+    string DefaultScreenTemplateMode,
     string DefaultScreenTitle,
     int DefaultScreenTitleSize,
     string DefaultScreenLine1,
