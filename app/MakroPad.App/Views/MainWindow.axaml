@@ -41,6 +41,25 @@
             <Setter Property="BorderThickness" Value="1" />
             <Setter Property="CornerRadius" Value="6" />
             <Setter Property="Padding" Value="16" />
+            <Setter Property="MinWidth" Value="240" />
+        </Style>
+        <Style Selector="TextBox">
+            <Setter Property="MinWidth" Value="120" />
+            <Setter Property="MinHeight" Value="32" />
+        </Style>
+        <Style Selector="ComboBox">
+            <Setter Property="MinWidth" Value="120" />
+            <Setter Property="MinHeight" Value="32" />
+        </Style>
+        <Style Selector="NumericUpDown">
+            <Setter Property="MinWidth" Value="96" />
+            <Setter Property="MinHeight" Value="32" />
+        </Style>
+        <Style Selector="Button">
+            <Setter Property="MinHeight" Value="32" />
+        </Style>
+        <Style Selector="CheckBox">
+            <Setter Property="MinHeight" Value="28" />
         </Style>
         <Style Selector="Border.topBar">
             <Setter Property="Background" Value="#071528" />
@@ -114,9 +133,12 @@
                     MaxWidth="1920"
                     HorizontalAlignment="Stretch">
             <TabItem Header="Makros">
+                <ScrollViewer Margin="18,0,0,0"
+                              HorizontalScrollBarVisibility="Auto"
+                              VerticalScrollBarVisibility="Auto">
                 <Grid RowDefinitions="Auto,*"
                       RowSpacing="16"
-                      Margin="18,0,0,0">
+                      MinWidth="760">
                     <Grid ColumnDefinitions="*,Auto"
                           ColumnSpacing="16">
                         <StackPanel>
@@ -278,13 +300,16 @@
                         </Border>
                     </Grid>
                 </Grid>
+                </ScrollViewer>
             </TabItem>
 
             <TabItem Header="Geraet">
                 <ScrollViewer Margin="18,0,0,0"
+                              HorizontalScrollBarVisibility="Auto"
                               VerticalScrollBarVisibility="Auto">
                     <Grid RowDefinitions="Auto,Auto"
-                          RowSpacing="16">
+                          RowSpacing="16"
+                          MinWidth="620">
                         <StackPanel>
                             <TextBlock Classes="sectionTitle" Text="Geraet" />
                             <TextBlock Classes="muted"
@@ -353,9 +378,11 @@
 
             <TabItem Header="Simulation">
                 <ScrollViewer Margin="18,0,0,0"
+                              HorizontalScrollBarVisibility="Auto"
                               VerticalScrollBarVisibility="Auto">
                     <Grid RowDefinitions="Auto,Auto"
-                          RowSpacing="16">
+                          RowSpacing="16"
+                          MinWidth="520">
                         <StackPanel>
                             <TextBlock Classes="sectionTitle" Text="Simulation" />
                             <TextBlock Classes="muted"
@@ -436,9 +463,11 @@
                     </Grid>
 
                     <ScrollViewer Grid.Row="1"
+                                  HorizontalScrollBarVisibility="Auto"
                                   VerticalScrollBarVisibility="Auto">
                         <Border Classes="panel"
-                                HorizontalAlignment="Stretch">
+                                HorizontalAlignment="Stretch"
+                                MinWidth="560">
                             <Grid RowDefinitions="Auto,Auto"
                                   RowSpacing="18">
                                 <TextBlock Text="Profiles"
@@ -512,9 +541,11 @@
                     </Grid>
 
                     <ScrollViewer Grid.Row="1"
+                                  HorizontalScrollBarVisibility="Auto"
                                   VerticalScrollBarVisibility="Auto">
                         <Border Classes="panel"
-                                HorizontalAlignment="Stretch">
+                                HorizontalAlignment="Stretch"
+                                MinWidth="420">
                             <StackPanel Spacing="12">
                                 <TextBlock Text="Application"
                                            FontSize="16"
@@ -569,10 +600,13 @@
                     </Grid>
 
                     <ScrollViewer Grid.Row="1"
+                                  HorizontalScrollBarVisibility="Auto"
                                   VerticalScrollBarVisibility="Auto">
                         <Grid ColumnDefinitions="320,*,300"
-                              ColumnSpacing="16">
-                            <StackPanel Spacing="16">
+                              ColumnSpacing="16"
+                              MinWidth="1136">
+                            <StackPanel Spacing="16"
+                                        MinWidth="320">
                                 <Border Classes="panel">
                                     <StackPanel Spacing="10">
                                         <TextBlock Text="Idle Screen"
@@ -659,39 +693,39 @@
                                 </Border>
                             </StackPanel>
 
-                            <Border Grid.Column="1" Classes="panel">
+                            <Border Grid.Column="1" Classes="panel" MinWidth="500">
                                 <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,*" RowSpacing="12">
                                     <TextBlock Text="Selected Screen Rule" FontSize="16" FontWeight="SemiBold" />
                                     <Grid Grid.Row="1" ColumnDefinitions="Auto,*,*,*" ColumnSpacing="10">
                                         <CheckBox Content="Enabled" IsChecked="{Binding DisplayTriggersEditor.DisplayTriggerEditorEnabled}" VerticalAlignment="Center" />
-                                        <StackPanel Grid.Column="1" Spacing="4">
+                                        <StackPanel Grid.Column="1" Spacing="4" MinWidth="130">
                                             <TextBlock Classes="label" Text="Event" />
                                             <ComboBox ItemsSource="{Binding DisplayTriggersEditor.AvailableDisplayTriggerEventTypes}" SelectedItem="{Binding DisplayTriggersEditor.DisplayTriggerEditorEventType}" />
                                         </StackPanel>
-                                        <StackPanel Grid.Column="2" Spacing="4" IsVisible="{Binding DisplayTriggersEditor.ShowsDisplayTriggerInputMatch}">
+                                        <StackPanel Grid.Column="2" Spacing="4" MinWidth="130" IsVisible="{Binding DisplayTriggersEditor.ShowsDisplayTriggerInputMatch}">
                                             <TextBlock Classes="label" Text="Input" />
                                             <ComboBox ItemsSource="{Binding DisplayTriggersEditor.AvailableDisplayTriggerInputs}" SelectedItem="{Binding DisplayTriggersEditor.DisplayTriggerEditorInput}" />
                                         </StackPanel>
-                                        <StackPanel Grid.Column="3" Spacing="4">
+                                        <StackPanel Grid.Column="3" Spacing="4" MinWidth="130">
                                             <TextBlock Classes="label" Text="Display mode" />
                                             <ComboBox ItemsSource="{Binding DisplayTriggersEditor.AvailableDisplayTemplateModes}" SelectedItem="{Binding DisplayTriggersEditor.DisplayTriggerEditorTemplateMode}" />
                                         </StackPanel>
                                     </Grid>
 
                                     <Grid Grid.Row="2" ColumnDefinitions="*,*,*,*" ColumnSpacing="10">
-                                        <StackPanel Spacing="4" IsVisible="{Binding DisplayTriggersEditor.IsSliderInputDisplayTrigger}">
+                                        <StackPanel Spacing="4" MinWidth="104" IsVisible="{Binding DisplayTriggersEditor.IsSliderInputDisplayTrigger}">
                                             <TextBlock Classes="label" Text="Min %" />
                                             <NumericUpDown Value="{Binding DisplayTriggersEditor.DisplayTriggerEditorMinPercent}" Minimum="0" Maximum="100" Increment="1" />
                                         </StackPanel>
-                                        <StackPanel Grid.Column="1" Spacing="4" IsVisible="{Binding DisplayTriggersEditor.IsSliderInputDisplayTrigger}">
+                                        <StackPanel Grid.Column="1" Spacing="4" MinWidth="104" IsVisible="{Binding DisplayTriggersEditor.IsSliderInputDisplayTrigger}">
                                             <TextBlock Classes="label" Text="Max %" />
                                             <NumericUpDown Value="{Binding DisplayTriggersEditor.DisplayTriggerEditorMaxPercent}" Minimum="0" Maximum="100" Increment="1" />
                                         </StackPanel>
-                                        <StackPanel Grid.Column="2" Spacing="4" IsVisible="{Binding DisplayTriggersEditor.IsSliderInputDisplayTrigger}">
+                                        <StackPanel Grid.Column="2" Spacing="4" MinWidth="104" IsVisible="{Binding DisplayTriggersEditor.IsSliderInputDisplayTrigger}">
                                             <TextBlock Classes="label" Text="Change %" />
                                             <NumericUpDown Value="{Binding DisplayTriggersEditor.DisplayTriggerEditorChangePercent}" Minimum="0" Maximum="100" Increment="1" />
                                         </StackPanel>
-                                        <StackPanel Grid.Column="3" Spacing="4">
+                                        <StackPanel Grid.Column="3" Spacing="4" MinWidth="104">
                                             <TextBlock Classes="label" Text="Duration" />
                                             <NumericUpDown Value="{Binding DisplayTriggersEditor.DisplayTriggerEditorDurationMs}" Minimum="0" Maximum="60000" Increment="500" />
                                         </StackPanel>
@@ -706,7 +740,7 @@
                                     <TextBlock Grid.Row="4" Classes="label" Text="Content" />
                                     <Grid Grid.Row="5" RowDefinitions="*,Auto,Auto" RowSpacing="10">
                                         <TextBox Text="{Binding DisplayTriggersEditor.DisplayTriggerEditorTemplate}" AcceptsReturn="True" MinHeight="220" TextWrapping="Wrap" />
-                                        <Grid Grid.Row="1" ColumnDefinitions="Auto,*,*,*" ColumnSpacing="10" IsVisible="{Binding DisplayTriggersEditor.ShowsDisplayTriggerPreviewValues}">
+                                        <Grid Grid.Row="1" ColumnDefinitions="Auto,130,130,130" ColumnSpacing="10" IsVisible="{Binding DisplayTriggersEditor.ShowsDisplayTriggerPreviewValues}">
                                             <TextBlock Classes="label" Text="Preview values" VerticalAlignment="Center" />
                                             <NumericUpDown Grid.Column="1" Value="{Binding DisplayTriggersEditor.DisplayTriggerPreviewPercent}" Minimum="0" Maximum="100" Increment="1" IsVisible="{Binding DisplayTriggersEditor.IsSliderInputDisplayTrigger}" />
                                             <NumericUpDown Grid.Column="2" Value="{Binding DisplayTriggersEditor.DisplayTriggerPreviewPreviousPercent}" Minimum="0" Maximum="100" Increment="1" IsVisible="{Binding DisplayTriggersEditor.IsSliderInputDisplayTrigger}" />
@@ -734,7 +768,7 @@
                                 </Grid>
                             </Border>
 
-                            <StackPanel Grid.Column="2" Spacing="16">
+                            <StackPanel Grid.Column="2" Spacing="16" MinWidth="300">
                                 <Border Background="#02060C" BorderBrush="#2D5C88" BorderThickness="1" CornerRadius="4" Width="256" Height="128" Padding="12" HorizontalAlignment="Left">
                                     <StackPanel Spacing="6" VerticalAlignment="Top">
                                         <TextBlock Text="{Binding DisplaySettings.OledPreviewTitle}" FontFamily="Consolas" FontSize="{Binding DisplaySettings.OledPreviewTitleFontSize}" TextWrapping="NoWrap" />
@@ -789,9 +823,12 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Debug">
+                <ScrollViewer Margin="18,0,0,0"
+                              HorizontalScrollBarVisibility="Auto"
+                              VerticalScrollBarVisibility="Auto">
                 <Grid RowDefinitions="Auto,*"
                       RowSpacing="16"
-                      Margin="18,0,0,0">
+                      MinWidth="760">
                     <StackPanel>
                         <TextBlock Classes="sectionTitle" Text="Debug" />
                         <TextBlock Classes="muted"
@@ -868,6 +905,7 @@
                         </Border>
                     </Grid>
                 </Grid>
+                </ScrollViewer>
             </TabItem>
         </TabControl>
     </Grid>

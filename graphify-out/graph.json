@@ -8901,7 +8901,7 @@
       "label": "Supported Actions",
       "file_type": "document",
       "source_file": "docs/HANDOFF.md",
-      "source_location": "L90",
+      "source_location": "L93",
       "id": "docs_handoff_supported_actions",
       "community": 66,
       "norm_label": "supported actions"
@@ -8910,7 +8910,7 @@
       "label": "OLED Behavior",
       "file_type": "document",
       "source_file": "docs/HANDOFF.md",
-      "source_location": "L108",
+      "source_location": "L111",
       "id": "docs_handoff_oled_behavior",
       "community": 66,
       "norm_label": "oled behavior"
@@ -8919,7 +8919,7 @@
       "label": "Known Limitations",
       "file_type": "document",
       "source_file": "docs/HANDOFF.md",
-      "source_location": "L156",
+      "source_location": "L159",
       "id": "docs_handoff_known_limitations",
       "community": 66,
       "norm_label": "known limitations"
@@ -8928,7 +8928,7 @@
       "label": "Verification Baseline",
       "file_type": "document",
       "source_file": "docs/HANDOFF.md",
-      "source_location": "L178",
+      "source_location": "L182",
       "id": "docs_handoff_verification_baseline",
       "community": 66,
       "norm_label": "verification baseline"
@@ -8937,7 +8937,7 @@
       "label": "code:powershell (dotnet build app\\MakroPad.sln)",
       "file_type": "document",
       "source_file": "docs/HANDOFF.md",
-      "source_location": "L182",
+      "source_location": "L186",
       "id": "docs_handoff_codeblock_1",
       "community": 66,
       "norm_label": "code:powershell (dotnet build app\\makropad.sln)"
@@ -8946,7 +8946,7 @@
       "label": "Recommended Next Steps",
       "file_type": "document",
       "source_file": "docs/HANDOFF.md",
-      "source_location": "L190",
+      "source_location": "L194",
       "id": "docs_handoff_recommended_next_steps",
       "community": 66,
       "norm_label": "recommended next steps"
@@ -8955,7 +8955,7 @@
       "label": "Graphify Notes",
       "file_type": "document",
       "source_file": "docs/HANDOFF.md",
-      "source_location": "L210",
+      "source_location": "L214",
       "id": "docs_handoff_graphify_notes",
       "community": 66,
       "norm_label": "graphify notes"
@@ -33269,5 +33269,5 @@
       "source_file": "app/README.md"
     }
   ],
-  "built_at_commit": "af2c0ba2e7c0ce77b9937c00f56d734b75e0f579"
+  "built_at_commit": "cbc31ecc123d8f37bf851a1199bfb7e6b4e30f53"
 }

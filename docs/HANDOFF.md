@@ -86,6 +86,9 @@ MakroPad has a working vertical prototype across firmware and desktop app:
 - Replaced the separate `OLED Default` and `Display Trigger` settings tabs with
   a unified `Display` editor. Idle-screen settings, display rules, selected
   rule editing, previews, and runtime display options now live in one workflow.
+- Added defensive minimum sizes and horizontal scroll behavior to the main
+  Avalonia UI so dense editor forms keep controls readable instead of
+  overlapping when the window is made small.
 
 ## Supported Actions
 
@@ -172,8 +175,9 @@ MakroPad has a working vertical prototype across firmware and desktop app:
 - Layout screens currently support only fixed built-in layouts. A free element
   list or custom layout mode is still open.
 - Slider quality is still being validated with replacement hardware.
-- App UI is functional after the display-editor redesign, but the new Display
-  tab still needs hardware-driven usability feedback.
+- App UI is functional after the display-editor redesign and now guards dense
+  editor forms against small-window overlap, but the new Display tab still
+  needs hardware-driven usability feedback.
 
 ## Verification Baseline
 
