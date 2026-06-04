@@ -21,7 +21,7 @@ public partial class MainWindow : Window
 
     private void OnKeyDown(object? sender, KeyEventArgs e)
     {
-        if (ViewModel?.ActionEditor.IsRecordingShortcut != true)
+        if (ViewModel?.ProfilesEditor.ActionEditor.IsRecordingShortcut != true)
         {
             return;
         }
@@ -30,7 +30,7 @@ public partial class MainWindow : Window
 
         if (e.Key == Key.Escape && e.KeyModifiers == KeyModifiers.None)
         {
-            ViewModel.ActionEditor.CancelShortcutRecording();
+            ViewModel.ProfilesEditor.ActionEditor.CancelShortcutRecording();
             return;
         }
 
@@ -40,7 +40,7 @@ public partial class MainWindow : Window
             return;
         }
 
-        ViewModel.ActionEditor.CompleteShortcutRecording(shortcut);
+        ViewModel.ProfilesEditor.ActionEditor.CompleteShortcutRecording(shortcut);
     }
 
     private async void BrowseOpenApp_Click(object? sender, RoutedEventArgs e)
@@ -73,7 +73,7 @@ public partial class MainWindow : Window
         var path = files.FirstOrDefault()?.TryGetLocalPath();
         if (!string.IsNullOrWhiteSpace(path))
         {
-            ViewModel.ActionEditor.SetOpenAppPath(path);
+            ViewModel.ProfilesEditor.ActionEditor.SetOpenAppPath(path);
         }
     }
 

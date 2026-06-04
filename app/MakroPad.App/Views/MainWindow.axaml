@@ -160,8 +160,8 @@
                                 </Grid>
 
                                 <ListBox Grid.Row="1"
-                                         ItemsSource="{Binding ProfileBindings}"
-                                         SelectedItem="{Binding SelectedBinding}">
+                                         ItemsSource="{Binding ProfilesEditor.ProfileBindings}"
+                                         SelectedItem="{Binding ProfilesEditor.SelectedBinding}">
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
                                             <Grid ColumnDefinitions="150,220,*"
@@ -191,47 +191,47 @@
                                   RowSpacing="10"
                                   ColumnSpacing="12">
                                 <ComboBox Grid.Column="0"
-                                          ItemsSource="{Binding AvailableInputs}"
-                                          SelectedItem="{Binding BindingEditorInput}"
+                                          ItemsSource="{Binding ProfilesEditor.AvailableInputs}"
+                                          SelectedItem="{Binding ProfilesEditor.BindingEditorInput}"
                                           HorizontalAlignment="Stretch" />
                                 <ComboBox Grid.Column="1"
-                                          ItemsSource="{Binding ActionEditor.AvailableActions}"
-                                          SelectedItem="{Binding ActionEditor.Action}"
+                                          ItemsSource="{Binding ProfilesEditor.ActionEditor.AvailableActions}"
+                                          SelectedItem="{Binding ProfilesEditor.ActionEditor.Action}"
                                           HorizontalAlignment="Stretch" />
                                 <TextBox Grid.Column="2"
-                                         PlaceholderText="{Binding ActionEditor.ParameterPlaceholder}"
-                                         Text="{Binding ActionEditor.Parameters}" />
+                                         PlaceholderText="{Binding ProfilesEditor.ActionEditor.ParameterPlaceholder}"
+                                         Text="{Binding ProfilesEditor.ActionEditor.Parameters}" />
 
                                 <StackPanel Grid.Row="1"
                                             Grid.ColumnSpan="3"
                                             Spacing="8">
-                                    <StackPanel IsVisible="{Binding ActionEditor.HasStructuredParameter}"
+                                    <StackPanel IsVisible="{Binding ProfilesEditor.ActionEditor.HasStructuredParameter}"
                                                 Spacing="6">
                                         <TextBlock Classes="label"
-                                                   Text="{Binding ActionEditor.StructuredParameterLabel}" />
-                                        <TextBox IsVisible="{Binding ActionEditor.ShowsStructuredTextInput}"
-                                                 Text="{Binding ActionEditor.StructuredParameterValue}" />
-                                        <ComboBox IsVisible="{Binding ActionEditor.IsAppVolumeAction}"
-                                                  ItemsSource="{Binding ActionEditor.AvailableAudioProcessNames}"
-                                                  SelectedItem="{Binding ActionEditor.StructuredParameterValue}"
+                                                   Text="{Binding ProfilesEditor.ActionEditor.StructuredParameterLabel}" />
+                                        <TextBox IsVisible="{Binding ProfilesEditor.ActionEditor.ShowsStructuredTextInput}"
+                                                 Text="{Binding ProfilesEditor.ActionEditor.StructuredParameterValue}" />
+                                        <ComboBox IsVisible="{Binding ProfilesEditor.ActionEditor.IsAppVolumeAction}"
+                                                  ItemsSource="{Binding ProfilesEditor.ActionEditor.AvailableAudioProcessNames}"
+                                                  SelectedItem="{Binding ProfilesEditor.ActionEditor.StructuredParameterValue}"
                                                   HorizontalAlignment="Stretch" />
-                                        <TextBlock Text="{Binding ActionEditor.StructuredParameterValidationMessage}"
+                                        <TextBlock Text="{Binding ProfilesEditor.ActionEditor.StructuredParameterValidationMessage}"
                                                    Foreground="#FFB86B"
                                                    FontSize="12"
                                                    TextWrapping="Wrap" />
                                     </StackPanel>
-                                    <TextBlock Text="{Binding ActionEditor.ActionDescription}"
+                                    <TextBlock Text="{Binding ProfilesEditor.ActionEditor.ActionDescription}"
                                                TextWrapping="Wrap" />
-                                    <TextBlock Text="{Binding ActionEditor.ParameterHint}"
+                                    <TextBlock Text="{Binding ProfilesEditor.ActionEditor.ParameterHint}"
                                                FontFamily="Consolas"
                                                FontSize="12"
                                                Classes="muted"
                                                TextWrapping="Wrap" />
-                                    <TextBlock Text="{Binding BindingEditorValidationMessage}"
+                                    <TextBlock Text="{Binding ProfilesEditor.BindingEditorValidationMessage}"
                                                Foreground="#FF7A90"
                                                FontSize="12"
                                                TextWrapping="Wrap" />
-                                    <TextBlock Text="{Binding ActionEditor.ShortcutRecordingStatus}"
+                                    <TextBlock Text="{Binding ProfilesEditor.ActionEditor.ShortcutRecordingStatus}"
                                                FontSize="12"
                                                Classes="muted"
                                                TextWrapping="Wrap" />
@@ -242,12 +242,12 @@
                                       ColumnDefinitions="*,*"
                                       ColumnSpacing="8">
                                     <Button Grid.Column="0"
-                                            IsVisible="{Binding ActionEditor.IsKeyboardShortcutAction}"
+                                            IsVisible="{Binding ProfilesEditor.ActionEditor.IsKeyboardShortcutAction}"
                                             Content="Record Shortcut"
-                                            Command="{Binding ActionEditor.StartShortcutRecordingCommand}"
+                                            Command="{Binding ProfilesEditor.ActionEditor.StartShortcutRecordingCommand}"
                                             HorizontalAlignment="Stretch" />
                                     <Button Grid.Column="1"
-                                            IsVisible="{Binding ActionEditor.IsOpenAppAction}"
+                                            IsVisible="{Binding ProfilesEditor.ActionEditor.IsOpenAppAction}"
                                             Content="Browse App/File"
                                             Click="BrowseOpenApp_Click"
                                             HorizontalAlignment="Stretch" />
@@ -259,19 +259,19 @@
                                       ColumnSpacing="8">
                                     <Button Grid.Column="0"
                                             Content="Apply"
-                                            Command="{Binding ApplyBindingCommand}"
+                                            Command="{Binding ProfilesEditor.ApplyBindingCommand}"
                                             HorizontalAlignment="Stretch" />
                                     <Button Grid.Column="1"
                                             Content="Add"
-                                            Command="{Binding AddBindingCommand}"
+                                            Command="{Binding ProfilesEditor.AddBindingCommand}"
                                             HorizontalAlignment="Stretch" />
                                     <Button Grid.Column="2"
                                             Content="Remove"
-                                            Command="{Binding RemoveBindingCommand}"
+                                            Command="{Binding ProfilesEditor.RemoveBindingCommand}"
                                             HorizontalAlignment="Stretch" />
                                     <Button Grid.Column="3"
                                             Content="Example"
-                                            Command="{Binding ActionEditor.UseParameterExampleCommand}"
+                                            Command="{Binding ProfilesEditor.ActionEditor.UseParameterExampleCommand}"
                                             HorizontalAlignment="Stretch" />
                                 </Grid>
                             </Grid>
@@ -334,7 +334,7 @@
                                                FontSize="16"
                                                FontWeight="SemiBold" />
                                     <CheckBox Content="Show Now Playing on OLED"
-                                              IsChecked="{Binding EnableNowPlayingDisplay}" />
+                                              IsChecked="{Binding DisplaySettings.EnableNowPlayingDisplay}" />
                                     <TextBlock Text="{Binding NowPlayingStatus}"
                                                TextWrapping="Wrap"
                                                Classes="muted" />
@@ -452,20 +452,20 @@
                                       RowSpacing="12">
                                     <StackPanel Spacing="6">
                                         <TextBlock Classes="label" Text="Active profile" />
-                                        <ComboBox ItemsSource="{Binding ProfileNames}"
-                                                  SelectedItem="{Binding ActiveProfileName}"
+                                        <ComboBox ItemsSource="{Binding ProfilesEditor.ProfileNames}"
+                                                  SelectedItem="{Binding ProfilesEditor.ActiveProfileName}"
                                                   HorizontalAlignment="Stretch" />
                                     </StackPanel>
                                     <Button Grid.Column="1"
                                             Content="Delete"
-                                            Command="{Binding DeleteProfileCommand}"
+                                            Command="{Binding ProfilesEditor.DeleteProfileCommand}"
                                             HorizontalAlignment="Stretch"
                                             VerticalAlignment="Bottom" />
 
                                     <StackPanel Grid.Row="1"
                                                 Spacing="6">
                                         <TextBlock Classes="label" Text="Profile name" />
-                                        <TextBox Text="{Binding ProfileEditorName}" />
+                                        <TextBox Text="{Binding ProfilesEditor.ProfileEditorName}" />
                                     </StackPanel>
                                     <Grid Grid.Row="1"
                                           Grid.Column="1"
@@ -474,11 +474,11 @@
                                           VerticalAlignment="Bottom">
                                         <Button Grid.Column="0"
                                                 Content="Add"
-                                                Command="{Binding AddProfileCommand}"
+                                                Command="{Binding ProfilesEditor.AddProfileCommand}"
                                                 HorizontalAlignment="Stretch" />
                                         <Button Grid.Column="1"
                                                 Content="Rename"
-                                                Command="{Binding RenameProfileCommand}"
+                                                Command="{Binding ProfilesEditor.RenameProfileCommand}"
                                                 HorizontalAlignment="Stretch" />
                                     </Grid>
                                 </Grid>
@@ -525,13 +525,13 @@
                                            Classes="muted" />
                                 <TextBlock Classes="label"
                                            Text="Action result timeout (ms)" />
-                                <NumericUpDown Value="{Binding ActionResultTimeoutMs}"
+                                <NumericUpDown Value="{Binding DisplaySettings.ActionResultTimeoutMs}"
                                                Minimum="0"
                                                Maximum="60000"
                                                Increment="500" />
                                 <TextBlock Classes="label"
                                            Text="Volume slider deadband (%)" />
-                                <NumericUpDown Value="{Binding VolumeSliderDeadbandPercent}"
+                                <NumericUpDown Value="{Binding DisplaySettings.VolumeSliderDeadbandPercent}"
                                                Minimum="0"
                                                Maximum="25"
                                                Increment="1" />
@@ -578,25 +578,25 @@
                                                FontSize="16"
                                                FontWeight="SemiBold" />
                                     <TextBlock Classes="label" Text="Layout rows" />
-                                    <ComboBox ItemsSource="{Binding AvailableOledLayoutRows}"
-                                              SelectedItem="{Binding DefaultScreenRows}"
+                                    <ComboBox ItemsSource="{Binding DisplaySettings.AvailableOledLayoutRows}"
+                                              SelectedItem="{Binding DisplaySettings.DefaultScreenRows}"
                                               HorizontalAlignment="Stretch" />
                                     <TextBlock Classes="label" Text="Title" />
-                                    <TextBox Text="{Binding DefaultScreenTitle}" />
+                                    <TextBox Text="{Binding DisplaySettings.DefaultScreenTitle}" />
                                     <TextBlock Classes="label" Text="Line 1" />
-                                    <TextBox Text="{Binding DefaultScreenLine1}" />
+                                    <TextBox Text="{Binding DisplaySettings.DefaultScreenLine1}" />
                                     <TextBlock Classes="label" Text="Line 2" />
-                                    <TextBox Text="{Binding DefaultScreenLine2}" />
-                                    <TextBlock IsVisible="{Binding UsesFiveLineOledLayout}"
+                                    <TextBox Text="{Binding DisplaySettings.DefaultScreenLine2}" />
+                                    <TextBlock IsVisible="{Binding DisplaySettings.UsesFiveLineOledLayout}"
                                                Classes="label"
                                                Text="Line 3" />
-                                    <TextBox IsVisible="{Binding UsesFiveLineOledLayout}"
-                                             Text="{Binding DefaultScreenLine3}" />
-                                    <TextBlock IsVisible="{Binding UsesFiveLineOledLayout}"
+                                    <TextBox IsVisible="{Binding DisplaySettings.UsesFiveLineOledLayout}"
+                                             Text="{Binding DisplaySettings.DefaultScreenLine3}" />
+                                    <TextBlock IsVisible="{Binding DisplaySettings.UsesFiveLineOledLayout}"
                                                Classes="label"
                                                Text="Line 4" />
-                                    <TextBox IsVisible="{Binding UsesFiveLineOledLayout}"
-                                             Text="{Binding DefaultScreenLine4}" />
+                                    <TextBox IsVisible="{Binding DisplaySettings.UsesFiveLineOledLayout}"
+                                             Text="{Binding DisplaySettings.DefaultScreenLine4}" />
                                     <TextBlock Classes="muted"
                                                FontSize="12"
                                                TextWrapping="Wrap"
@@ -616,25 +616,25 @@
                                     VerticalAlignment="Top">
                                 <StackPanel Spacing="6"
                                             VerticalAlignment="Top">
-                                    <TextBlock Text="{Binding OledPreviewTitle}"
+                                    <TextBlock Text="{Binding DisplaySettings.OledPreviewTitle}"
                                                FontFamily="Consolas"
                                                FontSize="16"
                                                TextWrapping="NoWrap" />
-                                    <TextBlock Text="{Binding OledPreviewLine1}"
+                                    <TextBlock Text="{Binding DisplaySettings.OledPreviewLine1}"
                                                FontFamily="Consolas"
                                                FontSize="16"
                                                TextWrapping="NoWrap" />
-                                    <TextBlock Text="{Binding OledPreviewLine2}"
+                                    <TextBlock Text="{Binding DisplaySettings.OledPreviewLine2}"
                                                FontFamily="Consolas"
                                                FontSize="16"
                                                TextWrapping="NoWrap" />
-                                    <TextBlock IsVisible="{Binding UsesFiveLineOledLayout}"
-                                               Text="{Binding OledPreviewLine3}"
+                                    <TextBlock IsVisible="{Binding DisplaySettings.UsesFiveLineOledLayout}"
+                                               Text="{Binding DisplaySettings.OledPreviewLine3}"
                                                FontFamily="Consolas"
                                                FontSize="16"
                                                TextWrapping="NoWrap" />
-                                    <TextBlock IsVisible="{Binding UsesFiveLineOledLayout}"
-                                               Text="{Binding OledPreviewLine4}"
+                                    <TextBlock IsVisible="{Binding DisplaySettings.UsesFiveLineOledLayout}"
+                                               Text="{Binding DisplaySettings.OledPreviewLine4}"
                                                FontFamily="Consolas"
                                                FontSize="16"
                                                TextWrapping="NoWrap" />

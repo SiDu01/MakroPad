@@ -44,7 +44,9 @@ MakroPad has a working vertical prototype across firmware and desktop app:
   binding validation/action metadata in `BindingEditorService` and
   `ActionDefinitionCatalog`, action feedback in `ActionFeedbackCoordinator`,
   display-trigger runtime dispatch in `DisplayTriggerOrchestrator`, action
-  editor state in `ActionEditorViewModel`, display-trigger editor state in
+  editor state in `ActionEditorViewModel`, profile/binding editing in
+  `ProfilesEditorViewModel`, display/OLED settings in
+  `DisplaySettingsViewModel`, display-trigger editor state in
   `DisplayTriggersEditorViewModel`, and bounded diagnostics in
   `EventLogService`. `MainWindowViewModel` is now primarily the UI/application
   coordinator.
@@ -133,10 +135,11 @@ MakroPad has a working vertical prototype across firmware and desktop app:
   still missing.
 - `MainWindowViewModel` is still the largest app coordinator, but connection
   flow, config lifecycle, action helper UI, display-trigger editing/runtime,
-  event logging, audio sessions, OLED default rendering, Now Playing
+  event logging, audio sessions, OLED/default display settings, Now Playing
   orchestration, and device config/OLED sync are now split out. The remaining
-  useful decomposition targets are profile/binding editing, default OLED screen
-  editing, and startup/lifetime wiring.
+  useful decomposition targets are startup/lifetime wiring, command groups for
+  simulator/device actions, and possibly a thin app coordinator service if the
+  remaining root orchestration keeps growing.
 - Firmware is still a single Arduino sketch. That is fine for prototyping, but
   display/protocol/input modules should be split once behavior stabilizes.
 - Slider quality is still being validated with replacement hardware.
@@ -157,9 +160,9 @@ the ESP32-S3-DevKitC-1.
 
 ## Recommended Next Steps
 
-1. Continue refactoring `MainWindowViewModel` into smaller services/view models.
-   Next best target: profile and binding editing as a child view model, followed
-   by the default OLED settings editor.
+1. Continue refactoring `MainWindowViewModel` only where it still removes a
+   real responsibility. Next best target: startup/lifetime wiring for background
+   loops and async initialization.
 2. Replace Spotify-window-title Now Playing with Windows Media Session metadata.
 3. Improve the config editor UX with action definitions shared between UI,
    validation, and future docs generation.
@@ -168,9 +171,9 @@ the ESP32-S3-DevKitC-1.
 5. Add a small diagnostics screen for current device config, last heartbeat,
    last input, and last OLED message.
 
-Recommendation: continue the `MainWindowViewModel` split with profile/binding
-editing. The action metadata and display-trigger editor are already extracted,
-so profile/binding editing is now the largest remaining UI-specific state block.
+Recommendation: extract startup/lifetime wiring next. Most editor state is now
+out of `MainWindowViewModel`; the constructor still owns background loop startup
+and async initialization, which is the clearest remaining responsibility.
 
 ## Graphify Notes
 

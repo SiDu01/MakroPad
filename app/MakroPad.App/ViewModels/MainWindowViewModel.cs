@@ -34,7 +34,6 @@ public partial class MainWindowViewModel : ViewModelBase
     private readonly CancellationTokenSource audioSessionsCancellation = new();
     private IMakroPadConnection? activeConnection => deviceSessionService.ActiveConnection;
     private MakroPadConfig currentConfig = MakroPadConfig.CreateDefault();
-    private bool isRefreshingEditor;
     private bool isLoadingConfig;
 
     [ObservableProperty]
@@ -67,114 +66,12 @@ public partial class MainWindowViewModel : ViewModelBase
     private int simulatorSliderId = 1;
 
     [ObservableProperty]
-    private string activeProfileName = "Default";
-
-    [ObservableProperty]
     private string configPath = "";
-
-    [ObservableProperty]
-    private string profileEditorName = "Default";
 
     [ObservableProperty]
     private bool autoConnect = true;
 
-    [ObservableProperty]
-    private bool enableNowPlayingDisplay = true;
-
-    [ObservableProperty]
-    private int volumeSliderDeadbandPercent = 2;
-
-    partial void OnEnableNowPlayingDisplayChanged(bool value)
-    {
-        NowPlayingViewModel.SetEnabled(value);
-        RefreshOledPreview();
-        _ = SendDeviceConfigAsync();
-    }
-
-    [ObservableProperty]
-    private int actionResultTimeoutMs = 3000;
-
-    [ObservableProperty]
-    private string defaultScreenTitle = "MakroPad";
-
-    partial void OnDefaultScreenTitleChanged(string value)
-    {
-        RefreshOledPreview();
-    }
-
-    [ObservableProperty]
-    private string defaultScreenLine1 = "{profile}";
-
-    partial void OnDefaultScreenLine1Changed(string value)
-    {
-        RefreshOledPreview();
-    }
-
-    [ObservableProperty]
-    private string defaultScreenLine2 = "{status}";
-
-    partial void OnDefaultScreenLine2Changed(string value)
-    {
-        RefreshOledPreview();
-    }
-
-    [ObservableProperty]
-    private string defaultScreenLine3 = "";
-
-    partial void OnDefaultScreenLine3Changed(string value)
-    {
-        RefreshOledPreview();
-    }
-
-    [ObservableProperty]
-    private string defaultScreenLine4 = "";
-
-    partial void OnDefaultScreenLine4Changed(string value)
-    {
-        RefreshOledPreview();
-    }
-
-    [ObservableProperty]
-    private int defaultScreenRows = 3;
-
-    partial void OnDefaultScreenRowsChanged(int value)
-    {
-        RefreshOledPreview();
-        OnPropertyChanged(nameof(UsesFiveLineOledLayout));
-    }
-
-    [ObservableProperty]
-    private BindingViewModel? selectedBinding;
-
-    partial void OnSelectedBindingChanged(BindingViewModel? value)
-    {
-        if (isRefreshingEditor)
-        {
-            return;
-        }
-
-        BindingEditorInput = value?.Input ?? "";
-        ActionEditor.Load(value?.Action, value?.Parameters);
-    }
-
-    [ObservableProperty]
-    private string bindingEditorInput = "";
-
-    [ObservableProperty]
-    private string bindingEditorValidationMessage = "";
-
-    partial void OnActiveProfileNameChanged(string value)
-    {
-        ProfileEditorName = value;
-        currentConfig = currentConfig with { ActiveProfile = value };
-        RefreshProfileBindings();
-        RefreshOledPreview();
-        RefreshDisplayTriggerEditorRuntime();
-        if (!isLoadingConfig)
-        {
-            _ = HandleActiveProfileDisplayAsync(value);
-        }
-    }
+    public string ActiveProfileName => ProfilesEditor.ActiveProfileName;
 
     public string SelectedPortDisplay => string.IsNullOrWhiteSpace(SelectedPort)
         ? "No port selected"
@@ -193,24 +90,10 @@ public partial class MainWindowViewModel : ViewModelBase
     partial void OnConnectionStatusChanged(string value)
     {
         OnPropertyChanged(nameof(ConnectionStatusBrush));
-        RefreshOledPreview();
+        RefreshDisplaySettingsRuntime();
         RefreshDisplayTriggerEditorRuntime();
         _ = HandleConnectionStatusDisplayAsync(value);
     }
-
-    public string OledPreviewTitle => RenderOledPreview().Title;
-
-    public string OledPreviewLine1 => RenderOledPreview().Line1;
-
-    public string OledPreviewLine2 => RenderOledPreview().Line2;
-
-    public string OledPreviewLine3 => RenderOledPreview().Line3;
-
-    public string OledPreviewLine4 => RenderOledPreview().Line4;
-
-    public bool UsesFiveLineOledLayout => DefaultScreenRows == 5;
-
-    public IReadOnlyList<int> AvailableOledLayoutRows { get; } = [3, 5];
 
     public ObservableCollection<string> AvailablePorts { get; } = [];
 
@@ -228,19 +111,11 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public IAsyncRelayCommand RefreshAudioSessionsCommand => AudioSessionsViewModel.RefreshAudioSessionsCommand;
 
-    public ObservableCollection<string> ProfileNames { get; } = [];
+    public ProfilesEditorViewModel ProfilesEditor { get; }
 
-    public ObservableCollection<BindingViewModel> ProfileBindings { get; } = [];
-
-    public ActionEditorViewModel ActionEditor { get; }
+    public DisplaySettingsViewModel DisplaySettings { get; }
 
     public DisplayTriggersEditorViewModel DisplayTriggersEditor { get; }
-
-    public IReadOnlyList<string> AvailableInputs { get; } =
-    [
-        ..Enumerable.Range(1, 20).Select(id => $"button:{id}"),
-        ..Enumerable.Range(1, 3).Select(id => $"slider:{id}")
-    ];
 
     public IReadOnlyList<int> AvailableButtonIds { get; } =
         Enumerable.Range(1, 20).ToArray();
@@ -261,10 +136,14 @@ public partial class MainWindowViewModel : ViewModelBase
             deviceSessionService);
         bindingEditorService = new BindingEditorService(actionDefinitionCatalog);
         AudioSessionsViewModel = new AudioSessionsViewModel(ApplicationVolumeControllerFactory.Create());
-        ActionEditor = new ActionEditorViewModel(
-            actionDefinitionCatalog,
+        ProfilesEditor = new ProfilesEditorViewModel(
+            profileConfigService,
             bindingEditorService,
+            actionDefinitionCatalog,
             AudioSessionsViewModel.AvailableAudioProcessNames);
+        ProfilesEditor.Changed += OnProfilesEditorChanged;
+        DisplaySettings = new DisplaySettingsViewModel(deviceDisplaySyncService);
+        DisplaySettings.Changed += OnDisplaySettingsChanged;
         DisplayTriggersEditor = new DisplayTriggersEditorViewModel();
         DisplayTriggersEditor.Changed += OnDisplayTriggersEditorChanged;
         DisplayTriggersEditor.TestRequested += OnDisplayTriggerTestRequested;
@@ -279,18 +158,18 @@ public partial class MainWindowViewModel : ViewModelBase
             }
         };
         AudioSessionsViewModel.SessionsRefreshed += (_, _) =>
-            ActionEditor.NotifyAudioProcessNamesChanged();
+            ProfilesEditor.ActionEditor.NotifyAudioProcessNamesChanged();
         NowPlayingViewModel.PropertyChanged += (_, args) =>
         {
             if (args.PropertyName == nameof(NowPlayingViewModel.NowPlayingStatus))
             {
                 OnPropertyChanged(nameof(NowPlayingStatus));
-                RefreshOledPreview();
+                RefreshDisplaySettingsRuntime();
             }
         };
         NowPlayingViewModel.TrackChanged += (_, _) =>
         {
-            RefreshOledPreview();
+            RefreshDisplaySettingsRuntime();
             RefreshDisplayTriggerEditorRuntime();
         };
         RefreshPorts();
@@ -385,22 +264,13 @@ public partial class MainWindowViewModel : ViewModelBase
             isLoadingConfig = true;
             var loadResult = await configService.LoadAsync();
             currentConfig = loadResult.Config;
-            ActiveProfileName = currentConfig.ActiveProfile;
+            ProfilesEditor.Load(currentConfig);
+            OnPropertyChanged(nameof(ActiveProfileName));
             AutoConnect = currentConfig.AppSettings.AutoConnect;
-            EnableNowPlayingDisplay = currentConfig.AppSettings.EnableNowPlayingDisplay;
-            VolumeSliderDeadbandPercent = NormalizeVolumeSliderDeadbandPercent(currentConfig.AppSettings.VolumeSliderDeadbandPercent);
+            DisplaySettings.Load(currentConfig);
+            NowPlayingViewModel.SetEnabled(DisplaySettings.EnableNowPlayingDisplay);
             LoadDisplayTriggersEditor();
-            ActionResultTimeoutMs = currentConfig.Hardware.Display.ActionResultTimeoutMs;
-            DefaultScreenRows = OledDefaultScreenRenderer.NormalizeRows(currentConfig.Hardware.Display.DefaultLayoutRows);
-            DefaultScreenTitle = currentConfig.Hardware.Display.DefaultTitle;
-            DefaultScreenLine1 = currentConfig.Hardware.Display.DefaultLine1;
-            DefaultScreenLine2 = currentConfig.Hardware.Display.DefaultLine2;
-            DefaultScreenLine3 = currentConfig.Hardware.Display.DefaultLine3;
-            DefaultScreenLine4 = currentConfig.Hardware.Display.DefaultLine4;
 
-            RefreshProfileNames();
-
-            RefreshProfileBindings();
             RefreshPorts();
             if (loadResult.WasMigrated)
             {
@@ -437,30 +307,16 @@ public partial class MainWindowViewModel : ViewModelBase
             }
 
             var displayTriggers = DisplayTriggersEditor.Export().ToList();
+            currentConfig = ProfilesEditor.ExportConfig();
+            var displayConfig = DisplaySettings.ApplyTo(currentConfig, SelectedPort);
 
-            currentConfig = currentConfig with
+            currentConfig = displayConfig with
             {
                 ActiveProfile = ActiveProfileName,
-                Hardware = currentConfig.Hardware with
-                {
-                    Display = currentConfig.Hardware.Display with
-                    {
-                        ActionResultTimeoutMs = Math.Max(0, ActionResultTimeoutMs),
-                        DefaultLayoutRows = OledDefaultScreenRenderer.NormalizeRows(DefaultScreenRows),
-                        DefaultTitle = OledDefaultScreenRenderer.NormalizeLine(DefaultScreenTitle, "MakroPad"),
-                        DefaultLine1 = OledDefaultScreenRenderer.NormalizeLine(DefaultScreenLine1, "{profile}"),
-                        DefaultLine2 = OledDefaultScreenRenderer.NormalizeLine(DefaultScreenLine2, "{status}"),
-                        DefaultLine3 = DefaultScreenLine3.Trim(),
-                        DefaultLine4 = DefaultScreenLine4.Trim()
-                    }
-                },
-                AppSettings = currentConfig.AppSettings with
+                AppSettings = displayConfig.AppSettings with
                 {
                     AutoConnect = AutoConnect,
-                    EnableNowPlayingDisplay = EnableNowPlayingDisplay,
-                    VolumeSliderDeadbandPercent = NormalizeVolumeSliderDeadbandPercent(VolumeSliderDeadbandPercent),
-                    DisplayTriggers = displayTriggers,
-                    LastPort = SelectedPort == DeviceSessionService.SimulatorPort ? currentConfig.AppSettings.LastPort : SelectedPort
+                    DisplayTriggers = displayTriggers
                 }
             };
             await configService.SaveAsync(currentConfig);
@@ -532,140 +388,32 @@ public partial class MainWindowViewModel : ViewModelBase
         AddLog("Slider simulation is only available on the simulator connection.");
     }
 
-    [RelayCommand]
-    private void AddProfile()
+    private void OnProfilesEditorChanged(object? sender, ProfilesEditorChangedEventArgs args)
     {
-        var result = profileConfigService.AddProfile(currentConfig, ProfileEditorName);
-        if (!result.IsSuccess || result.Value is null)
+        currentConfig = args.Config;
+        OnPropertyChanged(nameof(ActiveProfileName));
+
+        if (!string.IsNullOrWhiteSpace(args.Message))
         {
-            AddLog(result.ErrorMessage);
-            return;
+            AddLog(args.Message);
         }
 
-        currentConfig = result.Value;
-        RefreshProfileNames();
-        ActiveProfileName = currentConfig.ActiveProfile;
-        AddLog($"Profile added: {currentConfig.ActiveProfile}");
-    }
-
-    [RelayCommand]
-    private void RenameProfile()
-    {
-        var oldName = currentConfig.ActiveProfile;
-        var result = profileConfigService.RenameActiveProfile(currentConfig, ProfileEditorName);
-        if (!result.IsSuccess || result.Value is null)
+        if (!string.IsNullOrWhiteSpace(args.SecondaryMessage))
         {
-            AddLog(result.ErrorMessage);
-            return;
+            AddLog(args.SecondaryMessage);
         }
 
-        currentConfig = result.Value;
-        RefreshProfileNames();
-        ActiveProfileName = currentConfig.ActiveProfile;
-        if (!oldName.Equals(currentConfig.ActiveProfile, StringComparison.OrdinalIgnoreCase))
-        {
-            AddLog($"Profile renamed: {oldName} -> {currentConfig.ActiveProfile}");
-        }
-    }
-
-    [RelayCommand]
-    private void DeleteProfile()
-    {
-        var deletedName = currentConfig.ActiveProfile;
-        var result = profileConfigService.DeleteActiveProfile(currentConfig);
-        if (!result.IsSuccess || result.Value is null)
-        {
-            AddLog(result.ErrorMessage);
-            return;
-        }
-
-        currentConfig = result.Value;
-        RefreshProfileNames();
-        ActiveProfileName = currentConfig.ActiveProfile;
-        AddLog($"Profile deleted: {deletedName}");
-    }
-
-    [RelayCommand]
-    private void ApplyBinding()
-    {
-        if (SelectedBinding is null)
-        {
-            AddLog("No binding selected.");
-            return;
-        }
-
-        if (!TryCreateEditorBinding(out var binding))
+        if (!args.ActiveProfileChanged)
         {
             return;
         }
 
-        var profile = GetActiveProfile();
-        if (profile is null || SelectedBinding.Index < 0 || SelectedBinding.Index >= profile.Bindings.Count)
+        RefreshDisplaySettingsRuntime();
+        RefreshDisplayTriggerEditorRuntime();
+        if (!isLoadingConfig)
         {
-            AddLog("Selected binding no longer exists.");
-            RefreshProfileBindings();
-            return;
+            _ = HandleActiveProfileDisplayAsync(ActiveProfileName);
         }
-
-        var updatedBindings = profile.Bindings.ToList();
-        updatedBindings[SelectedBinding.Index] = binding;
-
-        UpdateActiveProfile(profile with { Bindings = updatedBindings });
-        RefreshProfileBindings(SelectedBinding.Index);
-        AddLog($"Binding updated: {binding.Input} -> {binding.Action}");
-    }
-
-    [RelayCommand]
-    private void AddBinding()
-    {
-        if (!TryCreateEditorBinding(out var binding))
-        {
-            return;
-        }
-
-        var profile = GetActiveProfile();
-        if (profile is null)
-        {
-            AddLog("Active profile not found.");
-            return;
-        }
-
-        var updatedBindings = profile.Bindings.ToList();
-        updatedBindings.Add(binding);
-
-        UpdateActiveProfile(profile with { Bindings = updatedBindings });
-        RefreshProfileBindings(updatedBindings.Count - 1);
-        AddLog($"Binding added: {binding.Input} -> {binding.Action}");
-    }
-
-    [RelayCommand]
-    private void RemoveBinding()
-    {
-        if (SelectedBinding is null)
-        {
-            AddLog("No binding selected.");
-            return;
-        }
-
-        var profile = GetActiveProfile();
-        if (profile is null || SelectedBinding.Index < 0 || SelectedBinding.Index >= profile.Bindings.Count)
-        {
-            AddLog("Selected binding no longer exists.");
-            RefreshProfileBindings();
-            return;
-        }
-
-        var removed = profile.Bindings[SelectedBinding.Index];
-        var updatedBindings = profile.Bindings.ToList();
-        updatedBindings.RemoveAt(SelectedBinding.Index);
-
-        var nextIndex = updatedBindings.Count == 0
-            ? -1
-            : Math.Min(SelectedBinding.Index, updatedBindings.Count - 1);
-
-        UpdateActiveProfile(profile with { Bindings = updatedBindings });
-        RefreshProfileBindings(nextIndex);
-        AddLog($"Binding removed: {removed.Input} -> {removed.Action}");
     }
 
     private void OnDisplayTriggersEditorChanged(object? sender, EventArgs args)
@@ -678,6 +426,17 @@ public partial class MainWindowViewModel : ViewModelBase
             }
         };
         displayTriggerOrchestrator.ResetInputTracking();
+    }
+
+    private void OnDisplaySettingsChanged(object? sender, EventArgs args)
+    {
+        NowPlayingViewModel.SetEnabled(DisplaySettings.EnableNowPlayingDisplay);
+        if (isLoadingConfig)
+        {
+            return;
+        }
+
+        _ = SendDeviceConfigAsync();
     }
 
     private void OnDisplayTriggerTestRequested(object? sender, DisplayTriggerTestRequestedEventArgs args)
@@ -911,8 +670,8 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         try
         {
-            await deviceDisplaySyncService.SendConfigAsync(activeConnection, CreateDeviceDisplayState());
-            RefreshOledPreview();
+            await deviceDisplaySyncService.SendConfigAsync(activeConnection, DisplaySettings.CreateDeviceDisplayState());
+            RefreshDisplaySettingsRuntime();
         }
         catch (Exception ex)
         {
@@ -930,99 +689,10 @@ public partial class MainWindowViewModel : ViewModelBase
         eventLogService.Add(message);
     }
 
-    private void RefreshProfileNames()
-    {
-        ProfileNames.Clear();
-        foreach (var profile in currentConfig.Profiles)
-        {
-            ProfileNames.Add(profile.Name);
-        }
-    }
-
-    private void RefreshProfileBindings(int selectedIndex = 0)
-    {
-        ProfileBindings.Clear();
-
-        var profile = GetActiveProfile();
-
-        if (profile is null)
-        {
-            SelectedBinding = null;
-            return;
-        }
-
-        for (var index = 0; index < profile.Bindings.Count; index++)
-        {
-            var binding = profile.Bindings[index];
-            var parameters = binding.Parameters.Count == 0
-                ? ""
-                : string.Join(", ", binding.Parameters.Select(pair => $"{pair.Key}={pair.Value}"));
-
-            ProfileBindings.Add(new BindingViewModel(index, binding.Input, binding.Action, parameters));
-        }
-
-        isRefreshingEditor = true;
-        SelectedBinding = selectedIndex >= 0 && selectedIndex < ProfileBindings.Count
-            ? ProfileBindings[selectedIndex]
-            : null;
-        isRefreshingEditor = false;
-
-        OnSelectedBindingChanged(SelectedBinding);
-    }
-
-    private ProfileConfig? GetActiveProfile()
-    {
-        var result = profileConfigService.FindActiveProfile(currentConfig);
-        return result.IsSuccess ? result.Value : null;
-    }
-
-    private void UpdateActiveProfile(ProfileConfig updatedProfile)
-    {
-        var result = profileConfigService.UpdateActiveProfile(currentConfig, updatedProfile);
-        if (!result.IsSuccess || result.Value is null)
-        {
-            AddLog(result.ErrorMessage);
-            return;
-        }
-
-        currentConfig = result.Value;
-    }
-
-    private bool TryCreateEditorBinding(out ActionBinding binding)
-    {
-        binding = new ActionBinding();
-        BindingEditorValidationMessage = "";
-        var result = bindingEditorService.CreateBinding(BindingEditorInput, ActionEditor.Action, ActionEditor.Parameters);
-        if (!result.IsSuccess || result.Binding is null)
-        {
-            SetBindingEditorError(result.Error);
-            return false;
-        }
-
-        if (!string.IsNullOrWhiteSpace(result.Warning))
-        {
-            AddLog(result.Warning);
-        }
-
-        binding = result.Binding;
-        return true;
-    }
-
-    private void SetBindingEditorError(string message)
-    {
-        BindingEditorValidationMessage = message;
-        AddLog(message);
-    }
-
     private static string GetDefaultConfigPath()
     {
         var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
         return Path.Combine(appData, "MakroPad", "config.json");
-    }
-
-    private static int NormalizeVolumeSliderDeadbandPercent(int value)
-    {
-        return Math.Clamp(value, 0, 25);
     }
 
     private void LoadDisplayTriggersEditor()
@@ -1043,36 +713,14 @@ public partial class MainWindowViewModel : ViewModelBase
 
     private bool DefaultScreenUsesMediaPlaceholder()
     {
-        return deviceDisplaySyncService.UsesMediaPlaceholder(CreateDeviceDisplayState());
+        return DisplaySettings.UsesMediaPlaceholder();
     }
 
-    private void RefreshOledPreview()
+    private void RefreshDisplaySettingsRuntime()
     {
-        OnPropertyChanged(nameof(OledPreviewTitle));
-        OnPropertyChanged(nameof(OledPreviewLine1));
-        OnPropertyChanged(nameof(OledPreviewLine2));
-        OnPropertyChanged(nameof(OledPreviewLine3));
-        OnPropertyChanged(nameof(OledPreviewLine4));
-    }
-
-    private OledDefaultScreenPreview RenderOledPreview()
-    {
-        return deviceDisplaySyncService.RenderPreview(CreateDeviceDisplayState());
-    }
-
-    private DeviceDisplayState CreateDeviceDisplayState()
-    {
-        return new DeviceDisplayState(
+        DisplaySettings.SetRuntime(
             ActiveProfileName,
             ConnectionStatus,
-            ActionResultTimeoutMs,
-            DefaultScreenRows,
-            DefaultScreenTitle,
-            DefaultScreenLine1,
-            DefaultScreenLine2,
-            DefaultScreenLine3,
-            DefaultScreenLine4,
-            EnableNowPlayingDisplay,
             NowPlayingViewModel.LastSentTrack);
     }
 
