@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MakroPad.Actions;
+using MakroPad.Core.DisplayTriggers;
 using MakroPad.Core.Protocol;
 using MakroPad.Device;
 
@@ -44,6 +46,19 @@ public sealed class DeviceDisplaySyncService
         int durationMs,
         CancellationToken cancellationToken = default)
     {
+        await SendTemporaryTemplateAsync(
+            connection,
+            lines.Select(line => new DisplayTemplateLine(line)).ToList(),
+            durationMs,
+            cancellationToken);
+    }
+
+    public async Task SendTemporaryTemplateAsync(
+        IMakroPadConnection? connection,
+        IReadOnlyList<DisplayTemplateLine> lines,
+        int durationMs,
+        CancellationToken cancellationToken = default)
+    {
         if (connection is null || connection.State != DeviceConnectionState.Connected || lines.Count == 0)
         {
             return;
@@ -57,7 +72,12 @@ public sealed class DeviceDisplaySyncService
 
         for (var index = 0; index < Math.Min(lines.Count, 5); index++)
         {
-            values[$"line{index + 1}"] = lines[index];
+            var line = lines[index];
+            values[$"line{index + 1}"] = line.Text;
+            if (line.NormalizedTextSize > 1)
+            {
+                values[$"line{index + 1}Size"] = line.NormalizedTextSize.ToString();
+            }
         }
 
         await connection.SendLineAsync(ProtocolCodec.Format("display", values), cancellationToken);

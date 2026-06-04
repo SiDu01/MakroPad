@@ -692,7 +692,7 @@ public partial class DisplayTriggersEditorViewModel : ViewModelBase
         var trigger = CreateEditorTriggerForPreview();
         var preview = CreatePreviewContext(trigger);
         var lines = DisplayTriggerRenderer.FitPreviewLines(
-            DisplayTriggerRenderer.RenderLines(trigger, CreateRenderContext(preview)));
+            DisplayTriggerRenderer.RenderTemplateLines(trigger, CreateRenderContext(preview)));
         SetPreviewLines(lines);
     }
 

@@ -64,6 +64,9 @@ MakroPad has a working vertical prototype across firmware and desktop app:
   visible 21-character width. Display triggers and their Test button now send
   full rendered lines so long content can scroll on the device while the app
   preview remains a fixed-width snapshot.
+- Added per-line OLED text sizes for temporary display templates via optional
+  `lineXSize` protocol fields. App-side HTML display triggers map `h1`/`h2`
+  content to size `2`; normal text and other HTML lines remain size `1`.
 
 ## Supported Actions
 

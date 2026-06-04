@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using MakroPad.Core.DisplayTriggers;
 using MakroPad.Device;
 
 namespace MakroPad.App.Services;
@@ -22,7 +23,7 @@ public sealed class DeviceDisplayTriggerSink : IDisplayTriggerSink
     }
 
     public Task SendTemporaryTemplateAsync(
-        IReadOnlyList<string> lines,
+        IReadOnlyList<DisplayTemplateLine> lines,
         int durationMs,
         CancellationToken cancellationToken = default)
     {

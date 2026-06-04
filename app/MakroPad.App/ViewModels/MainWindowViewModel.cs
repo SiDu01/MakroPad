@@ -456,7 +456,7 @@ public partial class MainWindowViewModel : ViewModelBase
             return;
         }
 
-        var lines = DisplayTriggerRenderer.RenderLines(
+        var lines = DisplayTriggerRenderer.RenderTemplateLines(
             trigger,
             new DisplayTriggerRenderContext
             {

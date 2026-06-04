@@ -129,8 +129,10 @@ condition controls that are relevant to the selected event type.
 Built-in presets, trigger duplication, editable event-specific preview values,
 match diagnostics, content warnings, and a device-width preview make trigger
 authoring possible without generating every real hardware event. Long trigger
-lines are sent to the device unchanged so the firmware can scroll them. Saving
-the config also applies the currently selected valid trigger draft.
+lines are sent to the device unchanged so the firmware can scroll them. In HTML
+mode, `h1` and `h2` lines are sent as large OLED text (`lineXSize=2`); other
+lines use normal text size. Saving the config also applies the currently
+selected valid trigger draft.
 Action-result triggers can match `ok`, `failed`, or both statuses and use `{action.status}`,
 `{action.name}`, and `{action.message}` placeholders. Existing configs without
 action-result triggers receive default configurable Action and Action failed

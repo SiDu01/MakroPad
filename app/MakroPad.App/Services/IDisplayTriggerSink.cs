@@ -1,13 +1,14 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using MakroPad.Core.DisplayTriggers;
 
 namespace MakroPad.App.Services;
 
 public interface IDisplayTriggerSink
 {
     Task SendTemporaryTemplateAsync(
-        IReadOnlyList<string> lines,
+        IReadOnlyList<DisplayTemplateLine> lines,
         int durationMs,
         CancellationToken cancellationToken = default);
 }

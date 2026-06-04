@@ -97,7 +97,40 @@ public sealed class DisplayTriggerRendererTests
 
         var result = DisplayTriggerRenderer.RenderHtmlLikeText(html);
 
-        Assert.Equal("Title\nA\nB\n- One\n- Two & Three\n", result);
+        Assert.Equal("Title\nA\nB\n- One\n- Two & Three", result);
+    }
+
+    [Fact]
+    public void RenderTemplateLinesMapsHtmlHeadingsToLargeText()
+    {
+        var trigger = new DisplayTriggerConfig
+        {
+            TemplateMode = "html",
+            Template = "<h1>{media.title}</h1><div>Artist</div>"
+        };
+        var context = new DisplayTriggerRenderContext
+        {
+            MediaTitle = "Long Track Title"
+        };
+
+        var result = DisplayTriggerRenderer.RenderTemplateLines(trigger, context);
+
+        Assert.Equal("Long Track Title", result[0].Text);
+        Assert.Equal(2, result[0].NormalizedTextSize);
+        Assert.Equal("Artist", result[1].Text);
+        Assert.Equal(1, result[1].NormalizedTextSize);
+    }
+
+    [Fact]
+    public void FitPreviewLinesUsesTextSizeWidth()
+    {
+        var result = DisplayTriggerRenderer.FitPreviewLines(
+        [
+            new DisplayTemplateLine("This large title is too long", 2)
+        ]);
+
+        Assert.Equal(10, result.Single().Length);
+        Assert.EndsWith("..", result.Single());
     }
 
     [Fact]

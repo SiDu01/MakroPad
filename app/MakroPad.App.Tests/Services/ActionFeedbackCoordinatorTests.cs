@@ -1,6 +1,7 @@
 using MakroPad.Actions;
 using MakroPad.App.Services;
 using MakroPad.Core.Configuration;
+using MakroPad.Core.DisplayTriggers;
 
 namespace MakroPad.App.Tests.Services;
 
@@ -156,7 +157,7 @@ public sealed class ActionFeedbackCoordinatorTests
         public int SendAttempts { get; private set; }
 
         public Task SendTemporaryTemplateAsync(
-            IReadOnlyList<string> lines,
+            IReadOnlyList<DisplayTemplateLine> lines,
             int durationMs,
             CancellationToken cancellationToken = default)
         {

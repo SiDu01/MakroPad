@@ -236,6 +236,7 @@ display;mode=profile;name=Gaming
 display;mode=media;artist=Daft Punk;title=Digital Love
 display;mode=message;text=Connected
 display;mode=template;durationMs=3000;line1=Slider%201;line2=75%25
+display;mode=template;durationMs=3000;line1=Track;line1Size=2;line2=Artist
 ```
 
 Unterstuetzte Modi fuer Version 1:
@@ -245,7 +246,7 @@ Unterstuetzte Modi fuer Version 1:
 | `profile` | `name` | Aktives Profil anzeigen |
 | `media` | `artist`, `title` | Aktuellen Track anzeigen |
 | `message` | `text` | Freie Statusnachricht anzeigen |
-| `template` | `durationMs`, `line1`..`line5` | App-gerenderte OLED-Zeilen temporaer anzeigen |
+| `template` | `durationMs`, `line1`..`line5`, optional `line1Size`..`line5Size` | App-gerenderte OLED-Zeilen temporaer anzeigen |
 | `clear` | keine | Display leeren |
 
 Firmware-Hinweis:
@@ -253,6 +254,9 @@ Firmware-Hinweis:
 - Lange Textzeilen werden von der Firmware auf dem OLED horizontal gescrollt.
   Die App kann daher vollstaendige Textzeilen senden; die Desktop-Preview zeigt
   nur den sichtbaren Startausschnitt.
+- `lineXSize` ist optional und aktuell auf `1` oder `2` begrenzt. Ohne Feld
+  rendert die Firmware die Zeile mit Groesse `1`. Groessere Zeilen belegen mehr
+  Hoehe und haben entsprechend weniger sichtbare Zeichen, bevor sie scrollen.
 - Die App sollte keine pixelgenauen Layoutdaten senden. `template` sendet
   bereits gerenderte Textzeilen, aber keine Bitmap- oder Browser-Daten.
 - Bei `template` setzt `durationMs > 0` das Display nach Ablauf wieder auf die

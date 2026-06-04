@@ -82,6 +82,7 @@ String currentTime;
 String currentDate;
 String currentSystemVolume;
 String activeDisplayLines[MaxDisplayLines];
+uint8_t activeDisplayLineSizes[MaxDisplayLines];
 uint8_t activeDisplayLineCount = 0;
 uint16_t activeDisplayScrollStep = 0;
 uint32_t lastDisplayScrollMs = 0;
@@ -161,9 +162,10 @@ void sendError(const char* code, const char* message) {
   sendLine("error;code=" + String(code) + ";message=" + String(message));
 }
 
-String renderDisplayLine(const String& line);
+String renderDisplayLine(const String& line, uint8_t textSize);
 void renderActiveDisplayLines();
 void setDisplayLines(const String lines[], uint8_t count);
+void setDisplayLines(const String lines[], const uint8_t lineSizes[], uint8_t count);
 
 void drawStatusMessage(
   const String& line1,
@@ -196,13 +198,22 @@ void drawStatusMessage(
 
 void drawMedia(const String& artist, const String& title);
 
-bool displayLinesChanged(const String lines[], uint8_t count) {
+uint8_t normalizeDisplayTextSize(int textSize) {
+  return textSize >= 2 ? 2 : 1;
+}
+
+int visibleCharactersForTextSize(uint8_t textSize) {
+  return max(1, MaxTextSizeOneCharacters / normalizeDisplayTextSize(textSize));
+}
+
+bool displayLinesChanged(const String lines[], const uint8_t lineSizes[], uint8_t count) {
   if (activeDisplayLineCount != count) {
     return true;
   }
 
   for (uint8_t index = 0; index < count; index++) {
-    if (activeDisplayLines[index] != lines[index]) {
+    if (activeDisplayLines[index] != lines[index]
+        || activeDisplayLineSizes[index] != normalizeDisplayTextSize(lineSizes[index])) {
       return true;
     }
   }
@@ -210,9 +221,9 @@ bool displayLinesChanged(const String lines[], uint8_t count) {
   return false;
 }
 
-bool displayNeedsScroll(const String lines[], uint8_t count) {
+bool displayNeedsScroll(const String lines[], const uint8_t lineSizes[], uint8_t count) {
   for (uint8_t index = 0; index < count; index++) {
-    if (lines[index].length() > MaxTextSizeOneCharacters) {
+    if (lines[index].length() > visibleCharactersForTextSize(lineSizes[index])) {
       return true;
     }
   }
@@ -234,17 +245,18 @@ uint16_t displayScrollCycleLength() {
     : 0;
 }
 
-String renderDisplayLine(const String& line) {
-  if (line.length() <= MaxTextSizeOneCharacters) {
+String renderDisplayLine(const String& line, uint8_t textSize) {
+  const int visibleCharacters = visibleCharactersForTextSize(textSize);
+  if (line.length() <= visibleCharacters) {
     return line;
   }
 
   const uint16_t cycleLength = line.length() + DisplayScrollGapCharacters;
   const uint16_t start = activeDisplayScrollStep % cycleLength;
   String visible;
-  visible.reserve(MaxTextSizeOneCharacters);
+  visible.reserve(visibleCharacters);
 
-  for (int offset = 0; offset < MaxTextSizeOneCharacters; offset++) {
+  for (int offset = 0; offset < visibleCharacters; offset++) {
     const uint16_t sourceIndex = (start + offset) % cycleLength;
     visible += sourceIndex < line.length()
       ? line[sourceIndex]
@@ -260,31 +272,52 @@ void renderActiveDisplayLines() {
   }
 
   display.clearDisplay();
-  display.setTextSize(1);
   display.setTextColor(SSD1306_WHITE);
 
+  int y = 0;
   for (uint8_t index = 0; index < activeDisplayLineCount && index < MaxDisplayLines; index++) {
-    display.setCursor(0, index * DisplayLineHeight);
-    display.println(renderDisplayLine(activeDisplayLines[index]));
+    const uint8_t textSize = normalizeDisplayTextSize(activeDisplayLineSizes[index]);
+    if (y >= ScreenHeight) {
+      break;
+    }
+
+    display.setTextSize(textSize);
+    display.setCursor(0, y);
+    display.println(renderDisplayLine(activeDisplayLines[index], textSize));
+    y += DisplayLineHeight * textSize;
   }
 
   display.display();
 }
 
 void setDisplayLines(const String lines[], uint8_t count) {
+  uint8_t lineSizes[MaxDisplayLines];
+  for (uint8_t index = 0; index < MaxDisplayLines; index++) {
+    lineSizes[index] = 1;
+  }
+
+  setDisplayLines(lines, lineSizes, count);
+}
+
+void setDisplayLines(const String lines[], const uint8_t lineSizes[], uint8_t count) {
   const uint8_t cappedCount = min(count, static_cast<uint8_t>(MaxDisplayLines));
-  const bool changed = displayLinesChanged(lines, cappedCount);
+  const bool changed = displayLinesChanged(lines, lineSizes, cappedCount);
 
   for (uint8_t index = 0; index < cappedCount; index++) {
     activeDisplayLines[index] = lines[index];
+    activeDisplayLineSizes[index] = normalizeDisplayTextSize(lineSizes[index]);
   }
 
   for (uint8_t index = cappedCount; index < MaxDisplayLines; index++) {
     activeDisplayLines[index] = "";
+    activeDisplayLineSizes[index] = 1;
   }
 
   activeDisplayLineCount = cappedCount;
-  activeDisplayScrollNeeded = displayNeedsScroll(activeDisplayLines, activeDisplayLineCount);
+  activeDisplayScrollNeeded = displayNeedsScroll(
+    activeDisplayLines,
+    activeDisplayLineSizes,
+    activeDisplayLineCount);
 
   if (changed) {
     activeDisplayScrollStep = 0;
@@ -382,6 +415,11 @@ void handleDisplayCommand(const String& line) {
     activeDisplayLineCount = 0;
     activeDisplayScrollStep = 0;
     activeDisplayScrollNeeded = false;
+    for (uint8_t index = 0; index < MaxDisplayLines; index++) {
+      activeDisplayLines[index] = "";
+      activeDisplayLineSizes[index] = 1;
+    }
+
     if (displayAvailable) {
       display.clearDisplay();
       display.display();
@@ -415,12 +453,22 @@ void handleDisplayCommand(const String& line) {
   }
 
   if (mode == "template") {
-    drawStatusMessage(
-      protocolValue(line, "line1"),
-      protocolValue(line, "line2"),
-      protocolValue(line, "line3"),
-      protocolValue(line, "line4"),
-      protocolValue(line, "line5"));
+    String lines[MaxDisplayLines];
+    uint8_t lineSizes[MaxDisplayLines];
+    uint8_t count = 0;
+
+    for (uint8_t index = 0; index < MaxDisplayLines; index++) {
+      const String key = "line" + String(index + 1);
+      const String value = protocolValue(line, key.c_str());
+      if (index == 0 || value.length() > 0) {
+        lines[count] = value;
+        lineSizes[count] = normalizeDisplayTextSize(
+          protocolValue(line, (key + "Size").c_str()).toInt());
+        count++;
+      }
+    }
+
+    setDisplayLines(lines, lineSizes, count);
 
     const String duration = protocolValue(line, "durationMs");
     temporaryDisplayUntilMs = duration.length() > 0 && duration.toInt() > 0

@@ -1,5 +1,6 @@
 using MakroPad.App.Services;
 using MakroPad.Core.Configuration;
+using MakroPad.Core.DisplayTriggers;
 
 namespace MakroPad.App.Tests.Services;
 
@@ -29,7 +30,7 @@ public sealed class DisplayTriggerOrchestratorTests
         Assert.False(first.Handled);
         Assert.False(second.Handled);
         Assert.True(third.Handled);
-        Assert.Equal("Studio|Connected|60", sink.Sends.Single().Lines.Single());
+        Assert.Equal("Studio|Connected|60", sink.Sends.Single().Lines.Single().Text);
     }
 
     [Fact]
@@ -56,8 +57,8 @@ public sealed class DisplayTriggerOrchestratorTests
         Assert.Equal(2, result.SentScreenCount);
         Assert.Collection(
             sink.Sends,
-            send => Assert.Equal("Action Done", send.Lines.Single()),
-            send => Assert.Equal("Artist - Title", send.Lines.Single()));
+            send => Assert.Equal("Action Done", send.Lines.Single().Text),
+            send => Assert.Equal("Artist - Title", send.Lines.Single().Text));
     }
 
     [Fact]
@@ -82,8 +83,8 @@ public sealed class DisplayTriggerOrchestratorTests
 
         Assert.True(first.WasCancelled);
         Assert.True(second.Handled);
-        Assert.DoesNotContain(sink.Sends, send => send.Lines.Contains("Never"));
-        Assert.Contains(sink.Sends, send => send.Lines.Contains("Profile Studio"));
+        Assert.DoesNotContain(sink.Sends, send => send.Lines.Any(line => line.Text == "Never"));
+        Assert.Contains(sink.Sends, send => send.Lines.Any(line => line.Text == "Profile Studio"));
     }
 
     [Fact]
@@ -106,7 +107,7 @@ public sealed class DisplayTriggerOrchestratorTests
             "Connected");
 
         Assert.True(result.Handled);
-        Assert.Equal("Connected", sink.Sends.Single().Lines.Single());
+        Assert.Equal("Connected", sink.Sends.Single().Lines.Single().Text);
     }
 
     private static DisplayTriggerConfig Trigger(
@@ -139,7 +140,7 @@ public sealed class DisplayTriggerOrchestratorTests
             new(TaskCreationOptions.RunContinuationsAsynchronously);
 
         public Task SendTemporaryTemplateAsync(
-            IReadOnlyList<string> lines,
+            IReadOnlyList<DisplayTemplateLine> lines,
             int durationMs,
             CancellationToken cancellationToken = default)
         {
@@ -153,5 +154,5 @@ public sealed class DisplayTriggerOrchestratorTests
         }
     }
 
-    private sealed record Send(IReadOnlyList<string> Lines, int DurationMs);
+    private sealed record Send(IReadOnlyList<DisplayTemplateLine> Lines, int DurationMs);
 }

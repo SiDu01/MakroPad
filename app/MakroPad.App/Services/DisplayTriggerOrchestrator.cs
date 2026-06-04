@@ -244,7 +244,7 @@ public sealed class DisplayTriggerOrchestrator : IDisposable
             for (var index = 0; index < triggers.Count; index++)
             {
                 var trigger = triggers[index];
-                var lines = DisplayTriggerRenderer.RenderLines(
+                var lines = DisplayTriggerRenderer.RenderTemplateLines(
                     trigger,
                     eventContext with
                     {

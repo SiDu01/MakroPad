@@ -143,6 +143,9 @@ Use `preferred=false` on `display;mode=media` to update media placeholder
 values without switching the idle screen to the dedicated media display.
 Long display lines scroll horizontally when they exceed 21 characters at the
 current text size.
+Temporary `display;mode=template` messages can provide optional
+`line1Size`..`line5Size` values. Supported text sizes are `1` and `2`; missing
+or invalid values fall back to `1`.
 
 Button and slider events should appear as:
 

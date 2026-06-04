@@ -10,6 +10,13 @@ public static partial class DisplayTriggerRenderer
 
     public static IReadOnlyList<string> RenderLines(
         DisplayTriggerConfig trigger,
+        DisplayTriggerRenderContext context) =>
+        RenderTemplateLines(trigger, context)
+            .Select(line => line.Text)
+            .ToList();
+
+    public static IReadOnlyList<DisplayTemplateLine> RenderTemplateLines(
+        DisplayTriggerConfig trigger,
         DisplayTriggerRenderContext context)
     {
         ArgumentNullException.ThrowIfNull(trigger);
@@ -18,9 +25,16 @@ public static partial class DisplayTriggerRenderer
         var text = ReplacePlaceholders(trigger.Template, context);
         if (DisplayTriggerNormalizer.NormalizeTemplateMode(trigger.TemplateMode) == "html")
         {
-            text = RenderHtmlLikeText(text);
+            return RenderHtmlLikeLines(text);
         }
 
+        return SplitDisplayTextLines(text)
+            .Select(line => new DisplayTemplateLine(line))
+            .ToList();
+    }
+
+    private static IReadOnlyList<string> SplitDisplayTextLines(string text)
+    {
         return text
             .Replace("\r\n", "\n")
             .Replace('\r', '\n')
@@ -60,11 +74,36 @@ public static partial class DisplayTriggerRenderer
     {
         ArgumentNullException.ThrowIfNull(html);
 
-        var text = BreakTagRegex().Replace(html, "\n");
+        return string.Join(
+            "\n",
+            RenderHtmlLikeLines(html).Select(line => line.Text));
+    }
+
+    public static IReadOnlyList<DisplayTemplateLine> RenderHtmlLikeLines(string html)
+    {
+        ArgumentNullException.ThrowIfNull(html);
+
+        var text = HeadingTagRegex().Replace(
+            html,
+            match => "\n" + HeadingMarker + StripHtml(match.Groups[1].Value) + "\n");
+        text = BreakTagRegex().Replace(text, "\n");
         text = BlockClosingTagRegex().Replace(text, "\n");
         text = ListItemOpeningTagRegex().Replace(text, "- ");
-        text = AnyTagRegex().Replace(text, "");
-        return WebUtility.HtmlDecode(text);
+        text = StripHtml(text);
+
+        return SplitDisplayTextLines(text)
+            .Select(line =>
+            {
+                if (line.StartsWith(HeadingMarker, StringComparison.Ordinal))
+                {
+                    return new DisplayTemplateLine(line[HeadingMarker.Length..].Trim(), 2);
+                }
+
+                return new DisplayTemplateLine(line);
+            })
+            .Where(line => line.Text.Length > 0)
+            .Take(5)
+            .ToList();
     }
 
     public static int MapSliderValueToPercent(int sliderValue)
@@ -76,14 +115,15 @@ public static partial class DisplayTriggerRenderer
     {
         ArgumentNullException.ThrowIfNull(lines);
 
+        return FitPreviewLines(lines.Select(line => new DisplayTemplateLine(line)));
+    }
+
+    public static IReadOnlyList<string> FitPreviewLines(IEnumerable<DisplayTemplateLine> lines)
+    {
+        ArgumentNullException.ThrowIfNull(lines);
+
         return lines
-            .Select(line =>
-            {
-                var trimmed = line.Trim();
-                return trimmed.Length <= MaxPreviewCharacters
-                    ? trimmed
-                    : $"{trimmed[..(MaxPreviewCharacters - 2)]}..";
-            })
+            .Select(line => FitPreviewLine(line.Text, line.NormalizedTextSize))
             .ToList();
     }
 
@@ -98,8 +138,29 @@ public static partial class DisplayTriggerRenderer
             && id > 0;
     }
 
+    private const string HeadingMarker = "\u0002";
+
+    private static string FitPreviewLine(string line, int textSize)
+    {
+        var trimmed = line.Trim();
+        var maxCharacters = Math.Max(1, MaxPreviewCharacters / Math.Clamp(textSize, 1, 2));
+
+        return trimmed.Length <= maxCharacters
+            ? trimmed
+            : $"{trimmed[..Math.Max(1, maxCharacters - 2)]}..";
+    }
+
+    private static string StripHtml(string html)
+    {
+        var text = AnyTagRegex().Replace(html, "");
+        return WebUtility.HtmlDecode(text);
+    }
+
     [GeneratedRegex("(?i)<\\s*br\\s*/?\\s*>")]
     private static partial Regex BreakTagRegex();
+
+    [GeneratedRegex("(?is)<\\s*h[1-2][^>]*>(.*?)</\\s*h[1-2]\\s*>")]
+    private static partial Regex HeadingTagRegex();
 
     [GeneratedRegex("(?i)</\\s*(p|div|h[1-6]|li|tr)\\s*>")]
     private static partial Regex BlockClosingTagRegex();
