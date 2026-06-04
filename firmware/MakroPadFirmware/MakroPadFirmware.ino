@@ -366,7 +366,7 @@ String renderDefaultScreenLine(String line, const String& status) {
 }
 
 void drawIdleStatus() {
-  const String status = hostAcknowledged ? "Connected" : "Waiting for app";
+  const String status = hostAcknowledged ? "Connected" : "Connection Lost";
   if (defaultScreenRows == 5) {
     String lines[MaxDisplayLines] = {
       renderDefaultScreenLine(defaultScreenTitle, status),
