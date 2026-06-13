@@ -12,7 +12,7 @@ namespace MakroPad.App;
 
 public partial class App : Application
 {
-    private MainWindow? mainWindow;
+    private Shell? mainWindow;
     private TrayIcon? trayIcon;
     private bool isExitRequested;
 
@@ -25,9 +25,9 @@ public partial class App : Application
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            mainWindow = new MainWindow
+            mainWindow = new Shell
             {
-                DataContext = new MainWindowViewModel(),
+                DataContext = new ShellViewModel(),
             };
 
             mainWindow.Closing += (_, args) =>

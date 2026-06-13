@@ -1,0 +1,20 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:MakroPad.App.ViewModels"
+             x:Class="MakroPad.App.Views.PadView"
+             x:DataType="vm:ShellViewModel">
+    <ScrollViewer Classes="pageContent">
+        <StackPanel Spacing="16" MaxWidth="980" HorizontalAlignment="Left">
+            <StackPanel Spacing="4">
+                <TextBlock Classes="sectionTitle" Text="Pad" />
+                <TextBlock Classes="muted"
+                           Text="Geraete-Grid mit Tasten und Slidern. Taste waehlen zum Bearbeiten oder im Testmodus ausloesen." />
+            </StackPanel>
+            <Border Classes="panel">
+                <TextBlock Classes="muted"
+                           TextWrapping="Wrap"
+                           Text="Das Tasten-Grid und der Inspector werden im naechsten Schritt aufgebaut." />
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

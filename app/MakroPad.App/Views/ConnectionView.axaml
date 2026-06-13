@@ -1,0 +1,20 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:MakroPad.App.ViewModels"
+             x:Class="MakroPad.App.Views.ConnectionView"
+             x:DataType="vm:ShellViewModel">
+    <ScrollViewer Classes="pageContent">
+        <StackPanel Spacing="16" MaxWidth="980" HorizontalAlignment="Left">
+            <StackPanel Spacing="4">
+                <TextBlock Classes="sectionTitle" Text="Verbindung" />
+                <TextBlock Classes="muted"
+                           Text="Serielle Verbindung, Port-Auswahl und Auto-Connect." />
+            </StackPanel>
+            <Border Classes="panel">
+                <TextBlock Classes="muted"
+                           TextWrapping="Wrap"
+                           Text="Die Verbindungs-Verwaltung wird in einem spaeteren Schritt aufgebaut." />
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
