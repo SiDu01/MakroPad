@@ -79,7 +79,33 @@ public partial class ShellViewModel
         OnPropertyChanged(nameof(IsConnectionSelected));
         OnPropertyChanged(nameof(IsSettingsSelected));
         OnPropertyChanged(nameof(IsDiagnosticsSelected));
+        IsDisplayEditorOpen = false;
     }
+
+    /// <summary>True while the dedicated single-rule editor page is shown inside Display.</summary>
+    [ObservableProperty]
+    private bool isDisplayEditorOpen;
+
+    [RelayCommand]
+    private void CreateDisplayRule()
+    {
+        // Reset the editor to defaults, then add a fresh rule and open the editor page for it.
+        DisplayTriggersEditor.SelectedDisplayTrigger = null;
+        DisplayTriggersEditor.AddDisplayTriggerCommand.Execute(null);
+        IsDisplayEditorOpen = true;
+    }
+
+    [RelayCommand]
+    private void EditDisplayRule()
+    {
+        if (DisplayTriggersEditor.SelectedDisplayTrigger is not null)
+        {
+            IsDisplayEditorOpen = true;
+        }
+    }
+
+    [RelayCommand]
+    private void CloseDisplayEditor() => IsDisplayEditorOpen = false;
 
     public bool IsPadSelected => SelectedSection == AppSection.Pad;
 

@@ -3,24 +3,22 @@
              xmlns:vm="using:MakroPad.App.ViewModels"
              x:Class="MakroPad.App.Views.DisplayView"
              x:DataType="vm:ShellViewModel">
+    <Panel>
 
-    <Grid RowDefinitions="Auto,*" Margin="24,20,24,20" RowSpacing="14">
+        <!-- ===================== Overview ===================== -->
+        <Grid IsVisible="{Binding !IsDisplayEditorOpen}"
+              RowDefinitions="Auto,*" Margin="24,20,24,20" RowSpacing="14">
 
-        <StackPanel Grid.Row="0" Spacing="2">
-            <TextBlock Classes="sectionTitle" Text="Display" />
-            <TextBlock Classes="muted" Text="Idle-Screen und ereignisgesteuerte OLED-Regeln mit Live-Vorschau." />
-        </StackPanel>
+            <StackPanel Grid.Row="0" Spacing="2">
+                <TextBlock Classes="sectionTitle" Text="Display" />
+                <TextBlock Classes="muted" Text="Idle-Screen und ereignisgesteuerte OLED-Regeln." />
+            </StackPanel>
 
-        <Grid Grid.Row="1" ColumnDefinitions="*,344" ColumnSpacing="16">
-
-            <!-- Rules + idle settings + editor -->
-            <ScrollViewer Grid.Column="0"
-                          HorizontalScrollBarVisibility="Auto"
-                          VerticalScrollBarVisibility="Auto">
-                <Grid ColumnDefinitions="312,*" ColumnSpacing="16" MinWidth="660">
-
-                    <!-- Left stack: idle screen + rule list -->
-                    <StackPanel Grid.Column="0" Spacing="16">
+            <Grid Grid.Row="1" ColumnDefinitions="*,344" ColumnSpacing="16">
+                <ScrollViewer Grid.Column="0"
+                              HorizontalScrollBarVisibility="Auto"
+                              VerticalScrollBarVisibility="Auto">
+                    <StackPanel Spacing="16" MinWidth="420">
                         <Border Classes="panel">
                             <StackPanel Spacing="10">
                                 <TextBlock Text="Idle Screen" FontSize="15" FontWeight="SemiBold" />
@@ -70,17 +68,16 @@
 
                         <Border Classes="panel">
                             <StackPanel Spacing="10">
-                                <TextBlock Text="Anzeige-Regeln" FontSize="15" FontWeight="SemiBold" />
-                                <ComboBox HorizontalAlignment="Stretch"
-                                          ItemsSource="{Binding DisplayTriggersEditor.AvailableDisplayTriggerPresets}"
-                                          SelectedItem="{Binding DisplayTriggersEditor.SelectedDisplayTriggerPreset}"
-                                          DisplayMemberBinding="{Binding Name}" />
-                                <Button Classes="secondary" Content="Preset uebernehmen"
-                                        Command="{Binding DisplayTriggersEditor.ApplyDisplayTriggerPresetCommand}" />
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <TextBlock Text="Anzeige-Regeln" FontSize="15" FontWeight="SemiBold" VerticalAlignment="Center" />
+                                    <Button Grid.Column="1" Classes="primary" Content="Regel erstellen"
+                                            Command="{Binding CreateDisplayRuleCommand}" />
+                                </Grid>
                                 <ListBox ItemsSource="{Binding DisplayTriggersEditor.DisplayTriggers}"
                                          Classes="dataList"
                                          SelectedItem="{Binding DisplayTriggersEditor.SelectedDisplayTrigger}"
-                                         MinHeight="240">
+                                         DoubleTapped="RuleList_DoubleTapped"
+                                         MinHeight="280">
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
                                             <StackPanel Spacing="2">
@@ -96,21 +93,72 @@
                                     </ListBox.ItemTemplate>
                                 </ListBox>
                                 <WrapPanel>
-                                    <Button Content="Add" Classes="secondary" Command="{Binding DisplayTriggersEditor.AddDisplayTriggerCommand}" MinWidth="64" Margin="0,0,8,8" />
+                                    <Button Content="Bearbeiten" Classes="secondary" Command="{Binding EditDisplayRuleCommand}" MinWidth="92" Margin="0,0,8,8" />
                                     <Button Content="Duplizieren" Classes="secondary" Command="{Binding DisplayTriggersEditor.DuplicateDisplayTriggerCommand}" MinWidth="96" Margin="0,0,8,8" />
-                                    <Button Content="Remove" Classes="danger" Command="{Binding DisplayTriggersEditor.RemoveDisplayTriggerCommand}" MinWidth="80" Margin="0,0,8,8" />
+                                    <Button Content="Entfernen" Classes="danger" Command="{Binding DisplayTriggersEditor.RemoveDisplayTriggerCommand}" MinWidth="92" Margin="0,0,8,8" />
                                     <Button Content="Up" Classes="secondary" Command="{Binding DisplayTriggersEditor.MoveDisplayTriggerUpCommand}" MinWidth="52" Margin="0,0,8,8" />
                                     <Button Content="Down" Classes="secondary" Command="{Binding DisplayTriggersEditor.MoveDisplayTriggerDownCommand}" MinWidth="64" Margin="0,0,8,8" />
                                 </WrapPanel>
                             </StackPanel>
                         </Border>
                     </StackPanel>
+                </ScrollViewer>
 
-                    <!-- Rule editor -->
-                    <Border Grid.Column="1" Classes="panelElevated" MinWidth="320">
+                <Border Grid.Column="1" Classes="inspector" Width="344">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel Spacing="16">
+                            <TextBlock Text="Idle-Vorschau" FontSize="15" FontWeight="SemiBold" />
+                            <Border Classes="oledPreview" HorizontalAlignment="Left">
+                                <StackPanel Spacing="6" VerticalAlignment="Top">
+                                    <TextBlock Text="{Binding DisplaySettings.OledPreviewTitle}" FontFamily="Consolas"
+                                               FontSize="{Binding DisplaySettings.OledPreviewTitleFontSize}" TextWrapping="NoWrap" />
+                                    <TextBlock Text="{Binding DisplaySettings.OledPreviewLine1}" FontFamily="Consolas"
+                                               FontSize="{Binding DisplaySettings.OledPreviewLine1FontSize}" TextWrapping="NoWrap" />
+                                    <TextBlock Text="{Binding DisplaySettings.OledPreviewLine2}" FontFamily="Consolas"
+                                               FontSize="{Binding DisplaySettings.OledPreviewLine2FontSize}" TextWrapping="NoWrap" />
+                                    <TextBlock IsVisible="{Binding DisplaySettings.UsesFiveLineOledLayout}"
+                                               Text="{Binding DisplaySettings.OledPreviewLine3}" FontFamily="Consolas"
+                                               FontSize="{Binding DisplaySettings.OledPreviewLine3FontSize}" TextWrapping="NoWrap" />
+                                    <TextBlock IsVisible="{Binding DisplaySettings.UsesFiveLineOledLayout}"
+                                               Text="{Binding DisplaySettings.OledPreviewLine4}" FontFamily="Consolas"
+                                               FontSize="{Binding DisplaySettings.OledPreviewLine4FontSize}" TextWrapping="NoWrap" />
+                                </StackPanel>
+                            </Border>
+
+                            <Border Classes="panelElevated">
+                                <StackPanel Spacing="10">
+                                    <TextBlock Text="Runtime" FontWeight="SemiBold" />
+                                    <CheckBox Content="Now Playing anzeigen" IsChecked="{Binding DisplaySettings.EnableNowPlayingDisplay}" />
+                                    <TextBlock Classes="label" Text="Action result timeout (ms)" />
+                                    <NumericUpDown Value="{Binding DisplaySettings.ActionResultTimeoutMs}" Minimum="0" Maximum="60000" Increment="500" />
+                                    <TextBlock Classes="label" Text="Volume deadband (%)" />
+                                    <NumericUpDown Value="{Binding DisplaySettings.VolumeSliderDeadbandPercent}" Minimum="0" Maximum="25" Increment="1" />
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Border>
+            </Grid>
+        </Grid>
+
+        <!-- ===================== Single-rule editor ===================== -->
+        <Grid IsVisible="{Binding IsDisplayEditorOpen}"
+              RowDefinitions="Auto,*" Margin="24,20,24,20" RowSpacing="14">
+
+            <Grid Grid.Row="0" ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                <Button Classes="secondary" Content="← Übersicht" Command="{Binding CloseDisplayEditorCommand}" VerticalAlignment="Center" />
+                <StackPanel Grid.Column="1" Spacing="2" VerticalAlignment="Center">
+                    <TextBlock Classes="sectionTitle" Text="Regel bearbeiten" />
+                    <TextBlock Classes="muted" Text="Ereignis, Bedingung und OLED-Inhalt dieser Regel." />
+                </StackPanel>
+            </Grid>
+
+            <Grid Grid.Row="1" ColumnDefinitions="*,344" ColumnSpacing="16">
+                <ScrollViewer Grid.Column="0"
+                              HorizontalScrollBarVisibility="Auto"
+                              VerticalScrollBarVisibility="Auto">
+                    <Border Classes="panelElevated" MinWidth="360">
                         <StackPanel Spacing="12">
-                            <TextBlock Text="Ausgewaehlte Regel" FontSize="15" FontWeight="SemiBold" />
-
                             <CheckBox Content="Aktiviert" IsChecked="{Binding DisplayTriggersEditor.DisplayTriggerEditorEnabled}" />
 
                             <Grid ColumnDefinitions="*,*" ColumnSpacing="10" RowDefinitions="Auto,Auto" RowSpacing="10">
@@ -216,92 +264,56 @@
                                        Foreground="{DynamicResource AppErrorBrush}" FontSize="12" TextWrapping="Wrap" />
 
                             <WrapPanel>
-                                <Button Content="Apply" Classes="primary" Command="{Binding DisplayTriggersEditor.ApplyDisplayTriggerCommand}" MinWidth="78" Margin="0,0,8,8" />
-                                <Button Content="Reset" Classes="secondary" Command="{Binding DisplayTriggersEditor.ResetDisplayTriggerEditorCommand}" MinWidth="78" Margin="0,0,8,8" />
+                                <Button Content="Uebernehmen" Classes="primary" Command="{Binding DisplayTriggersEditor.ApplyDisplayTriggerCommand}" MinWidth="110" Margin="0,0,8,8" />
+                                <Button Content="Zuruecksetzen" Classes="secondary" Command="{Binding DisplayTriggersEditor.ResetDisplayTriggerEditorCommand}" MinWidth="110" Margin="0,0,8,8" />
                                 <Button Content="Test" Classes="secondary" Command="{Binding DisplayTriggersEditor.TestDisplayTriggerCommand}" MinWidth="78" Margin="0,0,8,8" />
                             </WrapPanel>
                         </StackPanel>
                     </Border>
-                </Grid>
-            </ScrollViewer>
-
-            <!-- Persistent live preview + runtime -->
-            <Border Grid.Column="1" Classes="inspector" Width="344">
-                <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <StackPanel Spacing="16">
-                        <TextBlock Text="Live-Vorschau" FontSize="15" FontWeight="SemiBold" />
-
-                        <StackPanel Spacing="8">
-                            <TextBlock Classes="label" Text="Idle screen" />
-                            <Border Classes="oledPreview" HorizontalAlignment="Left">
-                                <StackPanel Spacing="6" VerticalAlignment="Top">
-                                    <TextBlock Text="{Binding DisplaySettings.OledPreviewTitle}" FontFamily="Consolas"
-                                               FontSize="{Binding DisplaySettings.OledPreviewTitleFontSize}" TextWrapping="NoWrap" />
-                                    <TextBlock Text="{Binding DisplaySettings.OledPreviewLine1}" FontFamily="Consolas"
-                                               FontSize="{Binding DisplaySettings.OledPreviewLine1FontSize}" TextWrapping="NoWrap" />
-                                    <TextBlock Text="{Binding DisplaySettings.OledPreviewLine2}" FontFamily="Consolas"
-                                               FontSize="{Binding DisplaySettings.OledPreviewLine2FontSize}" TextWrapping="NoWrap" />
-                                    <TextBlock IsVisible="{Binding DisplaySettings.UsesFiveLineOledLayout}"
-                                               Text="{Binding DisplaySettings.OledPreviewLine3}" FontFamily="Consolas"
-                                               FontSize="{Binding DisplaySettings.OledPreviewLine3FontSize}" TextWrapping="NoWrap" />
-                                    <TextBlock IsVisible="{Binding DisplaySettings.UsesFiveLineOledLayout}"
-                                               Text="{Binding DisplaySettings.OledPreviewLine4}" FontFamily="Consolas"
-                                               FontSize="{Binding DisplaySettings.OledPreviewLine4FontSize}" TextWrapping="NoWrap" />
-                                </StackPanel>
-                            </Border>
-                        </StackPanel>
-
-                        <StackPanel Spacing="8">
-                            <TextBlock Classes="label" Text="Ausgewaehlte Regel" />
-                            <Border Classes="oledPreview" HorizontalAlignment="Left">
-                                <Grid>
-                                    <StackPanel Spacing="6" IsVisible="{Binding DisplayTriggersEditor.UsesTextDisplayPreview}">
-                                        <TextBlock Text="{Binding DisplayTriggersEditor.DisplayTriggerPreviewLine1}" FontFamily="Consolas" FontSize="16" TextWrapping="NoWrap" />
-                                        <TextBlock Text="{Binding DisplayTriggersEditor.DisplayTriggerPreviewLine2}" FontFamily="Consolas" FontSize="16" TextWrapping="NoWrap" />
-                                        <TextBlock Text="{Binding DisplayTriggersEditor.DisplayTriggerPreviewLine3}" FontFamily="Consolas" FontSize="16" TextWrapping="NoWrap" />
-                                        <TextBlock Text="{Binding DisplayTriggersEditor.DisplayTriggerPreviewLine4}" FontFamily="Consolas" FontSize="16" TextWrapping="NoWrap" />
-                                        <TextBlock Text="{Binding DisplayTriggersEditor.DisplayTriggerPreviewLine5}" FontFamily="Consolas" FontSize="16" TextWrapping="NoWrap" />
-                                    </StackPanel>
-                                    <Grid RowDefinitions="18,*,16" IsVisible="{Binding DisplayTriggersEditor.UsesLayoutDisplayPreview}">
-                                        <Border Background="#DDEBFF" CornerRadius="2" Padding="4,1">
-                                            <TextBlock Text="{Binding DisplayTriggersEditor.DisplayTriggerLayoutPreviewTitle}"
-                                                       Foreground="#02060C" FontFamily="Consolas" FontSize="12" TextWrapping="NoWrap" />
-                                        </Border>
-                                        <Grid Grid.Row="1" ColumnDefinitions="28,*" Margin="0,8,0,0">
-                                            <Border Width="22" Height="22" BorderBrush="#DDEBFF" BorderThickness="1"
-                                                    IsVisible="{Binding DisplayTriggersEditor.HasDisplayTriggerLayoutPreviewIcon}">
-                                                <TextBlock Text="{Binding DisplayTriggersEditor.DisplayTriggerLayoutPreviewIcon}"
-                                                           Foreground="#DDEBFF" FontFamily="Consolas" FontSize="11"
-                                                           HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                            </Border>
-                                            <StackPanel Grid.Column="1" Spacing="4">
-                                                <TextBlock Text="{Binding DisplayTriggersEditor.DisplayTriggerLayoutPreviewLine1}" FontFamily="Consolas" FontSize="15" TextWrapping="NoWrap" />
-                                                <TextBlock Text="{Binding DisplayTriggersEditor.DisplayTriggerLayoutPreviewLine2}" FontFamily="Consolas" FontSize="15" TextWrapping="NoWrap" />
-                                                <TextBlock Text="{Binding DisplayTriggersEditor.DisplayTriggerLayoutPreviewValueText}" FontFamily="Consolas" FontSize="22"
-                                                           IsVisible="{Binding DisplayTriggersEditor.ShowsDisplayTriggerLayoutPreviewValue}" />
-                                            </StackPanel>
-                                        </Grid>
-                                        <ProgressBar Grid.Row="2" Minimum="0" Maximum="100"
-                                                     Value="{Binding DisplayTriggersEditor.DisplayTriggerLayoutPreviewValue}"
-                                                     IsVisible="{Binding DisplayTriggersEditor.ShowsDisplayTriggerLayoutPreviewValue}" />
-                                    </Grid>
-                                </Grid>
-                            </Border>
-                        </StackPanel>
-
-                        <Border Classes="panelElevated">
-                            <StackPanel Spacing="10">
-                                <TextBlock Text="Runtime" FontWeight="SemiBold" />
-                                <CheckBox Content="Now Playing anzeigen" IsChecked="{Binding DisplaySettings.EnableNowPlayingDisplay}" />
-                                <TextBlock Classes="label" Text="Action result timeout (ms)" />
-                                <NumericUpDown Value="{Binding DisplaySettings.ActionResultTimeoutMs}" Minimum="0" Maximum="60000" Increment="500" />
-                                <TextBlock Classes="label" Text="Volume deadband (%)" />
-                                <NumericUpDown Value="{Binding DisplaySettings.VolumeSliderDeadbandPercent}" Minimum="0" Maximum="25" Increment="1" />
-                            </StackPanel>
-                        </Border>
-                    </StackPanel>
                 </ScrollViewer>
-            </Border>
+
+                <Border Grid.Column="1" Classes="inspector" Width="344">
+                    <StackPanel Spacing="16">
+                        <TextBlock Text="Vorschau" FontSize="15" FontWeight="SemiBold" />
+                        <Border Classes="oledPreview" HorizontalAlignment="Left">
+                            <Grid>
+                                <StackPanel Spacing="6" IsVisible="{Binding DisplayTriggersEditor.UsesTextDisplayPreview}">
+                                    <TextBlock Text="{Binding DisplayTriggersEditor.DisplayTriggerPreviewLine1}" FontFamily="Consolas" FontSize="16" TextWrapping="NoWrap" />
+                                    <TextBlock Text="{Binding DisplayTriggersEditor.DisplayTriggerPreviewLine2}" FontFamily="Consolas" FontSize="16" TextWrapping="NoWrap" />
+                                    <TextBlock Text="{Binding DisplayTriggersEditor.DisplayTriggerPreviewLine3}" FontFamily="Consolas" FontSize="16" TextWrapping="NoWrap" />
+                                    <TextBlock Text="{Binding DisplayTriggersEditor.DisplayTriggerPreviewLine4}" FontFamily="Consolas" FontSize="16" TextWrapping="NoWrap" />
+                                    <TextBlock Text="{Binding DisplayTriggersEditor.DisplayTriggerPreviewLine5}" FontFamily="Consolas" FontSize="16" TextWrapping="NoWrap" />
+                                </StackPanel>
+                                <Grid RowDefinitions="18,*,16" IsVisible="{Binding DisplayTriggersEditor.UsesLayoutDisplayPreview}">
+                                    <Border Background="#DDEBFF" CornerRadius="2" Padding="4,1">
+                                        <TextBlock Text="{Binding DisplayTriggersEditor.DisplayTriggerLayoutPreviewTitle}"
+                                                   Foreground="#02060C" FontFamily="Consolas" FontSize="12" TextWrapping="NoWrap" />
+                                    </Border>
+                                    <Grid Grid.Row="1" ColumnDefinitions="28,*" Margin="0,8,0,0">
+                                        <Border Width="22" Height="22" BorderBrush="#DDEBFF" BorderThickness="1"
+                                                IsVisible="{Binding DisplayTriggersEditor.HasDisplayTriggerLayoutPreviewIcon}">
+                                            <TextBlock Text="{Binding DisplayTriggersEditor.DisplayTriggerLayoutPreviewIcon}"
+                                                       Foreground="#DDEBFF" FontFamily="Consolas" FontSize="11"
+                                                       HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                        </Border>
+                                        <StackPanel Grid.Column="1" Spacing="4">
+                                            <TextBlock Text="{Binding DisplayTriggersEditor.DisplayTriggerLayoutPreviewLine1}" FontFamily="Consolas" FontSize="15" TextWrapping="NoWrap" />
+                                            <TextBlock Text="{Binding DisplayTriggersEditor.DisplayTriggerLayoutPreviewLine2}" FontFamily="Consolas" FontSize="15" TextWrapping="NoWrap" />
+                                            <TextBlock Text="{Binding DisplayTriggersEditor.DisplayTriggerLayoutPreviewValueText}" FontFamily="Consolas" FontSize="22"
+                                                       IsVisible="{Binding DisplayTriggersEditor.ShowsDisplayTriggerLayoutPreviewValue}" />
+                                        </StackPanel>
+                                    </Grid>
+                                    <ProgressBar Grid.Row="2" Minimum="0" Maximum="100"
+                                                 Value="{Binding DisplayTriggersEditor.DisplayTriggerLayoutPreviewValue}"
+                                                 IsVisible="{Binding DisplayTriggersEditor.ShowsDisplayTriggerLayoutPreviewValue}" />
+                                </Grid>
+                            </Grid>
+                        </Border>
+                        <TextBlock Classes="muted" FontSize="12" TextWrapping="Wrap"
+                                   Text="Mit Uebernehmen speicherst du die Regel in der Liste. Globales Speichern schreibt sie in die Konfiguration." />
+                    </StackPanel>
+                </Border>
+            </Grid>
         </Grid>
-    </Grid>
+    </Panel>
 </UserControl>
