@@ -8,6 +8,12 @@ public sealed record AppSettingsConfig
 
     public int VolumeSliderDeadbandPercent { get; init; } = 2;
 
+    public int ButtonRows { get; init; } = 4;
+
+    public int ButtonColumns { get; init; } = 5;
+
+    public int SliderCount { get; init; } = 3;
+
     public List<DisplayTriggerConfig> DisplayTriggers { get; init; } = [];
 
     public bool DisplayTriggerDefaultsInitialized { get; init; }

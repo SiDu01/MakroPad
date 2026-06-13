@@ -14,6 +14,30 @@
 
             <Border Classes="panel">
                 <StackPanel Spacing="12">
+                    <TextBlock Text="Pad-Layout" FontSize="15" FontWeight="SemiBold" />
+                    <TextBlock Classes="muted" FontSize="12" TextWrapping="Wrap"
+                               Text="Anzahl der Tasten-Zeilen und -Spalten sowie der Slider deines Geraets." />
+                    <Grid ColumnDefinitions="*,*,*" ColumnSpacing="12">
+                        <StackPanel Spacing="4">
+                            <TextBlock Classes="label" Text="Zeilen" />
+                            <NumericUpDown Minimum="1" Maximum="12" Increment="1" Value="{Binding PadButtonRows}" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Spacing="4">
+                            <TextBlock Classes="label" Text="Spalten" />
+                            <NumericUpDown Minimum="1" Maximum="12" Increment="1" Value="{Binding PadButtonColumns}" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="2" Spacing="4">
+                            <TextBlock Classes="label" Text="Slider" />
+                            <NumericUpDown Minimum="0" Maximum="12" Increment="1" Value="{Binding PadSliderCount}" />
+                        </StackPanel>
+                    </Grid>
+                    <TextBlock Classes="muted" FontSize="12"
+                               Text="{Binding PadButtonTotal, StringFormat='Insgesamt {0} Tasten'}" />
+                </StackPanel>
+            </Border>
+
+            <Border Classes="panel">
+                <StackPanel Spacing="12">
                     <TextBlock Text="Erscheinungsbild" FontSize="15" FontWeight="SemiBold" />
                     <Grid ColumnDefinitions="*,Auto">
                         <StackPanel Spacing="2" VerticalAlignment="Center">

@@ -111,6 +111,32 @@ public sealed class PadViewModelTests
     }
 
     [Fact]
+    public void ApplyLayoutRebuildsGridForGivenGeometry()
+    {
+        var pad = new PadViewModel(CreateProfiles(MakroPadConfig.CreateDefault()), _ => true);
+
+        pad.ApplyLayout(rows: 3, columns: 4, sliderCount: 2);
+
+        Assert.Equal(12, pad.Keys.Count);
+        Assert.Equal(4, pad.Columns);
+        Assert.Equal(2, pad.Sliders.Count);
+        Assert.Equal("button:12", pad.Keys[11].Input);
+        Assert.Null(pad.SelectedSlot);
+    }
+
+    [Fact]
+    public void ApplyLayoutClampsToValidRange()
+    {
+        var pad = new PadViewModel(CreateProfiles(MakroPadConfig.CreateDefault()), _ => true);
+
+        pad.ApplyLayout(rows: 0, columns: 0, sliderCount: -5);
+
+        Assert.Equal(1, pad.Keys.Count);
+        Assert.Equal(1, pad.Columns);
+        Assert.Empty(pad.Sliders);
+    }
+
+    [Fact]
     public void ClearSlotRemovesBinding()
     {
         var profiles = CreateProfiles(ConfigWithBinding("button:5", "media.nextTrack"));

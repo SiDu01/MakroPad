@@ -13,9 +13,10 @@ public enum AppSection
 }
 
 /// <summary>
-/// Root view model for the device-centric shell. Inherits the proven app runtime
-/// orchestration from <see cref="MainWindowViewModel"/> and adds the workflow-ordered
-/// navigation between the Pad, Display, Connection, Settings and Diagnostics sections.
+/// Root view model for the device-centric shell. The app runtime orchestration lives in the
+/// <c>ShellViewModel.Runtime.cs</c> partial; this partial adds the workflow-ordered navigation
+/// between the Pad, Display, Connection, Settings and Diagnostics sections and the configurable
+/// pad layout (button rows/columns and slider count).
 /// </summary>
 public partial class ShellViewModel
 {
@@ -23,6 +24,53 @@ public partial class ShellViewModel
 
     [ObservableProperty]
     private AppSection selectedSection = AppSection.Pad;
+
+    [ObservableProperty]
+    private int padButtonRows = 4;
+
+    [ObservableProperty]
+    private int padButtonColumns = 5;
+
+    [ObservableProperty]
+    private int padSliderCount = 3;
+
+    public int PadButtonTotal => PadButtonRows * PadButtonColumns;
+
+    partial void OnPadButtonRowsChanged(int value)
+    {
+        OnPropertyChanged(nameof(PadButtonTotal));
+        ApplyPadLayout();
+    }
+
+    partial void OnPadButtonColumnsChanged(int value)
+    {
+        OnPropertyChanged(nameof(PadButtonTotal));
+        ApplyPadLayout();
+    }
+
+    partial void OnPadSliderCountChanged(int value)
+    {
+        ApplyPadLayout();
+    }
+
+    private void ApplyPadLayout()
+    {
+        if (isLoadingConfig)
+        {
+            return;
+        }
+
+        Pad.ApplyLayout(PadButtonRows, PadButtonColumns, PadSliderCount);
+    }
+
+    /// <summary>Loads the saved pad layout into the editor and rebuilds the grid.</summary>
+    private void LoadPadLayout(MakroPad.Core.Configuration.AppSettingsConfig settings)
+    {
+        PadButtonRows = settings.ButtonRows;
+        PadButtonColumns = settings.ButtonColumns;
+        PadSliderCount = settings.SliderCount;
+        Pad.ApplyLayout(PadButtonRows, PadButtonColumns, PadSliderCount);
+    }
 
     partial void OnSelectedSectionChanged(AppSection value)
     {

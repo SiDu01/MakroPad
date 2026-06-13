@@ -342,6 +342,7 @@ public partial class ShellViewModel : ViewModelBase
             var loadResult = await configService.LoadAsync();
             currentConfig = loadResult.Config;
             ProfilesEditor.Load(currentConfig);
+            LoadPadLayout(currentConfig.AppSettings);
             OnPropertyChanged(nameof(ActiveProfileName));
             AutoConnect = currentConfig.AppSettings.AutoConnect;
             DisplaySettings.Load(currentConfig);
@@ -393,7 +394,10 @@ public partial class ShellViewModel : ViewModelBase
                 AppSettings = displayConfig.AppSettings with
                 {
                     AutoConnect = AutoConnect,
-                    DisplayTriggers = displayTriggers
+                    DisplayTriggers = displayTriggers,
+                    ButtonRows = PadButtonRows,
+                    ButtonColumns = PadButtonColumns,
+                    SliderCount = PadSliderCount
                 }
             };
             await configService.SaveAsync(currentConfig);

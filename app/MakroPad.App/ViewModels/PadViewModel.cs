@@ -16,8 +16,6 @@ namespace MakroPad.App.ViewModels;
 /// </summary>
 public partial class PadViewModel : ObservableObject
 {
-    private const int KeyCount = 20;
-    private const int SliderCount = 3;
     private static readonly TimeSpan ActivePulse = TimeSpan.FromMilliseconds(280);
 
     private readonly ProfilesEditorViewModel profiles;
@@ -28,17 +26,40 @@ public partial class PadViewModel : ObservableObject
         this.profiles = profiles;
         this.simulateInput = simulateInput;
 
-        for (var i = 1; i <= KeyCount; i++)
+        profiles.ProfileBindings.CollectionChanged += OnProfileBindingsChanged;
+        ApplyLayout(4, 5, 3);
+    }
+
+    /// <summary>Number of columns the key grid is arranged in.</summary>
+    [ObservableProperty]
+    private int columns = 5;
+
+    /// <summary>
+    /// Rebuilds the key and slider slots for the given grid geometry. The key count is
+    /// rows * columns; inputs are numbered button:1..N and slider:1..M row by row.
+    /// </summary>
+    public void ApplyLayout(int rows, int columns, int sliderCount)
+    {
+        rows = Math.Clamp(rows, 1, 12);
+        columns = Math.Clamp(columns, 1, 12);
+        sliderCount = Math.Clamp(sliderCount, 0, 12);
+        var keyCount = rows * columns;
+
+        Columns = columns;
+
+        Keys.Clear();
+        for (var i = 1; i <= keyCount; i++)
         {
             Keys.Add(new KeyViewModel(i));
         }
 
-        for (var i = 1; i <= SliderCount; i++)
+        Sliders.Clear();
+        for (var i = 1; i <= sliderCount; i++)
         {
             Sliders.Add(new SliderViewModel(i));
         }
 
-        profiles.ProfileBindings.CollectionChanged += OnProfileBindingsChanged;
+        SelectedSlot = null;
         RefreshFromProfile();
     }
 
