@@ -4551,19 +4551,10 @@
       "norm_label": "padviewmodel"
     },
     {
-      "label": "int",
-      "file_type": "code",
-      "source_file": "app/MakroPad.App/ViewModels/PadViewModel.cs",
-      "source_location": "L19",
-      "id": "app_makropad_app_viewmodels_padviewmodel_cs_int",
-      "community": 142,
-      "norm_label": "int"
-    },
-    {
       "label": "TimeSpan",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/PadViewModel.cs",
-      "source_location": "L21",
+      "source_location": "L19",
       "id": "app_makropad_app_viewmodels_padviewmodel_cs_timespan",
       "community": 142,
       "norm_label": "timespan"
@@ -4572,7 +4563,7 @@
       "label": "ProfilesEditorViewModel",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/PadViewModel.cs",
-      "source_location": "L23",
+      "source_location": "L21",
       "id": "profileseditorviewmodel",
       "community": 142,
       "norm_label": "profileseditorviewmodel"
@@ -4581,16 +4572,34 @@
       "label": "Func",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/PadViewModel.cs",
-      "source_location": "L24",
+      "source_location": "L22",
       "id": "app_makropad_app_viewmodels_padviewmodel_cs_func",
       "community": 142,
       "norm_label": "func"
     },
     {
+      "label": "int",
+      "file_type": "code",
+      "source_file": "app/MakroPad.App/ViewModels/PadViewModel.cs",
+      "source_location": "L34",
+      "id": "app_makropad_app_viewmodels_padviewmodel_cs_int",
+      "community": 142,
+      "norm_label": "int"
+    },
+    {
+      "label": ".ApplyLayout()",
+      "file_type": "code",
+      "source_file": "app/MakroPad.App/ViewModels/PadViewModel.cs",
+      "source_location": "L41",
+      "id": "viewmodels_padviewmodel_padviewmodel_applylayout",
+      "community": 142,
+      "norm_label": ".applylayout()"
+    },
+    {
       "label": "bool",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/PadViewModel.cs",
-      "source_location": "L52",
+      "source_location": "L73",
       "id": "app_makropad_app_viewmodels_padviewmodel_cs_bool",
       "community": 142,
       "norm_label": "bool"
@@ -4599,7 +4608,7 @@
       "label": ".OnIsTestModeChanged()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/PadViewModel.cs",
-      "source_location": "L57",
+      "source_location": "L78",
       "id": "viewmodels_padviewmodel_padviewmodel_onistestmodechanged",
       "community": 142,
       "norm_label": ".onistestmodechanged()"
@@ -4608,7 +4617,7 @@
       "label": "PadSlotViewModel",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/PadViewModel.cs",
-      "source_location": "L62",
+      "source_location": "L83",
       "id": "padslotviewmodel",
       "community": 142,
       "norm_label": "padslotviewmodel"
@@ -4617,7 +4626,7 @@
       "label": ".OnSelectedSlotChanged()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/PadViewModel.cs",
-      "source_location": "L67",
+      "source_location": "L88",
       "id": "viewmodels_padviewmodel_padviewmodel_onselectedslotchanged",
       "community": 142,
       "norm_label": ".onselectedslotchanged()"
@@ -4626,7 +4635,7 @@
       "label": ".SetEditMode()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/PadViewModel.cs",
-      "source_location": "L72",
+      "source_location": "L93",
       "id": "viewmodels_padviewmodel_padviewmodel_seteditmode",
       "community": 142,
       "norm_label": ".seteditmode()"
@@ -4635,7 +4644,7 @@
       "label": ".SetTestMode()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/PadViewModel.cs",
-      "source_location": "L75",
+      "source_location": "L96",
       "id": "viewmodels_padviewmodel_padviewmodel_settestmode",
       "community": 142,
       "norm_label": ".settestmode()"
@@ -4644,7 +4653,7 @@
       "label": ".SelectSlot()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/PadViewModel.cs",
-      "source_location": "L78",
+      "source_location": "L99",
       "id": "viewmodels_padviewmodel_padviewmodel_selectslot",
       "community": 142,
       "norm_label": ".selectslot()"
@@ -4653,7 +4662,7 @@
       "label": ".SaveSlot()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/PadViewModel.cs",
-      "source_location": "L102",
+      "source_location": "L123",
       "id": "viewmodels_padviewmodel_padviewmodel_saveslot",
       "community": 142,
       "norm_label": ".saveslot()"
@@ -4662,7 +4671,7 @@
       "label": ".ClearSlot()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/PadViewModel.cs",
-      "source_location": "L123",
+      "source_location": "L144",
       "id": "viewmodels_padviewmodel_padviewmodel_clearslot",
       "community": 142,
       "norm_label": ".clearslot()"
@@ -4671,7 +4680,7 @@
       "label": ".OnInputActivated()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/PadViewModel.cs",
-      "source_location": "L140",
+      "source_location": "L161",
       "id": "viewmodels_padviewmodel_padviewmodel_oninputactivated",
       "community": 142,
       "norm_label": ".oninputactivated()"
@@ -4680,7 +4689,7 @@
       "label": ".OnProfileBindingsChanged()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/PadViewModel.cs",
-      "source_location": "L152",
+      "source_location": "L173",
       "id": "viewmodels_padviewmodel_padviewmodel_onprofilebindingschanged",
       "community": 142,
       "norm_label": ".onprofilebindingschanged()"
@@ -4689,7 +4698,7 @@
       "label": ".RefreshFromProfile()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/PadViewModel.cs",
-      "source_location": "L157",
+      "source_location": "L178",
       "id": "viewmodels_padviewmodel_padviewmodel_refreshfromprofile",
       "community": 142,
       "norm_label": ".refreshfromprofile()"
@@ -4698,7 +4707,7 @@
       "label": ".LoadSlotIntoEditor()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/PadViewModel.cs",
-      "source_location": "L170",
+      "source_location": "L191",
       "id": "viewmodels_padviewmodel_padviewmodel_loadslotintoeditor",
       "community": 142,
       "norm_label": ".loadslotintoeditor()"
@@ -4707,7 +4716,7 @@
       "label": ".AllSlots()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/PadViewModel.cs",
-      "source_location": "L186",
+      "source_location": "L207",
       "id": "viewmodels_padviewmodel_padviewmodel_allslots",
       "community": 142,
       "norm_label": ".allslots()"
@@ -4968,7 +4977,7 @@
       "label": "ShellViewModel",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.cs",
-      "source_location": "L20",
+      "source_location": "L21",
       "id": "viewmodels_shellviewmodel_shellviewmodel",
       "community": 145,
       "norm_label": "shellviewmodel"
@@ -4977,16 +4986,70 @@
       "label": "AppSection",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.cs",
-      "source_location": "L24",
+      "source_location": "L25",
       "id": "appsection",
       "community": 145,
       "norm_label": "appsection"
     },
     {
+      "label": "int",
+      "file_type": "code",
+      "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.cs",
+      "source_location": "L28",
+      "id": "app_makropad_app_viewmodels_shellviewmodel_cs_int",
+      "community": 145,
+      "norm_label": "int"
+    },
+    {
+      "label": ".OnPadButtonRowsChanged()",
+      "file_type": "code",
+      "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.cs",
+      "source_location": "L39",
+      "id": "viewmodels_shellviewmodel_shellviewmodel_onpadbuttonrowschanged",
+      "community": 145,
+      "norm_label": ".onpadbuttonrowschanged()"
+    },
+    {
+      "label": ".OnPadButtonColumnsChanged()",
+      "file_type": "code",
+      "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.cs",
+      "source_location": "L45",
+      "id": "viewmodels_shellviewmodel_shellviewmodel_onpadbuttoncolumnschanged",
+      "community": 145,
+      "norm_label": ".onpadbuttoncolumnschanged()"
+    },
+    {
+      "label": ".OnPadSliderCountChanged()",
+      "file_type": "code",
+      "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.cs",
+      "source_location": "L51",
+      "id": "viewmodels_shellviewmodel_shellviewmodel_onpadslidercountchanged",
+      "community": 145,
+      "norm_label": ".onpadslidercountchanged()"
+    },
+    {
+      "label": ".ApplyPadLayout()",
+      "file_type": "code",
+      "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.cs",
+      "source_location": "L56",
+      "id": "viewmodels_shellviewmodel_shellviewmodel_applypadlayout",
+      "community": 145,
+      "norm_label": ".applypadlayout()"
+    },
+    {
+      "label": ".LoadPadLayout()",
+      "file_type": "code",
+      "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.cs",
+      "source_location": "L67",
+      "id": "viewmodels_shellviewmodel_shellviewmodel_loadpadlayout",
+      "community": 132,
+      "norm_label": ".loadpadlayout()"
+    },
+    {
       "label": ".OnSelectedSectionChanged()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.cs",
-      "source_location": "L27",
+      "source_location": "L75",
       "id": "viewmodels_shellviewmodel_shellviewmodel_onselectedsectionchanged",
       "community": 145,
       "norm_label": ".onselectedsectionchanged()"
@@ -4995,7 +5058,7 @@
       "label": ".ShowPad()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.cs",
-      "source_location": "L46",
+      "source_location": "L94",
       "id": "viewmodels_shellviewmodel_shellviewmodel_showpad",
       "community": 145,
       "norm_label": ".showpad()"
@@ -5004,7 +5067,7 @@
       "label": ".ShowDisplay()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.cs",
-      "source_location": "L49",
+      "source_location": "L97",
       "id": "viewmodels_shellviewmodel_shellviewmodel_showdisplay",
       "community": 145,
       "norm_label": ".showdisplay()"
@@ -5013,7 +5076,7 @@
       "label": ".ShowConnection()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.cs",
-      "source_location": "L52",
+      "source_location": "L100",
       "id": "viewmodels_shellviewmodel_shellviewmodel_showconnection",
       "community": 145,
       "norm_label": ".showconnection()"
@@ -5022,7 +5085,7 @@
       "label": ".ShowSettings()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.cs",
-      "source_location": "L55",
+      "source_location": "L103",
       "id": "viewmodels_shellviewmodel_shellviewmodel_showsettings",
       "community": 145,
       "norm_label": ".showsettings()"
@@ -5031,7 +5094,7 @@
       "label": ".ShowDiagnostics()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.cs",
-      "source_location": "L58",
+      "source_location": "L106",
       "id": "viewmodels_shellviewmodel_shellviewmodel_showdiagnostics",
       "community": 145,
       "norm_label": ".showdiagnostics()"
@@ -5319,7 +5382,7 @@
       "label": ".SaveConfigAsync()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
-      "source_location": "L375",
+      "source_location": "L376",
       "id": "viewmodels_shellviewmodel_runtime_shellviewmodel_saveconfigasync",
       "community": 132,
       "norm_label": ".saveconfigasync()"
@@ -5328,7 +5391,7 @@
       "label": ".AutoConnectAsync()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
-      "source_location": "L409",
+      "source_location": "L413",
       "id": "viewmodels_shellviewmodel_runtime_shellviewmodel_autoconnectasync",
       "community": 132,
       "norm_label": ".autoconnectasync()"
@@ -5337,7 +5400,7 @@
       "label": ".SimulateButton()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
-      "source_location": "L445",
+      "source_location": "L449",
       "id": "viewmodels_shellviewmodel_runtime_shellviewmodel_simulatebutton",
       "community": 132,
       "norm_label": ".simulatebutton()"
@@ -5346,7 +5409,7 @@
       "label": ".SimulateSlider()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
-      "source_location": "L456",
+      "source_location": "L460",
       "id": "viewmodels_shellviewmodel_runtime_shellviewmodel_simulateslider",
       "community": 132,
       "norm_label": ".simulateslider()"
@@ -5355,7 +5418,7 @@
       "label": ".OnProfilesEditorChanged()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
-      "source_location": "L468",
+      "source_location": "L472",
       "id": "viewmodels_shellviewmodel_runtime_shellviewmodel_onprofileseditorchanged",
       "community": 132,
       "norm_label": ".onprofileseditorchanged()"
@@ -5364,7 +5427,7 @@
       "label": ".OnDisplayTriggersEditorChanged()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
-      "source_location": "L496",
+      "source_location": "L500",
       "id": "viewmodels_shellviewmodel_runtime_shellviewmodel_ondisplaytriggerseditorchanged",
       "community": 132,
       "norm_label": ".ondisplaytriggerseditorchanged()"
@@ -5373,7 +5436,7 @@
       "label": ".OnDisplaySettingsChanged()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
-      "source_location": "L508",
+      "source_location": "L512",
       "id": "viewmodels_shellviewmodel_runtime_shellviewmodel_ondisplaysettingschanged",
       "community": 132,
       "norm_label": ".ondisplaysettingschanged()"
@@ -5382,7 +5445,7 @@
       "label": ".OnDisplayTriggerTestRequested()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
-      "source_location": "L519",
+      "source_location": "L523",
       "id": "viewmodels_shellviewmodel_runtime_shellviewmodel_ondisplaytriggertestrequested",
       "community": 132,
       "norm_label": ".ondisplaytriggertestrequested()"
@@ -5391,7 +5454,7 @@
       "label": ".TestDisplayTriggerAsync()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
-      "source_location": "L524",
+      "source_location": "L528",
       "id": "viewmodels_shellviewmodel_runtime_shellviewmodel_testdisplaytriggerasync",
       "community": 132,
       "norm_label": ".testdisplaytriggerasync()"
@@ -5400,7 +5463,7 @@
       "label": ".OnDeviceEventReceived()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
-      "source_location": "L585",
+      "source_location": "L589",
       "id": "viewmodels_shellviewmodel_runtime_shellviewmodel_ondeviceeventreceived",
       "community": 132,
       "norm_label": ".ondeviceeventreceived()"
@@ -5409,7 +5472,7 @@
       "label": ".OnDeviceStateChanged()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
-      "source_location": "L590",
+      "source_location": "L594",
       "id": "viewmodels_shellviewmodel_runtime_shellviewmodel_ondevicestatechanged",
       "community": 132,
       "norm_label": ".ondevicestatechanged()"
@@ -5418,7 +5481,7 @@
       "label": ".HandleDeviceEvent()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
-      "source_location": "L595",
+      "source_location": "L599",
       "id": "viewmodels_shellviewmodel_runtime_shellviewmodel_handledeviceevent",
       "community": 132,
       "norm_label": ".handledeviceevent()"
@@ -5427,7 +5490,7 @@
       "label": ".HandleProtocolMessageSafelyAsync()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
-      "source_location": "L605",
+      "source_location": "L609",
       "id": "viewmodels_shellviewmodel_runtime_shellviewmodel_handleprotocolmessagesafelyasync",
       "community": 132,
       "norm_label": ".handleprotocolmessagesafelyasync()"
@@ -5436,7 +5499,7 @@
       "label": ".HandleProtocolMessageAsync()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
-      "source_location": "L617",
+      "source_location": "L621",
       "id": "viewmodels_shellviewmodel_runtime_shellviewmodel_handleprotocolmessageasync",
       "community": 132,
       "norm_label": ".handleprotocolmessageasync()"
@@ -5445,7 +5508,7 @@
       "label": ".HandleDisplayTriggersAsync()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
-      "source_location": "L647",
+      "source_location": "L651",
       "id": "viewmodels_shellviewmodel_runtime_shellviewmodel_handledisplaytriggersasync",
       "community": 132,
       "norm_label": ".handledisplaytriggersasync()"
@@ -5454,7 +5517,7 @@
       "label": ".HandleConfiguredInputAsync()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
-      "source_location": "L664",
+      "source_location": "L668",
       "id": "viewmodels_shellviewmodel_runtime_shellviewmodel_handleconfiguredinputasync",
       "community": 132,
       "norm_label": ".handleconfiguredinputasync()"
@@ -5463,7 +5526,7 @@
       "label": ".HasMediaChangedDisplayTrigger()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
-      "source_location": "L685",
+      "source_location": "L689",
       "id": "viewmodels_shellviewmodel_runtime_shellviewmodel_hasmediachangeddisplaytrigger",
       "community": 132,
       "norm_label": ".hasmediachangeddisplaytrigger()"
@@ -5472,7 +5535,7 @@
       "label": ".HandleMediaChangedDisplayTriggerAsync()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
-      "source_location": "L690",
+      "source_location": "L694",
       "id": "viewmodels_shellviewmodel_runtime_shellviewmodel_handlemediachangeddisplaytriggerasync",
       "community": 132,
       "norm_label": ".handlemediachangeddisplaytriggerasync()"
@@ -5481,7 +5544,7 @@
       "label": ".HandleConnectionChangedDisplayTriggersAsync()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
-      "source_location": "L709",
+      "source_location": "L713",
       "id": "viewmodels_shellviewmodel_runtime_shellviewmodel_handleconnectionchangeddisplaytriggersasync",
       "community": 132,
       "norm_label": ".handleconnectionchangeddisplaytriggersasync()"
@@ -5490,7 +5553,7 @@
       "label": ".HandleConnectionStatusDisplayAsync()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
-      "source_location": "L725",
+      "source_location": "L729",
       "id": "viewmodels_shellviewmodel_runtime_shellviewmodel_handleconnectionstatusdisplayasync",
       "community": 132,
       "norm_label": ".handleconnectionstatusdisplayasync()"
@@ -5499,7 +5562,7 @@
       "label": ".HandleActiveProfileDisplayAsync()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
-      "source_location": "L735",
+      "source_location": "L739",
       "id": "viewmodels_shellviewmodel_runtime_shellviewmodel_handleactiveprofiledisplayasync",
       "community": 132,
       "norm_label": ".handleactiveprofiledisplayasync()"
@@ -5508,7 +5571,7 @@
       "label": ".CreateDisplayTriggerRuntimeState()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
-      "source_location": "L752",
+      "source_location": "L756",
       "id": "viewmodels_shellviewmodel_runtime_shellviewmodel_createdisplaytriggerruntimestate",
       "community": 132,
       "norm_label": ".createdisplaytriggerruntimestate()"
@@ -5517,7 +5580,7 @@
       "label": ".LogDisplayTriggerSequence()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
-      "source_location": "L760",
+      "source_location": "L764",
       "id": "viewmodels_shellviewmodel_runtime_shellviewmodel_logdisplaytriggersequence",
       "community": 132,
       "norm_label": ".logdisplaytriggersequence()"
@@ -5526,7 +5589,7 @@
       "label": ".SendDeviceConfigAsync()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
-      "source_location": "L768",
+      "source_location": "L772",
       "id": "viewmodels_shellviewmodel_runtime_shellviewmodel_senddeviceconfigasync",
       "community": 132,
       "norm_label": ".senddeviceconfigasync()"
@@ -5535,7 +5598,7 @@
       "label": ".DisconnectActiveConnectionAsync()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
-      "source_location": "L781",
+      "source_location": "L785",
       "id": "viewmodels_shellviewmodel_runtime_shellviewmodel_disconnectactiveconnectionasync",
       "community": 132,
       "norm_label": ".disconnectactiveconnectionasync()"
@@ -5544,7 +5607,7 @@
       "label": ".AddLog()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
-      "source_location": "L786",
+      "source_location": "L790",
       "id": "viewmodels_shellviewmodel_runtime_shellviewmodel_addlog",
       "community": 132,
       "norm_label": ".addlog()"
@@ -5553,7 +5616,7 @@
       "label": ".GetDefaultConfigPath()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
-      "source_location": "L791",
+      "source_location": "L795",
       "id": "viewmodels_shellviewmodel_runtime_shellviewmodel_getdefaultconfigpath",
       "community": 132,
       "norm_label": ".getdefaultconfigpath()"
@@ -5562,7 +5625,7 @@
       "label": ".LoadDisplayTriggersEditor()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
-      "source_location": "L797",
+      "source_location": "L801",
       "id": "viewmodels_shellviewmodel_runtime_shellviewmodel_loaddisplaytriggerseditor",
       "community": 132,
       "norm_label": ".loaddisplaytriggerseditor()"
@@ -5571,7 +5634,7 @@
       "label": ".RefreshDisplayTriggerEditorRuntime()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
-      "source_location": "L804",
+      "source_location": "L808",
       "id": "viewmodels_shellviewmodel_runtime_shellviewmodel_refreshdisplaytriggereditorruntime",
       "community": 132,
       "norm_label": ".refreshdisplaytriggereditorruntime()"
@@ -5580,7 +5643,7 @@
       "label": ".DefaultScreenUsesMediaPlaceholder()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
-      "source_location": "L813",
+      "source_location": "L817",
       "id": "viewmodels_shellviewmodel_runtime_shellviewmodel_defaultscreenusesmediaplaceholder",
       "community": 132,
       "norm_label": ".defaultscreenusesmediaplaceholder()"
@@ -5589,7 +5652,7 @@
       "label": ".RefreshDisplaySettingsRuntime()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
-      "source_location": "L818",
+      "source_location": "L822",
       "id": "viewmodels_shellviewmodel_runtime_shellviewmodel_refreshdisplaysettingsruntime",
       "community": 132,
       "norm_label": ".refreshdisplaysettingsruntime()"
@@ -6077,7 +6140,7 @@
       "source_file": "app/MakroPad.App.Tests/Services/DeviceDisplaySyncServiceTests.cs",
       "source_location": "L57",
       "id": "services_devicedisplaysyncservicetests_recordingconnection",
-      "community": 3,
+      "community": 140,
       "norm_label": "recordingconnection"
     },
     {
@@ -6086,7 +6149,7 @@
       "source_file": "app/MakroPad.App.Tests/Services/DeviceDisplaySyncServiceTests.cs",
       "source_location": "L67",
       "id": "services_devicedisplaysyncservicetests_recordingconnection_getavailableports",
-      "community": 3,
+      "community": 140,
       "norm_label": ".getavailableports()"
     },
     {
@@ -6095,7 +6158,7 @@
       "source_file": "app/MakroPad.App.Tests/Services/DeviceDisplaySyncServiceTests.cs",
       "source_location": "L69",
       "id": "services_devicedisplaysyncservicetests_recordingconnection_connectasync",
-      "community": 3,
+      "community": 140,
       "norm_label": ".connectasync()"
     },
     {
@@ -6104,7 +6167,7 @@
       "source_file": "app/MakroPad.App.Tests/Services/DeviceDisplaySyncServiceTests.cs",
       "source_location": "L76",
       "id": "services_devicedisplaysyncservicetests_recordingconnection_disconnectasync",
-      "community": 3,
+      "community": 140,
       "norm_label": ".disconnectasync()"
     },
     {
@@ -6113,7 +6176,7 @@
       "source_file": "app/MakroPad.App.Tests/Services/DeviceDisplaySyncServiceTests.cs",
       "source_location": "L83",
       "id": "services_devicedisplaysyncservicetests_recordingconnection_senddisplaymessageasync",
-      "community": 3,
+      "community": 140,
       "norm_label": ".senddisplaymessageasync()"
     },
     {
@@ -6122,7 +6185,7 @@
       "source_file": "app/MakroPad.App.Tests/Services/DeviceDisplaySyncServiceTests.cs",
       "source_location": "L89",
       "id": "services_devicedisplaysyncservicetests_recordingconnection_sendlineasync",
-      "community": 3,
+      "community": 140,
       "norm_label": ".sendlineasync()"
     },
     {
@@ -6131,7 +6194,7 @@
       "source_file": "app/MakroPad.App.Tests/Services/DeviceDisplaySyncServiceTests.cs",
       "source_location": "L95",
       "id": "services_devicedisplaysyncservicetests_recordingconnection_raiseevent",
-      "community": 3,
+      "community": 140,
       "norm_label": ".raiseevent()"
     },
     {
@@ -6756,10 +6819,28 @@
       "norm_label": ".saveslotaddsbindingforemptyslot()"
     },
     {
-      "label": ".ClearSlotRemovesBinding()",
+      "label": ".ApplyLayoutRebuildsGridForGivenGeometry()",
       "file_type": "code",
       "source_file": "app/MakroPad.App.Tests/ViewModels/PadViewModelTests.cs",
       "source_location": "L113",
+      "id": "viewmodels_padviewmodeltests_padviewmodeltests_applylayoutrebuildsgridforgivengeometry",
+      "community": 143,
+      "norm_label": ".applylayoutrebuildsgridforgivengeometry()"
+    },
+    {
+      "label": ".ApplyLayoutClampsToValidRange()",
+      "file_type": "code",
+      "source_file": "app/MakroPad.App.Tests/ViewModels/PadViewModelTests.cs",
+      "source_location": "L127",
+      "id": "viewmodels_padviewmodeltests_padviewmodeltests_applylayoutclampstovalidrange",
+      "community": 143,
+      "norm_label": ".applylayoutclampstovalidrange()"
+    },
+    {
+      "label": ".ClearSlotRemovesBinding()",
+      "file_type": "code",
+      "source_file": "app/MakroPad.App.Tests/ViewModels/PadViewModelTests.cs",
+      "source_location": "L139",
       "id": "viewmodels_padviewmodeltests_padviewmodeltests_clearslotremovesbinding",
       "community": 143,
       "norm_label": ".clearslotremovesbinding()"
@@ -17033,9 +17114,9 @@
       "source_location": "L15",
       "weight": 1.0,
       "context": "field",
+      "confidence_score": 1.0,
       "source": "makropad_app_app_axaml_app",
-      "target": "shell",
-      "confidence_score": 1.0
+      "target": "shell"
     },
     {
       "relation": "references",
@@ -17814,9 +17895,9 @@
       "source_location": "L13",
       "weight": 1.0,
       "context": "field",
+      "confidence_score": 1.0,
       "source": "services_devicedisplaytriggersink_devicedisplaytriggersink",
-      "target": "app_makropad_app_services_devicedisplaytriggersink_cs_func",
-      "confidence_score": 1.0
+      "target": "app_makropad_app_services_devicedisplaytriggersink_cs_func"
     },
     {
       "relation": "method",
@@ -21697,9 +21778,9 @@
       "source_file": "app/MakroPad.App/ViewModels/PadSlotViewModel.cs",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_app_viewmodels_padslotviewmodel_cs",
-      "target": "viewmodels_padslotviewmodel_padslotviewmodel",
-      "confidence_score": 1.0
+      "target": "viewmodels_padslotviewmodel_padslotviewmodel"
     },
     {
       "relation": "contains",
@@ -21707,9 +21788,9 @@
       "source_file": "app/MakroPad.App/ViewModels/PadSlotViewModel.cs",
       "source_location": "L36",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_app_viewmodels_padslotviewmodel_cs",
-      "target": "viewmodels_padslotviewmodel_keyviewmodel",
-      "confidence_score": 1.0
+      "target": "viewmodels_padslotviewmodel_keyviewmodel"
     },
     {
       "relation": "contains",
@@ -21717,9 +21798,9 @@
       "source_file": "app/MakroPad.App/ViewModels/PadSlotViewModel.cs",
       "source_location": "L47",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_app_viewmodels_padslotviewmodel_cs",
-      "target": "viewmodels_padslotviewmodel_sliderviewmodel",
-      "confidence_score": 1.0
+      "target": "viewmodels_padslotviewmodel_sliderviewmodel"
     },
     {
       "relation": "inherits",
@@ -21727,9 +21808,9 @@
       "source_file": "app/MakroPad.App/ViewModels/PadSlotViewModel.cs",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_padslotviewmodel_padslotviewmodel",
-      "target": "observableobject",
-      "confidence_score": 1.0
+      "target": "observableobject"
     },
     {
       "relation": "references",
@@ -21738,9 +21819,9 @@
       "source_location": "L23",
       "weight": 1.0,
       "context": "field",
+      "confidence_score": 1.0,
       "source": "viewmodels_padslotviewmodel_padslotviewmodel",
-      "target": "app_makropad_app_viewmodels_padslotviewmodel_cs_string",
-      "confidence_score": 1.0
+      "target": "app_makropad_app_viewmodels_padslotviewmodel_cs_string"
     },
     {
       "relation": "references",
@@ -21749,9 +21830,9 @@
       "source_location": "L32",
       "weight": 1.0,
       "context": "field",
+      "confidence_score": 1.0,
       "source": "viewmodels_padslotviewmodel_padslotviewmodel",
-      "target": "app_makropad_app_viewmodels_padslotviewmodel_cs_bool",
-      "confidence_score": 1.0
+      "target": "app_makropad_app_viewmodels_padslotviewmodel_cs_bool"
     },
     {
       "relation": "inherits",
@@ -21759,9 +21840,9 @@
       "source_file": "app/MakroPad.App/ViewModels/PadSlotViewModel.cs",
       "source_location": "L36",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_padslotviewmodel_keyviewmodel",
-      "target": "viewmodels_padslotviewmodel_padslotviewmodel",
-      "confidence_score": 1.0
+      "target": "viewmodels_padslotviewmodel_padslotviewmodel"
     },
     {
       "relation": "inherits",
@@ -21769,9 +21850,9 @@
       "source_file": "app/MakroPad.App/ViewModels/PadSlotViewModel.cs",
       "source_location": "L47",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_padslotviewmodel_sliderviewmodel",
-      "target": "viewmodels_padslotviewmodel_padslotviewmodel",
-      "confidence_score": 1.0
+      "target": "viewmodels_padslotviewmodel_padslotviewmodel"
     },
     {
       "relation": "inherits",
@@ -21779,9 +21860,9 @@
       "source_file": "app/MakroPad.App/ViewModels/PadViewModel.cs",
       "source_location": "L17",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_padviewmodel_padviewmodel",
-      "target": "observableobject",
-      "confidence_score": 1.0
+      "target": "observableobject"
     },
     {
       "relation": "inherits",
@@ -21799,20 +21880,9 @@
       "source_file": "app/MakroPad.App/ViewModels/PadViewModel.cs",
       "source_location": "L17",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_app_viewmodels_padviewmodel_cs",
-      "target": "viewmodels_padviewmodel_padviewmodel",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "source_file": "app/MakroPad.App/ViewModels/PadViewModel.cs",
-      "source_location": "L20",
-      "weight": 1.0,
-      "context": "field",
-      "source": "viewmodels_padviewmodel_padviewmodel",
-      "target": "app_makropad_app_viewmodels_padviewmodel_cs_int",
-      "confidence_score": 1.0
+      "target": "viewmodels_padviewmodel_padviewmodel"
     },
     {
       "relation": "references",
@@ -21821,9 +21891,9 @@
       "source_location": "L21",
       "weight": 1.0,
       "context": "field",
+      "confidence_score": 1.0,
       "source": "viewmodels_padviewmodel_padviewmodel",
-      "target": "app_makropad_app_viewmodels_padviewmodel_cs_timespan",
-      "confidence_score": 1.0
+      "target": "app_makropad_app_viewmodels_padviewmodel_cs_timespan"
     },
     {
       "relation": "references",
@@ -21832,9 +21902,9 @@
       "source_location": "L23",
       "weight": 1.0,
       "context": "field",
+      "confidence_score": 1.0,
       "source": "viewmodels_padviewmodel_padviewmodel",
-      "target": "profileseditorviewmodel",
-      "confidence_score": 1.0
+      "target": "profileseditorviewmodel"
     },
     {
       "relation": "references",
@@ -21843,8 +21913,29 @@
       "source_location": "L24",
       "weight": 1.0,
       "context": "field",
+      "confidence_score": 1.0,
       "source": "viewmodels_padviewmodel_padviewmodel",
-      "target": "app_makropad_app_viewmodels_padviewmodel_cs_func",
+      "target": "app_makropad_app_viewmodels_padviewmodel_cs_func"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "app/MakroPad.App/ViewModels/PadViewModel.cs",
+      "source_location": "L20",
+      "weight": 1.0,
+      "context": "field",
+      "confidence_score": 1.0,
+      "source": "viewmodels_padviewmodel_padviewmodel",
+      "target": "app_makropad_app_viewmodels_padviewmodel_cs_int"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "app/MakroPad.App/ViewModels/PadViewModel.cs",
+      "source_location": "L41",
+      "weight": 1.0,
+      "source": "viewmodels_padviewmodel_padviewmodel",
+      "target": "viewmodels_padviewmodel_padviewmodel_applylayout",
       "confidence_score": 1.0
     },
     {
@@ -21854,9 +21945,9 @@
       "source_location": "L52",
       "weight": 1.0,
       "context": "field",
+      "confidence_score": 1.0,
       "source": "viewmodels_padviewmodel_padviewmodel",
-      "target": "app_makropad_app_viewmodels_padviewmodel_cs_bool",
-      "confidence_score": 1.0
+      "target": "app_makropad_app_viewmodels_padviewmodel_cs_bool"
     },
     {
       "relation": "method",
@@ -21864,9 +21955,9 @@
       "source_file": "app/MakroPad.App/ViewModels/PadViewModel.cs",
       "source_location": "L57",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_padviewmodel_padviewmodel",
-      "target": "viewmodels_padviewmodel_padviewmodel_onistestmodechanged",
-      "confidence_score": 1.0
+      "target": "viewmodels_padviewmodel_padviewmodel_onistestmodechanged"
     },
     {
       "relation": "references",
@@ -21875,9 +21966,9 @@
       "source_location": "L62",
       "weight": 1.0,
       "context": "field",
+      "confidence_score": 1.0,
       "source": "viewmodels_padviewmodel_padviewmodel",
-      "target": "padslotviewmodel",
-      "confidence_score": 1.0
+      "target": "padslotviewmodel"
     },
     {
       "relation": "method",
@@ -21885,9 +21976,9 @@
       "source_file": "app/MakroPad.App/ViewModels/PadViewModel.cs",
       "source_location": "L67",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_padviewmodel_padviewmodel",
-      "target": "viewmodels_padviewmodel_padviewmodel_onselectedslotchanged",
-      "confidence_score": 1.0
+      "target": "viewmodels_padviewmodel_padviewmodel_onselectedslotchanged"
     },
     {
       "relation": "method",
@@ -21895,9 +21986,9 @@
       "source_file": "app/MakroPad.App/ViewModels/PadViewModel.cs",
       "source_location": "L72",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_padviewmodel_padviewmodel",
-      "target": "viewmodels_padviewmodel_padviewmodel_seteditmode",
-      "confidence_score": 1.0
+      "target": "viewmodels_padviewmodel_padviewmodel_seteditmode"
     },
     {
       "relation": "method",
@@ -21905,9 +21996,9 @@
       "source_file": "app/MakroPad.App/ViewModels/PadViewModel.cs",
       "source_location": "L75",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_padviewmodel_padviewmodel",
-      "target": "viewmodels_padviewmodel_padviewmodel_settestmode",
-      "confidence_score": 1.0
+      "target": "viewmodels_padviewmodel_padviewmodel_settestmode"
     },
     {
       "relation": "method",
@@ -21915,9 +22006,9 @@
       "source_file": "app/MakroPad.App/ViewModels/PadViewModel.cs",
       "source_location": "L78",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_padviewmodel_padviewmodel",
-      "target": "viewmodels_padviewmodel_padviewmodel_selectslot",
-      "confidence_score": 1.0
+      "target": "viewmodels_padviewmodel_padviewmodel_selectslot"
     },
     {
       "relation": "method",
@@ -21925,9 +22016,9 @@
       "source_file": "app/MakroPad.App/ViewModels/PadViewModel.cs",
       "source_location": "L102",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_padviewmodel_padviewmodel",
-      "target": "viewmodels_padviewmodel_padviewmodel_saveslot",
-      "confidence_score": 1.0
+      "target": "viewmodels_padviewmodel_padviewmodel_saveslot"
     },
     {
       "relation": "method",
@@ -21935,9 +22026,9 @@
       "source_file": "app/MakroPad.App/ViewModels/PadViewModel.cs",
       "source_location": "L123",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_padviewmodel_padviewmodel",
-      "target": "viewmodels_padviewmodel_padviewmodel_clearslot",
-      "confidence_score": 1.0
+      "target": "viewmodels_padviewmodel_padviewmodel_clearslot"
     },
     {
       "relation": "method",
@@ -21945,9 +22036,9 @@
       "source_file": "app/MakroPad.App/ViewModels/PadViewModel.cs",
       "source_location": "L140",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_padviewmodel_padviewmodel",
-      "target": "viewmodels_padviewmodel_padviewmodel_oninputactivated",
-      "confidence_score": 1.0
+      "target": "viewmodels_padviewmodel_padviewmodel_oninputactivated"
     },
     {
       "relation": "method",
@@ -21955,9 +22046,9 @@
       "source_file": "app/MakroPad.App/ViewModels/PadViewModel.cs",
       "source_location": "L152",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_padviewmodel_padviewmodel",
-      "target": "viewmodels_padviewmodel_padviewmodel_onprofilebindingschanged",
-      "confidence_score": 1.0
+      "target": "viewmodels_padviewmodel_padviewmodel_onprofilebindingschanged"
     },
     {
       "relation": "method",
@@ -21965,9 +22056,9 @@
       "source_file": "app/MakroPad.App/ViewModels/PadViewModel.cs",
       "source_location": "L157",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_padviewmodel_padviewmodel",
-      "target": "viewmodels_padviewmodel_padviewmodel_refreshfromprofile",
-      "confidence_score": 1.0
+      "target": "viewmodels_padviewmodel_padviewmodel_refreshfromprofile"
     },
     {
       "relation": "method",
@@ -21975,9 +22066,9 @@
       "source_file": "app/MakroPad.App/ViewModels/PadViewModel.cs",
       "source_location": "L170",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_padviewmodel_padviewmodel",
-      "target": "viewmodels_padviewmodel_padviewmodel_loadslotintoeditor",
-      "confidence_score": 1.0
+      "target": "viewmodels_padviewmodel_padviewmodel_loadslotintoeditor"
     },
     {
       "relation": "method",
@@ -21985,8 +22076,19 @@
       "source_file": "app/MakroPad.App/ViewModels/PadViewModel.cs",
       "source_location": "L186",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_padviewmodel_padviewmodel",
-      "target": "viewmodels_padviewmodel_padviewmodel_allslots",
+      "target": "viewmodels_padviewmodel_padviewmodel_allslots"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "app/MakroPad.App/ViewModels/PadViewModel.cs",
+      "source_location": "L63",
+      "weight": 1.0,
+      "source": "viewmodels_padviewmodel_padviewmodel_applylayout",
+      "target": "viewmodels_padviewmodel_padviewmodel_refreshfromprofile",
       "confidence_score": 1.0
     },
     {
@@ -21996,9 +22098,9 @@
       "source_file": "app/MakroPad.App/ViewModels/PadViewModel.cs",
       "source_location": "L92",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_padviewmodel_padviewmodel_selectslot",
-      "target": "viewmodels_padviewmodel_padviewmodel_allslots",
-      "confidence_score": 1.0
+      "target": "viewmodels_padviewmodel_padviewmodel_allslots"
     },
     {
       "relation": "calls",
@@ -22007,9 +22109,9 @@
       "source_file": "app/MakroPad.App/ViewModels/PadViewModel.cs",
       "source_location": "L98",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_padviewmodel_padviewmodel_selectslot",
-      "target": "viewmodels_padviewmodel_padviewmodel_loadslotintoeditor",
-      "confidence_score": 1.0
+      "target": "viewmodels_padviewmodel_padviewmodel_loadslotintoeditor"
     },
     {
       "relation": "calls",
@@ -22018,9 +22120,9 @@
       "source_file": "app/MakroPad.App/ViewModels/PadViewModel.cs",
       "source_location": "L119",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_padviewmodel_padviewmodel_saveslot",
-      "target": "viewmodels_padviewmodel_padviewmodel_loadslotintoeditor",
-      "confidence_score": 1.0
+      "target": "viewmodels_padviewmodel_padviewmodel_loadslotintoeditor"
     },
     {
       "relation": "calls",
@@ -22029,9 +22131,9 @@
       "source_file": "app/MakroPad.App/ViewModels/PadViewModel.cs",
       "source_location": "L136",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_padviewmodel_padviewmodel_clearslot",
-      "target": "viewmodels_padviewmodel_padviewmodel_loadslotintoeditor",
-      "confidence_score": 1.0
+      "target": "viewmodels_padviewmodel_padviewmodel_loadslotintoeditor"
     },
     {
       "relation": "calls",
@@ -22040,9 +22142,9 @@
       "source_file": "app/MakroPad.App/ViewModels/PadViewModel.cs",
       "source_location": "L142",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_padviewmodel_padviewmodel_oninputactivated",
-      "target": "viewmodels_padviewmodel_padviewmodel_allslots",
-      "confidence_score": 1.0
+      "target": "viewmodels_padviewmodel_padviewmodel_allslots"
     },
     {
       "relation": "calls",
@@ -22051,9 +22153,9 @@
       "source_file": "app/MakroPad.App/ViewModels/PadViewModel.cs",
       "source_location": "L154",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_padviewmodel_padviewmodel_onprofilebindingschanged",
-      "target": "viewmodels_padviewmodel_padviewmodel_refreshfromprofile",
-      "confidence_score": 1.0
+      "target": "viewmodels_padviewmodel_padviewmodel_refreshfromprofile"
     },
     {
       "relation": "calls",
@@ -22062,9 +22164,9 @@
       "source_file": "app/MakroPad.App/ViewModels/PadViewModel.cs",
       "source_location": "L159",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_padviewmodel_padviewmodel_refreshfromprofile",
-      "target": "viewmodels_padviewmodel_padviewmodel_allslots",
-      "confidence_score": 1.0
+      "target": "viewmodels_padviewmodel_padviewmodel_allslots"
     },
     {
       "relation": "contains",
@@ -22799,9 +22901,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.cs",
       "source_location": "L20",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_app_viewmodels_shellviewmodel_cs",
-      "target": "viewmodels_shellviewmodel_shellviewmodel",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_shellviewmodel"
     },
     {
       "relation": "references",
@@ -22810,8 +22912,69 @@
       "source_location": "L24",
       "weight": 1.0,
       "context": "field",
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_shellviewmodel",
-      "target": "appsection",
+      "target": "appsection"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.cs",
+      "source_location": "L34",
+      "weight": 1.0,
+      "context": "field",
+      "source": "viewmodels_shellviewmodel_shellviewmodel",
+      "target": "app_makropad_app_viewmodels_shellviewmodel_cs_int",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.cs",
+      "source_location": "L39",
+      "weight": 1.0,
+      "source": "viewmodels_shellviewmodel_shellviewmodel",
+      "target": "viewmodels_shellviewmodel_shellviewmodel_onpadbuttonrowschanged",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.cs",
+      "source_location": "L45",
+      "weight": 1.0,
+      "source": "viewmodels_shellviewmodel_shellviewmodel",
+      "target": "viewmodels_shellviewmodel_shellviewmodel_onpadbuttoncolumnschanged",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.cs",
+      "source_location": "L51",
+      "weight": 1.0,
+      "source": "viewmodels_shellviewmodel_shellviewmodel",
+      "target": "viewmodels_shellviewmodel_shellviewmodel_onpadslidercountchanged",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.cs",
+      "source_location": "L56",
+      "weight": 1.0,
+      "source": "viewmodels_shellviewmodel_shellviewmodel",
+      "target": "viewmodels_shellviewmodel_shellviewmodel_applypadlayout",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.cs",
+      "source_location": "L67",
+      "weight": 1.0,
+      "source": "viewmodels_shellviewmodel_shellviewmodel",
+      "target": "viewmodels_shellviewmodel_shellviewmodel_loadpadlayout",
       "confidence_score": 1.0
     },
     {
@@ -22820,9 +22983,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.cs",
       "source_location": "L27",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_shellviewmodel",
-      "target": "viewmodels_shellviewmodel_shellviewmodel_onselectedsectionchanged",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_shellviewmodel_onselectedsectionchanged"
     },
     {
       "relation": "method",
@@ -22830,9 +22993,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.cs",
       "source_location": "L46",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_shellviewmodel",
-      "target": "viewmodels_shellviewmodel_shellviewmodel_showpad",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_shellviewmodel_showpad"
     },
     {
       "relation": "method",
@@ -22840,9 +23003,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.cs",
       "source_location": "L49",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_shellviewmodel",
-      "target": "viewmodels_shellviewmodel_shellviewmodel_showdisplay",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_shellviewmodel_showdisplay"
     },
     {
       "relation": "method",
@@ -22850,9 +23013,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.cs",
       "source_location": "L52",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_shellviewmodel",
-      "target": "viewmodels_shellviewmodel_shellviewmodel_showconnection",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_shellviewmodel_showconnection"
     },
     {
       "relation": "method",
@@ -22860,9 +23023,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.cs",
       "source_location": "L55",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_shellviewmodel",
-      "target": "viewmodels_shellviewmodel_shellviewmodel_showsettings",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_shellviewmodel_showsettings"
     },
     {
       "relation": "method",
@@ -22870,9 +23033,53 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.cs",
       "source_location": "L58",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_shellviewmodel",
-      "target": "viewmodels_shellviewmodel_shellviewmodel_showdiagnostics",
+      "target": "viewmodels_shellviewmodel_shellviewmodel_showdiagnostics"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.cs",
+      "source_location": "L42",
+      "weight": 1.0,
+      "source": "viewmodels_shellviewmodel_shellviewmodel_onpadbuttonrowschanged",
+      "target": "viewmodels_shellviewmodel_shellviewmodel_applypadlayout",
       "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.cs",
+      "source_location": "L48",
+      "weight": 1.0,
+      "source": "viewmodels_shellviewmodel_shellviewmodel_onpadbuttoncolumnschanged",
+      "target": "viewmodels_shellviewmodel_shellviewmodel_applypadlayout",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.cs",
+      "source_location": "L53",
+      "weight": 1.0,
+      "source": "viewmodels_shellviewmodel_shellviewmodel_onpadslidercountchanged",
+      "target": "viewmodels_shellviewmodel_shellviewmodel_applypadlayout",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
+      "source_location": "L345",
+      "weight": 1.0,
+      "source": "viewmodels_shellviewmodel_runtime_shellviewmodel_loadconfigasync",
+      "target": "viewmodels_shellviewmodel_shellviewmodel_loadpadlayout"
     },
     {
       "relation": "contains",
@@ -22880,9 +23087,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L22",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_app_viewmodels_shellviewmodel_runtime_cs",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel"
     },
     {
       "relation": "inherits",
@@ -22890,9 +23097,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L22",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel",
-      "target": "viewmodels_viewmodelbase_viewmodelbase",
-      "confidence_score": 1.0
+      "target": "viewmodels_viewmodelbase_viewmodelbase"
     },
     {
       "relation": "references",
@@ -22901,9 +23108,9 @@
       "source_location": "L24",
       "weight": 1.0,
       "context": "field",
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel",
-      "target": "app_makropad_app_viewmodels_shellviewmodel_runtime_cs_devicesessionservice",
-      "confidence_score": 1.0
+      "target": "app_makropad_app_viewmodels_shellviewmodel_runtime_cs_devicesessionservice"
     },
     {
       "relation": "references",
@@ -22912,9 +23119,9 @@
       "source_location": "L25",
       "weight": 1.0,
       "context": "field",
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel",
-      "target": "makropadconfigservice",
-      "confidence_score": 1.0
+      "target": "makropadconfigservice"
     },
     {
       "relation": "references",
@@ -22923,9 +23130,9 @@
       "source_location": "L26",
       "weight": 1.0,
       "context": "field",
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel",
-      "target": "app_makropad_app_viewmodels_shellviewmodel_runtime_cs_devicedisplaysyncservice",
-      "confidence_score": 1.0
+      "target": "app_makropad_app_viewmodels_shellviewmodel_runtime_cs_devicedisplaysyncservice"
     },
     {
       "relation": "references",
@@ -22934,9 +23141,9 @@
       "source_location": "L27",
       "weight": 1.0,
       "context": "field",
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel",
-      "target": "app_makropad_app_viewmodels_shellviewmodel_runtime_cs_actiondefinitioncatalog",
-      "confidence_score": 1.0
+      "target": "app_makropad_app_viewmodels_shellviewmodel_runtime_cs_actiondefinitioncatalog"
     },
     {
       "relation": "references",
@@ -22945,9 +23152,9 @@
       "source_location": "L28",
       "weight": 1.0,
       "context": "field",
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel",
-      "target": "app_makropad_app_viewmodels_shellviewmodel_runtime_cs_bindingeditorservice",
-      "confidence_score": 1.0
+      "target": "app_makropad_app_viewmodels_shellviewmodel_runtime_cs_bindingeditorservice"
     },
     {
       "relation": "references",
@@ -22956,9 +23163,9 @@
       "source_location": "L29",
       "weight": 1.0,
       "context": "field",
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel",
-      "target": "app_makropad_app_viewmodels_shellviewmodel_runtime_cs_profileconfigservice",
-      "confidence_score": 1.0
+      "target": "app_makropad_app_viewmodels_shellviewmodel_runtime_cs_profileconfigservice"
     },
     {
       "relation": "references",
@@ -22967,9 +23174,9 @@
       "source_location": "L30",
       "weight": 1.0,
       "context": "field",
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel",
-      "target": "app_makropad_app_viewmodels_shellviewmodel_runtime_cs_protocolinputdecoder",
-      "confidence_score": 1.0
+      "target": "app_makropad_app_viewmodels_shellviewmodel_runtime_cs_protocolinputdecoder"
     },
     {
       "relation": "references",
@@ -22978,9 +23185,9 @@
       "source_location": "L31",
       "weight": 1.0,
       "context": "field",
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel",
-      "target": "eventlogservice",
-      "confidence_score": 1.0
+      "target": "eventlogservice"
     },
     {
       "relation": "references",
@@ -22989,9 +23196,9 @@
       "source_location": "L32",
       "weight": 1.0,
       "context": "field",
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel",
-      "target": "app_makropad_app_viewmodels_shellviewmodel_runtime_cs_displaytriggerorchestrator",
-      "confidence_score": 1.0
+      "target": "app_makropad_app_viewmodels_shellviewmodel_runtime_cs_displaytriggerorchestrator"
     },
     {
       "relation": "references",
@@ -23000,9 +23207,9 @@
       "source_location": "L33",
       "weight": 1.0,
       "context": "field",
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel",
-      "target": "app_makropad_app_viewmodels_shellviewmodel_runtime_cs_actionpipeline",
-      "confidence_score": 1.0
+      "target": "app_makropad_app_viewmodels_shellviewmodel_runtime_cs_actionpipeline"
     },
     {
       "relation": "references",
@@ -23011,9 +23218,9 @@
       "source_location": "L34",
       "weight": 1.0,
       "context": "field",
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel",
-      "target": "actionfeedbackcoordinator",
-      "confidence_score": 1.0
+      "target": "actionfeedbackcoordinator"
     },
     {
       "relation": "references",
@@ -23022,9 +23229,9 @@
       "source_location": "L35",
       "weight": 1.0,
       "context": "field",
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel",
-      "target": "appruntimeloopservice",
-      "confidence_score": 1.0
+      "target": "appruntimeloopservice"
     },
     {
       "relation": "references",
@@ -23033,9 +23240,9 @@
       "source_location": "L37",
       "weight": 1.0,
       "context": "field",
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel",
-      "target": "app_makropad_app_viewmodels_shellviewmodel_runtime_cs_makropadconfig",
-      "confidence_score": 1.0
+      "target": "app_makropad_app_viewmodels_shellviewmodel_runtime_cs_makropadconfig"
     },
     {
       "relation": "references",
@@ -23044,9 +23251,9 @@
       "source_location": "L75",
       "weight": 1.0,
       "context": "field",
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel",
-      "target": "app_makropad_app_viewmodels_shellviewmodel_runtime_cs_bool",
-      "confidence_score": 1.0
+      "target": "app_makropad_app_viewmodels_shellviewmodel_runtime_cs_bool"
     },
     {
       "relation": "references",
@@ -23055,9 +23262,9 @@
       "source_location": "L69",
       "weight": 1.0,
       "context": "field",
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel",
-      "target": "app_makropad_app_viewmodels_shellviewmodel_runtime_cs_string",
-      "confidence_score": 1.0
+      "target": "app_makropad_app_viewmodels_shellviewmodel_runtime_cs_string"
     },
     {
       "relation": "method",
@@ -23065,9 +23272,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L46",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_onselectedportchanged",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_onselectedportchanged"
     },
     {
       "relation": "references",
@@ -23076,9 +23283,9 @@
       "source_location": "L66",
       "weight": 1.0,
       "context": "field",
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel",
-      "target": "app_makropad_app_viewmodels_shellviewmodel_runtime_cs_int",
-      "confidence_score": 1.0
+      "target": "app_makropad_app_viewmodels_shellviewmodel_runtime_cs_int"
     },
     {
       "relation": "method",
@@ -23086,9 +23293,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L58",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_onlastslidervaluechanged",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_onlastslidervaluechanged"
     },
     {
       "relation": "method",
@@ -23096,9 +23303,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L98",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_onconnectionstatuschanged",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_onconnectionstatuschanged"
     },
     {
       "relation": "method",
@@ -23106,9 +23313,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L144",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_trysimulateinput",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_trysimulateinput"
     },
     {
       "relation": "method",
@@ -23116,9 +23323,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L236",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_onisdarkthemechanged",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_onisdarkthemechanged"
     },
     {
       "relation": "method",
@@ -23126,9 +23333,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L242",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_toggletheme",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_toggletheme"
     },
     {
       "relation": "method",
@@ -23136,9 +23343,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L248",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_applythemevariant",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_applythemevariant"
     },
     {
       "relation": "method",
@@ -23146,9 +23353,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L260",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_shutdown",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_shutdown"
     },
     {
       "relation": "method",
@@ -23156,9 +23363,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L266",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_refreshports",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_refreshports"
     },
     {
       "relation": "method",
@@ -23166,9 +23373,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L282",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_connectasync",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_connectasync"
     },
     {
       "relation": "method",
@@ -23176,9 +23383,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L305",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_disconnectasync",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_disconnectasync"
     },
     {
       "relation": "method",
@@ -23186,9 +23393,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L312",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_senddisplaymessageasync",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_senddisplaymessageasync"
     },
     {
       "relation": "method",
@@ -23196,9 +23403,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L336",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_loadconfigasync",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_loadconfigasync"
     },
     {
       "relation": "method",
@@ -23206,9 +23413,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L375",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_saveconfigasync",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_saveconfigasync"
     },
     {
       "relation": "method",
@@ -23216,9 +23423,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L409",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_autoconnectasync",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_autoconnectasync"
     },
     {
       "relation": "method",
@@ -23226,9 +23433,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L445",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_simulatebutton",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_simulatebutton"
     },
     {
       "relation": "method",
@@ -23236,9 +23443,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L456",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_simulateslider",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_simulateslider"
     },
     {
       "relation": "method",
@@ -23246,9 +23453,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L468",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_onprofileseditorchanged",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_onprofileseditorchanged"
     },
     {
       "relation": "method",
@@ -23256,9 +23463,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L496",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_ondisplaytriggerseditorchanged",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_ondisplaytriggerseditorchanged"
     },
     {
       "relation": "method",
@@ -23266,9 +23473,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L508",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_ondisplaysettingschanged",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_ondisplaysettingschanged"
     },
     {
       "relation": "method",
@@ -23276,9 +23483,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L519",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_ondisplaytriggertestrequested",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_ondisplaytriggertestrequested"
     },
     {
       "relation": "method",
@@ -23286,9 +23493,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L524",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_testdisplaytriggerasync",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_testdisplaytriggerasync"
     },
     {
       "relation": "method",
@@ -23296,9 +23503,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L585",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_ondeviceeventreceived",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_ondeviceeventreceived"
     },
     {
       "relation": "method",
@@ -23306,9 +23513,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L590",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_ondevicestatechanged",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_ondevicestatechanged"
     },
     {
       "relation": "method",
@@ -23316,9 +23523,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L595",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_handledeviceevent",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_handledeviceevent"
     },
     {
       "relation": "method",
@@ -23326,9 +23533,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L605",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_handleprotocolmessagesafelyasync",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_handleprotocolmessagesafelyasync"
     },
     {
       "relation": "method",
@@ -23336,9 +23543,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L617",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_handleprotocolmessageasync",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_handleprotocolmessageasync"
     },
     {
       "relation": "method",
@@ -23346,9 +23553,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L647",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_handledisplaytriggersasync",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_handledisplaytriggersasync"
     },
     {
       "relation": "method",
@@ -23356,9 +23563,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L664",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_handleconfiguredinputasync",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_handleconfiguredinputasync"
     },
     {
       "relation": "method",
@@ -23366,9 +23573,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L685",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_hasmediachangeddisplaytrigger",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_hasmediachangeddisplaytrigger"
     },
     {
       "relation": "method",
@@ -23376,9 +23583,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L690",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_handlemediachangeddisplaytriggerasync",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_handlemediachangeddisplaytriggerasync"
     },
     {
       "relation": "method",
@@ -23386,9 +23593,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L709",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_handleconnectionchangeddisplaytriggersasync",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_handleconnectionchangeddisplaytriggersasync"
     },
     {
       "relation": "method",
@@ -23396,9 +23603,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L725",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_handleconnectionstatusdisplayasync",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_handleconnectionstatusdisplayasync"
     },
     {
       "relation": "method",
@@ -23406,9 +23613,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L735",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_handleactiveprofiledisplayasync",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_handleactiveprofiledisplayasync"
     },
     {
       "relation": "method",
@@ -23416,9 +23623,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L752",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_createdisplaytriggerruntimestate",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_createdisplaytriggerruntimestate"
     },
     {
       "relation": "method",
@@ -23426,9 +23633,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L760",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_logdisplaytriggersequence",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_logdisplaytriggersequence"
     },
     {
       "relation": "method",
@@ -23436,9 +23643,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L768",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_senddeviceconfigasync",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_senddeviceconfigasync"
     },
     {
       "relation": "method",
@@ -23446,9 +23653,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L781",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_disconnectactiveconnectionasync",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_disconnectactiveconnectionasync"
     },
     {
       "relation": "method",
@@ -23456,9 +23663,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L786",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_addlog",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_addlog"
     },
     {
       "relation": "method",
@@ -23466,9 +23673,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L791",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_getdefaultconfigpath",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_getdefaultconfigpath"
     },
     {
       "relation": "method",
@@ -23476,9 +23683,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L797",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_loaddisplaytriggerseditor",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_loaddisplaytriggerseditor"
     },
     {
       "relation": "method",
@@ -23486,9 +23693,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L804",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_refreshdisplaytriggereditorruntime",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_refreshdisplaytriggereditorruntime"
     },
     {
       "relation": "method",
@@ -23496,9 +23703,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L813",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_defaultscreenusesmediaplaceholder",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_defaultscreenusesmediaplaceholder"
     },
     {
       "relation": "method",
@@ -23506,9 +23713,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L818",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_refreshdisplaysettingsruntime",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_refreshdisplaysettingsruntime"
     },
     {
       "relation": "references",
@@ -23561,9 +23768,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L60",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel_onlastslidervaluechanged",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_refreshdisplaytriggereditorruntime",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_refreshdisplaytriggereditorruntime"
     },
     {
       "relation": "calls",
@@ -23572,9 +23779,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L101",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel_onconnectionstatuschanged",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_refreshdisplaysettingsruntime",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_refreshdisplaysettingsruntime"
     },
     {
       "relation": "calls",
@@ -23583,9 +23790,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L102",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel_onconnectionstatuschanged",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_refreshdisplaytriggereditorruntime",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_refreshdisplaytriggereditorruntime"
     },
     {
       "relation": "calls",
@@ -23594,9 +23801,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L103",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel_onconnectionstatuschanged",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_handleconnectionstatusdisplayasync",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_handleconnectionstatusdisplayasync"
     },
     {
       "relation": "calls",
@@ -23605,9 +23812,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L238",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel_onisdarkthemechanged",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_applythemevariant",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_applythemevariant"
     },
     {
       "relation": "calls",
@@ -23616,9 +23823,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L351",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel_loadconfigasync",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_refreshports",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_refreshports"
     },
     {
       "relation": "calls",
@@ -23627,9 +23834,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L418",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel_autoconnectasync",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_refreshports",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_refreshports"
     },
     {
       "relation": "calls",
@@ -23638,9 +23845,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L287",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel_connectasync",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_addlog",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_addlog"
     },
     {
       "relation": "calls",
@@ -23649,9 +23856,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L432",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel_autoconnectasync",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_connectasync",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_connectasync"
     },
     {
       "relation": "calls",
@@ -23660,9 +23867,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L783",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel_disconnectactiveconnectionasync",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_disconnectasync",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_disconnectasync"
     },
     {
       "relation": "calls",
@@ -23671,9 +23878,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L322",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel_senddisplaymessageasync",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_addlog",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_addlog"
     },
     {
       "relation": "calls",
@@ -23682,9 +23889,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L349",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel_loadconfigasync",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_loaddisplaytriggerseditor",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_loaddisplaytriggerseditor"
     },
     {
       "relation": "calls",
@@ -23693,9 +23900,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L354",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel_loadconfigasync",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_addlog",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_addlog"
     },
     {
       "relation": "calls",
@@ -23704,9 +23911,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L356",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel_loadconfigasync",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_senddeviceconfigasync",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_senddeviceconfigasync"
     },
     {
       "relation": "calls",
@@ -23715,9 +23922,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L362",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel_loadconfigasync",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_autoconnectasync",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_autoconnectasync"
     },
     {
       "relation": "calls",
@@ -23726,9 +23933,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L382",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel_saveconfigasync",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_addlog",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_addlog"
     },
     {
       "relation": "calls",
@@ -23737,9 +23944,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L400",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel_saveconfigasync",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_senddeviceconfigasync",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_senddeviceconfigasync"
     },
     {
       "relation": "calls",
@@ -23748,9 +23955,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L414",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel_autoconnectasync",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_addlog",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_addlog"
     },
     {
       "relation": "calls",
@@ -23759,9 +23966,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L453",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel_simulatebutton",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_addlog",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_addlog"
     },
     {
       "relation": "calls",
@@ -23770,9 +23977,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L465",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel_simulateslider",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_addlog",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_addlog"
     },
     {
       "relation": "calls",
@@ -23781,9 +23988,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L475",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel_onprofileseditorchanged",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_addlog",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_addlog"
     },
     {
       "relation": "calls",
@@ -23792,9 +23999,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L488",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel_onprofileseditorchanged",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_refreshdisplaysettingsruntime",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_refreshdisplaysettingsruntime"
     },
     {
       "relation": "calls",
@@ -23803,9 +24010,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L489",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel_onprofileseditorchanged",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_refreshdisplaytriggereditorruntime",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_refreshdisplaytriggereditorruntime"
     },
     {
       "relation": "calls",
@@ -23814,9 +24021,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L492",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel_onprofileseditorchanged",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_handleactiveprofiledisplayasync",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_handleactiveprofiledisplayasync"
     },
     {
       "relation": "calls",
@@ -23825,9 +24032,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L516",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel_ondisplaysettingschanged",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_senddeviceconfigasync",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_senddeviceconfigasync"
     },
     {
       "relation": "calls",
@@ -23836,9 +24043,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L521",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel_ondisplaytriggertestrequested",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_testdisplaytriggerasync",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_testdisplaytriggerasync"
     },
     {
       "relation": "calls",
@@ -23847,9 +24054,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L528",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel_testdisplaytriggerasync",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_addlog",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_addlog"
     },
     {
       "relation": "calls",
@@ -23858,9 +24065,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L587",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel_ondeviceeventreceived",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_handledeviceevent",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_handledeviceevent"
     },
     {
       "relation": "calls",
@@ -23869,9 +24076,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L599",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel_handledeviceevent",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_handleprotocolmessagesafelyasync",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_handleprotocolmessagesafelyasync"
     },
     {
       "relation": "calls",
@@ -23880,9 +24087,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L602",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel_handledeviceevent",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_addlog",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_addlog"
     },
     {
       "relation": "calls",
@@ -23891,9 +24098,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L609",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel_handleprotocolmessagesafelyasync",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_handleprotocolmessageasync",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_handleprotocolmessageasync"
     },
     {
       "relation": "calls",
@@ -23902,9 +24109,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L613",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel_handleprotocolmessagesafelyasync",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_addlog",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_addlog"
     },
     {
       "relation": "calls",
@@ -23913,9 +24120,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L627",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel_handleprotocolmessageasync",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_handleconfiguredinputasync",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_handleconfiguredinputasync"
     },
     {
       "relation": "calls",
@@ -23924,9 +24131,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L630",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel_handleprotocolmessageasync",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_handledisplaytriggersasync",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_handledisplaytriggersasync"
     },
     {
       "relation": "calls",
@@ -23935,9 +24142,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L653",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel_handledisplaytriggersasync",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_createdisplaytriggerruntimestate",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_createdisplaytriggerruntimestate"
     },
     {
       "relation": "calls",
@@ -23946,9 +24153,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L656",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel_handledisplaytriggersasync",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_logdisplaytriggersequence",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_logdisplaytriggersequence"
     },
     {
       "relation": "calls",
@@ -23957,9 +24164,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L660",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel_handledisplaytriggersasync",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_addlog",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_addlog"
     },
     {
       "relation": "calls",
@@ -23968,9 +24175,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L668",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel_handleconfiguredinputasync",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_createdisplaytriggerruntimestate",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_createdisplaytriggerruntimestate"
     },
     {
       "relation": "calls",
@@ -23979,9 +24186,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L674",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel_handleconfiguredinputasync",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_addlog",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_addlog"
     },
     {
       "relation": "calls",
@@ -23990,9 +24197,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L698",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel_handlemediachangeddisplaytriggerasync",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_createdisplaytriggerruntimestate",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_createdisplaytriggerruntimestate"
     },
     {
       "relation": "calls",
@@ -24001,9 +24208,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L701",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel_handlemediachangeddisplaytriggerasync",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_logdisplaytriggersequence",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_logdisplaytriggersequence"
     },
     {
       "relation": "calls",
@@ -24012,9 +24219,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L705",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel_handlemediachangeddisplaytriggerasync",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_addlog",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_addlog"
     },
     {
       "relation": "calls",
@@ -24023,9 +24230,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L715",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel_handleconnectionchangeddisplaytriggersasync",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_createdisplaytriggerruntimestate",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_createdisplaytriggerruntimestate"
     },
     {
       "relation": "calls",
@@ -24034,9 +24241,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L717",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel_handleconnectionchangeddisplaytriggersasync",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_logdisplaytriggersequence",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_logdisplaytriggersequence"
     },
     {
       "relation": "calls",
@@ -24045,9 +24252,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L721",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel_handleconnectionchangeddisplaytriggersasync",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_addlog",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_addlog"
     },
     {
       "relation": "calls",
@@ -24056,9 +24263,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L732",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel_handleconnectionstatusdisplayasync",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_handleconnectionchangeddisplaytriggersasync",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_handleconnectionchangeddisplaytriggersasync"
     },
     {
       "relation": "calls",
@@ -24067,9 +24274,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L729",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel_handleconnectionstatusdisplayasync",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_senddeviceconfigasync",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_senddeviceconfigasync"
     },
     {
       "relation": "calls",
@@ -24078,9 +24285,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L737",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel_handleactiveprofiledisplayasync",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_senddeviceconfigasync",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_senddeviceconfigasync"
     },
     {
       "relation": "calls",
@@ -24089,9 +24296,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L743",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel_handleactiveprofiledisplayasync",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_createdisplaytriggerruntimestate",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_createdisplaytriggerruntimestate"
     },
     {
       "relation": "calls",
@@ -24100,9 +24307,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L744",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel_handleactiveprofiledisplayasync",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_logdisplaytriggersequence",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_logdisplaytriggersequence"
     },
     {
       "relation": "calls",
@@ -24111,9 +24318,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L748",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel_handleactiveprofiledisplayasync",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_addlog",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_addlog"
     },
     {
       "relation": "calls",
@@ -24122,9 +24329,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L764",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel_logdisplaytriggersequence",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_addlog",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_addlog"
     },
     {
       "relation": "calls",
@@ -24133,9 +24340,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L773",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel_senddeviceconfigasync",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_refreshdisplaysettingsruntime",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_refreshdisplaysettingsruntime"
     },
     {
       "relation": "calls",
@@ -24144,9 +24351,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L777",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel_senddeviceconfigasync",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_addlog",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_addlog"
     },
     {
       "relation": "calls",
@@ -24155,9 +24362,9 @@
       "source_file": "app/MakroPad.App/ViewModels/ShellViewModel.Runtime.cs",
       "source_location": "L800",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_shellviewmodel_runtime_shellviewmodel_loaddisplaytriggerseditor",
-      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_refreshdisplaytriggereditorruntime",
-      "confidence_score": 1.0
+      "target": "viewmodels_shellviewmodel_runtime_shellviewmodel_refreshdisplaytriggereditorruntime"
     },
     {
       "relation": "contains",
@@ -24195,9 +24402,9 @@
       "source_file": "app/MakroPad.App/Views/ConnectionView.axaml.cs",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_app_views_connectionview_axaml_cs",
-      "target": "views_connectionview_axaml_connectionview",
-      "confidence_score": 1.0
+      "target": "views_connectionview_axaml_connectionview"
     },
     {
       "relation": "inherits",
@@ -24205,9 +24412,9 @@
       "source_file": "app/MakroPad.App/Views/ConnectionView.axaml.cs",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "views_connectionview_axaml_connectionview",
-      "target": "usercontrol",
-      "confidence_score": 1.0
+      "target": "usercontrol"
     },
     {
       "relation": "inherits",
@@ -24215,9 +24422,9 @@
       "source_file": "app/MakroPad.App/Views/DiagnosticsView.axaml.cs",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "views_diagnosticsview_axaml_diagnosticsview",
-      "target": "usercontrol",
-      "confidence_score": 1.0
+      "target": "usercontrol"
     },
     {
       "relation": "inherits",
@@ -24225,9 +24432,9 @@
       "source_file": "app/MakroPad.App/Views/DisplayView.axaml.cs",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "views_displayview_axaml_displayview",
-      "target": "usercontrol",
-      "confidence_score": 1.0
+      "target": "usercontrol"
     },
     {
       "relation": "inherits",
@@ -24235,9 +24442,9 @@
       "source_file": "app/MakroPad.App/Views/PadView.axaml.cs",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "views_padview_axaml_padview",
-      "target": "usercontrol",
-      "confidence_score": 1.0
+      "target": "usercontrol"
     },
     {
       "relation": "inherits",
@@ -24245,9 +24452,9 @@
       "source_file": "app/MakroPad.App/Views/SettingsView.axaml.cs",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "views_settingsview_axaml_settingsview",
-      "target": "usercontrol",
-      "confidence_score": 1.0
+      "target": "usercontrol"
     },
     {
       "relation": "inherits",
@@ -24335,9 +24542,9 @@
       "source_file": "app/MakroPad.App/Views/DiagnosticsView.axaml.cs",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_app_views_diagnosticsview_axaml_cs",
-      "target": "views_diagnosticsview_axaml_diagnosticsview",
-      "confidence_score": 1.0
+      "target": "views_diagnosticsview_axaml_diagnosticsview"
     },
     {
       "relation": "contains",
@@ -24345,9 +24552,9 @@
       "source_file": "app/MakroPad.App/Views/DisplayView.axaml.cs",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_app_views_displayview_axaml_cs",
-      "target": "views_displayview_axaml_displayview",
-      "confidence_score": 1.0
+      "target": "views_displayview_axaml_displayview"
     },
     {
       "relation": "contains",
@@ -24355,9 +24562,9 @@
       "source_file": "app/MakroPad.App/Views/PadView.axaml.cs",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_app_views_padview_axaml_cs",
-      "target": "views_padview_axaml_padview",
-      "confidence_score": 1.0
+      "target": "views_padview_axaml_padview"
     },
     {
       "relation": "method",
@@ -24365,9 +24572,9 @@
       "source_file": "app/MakroPad.App/Views/PadView.axaml.cs",
       "source_location": "L18",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "views_padview_axaml_padview",
-      "target": "views_padview_axaml_padview_browseopenapp_click",
-      "confidence_score": 1.0
+      "target": "views_padview_axaml_padview_browseopenapp_click"
     },
     {
       "relation": "contains",
@@ -24375,9 +24582,9 @@
       "source_file": "app/MakroPad.App/Views/SettingsView.axaml.cs",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_app_views_settingsview_axaml_cs",
-      "target": "views_settingsview_axaml_settingsview",
-      "confidence_score": 1.0
+      "target": "views_settingsview_axaml_settingsview"
     },
     {
       "relation": "contains",
@@ -24385,9 +24592,9 @@
       "source_file": "app/MakroPad.App/Views/Shell.axaml.cs",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_app_views_shell_axaml_cs",
-      "target": "views_shell_axaml_shell",
-      "confidence_score": 1.0
+      "target": "views_shell_axaml_shell"
     },
     {
       "relation": "inherits",
@@ -24395,9 +24602,9 @@
       "source_file": "app/MakroPad.App/Views/Shell.axaml.cs",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "views_shell_axaml_shell",
-      "target": "window",
-      "confidence_score": 1.0
+      "target": "window"
     },
     {
       "relation": "method",
@@ -24405,9 +24612,9 @@
       "source_file": "app/MakroPad.App/Views/Shell.axaml.cs",
       "source_location": "L20",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "views_shell_axaml_shell",
-      "target": "views_shell_axaml_shell_onkeydown",
-      "confidence_score": 1.0
+      "target": "views_shell_axaml_shell_onkeydown"
     },
     {
       "relation": "method",
@@ -24415,9 +24622,9 @@
       "source_file": "app/MakroPad.App/Views/Shell.axaml.cs",
       "source_location": "L45",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "views_shell_axaml_shell",
-      "target": "views_shell_axaml_shell_formatshortcut",
-      "confidence_score": 1.0
+      "target": "views_shell_axaml_shell_formatshortcut"
     },
     {
       "relation": "method",
@@ -24425,9 +24632,9 @@
       "source_file": "app/MakroPad.App/Views/Shell.axaml.cs",
       "source_location": "L78",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "views_shell_axaml_shell",
-      "target": "views_shell_axaml_shell_normalizekey",
-      "confidence_score": 1.0
+      "target": "views_shell_axaml_shell_normalizekey"
     },
     {
       "relation": "inherits",
@@ -24446,9 +24653,9 @@
       "source_file": "app/MakroPad.App/Views/Shell.axaml.cs",
       "source_location": "L36",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "views_shell_axaml_shell_onkeydown",
-      "target": "views_shell_axaml_shell_formatshortcut",
-      "confidence_score": 1.0
+      "target": "views_shell_axaml_shell_formatshortcut"
     },
     {
       "relation": "calls",
@@ -24457,9 +24664,9 @@
       "source_file": "app/MakroPad.App/Views/Shell.axaml.cs",
       "source_location": "L47",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "views_shell_axaml_shell_formatshortcut",
-      "target": "views_shell_axaml_shell_normalizekey",
-      "confidence_score": 1.0
+      "target": "views_shell_axaml_shell_normalizekey"
     },
     {
       "relation": "contains",
@@ -25159,9 +25366,9 @@
       "source_file": "app/MakroPad.App.Tests/Services/ProcessWindowNowPlayingProviderTests.cs",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_app_tests_services_processwindownowplayingprovidertests_cs",
-      "target": "services_processwindownowplayingprovidertests_processwindownowplayingprovidertests",
-      "confidence_score": 1.0
+      "target": "services_processwindownowplayingprovidertests_processwindownowplayingprovidertests"
     },
     {
       "relation": "method",
@@ -25169,9 +25376,9 @@
       "source_file": "app/MakroPad.App.Tests/Services/ProcessWindowNowPlayingProviderTests.cs",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "services_processwindownowplayingprovidertests_processwindownowplayingprovidertests",
-      "target": "services_processwindownowplayingprovidertests_processwindownowplayingprovidertests_parsesartistandtitlefromspotifywindowtitle",
-      "confidence_score": 1.0
+      "target": "services_processwindownowplayingprovidertests_processwindownowplayingprovidertests_parsesartistandtitlefromspotifywindowtitle"
     },
     {
       "relation": "method",
@@ -25179,9 +25386,9 @@
       "source_file": "app/MakroPad.App.Tests/Services/ProcessWindowNowPlayingProviderTests.cs",
       "source_location": "L17",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "services_processwindownowplayingprovidertests_processwindownowplayingprovidertests",
-      "target": "services_processwindownowplayingprovidertests_processwindownowplayingprovidertests_trimssurroundingwhitespacearoundseparator",
-      "confidence_score": 1.0
+      "target": "services_processwindownowplayingprovidertests_processwindownowplayingprovidertests_trimssurroundingwhitespacearoundseparator"
     },
     {
       "relation": "method",
@@ -25189,9 +25396,9 @@
       "source_file": "app/MakroPad.App.Tests/Services/ProcessWindowNowPlayingProviderTests.cs",
       "source_location": "L27",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "services_processwindownowplayingprovidertests_processwindownowplayingprovidertests",
-      "target": "services_processwindownowplayingprovidertests_processwindownowplayingprovidertests_keepstrailingseparatorinsidetracktitle",
-      "confidence_score": 1.0
+      "target": "services_processwindownowplayingprovidertests_processwindownowplayingprovidertests_keepstrailingseparatorinsidetracktitle"
     },
     {
       "relation": "method",
@@ -25199,9 +25406,9 @@
       "source_file": "app/MakroPad.App.Tests/Services/ProcessWindowNowPlayingProviderTests.cs",
       "source_location": "L37",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "services_processwindownowplayingprovidertests_processwindownowplayingprovidertests",
-      "target": "services_processwindownowplayingprovidertests_processwindownowplayingprovidertests_ignoresidleandadvertisementtitles",
-      "confidence_score": 1.0
+      "target": "services_processwindownowplayingprovidertests_processwindownowplayingprovidertests_ignoresidleandadvertisementtitles"
     },
     {
       "relation": "method",
@@ -25209,9 +25416,9 @@
       "source_file": "app/MakroPad.App.Tests/Services/ProcessWindowNowPlayingProviderTests.cs",
       "source_location": "L48",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "services_processwindownowplayingprovidertests_processwindownowplayingprovidertests",
-      "target": "services_processwindownowplayingprovidertests_processwindownowplayingprovidertests_returnsnullforunparseabletitles",
-      "confidence_score": 1.0
+      "target": "services_processwindownowplayingprovidertests_processwindownowplayingprovidertests_returnsnullforunparseabletitles"
     },
     {
       "relation": "contains",
@@ -25580,9 +25787,9 @@
       "source_file": "app/MakroPad.App.Tests/ViewModels/PadViewModelTests.cs",
       "source_location": "L10",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_makropad_app_tests_viewmodels_padviewmodeltests_cs",
-      "target": "viewmodels_padviewmodeltests_padviewmodeltests",
-      "confidence_score": 1.0
+      "target": "viewmodels_padviewmodeltests_padviewmodeltests"
     },
     {
       "relation": "method",
@@ -25590,9 +25797,9 @@
       "source_file": "app/MakroPad.App.Tests/ViewModels/PadViewModelTests.cs",
       "source_location": "L12",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_padviewmodeltests_padviewmodeltests",
-      "target": "viewmodels_padviewmodeltests_padviewmodeltests_createprofiles",
-      "confidence_score": 1.0
+      "target": "viewmodels_padviewmodeltests_padviewmodeltests_createprofiles"
     },
     {
       "relation": "method",
@@ -25600,9 +25807,9 @@
       "source_file": "app/MakroPad.App.Tests/ViewModels/PadViewModelTests.cs",
       "source_location": "L25",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_padviewmodeltests_padviewmodeltests",
-      "target": "viewmodels_padviewmodeltests_padviewmodeltests_configwithbinding",
-      "confidence_score": 1.0
+      "target": "viewmodels_padviewmodeltests_padviewmodeltests_configwithbinding"
     },
     {
       "relation": "method",
@@ -25610,9 +25817,9 @@
       "source_file": "app/MakroPad.App.Tests/ViewModels/PadViewModelTests.cs",
       "source_location": "L35",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_padviewmodeltests_padviewmodeltests",
-      "target": "viewmodels_padviewmodeltests_padviewmodeltests_buildstwentykeysandthreesliderslots",
-      "confidence_score": 1.0
+      "target": "viewmodels_padviewmodeltests_padviewmodeltests_buildstwentykeysandthreesliderslots"
     },
     {
       "relation": "method",
@@ -25620,9 +25827,9 @@
       "source_file": "app/MakroPad.App.Tests/ViewModels/PadViewModelTests.cs",
       "source_location": "L48",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_padviewmodeltests_padviewmodeltests",
-      "target": "viewmodels_padviewmodeltests_padviewmodeltests_mapsactiveprofilebindingsontoslots",
-      "confidence_score": 1.0
+      "target": "viewmodels_padviewmodeltests_padviewmodeltests_mapsactiveprofilebindingsontoslots"
     },
     {
       "relation": "method",
@@ -25630,9 +25837,9 @@
       "source_file": "app/MakroPad.App.Tests/ViewModels/PadViewModelTests.cs",
       "source_location": "L63",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_padviewmodeltests_padviewmodeltests",
-      "target": "viewmodels_padviewmodeltests_padviewmodeltests_testmodesimulatesinputwithoutselecting",
-      "confidence_score": 1.0
+      "target": "viewmodels_padviewmodeltests_padviewmodeltests_testmodesimulatesinputwithoutselecting"
     },
     {
       "relation": "method",
@@ -25640,9 +25847,9 @@
       "source_file": "app/MakroPad.App.Tests/ViewModels/PadViewModelTests.cs",
       "source_location": "L81",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_padviewmodeltests_padviewmodeltests",
-      "target": "viewmodels_padviewmodeltests_padviewmodeltests_editmodeselectsslotandloadseditorinput",
-      "confidence_score": 1.0
+      "target": "viewmodels_padviewmodeltests_padviewmodeltests_editmodeselectsslotandloadseditorinput"
     },
     {
       "relation": "method",
@@ -25650,9 +25857,9 @@
       "source_file": "app/MakroPad.App.Tests/ViewModels/PadViewModelTests.cs",
       "source_location": "L97",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_padviewmodeltests_padviewmodeltests",
-      "target": "viewmodels_padviewmodeltests_padviewmodeltests_saveslotaddsbindingforemptyslot",
-      "confidence_score": 1.0
+      "target": "viewmodels_padviewmodeltests_padviewmodeltests_saveslotaddsbindingforemptyslot"
     },
     {
       "relation": "method",
@@ -25661,8 +25868,28 @@
       "source_location": "L113",
       "weight": 1.0,
       "source": "viewmodels_padviewmodeltests_padviewmodeltests",
-      "target": "viewmodels_padviewmodeltests_padviewmodeltests_clearslotremovesbinding",
+      "target": "viewmodels_padviewmodeltests_padviewmodeltests_applylayoutrebuildsgridforgivengeometry",
       "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "app/MakroPad.App.Tests/ViewModels/PadViewModelTests.cs",
+      "source_location": "L127",
+      "weight": 1.0,
+      "source": "viewmodels_padviewmodeltests_padviewmodeltests",
+      "target": "viewmodels_padviewmodeltests_padviewmodeltests_applylayoutclampstovalidrange",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "app/MakroPad.App.Tests/ViewModels/PadViewModelTests.cs",
+      "source_location": "L113",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "viewmodels_padviewmodeltests_padviewmodeltests",
+      "target": "viewmodels_padviewmodeltests_padviewmodeltests_clearslotremovesbinding"
     },
     {
       "relation": "calls",
@@ -25671,9 +25898,9 @@
       "source_file": "app/MakroPad.App.Tests/ViewModels/PadViewModelTests.cs",
       "source_location": "L38",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_padviewmodeltests_padviewmodeltests_buildstwentykeysandthreesliderslots",
-      "target": "viewmodels_padviewmodeltests_padviewmodeltests_createprofiles",
-      "confidence_score": 1.0
+      "target": "viewmodels_padviewmodeltests_padviewmodeltests_createprofiles"
     },
     {
       "relation": "calls",
@@ -25682,9 +25909,9 @@
       "source_file": "app/MakroPad.App.Tests/ViewModels/PadViewModelTests.cs",
       "source_location": "L51",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_padviewmodeltests_padviewmodeltests_mapsactiveprofilebindingsontoslots",
-      "target": "viewmodels_padviewmodeltests_padviewmodeltests_createprofiles",
-      "confidence_score": 1.0
+      "target": "viewmodels_padviewmodeltests_padviewmodeltests_createprofiles"
     },
     {
       "relation": "calls",
@@ -25693,9 +25920,9 @@
       "source_file": "app/MakroPad.App.Tests/ViewModels/PadViewModelTests.cs",
       "source_location": "L67",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_padviewmodeltests_padviewmodeltests_testmodesimulatesinputwithoutselecting",
-      "target": "viewmodels_padviewmodeltests_padviewmodeltests_createprofiles",
-      "confidence_score": 1.0
+      "target": "viewmodels_padviewmodeltests_padviewmodeltests_createprofiles"
     },
     {
       "relation": "calls",
@@ -25704,9 +25931,9 @@
       "source_file": "app/MakroPad.App.Tests/ViewModels/PadViewModelTests.cs",
       "source_location": "L84",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_padviewmodeltests_padviewmodeltests_editmodeselectsslotandloadseditorinput",
-      "target": "viewmodels_padviewmodeltests_padviewmodeltests_createprofiles",
-      "confidence_score": 1.0
+      "target": "viewmodels_padviewmodeltests_padviewmodeltests_createprofiles"
     },
     {
       "relation": "calls",
@@ -25715,7 +25942,29 @@
       "source_file": "app/MakroPad.App.Tests/ViewModels/PadViewModelTests.cs",
       "source_location": "L100",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_padviewmodeltests_padviewmodeltests_saveslotaddsbindingforemptyslot",
+      "target": "viewmodels_padviewmodeltests_padviewmodeltests_createprofiles"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "app/MakroPad.App.Tests/ViewModels/PadViewModelTests.cs",
+      "source_location": "L116",
+      "weight": 1.0,
+      "source": "viewmodels_padviewmodeltests_padviewmodeltests_applylayoutrebuildsgridforgivengeometry",
+      "target": "viewmodels_padviewmodeltests_padviewmodeltests_createprofiles",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "app/MakroPad.App.Tests/ViewModels/PadViewModelTests.cs",
+      "source_location": "L130",
+      "weight": 1.0,
+      "source": "viewmodels_padviewmodeltests_padviewmodeltests_applylayoutclampstovalidrange",
       "target": "viewmodels_padviewmodeltests_padviewmodeltests_createprofiles",
       "confidence_score": 1.0
     },
@@ -25726,9 +25975,9 @@
       "source_file": "app/MakroPad.App.Tests/ViewModels/PadViewModelTests.cs",
       "source_location": "L116",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_padviewmodeltests_padviewmodeltests_clearslotremovesbinding",
-      "target": "viewmodels_padviewmodeltests_padviewmodeltests_createprofiles",
-      "confidence_score": 1.0
+      "target": "viewmodels_padviewmodeltests_padviewmodeltests_createprofiles"
     },
     {
       "relation": "calls",
@@ -25737,9 +25986,9 @@
       "source_file": "app/MakroPad.App.Tests/ViewModels/PadViewModelTests.cs",
       "source_location": "L51",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_padviewmodeltests_padviewmodeltests_mapsactiveprofilebindingsontoslots",
-      "target": "viewmodels_padviewmodeltests_padviewmodeltests_configwithbinding",
-      "confidence_score": 1.0
+      "target": "viewmodels_padviewmodeltests_padviewmodeltests_configwithbinding"
     },
     {
       "relation": "calls",
@@ -25748,9 +25997,9 @@
       "source_file": "app/MakroPad.App.Tests/ViewModels/PadViewModelTests.cs",
       "source_location": "L84",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_padviewmodeltests_padviewmodeltests_editmodeselectsslotandloadseditorinput",
-      "target": "viewmodels_padviewmodeltests_padviewmodeltests_configwithbinding",
-      "confidence_score": 1.0
+      "target": "viewmodels_padviewmodeltests_padviewmodeltests_configwithbinding"
     },
     {
       "relation": "calls",
@@ -25759,9 +26008,9 @@
       "source_file": "app/MakroPad.App.Tests/ViewModels/PadViewModelTests.cs",
       "source_location": "L116",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_padviewmodeltests_padviewmodeltests_clearslotremovesbinding",
-      "target": "viewmodels_padviewmodeltests_padviewmodeltests_configwithbinding",
-      "confidence_score": 1.0
+      "target": "viewmodels_padviewmodeltests_padviewmodeltests_configwithbinding"
     },
     {
       "relation": "contains",
@@ -37229,5 +37478,5 @@
       "source_file": "app/README.md"
     }
   ],
-  "built_at_commit": "06609bb98ac6104d18cf79fe773bcc25b3aebe88"
+  "built_at_commit": "ae7813c75590aad78f0e1f0412e3ddd39079fe1f"
 }

@@ -1,16 +1,16 @@
 # Graph Report - MakroPad  (2026-06-13)
 
 ## Corpus Check
-- 142 files · ~35,999 words
+- 142 files · ~36,273 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1519 nodes · 2224 edges · 148 communities (96 shown, 52 thin omitted)
-- Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 18 edges (avg confidence: 0.81)
+- 1528 nodes · 2240 edges · 148 communities (97 shown, 51 thin omitted)
+- Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 19 edges (avg confidence: 0.81)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `06609bb9`
+- Built from commit: `ae7813c7`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -126,7 +126,7 @@
 7. `DisplayTriggerRenderer` - 24 edges
 8. `ProfileConfigServiceTests` - 24 edges
 9. `DisplayTriggerOrchestrator` - 23 edges
-10. `ActionExecutor` - 20 edges
+10. `PadViewModel` - 21 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `MakroPad Firmware` --semantically_similar_to--> `ESP32-S3 Firmware`  [INFERRED] [semantically similar]
@@ -145,7 +145,7 @@
 - **Input to Action Flow** — hardware_buttons_gpio_pullup, hardware_sliders_adc1, protocol_button_message, protocol_slider_message, app_readme_action_pipeline [EXTRACTED 1.00]
 - **OLED Display Configuration Flow** — hardware_oled_i2c_ssd1306, protocol_display_message, protocol_config_message, protocol_action_result_message, app_readme_oled_default_screen [EXTRACTED 1.00]
 
-## Communities (148 total, 52 thin omitted)
+## Communities (148 total, 51 thin omitted)
 
 ### Community 0 - "Community 0"
 Cohesion: 0.18
@@ -156,8 +156,8 @@ Cohesion: 0.04
 Nodes (34): ActionPipeline, ActionDefinitionCatalog, ActionPipeline, BindingEditorService, bool, CancellationTokenSource, DeviceDisplaySyncService, DeviceSessionService (+26 more)
 
 ### Community 3 - "Community 3"
-Cohesion: 0.05
-Nodes (20): CancellationTokenSource, DeviceConnectionState, int, object, TimeSpan, DeviceConnectionState, DateTimeOffset, IMakroPadConnection (+12 more)
+Cohesion: 0.06
+Nodes (19): CancellationTokenSource, DeviceConnectionState, int, object, TimeSpan, DeviceConnectionState, DateTimeOffset, IMakroPadConnection (+11 more)
 
 ### Community 4 - "Community 4"
 Cohesion: 0.17
@@ -324,8 +324,8 @@ Cohesion: 0.33
 Nodes (6): Action Pipeline, MakroPad.Actions Project, Windows Media Actions, Windows Volume Actions, action-result Message, Supported Actions Catalog
 
 ### Community 140 - "Community 140"
-Cohesion: 0.08
-Nodes (7): ISystemVolumeController, NoopSystemVolumeController, WindowsSystemVolumeController, DeviceDisplaySyncServiceTests, FakeSystemVolumeController, DisplaySettingsViewModelTests, FakeSystemVolumeController
+Cohesion: 0.06
+Nodes (8): ISystemVolumeController, NoopSystemVolumeController, WindowsSystemVolumeController, DeviceDisplaySyncServiceTests, FakeSystemVolumeController, RecordingConnection, DisplaySettingsViewModelTests, FakeSystemVolumeController
 
 ### Community 141 - "Community 141"
 Cohesion: 0.50
@@ -339,25 +339,29 @@ Nodes (17): IApplicationVolumeController, string, bool, string, bool, Func, int,
 Cohesion: 0.67
 Nodes (4): Serial Heartbeat, Waiting for app Display State, ping Message, pong Message
 
+### Community 145 - "Community 145"
+Cohesion: 0.18
+Nodes (3): int, AppSection, ShellViewModel
+
 ## Knowledge Gaps
-- **279 isolated node(s):** `allow`, `PreToolUse`, `ISystemMediaController`, `ISystemVolumeController`, `IApplicationVolumeController` (+274 more)
+- **280 isolated node(s):** `allow`, `PreToolUse`, `ISystemMediaController`, `ISystemVolumeController`, `IApplicationVolumeController` (+275 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **52 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **51 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `MainWindowViewModel` connect `Community 1` to `Community 2`, `Community 100`, `Community 132`, `Community 102`, `Community 107`, `Community 108`, `Community 13`, `Community 142`, `Community 124`, `Community 16`, `Community 18`, `Community 21`, `Community 90`, `Community 92`, `Community 125`, `Community 62`?**
-  _High betweenness centrality (0.181) - this node is a cross-community bridge._
+  _High betweenness centrality (0.202) - this node is a cross-community bridge._
 - **Why does `DisplayTriggerInputTracker` connect `Community 18` to `Community 1`?**
-  _High betweenness centrality (0.104) - this node is a cross-community bridge._
+  _High betweenness centrality (0.116) - this node is a cross-community bridge._
 - **What connects `allow`, `PreToolUse`, `ISystemMediaController` to the rest of the system?**
-  _279 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _280 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 1` be split into smaller, more focused modules?**
   _Cohesion score 0.03567567567567568 - nodes in this community are weakly interconnected._
 - **Should `Community 2` be split into smaller, more focused modules?**
   _Cohesion score 0.14408602150537633 - nodes in this community are weakly interconnected._
 - **Should `Community 3` be split into smaller, more focused modules?**
-  _Cohesion score 0.05026300409117475 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.05957767722473605 - nodes in this community are weakly interconnected._
 - **Should `Community 5` be split into smaller, more focused modules?**
   _Cohesion score 0.1028225806451613 - nodes in this community are weakly interconnected._
