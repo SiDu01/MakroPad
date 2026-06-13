@@ -40,7 +40,7 @@ public sealed class ProcessWindowNowPlayingProvider : INowPlayingProvider
         return Task.FromResult<NowPlayingTrack?>(null);
     }
 
-    private static NowPlayingTrack? ParseSpotifyWindowTitle(string? title)
+    public static NowPlayingTrack? ParseSpotifyWindowTitle(string? title)
     {
         if (string.IsNullOrWhiteSpace(title)
             || IgnoredSpotifyTitles.Contains(title, StringComparer.OrdinalIgnoreCase))
