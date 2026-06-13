@@ -1,6 +1,6 @@
 # MakroPad Handoff
 
-Last updated: 2026-06-04
+Last updated: 2026-06-13
 
 ## Current State
 
@@ -19,6 +19,20 @@ MakroPad has a working vertical prototype across firmware and desktop app:
 
 ## Recent Milestones
 
+- Restructured the desktop UI shell. The formerly monolithic `MainWindow.axaml`
+  (~990 lines) is now a thin shell that hosts seven focused section views:
+  `MacrosView`, `DeviceView`, `SimulationView`, `ProfilesSettingsView`,
+  `ApplicationSettingsView`, `DisplayEditorView`, and `DebugView`, all bound to
+  the shared `MainWindowViewModel`. A reusable `Controls/PageHeader` provides the
+  per-section title/subtitle/profile-badge header. Shortcut recording and the
+  open-app file picker that previously lived in `MainWindow.axaml.cs` now live in
+  `MacrosView.axaml.cs` next to the action editor they serve.
+- Added a light/dark theme system. `Themes/AppTheme.axaml` defines themed
+  brushes via `ThemeDictionaries`, `Themes/NavIcons.axaml` provides nav/section
+  icon geometries, and `App.axaml` registers FluentTheme Dark/Light palettes.
+  `MainWindowViewModel` exposes `IsDarkTheme`, `ToggleThemeCommand`, and
+  `ThemeToggleHint`, switching `Application.Current.RequestedThemeVariant` at
+  runtime. Added a MakroPad app icon (`Assets/makropad.png` / `.ico`).
 - Added Windows `app.volume` action for setting the volume of a configured
   process/audio session.
 - Added configurable OLED default screen with 3-line or 5-line layout.

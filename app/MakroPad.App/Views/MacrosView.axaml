@@ -1,0 +1,114 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:MakroPad.App.ViewModels"
+             xmlns:controls="using:MakroPad.App.Controls"
+             x:Class="MakroPad.App.Views.MacrosView"
+             x:DataType="vm:MainWindowViewModel">
+    <ScrollViewer Classes="pageContent"
+                  HorizontalScrollBarVisibility="Auto"
+                  VerticalScrollBarVisibility="Auto">
+        <Grid RowDefinitions="Auto,*"
+              RowSpacing="16"
+              MinWidth="760">
+            <controls:PageHeader Title="Makros"
+                                 Subtitle="Bindings fuer Buttons und Slider bearbeiten."
+                                 ShowConfigActions="True"
+                                 ShowProfileBadge="True" />
+
+            <Grid Grid.Row="1"
+                  RowDefinitions="*,Auto"
+                  RowSpacing="16">
+                <Border Classes="panel">
+                    <Grid RowDefinitions="Auto,*"
+                          RowSpacing="10">
+                        <Grid ColumnDefinitions="150,220,*"
+                              ColumnSpacing="12">
+                            <TextBlock Text="Input" FontWeight="SemiBold" Classes="label" />
+                            <TextBlock Grid.Column="1" Text="Action" FontWeight="SemiBold" Classes="label" />
+                            <TextBlock Grid.Column="2" Text="Parameters" FontWeight="SemiBold" Classes="label" />
+                        </Grid>
+
+                        <ListBox Grid.Row="1"
+                                 Classes="dataList"
+                                 ItemsSource="{Binding ProfilesEditor.ProfileBindings}"
+                                 SelectedItem="{Binding ProfilesEditor.SelectedBinding}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid ColumnDefinitions="150,220,*" ColumnSpacing="12">
+                                        <TextBlock Text="{Binding Input}" FontFamily="Consolas" TextTrimming="CharacterEllipsis" />
+                                        <TextBlock Grid.Column="1" Text="{Binding Action}" FontFamily="Consolas" TextTrimming="CharacterEllipsis" />
+                                        <TextBlock Grid.Column="2" Text="{Binding Parameters}" FontFamily="Consolas" TextTrimming="CharacterEllipsis" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Grid>
+                </Border>
+
+                <Border Grid.Row="1" Classes="panel">
+                    <Grid RowDefinitions="Auto,Auto,Auto,Auto"
+                          ColumnDefinitions="150,220,*"
+                          RowSpacing="10"
+                          ColumnSpacing="12">
+                        <ComboBox Grid.Column="0"
+                                  ItemsSource="{Binding ProfilesEditor.AvailableInputs}"
+                                  SelectedItem="{Binding ProfilesEditor.BindingEditorInput}"
+                                  HorizontalAlignment="Stretch" />
+                        <ComboBox Grid.Column="1"
+                                  ItemsSource="{Binding ProfilesEditor.ActionEditor.AvailableActions}"
+                                  SelectedItem="{Binding ProfilesEditor.ActionEditor.Action}"
+                                  HorizontalAlignment="Stretch" />
+                        <TextBox Grid.Column="2"
+                                 PlaceholderText="{Binding ProfilesEditor.ActionEditor.ParameterPlaceholder}"
+                                 Text="{Binding ProfilesEditor.ActionEditor.Parameters}" />
+
+                        <StackPanel Grid.Row="1" Grid.ColumnSpan="3" Spacing="8">
+                            <StackPanel IsVisible="{Binding ProfilesEditor.ActionEditor.HasStructuredParameter}" Spacing="6">
+                                <TextBlock Classes="label" Text="{Binding ProfilesEditor.ActionEditor.StructuredParameterLabel}" />
+                                <TextBox IsVisible="{Binding ProfilesEditor.ActionEditor.ShowsStructuredTextInput}"
+                                         Text="{Binding ProfilesEditor.ActionEditor.StructuredParameterValue}" />
+                                <ComboBox IsVisible="{Binding ProfilesEditor.ActionEditor.IsAppVolumeAction}"
+                                          ItemsSource="{Binding ProfilesEditor.ActionEditor.AvailableAudioProcessNames}"
+                                          SelectedItem="{Binding ProfilesEditor.ActionEditor.StructuredParameterValue}"
+                                          HorizontalAlignment="Stretch" />
+                                <TextBlock Text="{Binding ProfilesEditor.ActionEditor.StructuredParameterValidationMessage}"
+                                           Foreground="#FFB86B" FontSize="12" TextWrapping="Wrap" />
+                            </StackPanel>
+                            <TextBlock Text="{Binding ProfilesEditor.ActionEditor.ActionDescription}" TextWrapping="Wrap" />
+                            <TextBlock Text="{Binding ProfilesEditor.ActionEditor.ParameterHint}"
+                                       FontFamily="Consolas" FontSize="12" Classes="muted" TextWrapping="Wrap" />
+                            <TextBlock Text="{Binding ProfilesEditor.BindingEditorValidationMessage}"
+                                       Foreground="#FF7A90" FontSize="12" TextWrapping="Wrap" />
+                            <TextBlock Text="{Binding ProfilesEditor.ActionEditor.ShortcutRecordingStatus}"
+                                       FontSize="12" Classes="muted" TextWrapping="Wrap" />
+                        </StackPanel>
+
+                        <Grid Grid.Row="2" Grid.ColumnSpan="3" ColumnDefinitions="*,*" ColumnSpacing="8">
+                            <Button Grid.Column="0"
+                                    IsVisible="{Binding ProfilesEditor.ActionEditor.IsKeyboardShortcutAction}"
+                                    Content="Record Shortcut"
+                                    Command="{Binding ProfilesEditor.ActionEditor.StartShortcutRecordingCommand}"
+                                    HorizontalAlignment="Stretch" />
+                            <Button Grid.Column="1"
+                                    IsVisible="{Binding ProfilesEditor.ActionEditor.IsOpenAppAction}"
+                                    Content="Browse App/File"
+                                    Click="BrowseOpenApp_Click"
+                                    HorizontalAlignment="Stretch" />
+                        </Grid>
+
+                        <Grid Grid.Row="3" Grid.ColumnSpan="3" ColumnDefinitions="*,*,*,*" ColumnSpacing="8">
+                            <Button Grid.Column="0" Classes="primary" Content="Apply"
+                                    Command="{Binding ProfilesEditor.ApplyBindingCommand}" HorizontalAlignment="Stretch" />
+                            <Button Grid.Column="1" Classes="secondary" Content="Add"
+                                    Command="{Binding ProfilesEditor.AddBindingCommand}" HorizontalAlignment="Stretch" />
+                            <Button Grid.Column="2" Classes="danger" Content="Remove"
+                                    Command="{Binding ProfilesEditor.RemoveBindingCommand}" HorizontalAlignment="Stretch" />
+                            <Button Grid.Column="3" Content="Example"
+                                    Command="{Binding ProfilesEditor.ActionEditor.UseParameterExampleCommand}" HorizontalAlignment="Stretch" />
+                        </Grid>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

@@ -1,0 +1,51 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:MakroPad.App.ViewModels"
+             xmlns:controls="using:MakroPad.App.Controls"
+             x:Class="MakroPad.App.Views.DeviceView"
+             x:DataType="vm:MainWindowViewModel">
+    <ScrollViewer Classes="pageContent"
+                  HorizontalScrollBarVisibility="Auto"
+                  VerticalScrollBarVisibility="Auto">
+        <Grid RowDefinitions="Auto,Auto" RowSpacing="16" MinWidth="620">
+            <controls:PageHeader Title="Geraet"
+                                 Subtitle="Serielle Verbindung und MakroPad-Status." />
+
+            <Grid Grid.Row="1" ColumnDefinitions="*,*" ColumnSpacing="16">
+                <Border Classes="panel">
+                    <StackPanel Spacing="12">
+                        <TextBlock Text="Connection" FontSize="16" FontWeight="SemiBold" />
+                        <TextBlock Classes="label" Text="Port" />
+                        <ComboBox ItemsSource="{Binding AvailablePorts}"
+                                  SelectedItem="{Binding SelectedPort}"
+                                  HorizontalAlignment="Stretch" />
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                            <Button Grid.Column="0" Classes="secondary" Content="Refresh"
+                                    Command="{Binding RefreshPortsCommand}" HorizontalAlignment="Stretch" />
+                            <Button Grid.Column="1" Classes="primary" Content="Connect"
+                                    Command="{Binding ConnectCommand}" HorizontalAlignment="Stretch" />
+                        </Grid>
+                        <Button Classes="secondary" Content="Auto Connect"
+                                Command="{Binding AutoConnectCommand}" HorizontalAlignment="Stretch" />
+                        <Button Classes="secondary" Content="Disconnect"
+                                Command="{Binding DisconnectCommand}" HorizontalAlignment="Stretch" />
+                        <CheckBox Content="Auto-connect on startup" IsChecked="{Binding AutoConnect}" />
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Column="1" Classes="panel">
+                    <StackPanel Spacing="12">
+                        <TextBlock Text="OLED Media" FontSize="16" FontWeight="SemiBold" />
+                        <CheckBox Content="Show Now Playing on OLED"
+                                  IsChecked="{Binding DisplaySettings.EnableNowPlayingDisplay}" />
+                        <TextBlock Text="{Binding NowPlayingStatus}" TextWrapping="Wrap" Classes="muted" />
+                        <TextBlock Classes="label" Text="OLED message" />
+                        <TextBox Text="{Binding DisplayText}" />
+                        <Button Classes="primary" Content="Send to Display"
+                                Command="{Binding SendDisplayMessageCommand}" HorizontalAlignment="Stretch" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

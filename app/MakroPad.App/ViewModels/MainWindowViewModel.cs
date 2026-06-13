@@ -5,6 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Avalonia;
+using Avalonia.Styling;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -69,6 +71,13 @@ public partial class MainWindowViewModel : ViewModelBase
 
     [ObservableProperty]
     private bool autoConnect = true;
+
+    [ObservableProperty]
+    private bool isDarkTheme = true;
+
+    public string ThemeToggleHint => IsDarkTheme
+        ? "Zu hellem Design wechseln"
+        : "Zu dunklem Design wechseln";
 
     public string ActiveProfileName => ProfilesEditor.ActiveProfileName;
 
@@ -182,6 +191,31 @@ public partial class MainWindowViewModel : ViewModelBase
             SendDeviceConfigAsync,
             AddLog);
         _ = LoadConfigAsync();
+        ApplyThemeVariant(IsDarkTheme);
+    }
+
+    partial void OnIsDarkThemeChanged(bool value)
+    {
+        ApplyThemeVariant(value);
+        OnPropertyChanged(nameof(ThemeToggleHint));
+    }
+
+    [RelayCommand]
+    private void ToggleTheme()
+    {
+        IsDarkTheme = !IsDarkTheme;
+    }
+
+    private static void ApplyThemeVariant(bool isDark)
+    {
+        if (Application.Current is null)
+        {
+            return;
+        }
+
+        Application.Current.RequestedThemeVariant = isDark
+            ? ThemeVariant.Dark
+            : ThemeVariant.Light;
     }
 
     public void Shutdown()
