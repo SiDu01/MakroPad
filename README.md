@@ -55,9 +55,12 @@ Implemented:
   independently accumulated slider thresholds make trigger authoring testable
   without generating every real device event.
 - Initial Spotify Now Playing OLED display via the Spotify window title.
-- Sidebar UI split into focused section views (macros, device, simulation,
-  profiles, application settings, display, and debug) with a runtime light/dark
-  theme toggle and a MakroPad app icon.
+- Device-centric UI rebuilt around the physical pad: a Pad screen with a
+  20-key grid and 3 slider strips, an Edit/Test mode toggle, live input
+  highlighting, an inline profile bar, and a contextual binding inspector.
+  Workflow-ordered navigation (Pad, Display, Verbindung, Einstellungen,
+  Diagnose), a persistent live OLED preview in the Display designer, a runtime
+  light/dark theme toggle, and a MakroPad app icon.
 - Debug view for active Windows audio sessions.
 - Graphify project graph in `graphify-out/` for architecture navigation.
 - Unit tests for protocol and action behavior.

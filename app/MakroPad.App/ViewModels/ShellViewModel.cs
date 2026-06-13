@@ -17,15 +17,9 @@ public enum AppSection
 /// orchestration from <see cref="MainWindowViewModel"/> and adds the workflow-ordered
 /// navigation between the Pad, Display, Connection, Settings and Diagnostics sections.
 /// </summary>
-public partial class ShellViewModel : MainWindowViewModel
+public partial class ShellViewModel
 {
-    public ShellViewModel()
-    {
-        Pad = new PadViewModel(ProfilesEditor, TrySimulateInput);
-        InputActivated += Pad.OnInputActivated;
-    }
-
-    public PadViewModel Pad { get; }
+    public PadViewModel Pad { get; private set; } = null!;
 
     [ObservableProperty]
     private AppSection selectedSection = AppSection.Pad;

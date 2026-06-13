@@ -19,6 +19,22 @@ MakroPad has a working vertical prototype across firmware and desktop app:
 
 ## Recent Milestones
 
+- Rebuilt the desktop UI from scratch into a device-centric layout (Stream-Deck
+  style). `ShellViewModel` is the new root (the former `MainWindowViewModel`
+  orchestration was merged into it across `ShellViewModel.cs` and
+  `ShellViewModel.Runtime.cs`); navigation is workflow-ordered: Pad, Display,
+  Verbindung, Einstellungen, Diagnose. The Pad screen (`PadViewModel`,
+  `PadView`) mirrors the hardware as a 20-key grid plus 3 slider strips with an
+  Edit/Test mode toggle, an inline profile bar, live input highlighting (new
+  `InputActivated` runtime event, raised for hardware and simulator inputs), and
+  a contextual binding inspector that reuses `ActionEditorViewModel`. The
+  Display screen keeps a persistent live OLED preview. A global Speichern button
+  lives in the nav rail; theme toggle moved there too. All legacy views
+  (`MacrosView`, `DeviceView`, `SimulationView`, `ProfilesSettingsView`,
+  `ApplicationSettingsView`, `DisplayEditorView`, `DebugView`) and the
+  `PageHeader` control were removed. The domain libraries (Core/Device/Actions)
+  and their tests were untouched; `MakroPad.App.Tests` gained `PadViewModel`
+  coverage.
 - Restructured the desktop UI shell. The formerly monolithic `MainWindow.axaml`
   (~990 lines) is now a thin shell that hosts seven focused section views:
   `MacrosView`, `DeviceView`, `SimulationView`, `ProfilesSettingsView`,
@@ -185,13 +201,14 @@ MakroPad has a working vertical prototype across firmware and desktop app:
   robust and app-agnostic.
 - Linux implementations for media keys, volume, app volume, and Now Playing are
   still missing.
-- `MainWindowViewModel` is still the largest app coordinator, but connection
-  flow, config lifecycle, action helper UI, display-trigger editing/runtime,
+- `ShellViewModel` (split across `ShellViewModel.cs` and
+  `ShellViewModel.Runtime.cs`) is the app root and still the largest coordinator:
+  it owns connection flow, config lifecycle, display-trigger editing/runtime,
   event logging, audio sessions, OLED/default display settings, Now Playing
-  orchestration, and device config/OLED sync are now split out. The remaining
-  useful decomposition targets are small command groups for simulator/device
-  actions and possibly a thin app coordinator service if the remaining root
-  orchestration keeps growing.
+  orchestration, navigation, and the Pad composition. Section view models
+  (`PadViewModel`) and the reused editor view models keep most editor state out
+  of it, but the runtime orchestration could still move into a dedicated app
+  service if it keeps growing.
 - Firmware is still a single Arduino sketch. That is fine for prototyping, but
   display/protocol/input modules should be split once behavior stabilizes.
 - Layout screens currently support only fixed built-in layouts. A free element
@@ -249,7 +266,8 @@ The graph artifacts are committed under `graphify-out/`:
 
 Useful graph entry points:
 
-- `MainWindowViewModel` is the biggest god node.
+- `ShellViewModel` is the biggest god node (app root, split across
+  `ShellViewModel.cs` and `ShellViewModel.Runtime.cs`).
 - `SerialMakroPadConnection`, `MakroPad Firmware`, and `ActionExecutor` are the
   next most important implementation hubs.
 - The most useful architecture question right now is: how does an input event

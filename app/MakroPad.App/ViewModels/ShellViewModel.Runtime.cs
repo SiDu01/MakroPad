@@ -19,7 +19,7 @@ using MakroPad.Device;
 
 namespace MakroPad.App.ViewModels;
 
-public partial class MainWindowViewModel : ViewModelBase
+public partial class ShellViewModel : ViewModelBase
 {
     private readonly DeviceSessionService deviceSessionService = new();
     private readonly MakroPadConfigService configService;
@@ -168,7 +168,7 @@ public partial class MainWindowViewModel : ViewModelBase
         return false;
     }
 
-    public MainWindowViewModel()
+    public ShellViewModel()
     {
         ConfigPath = GetDefaultConfigPath();
         configService = new MakroPadConfigService(new MakroPadConfigStore(ConfigPath));
@@ -227,6 +227,8 @@ public partial class MainWindowViewModel : ViewModelBase
             HandleMediaChangedDisplayTriggerAsync,
             SendDeviceConfigAsync,
             AddLog);
+        Pad = new PadViewModel(ProfilesEditor, TrySimulateInput);
+        InputActivated += Pad.OnInputActivated;
         _ = LoadConfigAsync();
         ApplyThemeVariant(IsDarkTheme);
     }
