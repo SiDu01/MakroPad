@@ -3,17 +3,45 @@
              xmlns:vm="using:MakroPad.App.ViewModels"
              x:Class="MakroPad.App.Views.SettingsView"
              x:DataType="vm:ShellViewModel">
-    <ScrollViewer Classes="pageContent">
-        <StackPanel Spacing="16" MaxWidth="980" HorizontalAlignment="Left">
+    <ScrollViewer Classes="pageContent"
+                  HorizontalScrollBarVisibility="Auto"
+                  VerticalScrollBarVisibility="Auto">
+        <StackPanel Spacing="16" MaxWidth="720" HorizontalAlignment="Left">
             <StackPanel Spacing="4">
                 <TextBlock Classes="sectionTitle" Text="Einstellungen" />
-                <TextBlock Classes="muted"
-                           Text="App-Optionen: Action-Timeout, Volume-Deadband, Now Playing, Design." />
+                <TextBlock Classes="muted" Text="Erscheinungsbild und Konfigurationsdatei." />
             </StackPanel>
+
             <Border Classes="panel">
-                <TextBlock Classes="muted"
-                           TextWrapping="Wrap"
-                           Text="Die App-Einstellungen werden in einem spaeteren Schritt aufgebaut." />
+                <StackPanel Spacing="12">
+                    <TextBlock Text="Erscheinungsbild" FontSize="15" FontWeight="SemiBold" />
+                    <Grid ColumnDefinitions="*,Auto">
+                        <StackPanel Spacing="2" VerticalAlignment="Center">
+                            <TextBlock Text="Design" />
+                            <TextBlock Classes="muted" FontSize="12" Text="{Binding ThemeToggleHint}" />
+                        </StackPanel>
+                        <ToggleSwitch Grid.Column="1"
+                                      IsChecked="{Binding IsDarkTheme}"
+                                      OnContent="Dunkel"
+                                      OffContent="Hell" />
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <Border Classes="panel">
+                <StackPanel Spacing="12">
+                    <TextBlock Text="Konfiguration" FontSize="15" FontWeight="SemiBold" />
+                    <TextBlock Classes="label" Text="Konfigurationsdatei" />
+                    <TextBox Text="{Binding ConfigPath}" IsReadOnly="True" />
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                        <Button Grid.Column="0" Classes="primary" Content="Speichern"
+                                Command="{Binding SaveConfigCommand}" HorizontalAlignment="Stretch" />
+                        <Button Grid.Column="1" Classes="secondary" Content="Neu laden"
+                                Command="{Binding LoadConfigCommand}" HorizontalAlignment="Stretch" />
+                    </Grid>
+                    <TextBlock Classes="muted" FontSize="12" TextWrapping="Wrap"
+                               Text="Action-Timeout, Volume-Deadband und Now Playing findest du unter Display › Runtime." />
+                </StackPanel>
             </Border>
         </StackPanel>
     </ScrollViewer>
