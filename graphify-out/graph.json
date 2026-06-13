@@ -51,6 +51,33 @@
   },
   "nodes": [
     {
+      "label": "settings.local.json",
+      "file_type": "code",
+      "source_file": ".claude/settings.local.json",
+      "source_location": "L1",
+      "id": "claude_settings_local_json",
+      "community": 154,
+      "norm_label": "settings.local.json"
+    },
+    {
+      "label": "permissions",
+      "file_type": "code",
+      "source_file": ".claude/settings.local.json",
+      "source_location": "L2",
+      "id": "claude_settings_local_permissions",
+      "community": 154,
+      "norm_label": "permissions"
+    },
+    {
+      "label": "allow",
+      "file_type": "code",
+      "source_file": ".claude/settings.local.json",
+      "source_location": "L3",
+      "id": "claude_settings_local_permissions_allow",
+      "community": 154,
+      "norm_label": "allow"
+    },
+    {
       "label": "hooks.json",
       "file_type": "code",
       "source_file": ".codex/hooks.json",
@@ -704,7 +731,7 @@
       "source_file": "app/MakroPad.Actions/NoopApplicationVolumeController.cs",
       "source_location": "L1",
       "id": "app_makropad_actions_noopapplicationvolumecontroller_cs",
-      "community": 132,
+      "community": 146,
       "norm_label": "noopapplicationvolumecontroller.cs"
     },
     {
@@ -713,7 +740,7 @@
       "source_file": "app/MakroPad.Actions/NoopApplicationVolumeController.cs",
       "source_location": "L3",
       "id": "makropad_actions_noopapplicationvolumecontroller_noopapplicationvolumecontroller",
-      "community": 132,
+      "community": 146,
       "norm_label": "noopapplicationvolumecontroller"
     },
     {
@@ -722,7 +749,7 @@
       "source_file": "",
       "source_location": "",
       "id": "iapplicationvolumecontroller",
-      "community": 132,
+      "community": 146,
       "norm_label": "iapplicationvolumecontroller"
     },
     {
@@ -731,7 +758,7 @@
       "source_file": "app/MakroPad.Actions/NoopApplicationVolumeController.cs",
       "source_location": "L5",
       "id": "makropad_actions_noopapplicationvolumecontroller_noopapplicationvolumecontroller_setapplicationvolumeasync",
-      "community": 132,
+      "community": 146,
       "norm_label": ".setapplicationvolumeasync()"
     },
     {
@@ -740,7 +767,7 @@
       "source_file": "app/MakroPad.Actions/NoopApplicationVolumeController.cs",
       "source_location": "L16",
       "id": "makropad_actions_noopapplicationvolumecontroller_noopapplicationvolumecontroller_getaudiosessionsasync",
-      "community": 132,
+      "community": 146,
       "norm_label": ".getaudiosessionsasync()"
     },
     {
@@ -749,7 +776,7 @@
       "source_file": "app/MakroPad.Actions/NoopKeyboardController.cs",
       "source_location": "L1",
       "id": "app_makropad_actions_noopkeyboardcontroller_cs",
-      "community": 11,
+      "community": 12,
       "norm_label": "noopkeyboardcontroller.cs"
     },
     {
@@ -758,7 +785,7 @@
       "source_file": "app/MakroPad.Actions/NoopKeyboardController.cs",
       "source_location": "L3",
       "id": "makropad_actions_noopkeyboardcontroller_noopkeyboardcontroller",
-      "community": 11,
+      "community": 12,
       "norm_label": "noopkeyboardcontroller"
     },
     {
@@ -767,7 +794,7 @@
       "source_file": "",
       "source_location": "",
       "id": "ikeyboardcontroller",
-      "community": 11,
+      "community": 12,
       "norm_label": "ikeyboardcontroller"
     },
     {
@@ -776,7 +803,7 @@
       "source_file": "app/MakroPad.Actions/NoopKeyboardController.cs",
       "source_location": "L5",
       "id": "makropad_actions_noopkeyboardcontroller_noopkeyboardcontroller_sendshortcutasync",
-      "community": 11,
+      "community": 12,
       "norm_label": ".sendshortcutasync()"
     },
     {
@@ -785,7 +812,7 @@
       "source_file": "app/MakroPad.Actions/NoopSystemMediaController.cs",
       "source_location": "L1",
       "id": "app_makropad_actions_noopsystemmediacontroller_cs",
-      "community": 9,
+      "community": 5,
       "norm_label": "noopsystemmediacontroller.cs"
     },
     {
@@ -794,7 +821,7 @@
       "source_file": "app/MakroPad.Actions/NoopSystemMediaController.cs",
       "source_location": "L3",
       "id": "makropad_actions_noopsystemmediacontroller_noopsystemmediacontroller",
-      "community": 9,
+      "community": 5,
       "norm_label": "noopsystemmediacontroller"
     },
     {
@@ -812,7 +839,7 @@
       "source_file": "app/MakroPad.Actions/NoopSystemMediaController.cs",
       "source_location": "L5",
       "id": "makropad_actions_noopsystemmediacontroller_noopsystemmediacontroller_playpauseasync",
-      "community": 9,
+      "community": 5,
       "norm_label": ".playpauseasync()"
     },
     {
@@ -821,7 +848,7 @@
       "source_file": "app/MakroPad.Actions/NoopSystemMediaController.cs",
       "source_location": "L8",
       "id": "makropad_actions_noopsystemmediacontroller_noopsystemmediacontroller_nexttrackasync",
-      "community": 9,
+      "community": 5,
       "norm_label": ".nexttrackasync()"
     },
     {
@@ -830,7 +857,7 @@
       "source_file": "app/MakroPad.Actions/NoopSystemMediaController.cs",
       "source_location": "L11",
       "id": "makropad_actions_noopsystemmediacontroller_noopsystemmediacontroller_previoustrackasync",
-      "community": 9,
+      "community": 5,
       "norm_label": ".previoustrackasync()"
     },
     {
@@ -839,7 +866,7 @@
       "source_file": "app/MakroPad.Actions/NoopSystemMediaController.cs",
       "source_location": "L14",
       "id": "makropad_actions_noopsystemmediacontroller_noopsystemmediacontroller_stopasync",
-      "community": 9,
+      "community": 5,
       "norm_label": ".stopasync()"
     },
     {
@@ -848,7 +875,7 @@
       "source_file": "app/MakroPad.Actions/NoopSystemMediaController.cs",
       "source_location": "L17",
       "id": "makropad_actions_noopsystemmediacontroller_noopsystemmediacontroller_volumeupasync",
-      "community": 9,
+      "community": 5,
       "norm_label": ".volumeupasync()"
     },
     {
@@ -857,7 +884,7 @@
       "source_file": "app/MakroPad.Actions/NoopSystemMediaController.cs",
       "source_location": "L20",
       "id": "makropad_actions_noopsystemmediacontroller_noopsystemmediacontroller_volumedownasync",
-      "community": 9,
+      "community": 5,
       "norm_label": ".volumedownasync()"
     },
     {
@@ -866,7 +893,7 @@
       "source_file": "app/MakroPad.Actions/NoopSystemMediaController.cs",
       "source_location": "L23",
       "id": "makropad_actions_noopsystemmediacontroller_noopsystemmediacontroller_muteasync",
-      "community": 9,
+      "community": 5,
       "norm_label": ".muteasync()"
     },
     {
@@ -875,7 +902,7 @@
       "source_file": "app/MakroPad.Actions/NoopSystemMediaController.cs",
       "source_location": "L26",
       "id": "makropad_actions_noopsystemmediacontroller_noopsystemmediacontroller_unsupportedasync",
-      "community": 9,
+      "community": 5,
       "norm_label": ".unsupportedasync()"
     },
     {
@@ -929,7 +956,7 @@
       "source_file": "app/MakroPad.Actions/SystemLauncher.cs",
       "source_location": "L1",
       "id": "app_makropad_actions_systemlauncher_cs",
-      "community": 11,
+      "community": 151,
       "norm_label": "systemlauncher.cs"
     },
     {
@@ -938,7 +965,7 @@
       "source_file": "app/MakroPad.Actions/SystemLauncher.cs",
       "source_location": "L5",
       "id": "makropad_actions_systemlauncher_systemlauncher",
-      "community": 11,
+      "community": 151,
       "norm_label": "systemlauncher"
     },
     {
@@ -956,7 +983,7 @@
       "source_file": "app/MakroPad.Actions/SystemLauncher.cs",
       "source_location": "L7",
       "id": "makropad_actions_systemlauncher_systemlauncher_openurlasync",
-      "community": 11,
+      "community": 151,
       "norm_label": ".openurlasync()"
     },
     {
@@ -965,7 +992,7 @@
       "source_file": "app/MakroPad.Actions/SystemLauncher.cs",
       "source_location": "L22",
       "id": "makropad_actions_systemlauncher_systemlauncher_openappasync",
-      "community": 11,
+      "community": 151,
       "norm_label": ".openappasync()"
     },
     {
@@ -974,7 +1001,7 @@
       "source_file": "app/MakroPad.Actions/SystemLauncher.cs",
       "source_location": "L36",
       "id": "makropad_actions_systemlauncher_systemlauncher_startprocessasync",
-      "community": 11,
+      "community": 151,
       "norm_label": ".startprocessasync()"
     },
     {
@@ -1226,7 +1253,7 @@
       "source_file": "app/MakroPad.Actions/WindowsSystemMediaController.cs",
       "source_location": "L1",
       "id": "app_makropad_actions_windowssystemmediacontroller_cs",
-      "community": 5,
+      "community": 137,
       "norm_label": "windowssystemmediacontroller.cs"
     },
     {
@@ -1235,7 +1262,7 @@
       "source_file": "app/MakroPad.Actions/WindowsSystemMediaController.cs",
       "source_location": "L6",
       "id": "makropad_actions_windowssystemmediacontroller_windowssystemmediacontroller",
-      "community": 5,
+      "community": 137,
       "norm_label": "windowssystemmediacontroller"
     },
     {
@@ -1244,7 +1271,7 @@
       "source_file": "app/MakroPad.Actions/WindowsSystemMediaController.cs",
       "source_location": "L8",
       "id": "app_makropad_actions_windowssystemmediacontroller_cs_ushort",
-      "community": 5,
+      "community": 137,
       "norm_label": "ushort"
     },
     {
@@ -1253,7 +1280,7 @@
       "source_file": "app/MakroPad.Actions/WindowsSystemMediaController.cs",
       "source_location": "L15",
       "id": "app_makropad_actions_windowssystemmediacontroller_cs_uint",
-      "community": 5,
+      "community": 137,
       "norm_label": "uint"
     },
     {
@@ -1262,7 +1289,7 @@
       "source_file": "app/MakroPad.Actions/WindowsSystemMediaController.cs",
       "source_location": "L19",
       "id": "makropad_actions_windowssystemmediacontroller_windowssystemmediacontroller_playpauseasync",
-      "community": 5,
+      "community": 137,
       "norm_label": ".playpauseasync()"
     },
     {
@@ -1271,7 +1298,7 @@
       "source_file": "app/MakroPad.Actions/WindowsSystemMediaController.cs",
       "source_location": "L22",
       "id": "makropad_actions_windowssystemmediacontroller_windowssystemmediacontroller_nexttrackasync",
-      "community": 5,
+      "community": 137,
       "norm_label": ".nexttrackasync()"
     },
     {
@@ -1280,7 +1307,7 @@
       "source_file": "app/MakroPad.Actions/WindowsSystemMediaController.cs",
       "source_location": "L25",
       "id": "makropad_actions_windowssystemmediacontroller_windowssystemmediacontroller_previoustrackasync",
-      "community": 5,
+      "community": 137,
       "norm_label": ".previoustrackasync()"
     },
     {
@@ -1289,7 +1316,7 @@
       "source_file": "app/MakroPad.Actions/WindowsSystemMediaController.cs",
       "source_location": "L28",
       "id": "makropad_actions_windowssystemmediacontroller_windowssystemmediacontroller_stopasync",
-      "community": 5,
+      "community": 137,
       "norm_label": ".stopasync()"
     },
     {
@@ -1298,7 +1325,7 @@
       "source_file": "app/MakroPad.Actions/WindowsSystemMediaController.cs",
       "source_location": "L31",
       "id": "makropad_actions_windowssystemmediacontroller_windowssystemmediacontroller_volumeupasync",
-      "community": 5,
+      "community": 137,
       "norm_label": ".volumeupasync()"
     },
     {
@@ -1307,7 +1334,7 @@
       "source_file": "app/MakroPad.Actions/WindowsSystemMediaController.cs",
       "source_location": "L34",
       "id": "makropad_actions_windowssystemmediacontroller_windowssystemmediacontroller_volumedownasync",
-      "community": 5,
+      "community": 137,
       "norm_label": ".volumedownasync()"
     },
     {
@@ -1316,7 +1343,7 @@
       "source_file": "app/MakroPad.Actions/WindowsSystemMediaController.cs",
       "source_location": "L37",
       "id": "makropad_actions_windowssystemmediacontroller_windowssystemmediacontroller_muteasync",
-      "community": 5,
+      "community": 137,
       "norm_label": ".muteasync()"
     },
     {
@@ -1325,7 +1352,7 @@
       "source_file": "app/MakroPad.Actions/WindowsSystemMediaController.cs",
       "source_location": "L40",
       "id": "makropad_actions_windowssystemmediacontroller_windowssystemmediacontroller_sendmediakeyasync",
-      "community": 5,
+      "community": 137,
       "norm_label": ".sendmediakeyasync()"
     },
     {
@@ -1334,7 +1361,7 @@
       "source_file": "app/MakroPad.Actions/WindowsSystemMediaController.cs",
       "source_location": "L55",
       "id": "makropad_actions_windowssystemmediacontroller_windowssystemmediacontroller_trysendmediakey",
-      "community": 5,
+      "community": 137,
       "norm_label": ".trysendmediakey()"
     },
     {
@@ -1343,7 +1370,7 @@
       "source_file": "app/MakroPad.Actions/WindowsSystemMediaController.cs",
       "source_location": "L99",
       "id": "makropad_actions_windowssystemmediacontroller_windowssystemmediacontroller_sendinput",
-      "community": 5,
+      "community": 137,
       "norm_label": ".sendinput()"
     },
     {
@@ -1397,7 +1424,7 @@
       "source_file": "app/MakroPad.Actions.Tests/ActionExecutorTests.cs",
       "source_location": "L5",
       "id": "makropad_actions_tests_actionexecutortests_actionexecutortests",
-      "community": 11,
+      "community": 143,
       "norm_label": "actionexecutortests"
     },
     {
@@ -1406,7 +1433,7 @@
       "source_file": "app/MakroPad.Actions.Tests/ActionExecutorTests.cs",
       "source_location": "L7",
       "id": "makropad_actions_tests_actionexecutortests_actionexecutortests_executeasyncmapsslidervaluetovolumepercent",
-      "community": 11,
+      "community": 143,
       "norm_label": ".executeasyncmapsslidervaluetovolumepercent()"
     },
     {
@@ -1415,7 +1442,7 @@
       "source_file": "app/MakroPad.Actions.Tests/ActionExecutorTests.cs",
       "source_location": "L32",
       "id": "makropad_actions_tests_actionexecutortests_actionexecutortests_executeasyncfailsvolumeactionwhenvalueisinvalid",
-      "community": 11,
+      "community": 143,
       "norm_label": ".executeasyncfailsvolumeactionwhenvalueisinvalid()"
     },
     {
@@ -1424,7 +1451,7 @@
       "source_file": "app/MakroPad.Actions.Tests/ActionExecutorTests.cs",
       "source_location": "L52",
       "id": "makropad_actions_tests_actionexecutortests_actionexecutortests_executeasyncmapsslidervaluetoapplicationvolumepercent",
-      "community": 11,
+      "community": 143,
       "norm_label": ".executeasyncmapsslidervaluetoapplicationvolumepercent()"
     },
     {
@@ -1433,7 +1460,7 @@
       "source_file": "app/MakroPad.Actions.Tests/ActionExecutorTests.cs",
       "source_location": "L81",
       "id": "makropad_actions_tests_actionexecutortests_actionexecutortests_executeasyncfailsapplicationvolumeactionwhenprocessismissing",
-      "community": 11,
+      "community": 143,
       "norm_label": ".executeasyncfailsapplicationvolumeactionwhenprocessismissing()"
     },
     {
@@ -1442,7 +1469,7 @@
       "source_file": "app/MakroPad.Actions.Tests/ActionExecutorTests.cs",
       "source_location": "L101",
       "id": "makropad_actions_tests_actionexecutortests_actionexecutortests_executeasyncfailsapplicationvolumeactionwhenvalueisinvalid",
-      "community": 11,
+      "community": 143,
       "norm_label": ".executeasyncfailsapplicationvolumeactionwhenvalueisinvalid()"
     },
     {
@@ -1451,7 +1478,7 @@
       "source_file": "app/MakroPad.Actions.Tests/ActionExecutorTests.cs",
       "source_location": "L125",
       "id": "makropad_actions_tests_actionexecutortests_actionexecutortests_executeasyncrunsmediaactions",
-      "community": 11,
+      "community": 143,
       "norm_label": ".executeasyncrunsmediaactions()"
     },
     {
@@ -1460,7 +1487,7 @@
       "source_file": "app/MakroPad.Actions.Tests/ActionExecutorTests.cs",
       "source_location": "L152",
       "id": "makropad_actions_tests_actionexecutortests_actionexecutortests_executeasyncrunskeyboardshortcutaction",
-      "community": 11,
+      "community": 143,
       "norm_label": ".executeasyncrunskeyboardshortcutaction()"
     },
     {
@@ -1469,7 +1496,7 @@
       "source_file": "app/MakroPad.Actions.Tests/ActionExecutorTests.cs",
       "source_location": "L176",
       "id": "makropad_actions_tests_actionexecutortests_actionexecutortests_executeasyncrunsopenurlaction",
-      "community": 11,
+      "community": 143,
       "norm_label": ".executeasyncrunsopenurlaction()"
     },
     {
@@ -1478,7 +1505,7 @@
       "source_file": "app/MakroPad.Actions.Tests/ActionExecutorTests.cs",
       "source_location": "L200",
       "id": "makropad_actions_tests_actionexecutortests_actionexecutortests_executeasyncrunsopenappaction",
-      "community": 11,
+      "community": 143,
       "norm_label": ".executeasyncrunsopenappaction()"
     },
     {
@@ -1487,7 +1514,7 @@
       "source_file": "app/MakroPad.Actions.Tests/ActionExecutorTests.cs",
       "source_location": "L224",
       "id": "makropad_actions_tests_actionexecutortests_fakemediacontroller",
-      "community": 11,
+      "community": 147,
       "norm_label": "fakemediacontroller"
     },
     {
@@ -1496,7 +1523,7 @@
       "source_file": "app/MakroPad.Actions.Tests/ActionExecutorTests.cs",
       "source_location": "L228",
       "id": "makropad_actions_tests_actionexecutortests_fakemediacontroller_playpauseasync",
-      "community": 11,
+      "community": 147,
       "norm_label": ".playpauseasync()"
     },
     {
@@ -1505,7 +1532,7 @@
       "source_file": "app/MakroPad.Actions.Tests/ActionExecutorTests.cs",
       "source_location": "L231",
       "id": "makropad_actions_tests_actionexecutortests_fakemediacontroller_nexttrackasync",
-      "community": 11,
+      "community": 147,
       "norm_label": ".nexttrackasync()"
     },
     {
@@ -1514,7 +1541,7 @@
       "source_file": "app/MakroPad.Actions.Tests/ActionExecutorTests.cs",
       "source_location": "L234",
       "id": "makropad_actions_tests_actionexecutortests_fakemediacontroller_previoustrackasync",
-      "community": 11,
+      "community": 147,
       "norm_label": ".previoustrackasync()"
     },
     {
@@ -1523,7 +1550,7 @@
       "source_file": "app/MakroPad.Actions.Tests/ActionExecutorTests.cs",
       "source_location": "L237",
       "id": "makropad_actions_tests_actionexecutortests_fakemediacontroller_stopasync",
-      "community": 11,
+      "community": 147,
       "norm_label": ".stopasync()"
     },
     {
@@ -1532,7 +1559,7 @@
       "source_file": "app/MakroPad.Actions.Tests/ActionExecutorTests.cs",
       "source_location": "L240",
       "id": "makropad_actions_tests_actionexecutortests_fakemediacontroller_volumeupasync",
-      "community": 11,
+      "community": 147,
       "norm_label": ".volumeupasync()"
     },
     {
@@ -1541,7 +1568,7 @@
       "source_file": "app/MakroPad.Actions.Tests/ActionExecutorTests.cs",
       "source_location": "L243",
       "id": "makropad_actions_tests_actionexecutortests_fakemediacontroller_volumedownasync",
-      "community": 11,
+      "community": 147,
       "norm_label": ".volumedownasync()"
     },
     {
@@ -1550,7 +1577,7 @@
       "source_file": "app/MakroPad.Actions.Tests/ActionExecutorTests.cs",
       "source_location": "L246",
       "id": "makropad_actions_tests_actionexecutortests_fakemediacontroller_muteasync",
-      "community": 11,
+      "community": 147,
       "norm_label": ".muteasync()"
     },
     {
@@ -1559,7 +1586,7 @@
       "source_file": "app/MakroPad.Actions.Tests/ActionExecutorTests.cs",
       "source_location": "L249",
       "id": "makropad_actions_tests_actionexecutortests_fakemediacontroller_recordasync",
-      "community": 11,
+      "community": 147,
       "norm_label": ".recordasync()"
     },
     {
@@ -1595,7 +1622,7 @@
       "source_file": "app/MakroPad.Actions.Tests/ActionExecutorTests.cs",
       "source_location": "L280",
       "id": "makropad_actions_tests_actionexecutortests_fakeapplicationvolumecontroller",
-      "community": 11,
+      "community": 146,
       "norm_label": "fakeapplicationvolumecontroller"
     },
     {
@@ -1604,7 +1631,7 @@
       "source_file": "app/MakroPad.Actions.Tests/ActionExecutorTests.cs",
       "source_location": "L284",
       "id": "makropad_actions_tests_actionexecutortests_fakeapplicationvolumecontroller_setapplicationvolumeasync",
-      "community": 11,
+      "community": 146,
       "norm_label": ".setapplicationvolumeasync()"
     },
     {
@@ -1613,7 +1640,7 @@
       "source_file": "app/MakroPad.Actions.Tests/ActionExecutorTests.cs",
       "source_location": "L295",
       "id": "makropad_actions_tests_actionexecutortests_fakeapplicationvolumecontroller_getaudiosessionsasync",
-      "community": 11,
+      "community": 146,
       "norm_label": ".getaudiosessionsasync()"
     },
     {
@@ -2004,6 +2031,42 @@
       "norm_label": ".match()"
     },
     {
+      "label": "PageHeader.axaml.cs",
+      "file_type": "code",
+      "source_file": "app/MakroPad.App/Controls/PageHeader.axaml.cs",
+      "source_location": "L1",
+      "id": "app_makropad_app_controls_pageheader_axaml_cs",
+      "community": 9,
+      "norm_label": "pageheader.axaml.cs"
+    },
+    {
+      "label": "PageHeader",
+      "file_type": "code",
+      "source_file": "app/MakroPad.App/Controls/PageHeader.axaml.cs",
+      "source_location": "L6",
+      "id": "controls_pageheader_axaml_pageheader",
+      "community": 9,
+      "norm_label": "pageheader"
+    },
+    {
+      "label": "UserControl",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "id": "usercontrol",
+      "community": 9,
+      "norm_label": "usercontrol"
+    },
+    {
+      "label": "StyledProperty",
+      "file_type": "code",
+      "source_file": "app/MakroPad.App/Controls/PageHeader.axaml.cs",
+      "source_location": "L8",
+      "id": "styledproperty",
+      "community": 9,
+      "norm_label": "styledproperty"
+    },
+    {
       "label": "ActionDefinition.cs",
       "file_type": "code",
       "source_file": "app/MakroPad.App/Services/ActionDefinition.cs",
@@ -2126,7 +2189,7 @@
       "source_file": "app/MakroPad.App/Services/AppRuntimeLoopService.cs",
       "source_location": "L1",
       "id": "app_makropad_app_services_appruntimeloopservice_cs",
-      "community": 18,
+      "community": 148,
       "norm_label": "appruntimeloopservice.cs"
     },
     {
@@ -2135,7 +2198,7 @@
       "source_file": "app/MakroPad.App/Services/AppRuntimeLoopService.cs",
       "source_location": "L10",
       "id": "services_appruntimeloopservice_appruntimeloopservice",
-      "community": 18,
+      "community": 148,
       "norm_label": "appruntimeloopservice"
     },
     {
@@ -2144,7 +2207,7 @@
       "source_file": "",
       "source_location": "",
       "id": "idisposable",
-      "community": 18,
+      "community": 148,
       "norm_label": "idisposable"
     },
     {
@@ -2153,7 +2216,7 @@
       "source_file": "app/MakroPad.App/Services/AppRuntimeLoopService.cs",
       "source_location": "L12",
       "id": "app_makropad_app_services_appruntimeloopservice_cs_cancellationtokensource",
-      "community": 18,
+      "community": 148,
       "norm_label": "cancellationtokensource"
     },
     {
@@ -2162,7 +2225,7 @@
       "source_file": "app/MakroPad.App/Services/AppRuntimeLoopService.cs",
       "source_location": "L14",
       "id": "app_makropad_app_services_appruntimeloopservice_cs_bool",
-      "community": 18,
+      "community": 148,
       "norm_label": "bool"
     },
     {
@@ -2171,7 +2234,7 @@
       "source_file": "app/MakroPad.App/Services/AppRuntimeLoopService.cs",
       "source_location": "L17",
       "id": "services_appruntimeloopservice_appruntimeloopservice_start",
-      "community": 18,
+      "community": 148,
       "norm_label": ".start()"
     },
     {
@@ -2180,7 +2243,7 @@
       "source_file": "app/MakroPad.App/Services/AppRuntimeLoopService.cs",
       "source_location": "L46",
       "id": "services_appruntimeloopservice_appruntimeloopservice_stop",
-      "community": 18,
+      "community": 148,
       "norm_label": ".stop()"
     },
     {
@@ -2189,7 +2252,7 @@
       "source_file": "app/MakroPad.App/Services/AppRuntimeLoopService.cs",
       "source_location": "L57",
       "id": "services_appruntimeloopservice_appruntimeloopservice_dispose",
-      "community": 18,
+      "community": 148,
       "norm_label": ".dispose()"
     },
     {
@@ -4383,7 +4446,7 @@
       "label": "MainWindowViewModel",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L20",
+      "source_location": "L22",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel",
       "community": 1,
       "norm_label": "mainwindowviewmodel"
@@ -4392,7 +4455,7 @@
       "label": "DeviceSessionService",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L22",
+      "source_location": "L24",
       "id": "app_makropad_app_viewmodels_mainwindowviewmodel_cs_devicesessionservice",
       "community": 1,
       "norm_label": "devicesessionservice"
@@ -4401,7 +4464,7 @@
       "label": "MakroPadConfigService",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L23",
+      "source_location": "L25",
       "id": "makropadconfigservice",
       "community": 1,
       "norm_label": "makropadconfigservice"
@@ -4410,7 +4473,7 @@
       "label": "DeviceDisplaySyncService",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L24",
+      "source_location": "L26",
       "id": "app_makropad_app_viewmodels_mainwindowviewmodel_cs_devicedisplaysyncservice",
       "community": 1,
       "norm_label": "devicedisplaysyncservice"
@@ -4419,7 +4482,7 @@
       "label": "ActionDefinitionCatalog",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L25",
+      "source_location": "L27",
       "id": "app_makropad_app_viewmodels_mainwindowviewmodel_cs_actiondefinitioncatalog",
       "community": 1,
       "norm_label": "actiondefinitioncatalog"
@@ -4428,7 +4491,7 @@
       "label": "BindingEditorService",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L26",
+      "source_location": "L28",
       "id": "app_makropad_app_viewmodels_mainwindowviewmodel_cs_bindingeditorservice",
       "community": 1,
       "norm_label": "bindingeditorservice"
@@ -4437,7 +4500,7 @@
       "label": "ProfileConfigService",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L27",
+      "source_location": "L29",
       "id": "app_makropad_app_viewmodels_mainwindowviewmodel_cs_profileconfigservice",
       "community": 1,
       "norm_label": "profileconfigservice"
@@ -4446,7 +4509,7 @@
       "label": "ProtocolInputDecoder",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L28",
+      "source_location": "L30",
       "id": "app_makropad_app_viewmodels_mainwindowviewmodel_cs_protocolinputdecoder",
       "community": 1,
       "norm_label": "protocolinputdecoder"
@@ -4455,7 +4518,7 @@
       "label": "EventLogService",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L29",
+      "source_location": "L31",
       "id": "eventlogservice",
       "community": 1,
       "norm_label": "eventlogservice"
@@ -4464,7 +4527,7 @@
       "label": "DisplayTriggerOrchestrator",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L30",
+      "source_location": "L32",
       "id": "app_makropad_app_viewmodels_mainwindowviewmodel_cs_displaytriggerorchestrator",
       "community": 1,
       "norm_label": "displaytriggerorchestrator"
@@ -4473,7 +4536,7 @@
       "label": "ActionPipeline",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L31",
+      "source_location": "L33",
       "id": "app_makropad_app_viewmodels_mainwindowviewmodel_cs_actionpipeline",
       "community": 1,
       "norm_label": "actionpipeline"
@@ -4482,7 +4545,7 @@
       "label": "ActionFeedbackCoordinator",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L32",
+      "source_location": "L34",
       "id": "actionfeedbackcoordinator",
       "community": 1,
       "norm_label": "actionfeedbackcoordinator"
@@ -4491,7 +4554,7 @@
       "label": "AppRuntimeLoopService",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L33",
+      "source_location": "L35",
       "id": "appruntimeloopservice",
       "community": 1,
       "norm_label": "appruntimeloopservice"
@@ -4500,7 +4563,7 @@
       "label": "MakroPadConfig",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L35",
+      "source_location": "L37",
       "id": "app_makropad_app_viewmodels_mainwindowviewmodel_cs_makropadconfig",
       "community": 1,
       "norm_label": "makropadconfig"
@@ -4509,7 +4572,7 @@
       "label": "bool",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L36",
+      "source_location": "L38",
       "id": "app_makropad_app_viewmodels_mainwindowviewmodel_cs_bool",
       "community": 1,
       "norm_label": "bool"
@@ -4518,7 +4581,7 @@
       "label": "string",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L38",
+      "source_location": "L40",
       "id": "app_makropad_app_viewmodels_mainwindowviewmodel_cs_string",
       "community": 1,
       "norm_label": "string"
@@ -4527,7 +4590,7 @@
       "label": ".OnSelectedPortChanged()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L44",
+      "source_location": "L46",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_onselectedportchanged",
       "community": 1,
       "norm_label": ".onselectedportchanged()"
@@ -4536,7 +4599,7 @@
       "label": "int",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L53",
+      "source_location": "L55",
       "id": "app_makropad_app_viewmodels_mainwindowviewmodel_cs_int",
       "community": 1,
       "norm_label": "int"
@@ -4545,7 +4608,7 @@
       "label": ".OnLastSliderValueChanged()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L56",
+      "source_location": "L58",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_onlastslidervaluechanged",
       "community": 62,
       "norm_label": ".onlastslidervaluechanged()"
@@ -4554,16 +4617,43 @@
       "label": ".OnConnectionStatusChanged()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L89",
+      "source_location": "L98",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_onconnectionstatuschanged",
       "community": 62,
       "norm_label": ".onconnectionstatuschanged()"
     },
     {
+      "label": ".OnIsDarkThemeChanged()",
+      "file_type": "code",
+      "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
+      "source_location": "L197",
+      "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_onisdarkthemechanged",
+      "community": 1,
+      "norm_label": ".onisdarkthemechanged()"
+    },
+    {
+      "label": ".ToggleTheme()",
+      "file_type": "code",
+      "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
+      "source_location": "L203",
+      "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_toggletheme",
+      "community": 1,
+      "norm_label": ".toggletheme()"
+    },
+    {
+      "label": ".ApplyThemeVariant()",
+      "file_type": "code",
+      "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
+      "source_location": "L209",
+      "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_applythemevariant",
+      "community": 1,
+      "norm_label": ".applythemevariant()"
+    },
+    {
       "label": ".Shutdown()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L187",
+      "source_location": "L221",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_shutdown",
       "community": 1,
       "norm_label": ".shutdown()"
@@ -4572,7 +4662,7 @@
       "label": ".RefreshPorts()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L193",
+      "source_location": "L227",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_refreshports",
       "community": 102,
       "norm_label": ".refreshports()"
@@ -4581,7 +4671,7 @@
       "label": ".ConnectAsync()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L209",
+      "source_location": "L243",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_connectasync",
       "community": 102,
       "norm_label": ".connectasync()"
@@ -4590,7 +4680,7 @@
       "label": ".DisconnectAsync()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L232",
+      "source_location": "L266",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_disconnectasync",
       "community": 102,
       "norm_label": ".disconnectasync()"
@@ -4599,7 +4689,7 @@
       "label": ".SendDisplayMessageAsync()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L239",
+      "source_location": "L273",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_senddisplaymessageasync",
       "community": 16,
       "norm_label": ".senddisplaymessageasync()"
@@ -4608,7 +4698,7 @@
       "label": ".LoadConfigAsync()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L263",
+      "source_location": "L297",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_loadconfigasync",
       "community": 102,
       "norm_label": ".loadconfigasync()"
@@ -4617,7 +4707,7 @@
       "label": ".SaveConfigAsync()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L302",
+      "source_location": "L336",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_saveconfigasync",
       "community": 102,
       "norm_label": ".saveconfigasync()"
@@ -4626,7 +4716,7 @@
       "label": ".AutoConnectAsync()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L336",
+      "source_location": "L370",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_autoconnectasync",
       "community": 102,
       "norm_label": ".autoconnectasync()"
@@ -4635,7 +4725,7 @@
       "label": ".SimulateButton()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L372",
+      "source_location": "L406",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_simulatebutton",
       "community": 16,
       "norm_label": ".simulatebutton()"
@@ -4644,7 +4734,7 @@
       "label": ".SimulateSlider()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L383",
+      "source_location": "L417",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_simulateslider",
       "community": 16,
       "norm_label": ".simulateslider()"
@@ -4653,7 +4743,7 @@
       "label": ".OnProfilesEditorChanged()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L395",
+      "source_location": "L429",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_onprofileseditorchanged",
       "community": 62,
       "norm_label": ".onprofileseditorchanged()"
@@ -4662,7 +4752,7 @@
       "label": ".OnDisplayTriggersEditorChanged()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L423",
+      "source_location": "L457",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_ondisplaytriggerseditorchanged",
       "community": 1,
       "norm_label": ".ondisplaytriggerseditorchanged()"
@@ -4671,16 +4761,16 @@
       "label": ".OnDisplaySettingsChanged()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L435",
+      "source_location": "L469",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_ondisplaysettingschanged",
-      "community": 102,
+      "community": 62,
       "norm_label": ".ondisplaysettingschanged()"
     },
     {
       "label": ".OnDisplayTriggerTestRequested()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L446",
+      "source_location": "L480",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_ondisplaytriggertestrequested",
       "community": 2,
       "norm_label": ".ondisplaytriggertestrequested()"
@@ -4689,7 +4779,7 @@
       "label": ".TestDisplayTriggerAsync()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L451",
+      "source_location": "L485",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_testdisplaytriggerasync",
       "community": 2,
       "norm_label": ".testdisplaytriggerasync()"
@@ -4698,16 +4788,16 @@
       "label": ".OnDeviceEventReceived()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L512",
+      "source_location": "L546",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_ondeviceeventreceived",
-      "community": 16,
+      "community": 2,
       "norm_label": ".ondeviceeventreceived()"
     },
     {
       "label": ".OnDeviceStateChanged()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L517",
+      "source_location": "L551",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_ondevicestatechanged",
       "community": 1,
       "norm_label": ".ondevicestatechanged()"
@@ -4716,34 +4806,34 @@
       "label": ".HandleDeviceEvent()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L522",
+      "source_location": "L556",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_handledeviceevent",
-      "community": 16,
+      "community": 2,
       "norm_label": ".handledeviceevent()"
     },
     {
       "label": ".HandleProtocolMessageSafelyAsync()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L532",
+      "source_location": "L566",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_handleprotocolmessagesafelyasync",
-      "community": 16,
+      "community": 2,
       "norm_label": ".handleprotocolmessagesafelyasync()"
     },
     {
       "label": ".HandleProtocolMessageAsync()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L544",
+      "source_location": "L578",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_handleprotocolmessageasync",
-      "community": 16,
+      "community": 2,
       "norm_label": ".handleprotocolmessageasync()"
     },
     {
       "label": ".HandleDisplayTriggersAsync()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L572",
+      "source_location": "L606",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_handledisplaytriggersasync",
       "community": 2,
       "norm_label": ".handledisplaytriggersasync()"
@@ -4752,25 +4842,25 @@
       "label": ".HandleConfiguredInputAsync()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L589",
+      "source_location": "L623",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_handleconfiguredinputasync",
-      "community": 16,
+      "community": 2,
       "norm_label": ".handleconfiguredinputasync()"
     },
     {
       "label": ".HasMediaChangedDisplayTrigger()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L610",
+      "source_location": "L644",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_hasmediachangeddisplaytrigger",
-      "community": 2,
+      "community": 45,
       "norm_label": ".hasmediachangeddisplaytrigger()"
     },
     {
       "label": ".HandleMediaChangedDisplayTriggerAsync()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L615",
+      "source_location": "L649",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_handlemediachangeddisplaytriggerasync",
       "community": 2,
       "norm_label": ".handlemediachangeddisplaytriggerasync()"
@@ -4779,7 +4869,7 @@
       "label": ".HandleConnectionChangedDisplayTriggersAsync()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L634",
+      "source_location": "L668",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_handleconnectionchangeddisplaytriggersasync",
       "community": 2,
       "norm_label": ".handleconnectionchangeddisplaytriggersasync()"
@@ -4788,7 +4878,7 @@
       "label": ".HandleConnectionStatusDisplayAsync()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L650",
+      "source_location": "L684",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_handleconnectionstatusdisplayasync",
       "community": 62,
       "norm_label": ".handleconnectionstatusdisplayasync()"
@@ -4797,16 +4887,16 @@
       "label": ".HandleActiveProfileDisplayAsync()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L660",
+      "source_location": "L694",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_handleactiveprofiledisplayasync",
-      "community": 2,
+      "community": 62,
       "norm_label": ".handleactiveprofiledisplayasync()"
     },
     {
       "label": ".CreateDisplayTriggerRuntimeState()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L677",
+      "source_location": "L711",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_createdisplaytriggerruntimestate",
       "community": 2,
       "norm_label": ".createdisplaytriggerruntimestate()"
@@ -4815,7 +4905,7 @@
       "label": ".LogDisplayTriggerSequence()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L685",
+      "source_location": "L719",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_logdisplaytriggersequence",
       "community": 2,
       "norm_label": ".logdisplaytriggersequence()"
@@ -4824,16 +4914,16 @@
       "label": ".SendDeviceConfigAsync()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L693",
+      "source_location": "L727",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_senddeviceconfigasync",
-      "community": 102,
+      "community": 62,
       "norm_label": ".senddeviceconfigasync()"
     },
     {
       "label": ".DisconnectActiveConnectionAsync()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L706",
+      "source_location": "L740",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_disconnectactiveconnectionasync",
       "community": 102,
       "norm_label": ".disconnectactiveconnectionasync()"
@@ -4842,7 +4932,7 @@
       "label": ".AddLog()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L711",
+      "source_location": "L745",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_addlog",
       "community": 16,
       "norm_label": ".addlog()"
@@ -4851,7 +4941,7 @@
       "label": ".GetDefaultConfigPath()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L716",
+      "source_location": "L750",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_getdefaultconfigpath",
       "community": 1,
       "norm_label": ".getdefaultconfigpath()"
@@ -4860,7 +4950,7 @@
       "label": ".LoadDisplayTriggersEditor()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L722",
+      "source_location": "L756",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_loaddisplaytriggerseditor",
       "community": 62,
       "norm_label": ".loaddisplaytriggerseditor()"
@@ -4869,7 +4959,7 @@
       "label": ".RefreshDisplayTriggerEditorRuntime()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L729",
+      "source_location": "L763",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_refreshdisplaytriggereditorruntime",
       "community": 62,
       "norm_label": ".refreshdisplaytriggereditorruntime()"
@@ -4878,16 +4968,16 @@
       "label": ".DefaultScreenUsesMediaPlaceholder()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L738",
+      "source_location": "L772",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_defaultscreenusesmediaplaceholder",
-      "community": 102,
+      "community": 62,
       "norm_label": ".defaultscreenusesmediaplaceholder()"
     },
     {
       "label": ".RefreshDisplaySettingsRuntime()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
-      "source_location": "L743",
+      "source_location": "L777",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_refreshdisplaysettingsruntime",
       "community": 62,
       "norm_label": ".refreshdisplaysettingsruntime()"
@@ -5235,6 +5325,132 @@
       "norm_label": "observableobject"
     },
     {
+      "label": "ApplicationSettingsView.axaml.cs",
+      "file_type": "code",
+      "source_file": "app/MakroPad.App/Views/ApplicationSettingsView.axaml.cs",
+      "source_location": "L1",
+      "id": "app_makropad_app_views_applicationsettingsview_axaml_cs",
+      "community": 9,
+      "norm_label": "applicationsettingsview.axaml.cs"
+    },
+    {
+      "label": "ApplicationSettingsView",
+      "file_type": "code",
+      "source_file": "app/MakroPad.App/Views/ApplicationSettingsView.axaml.cs",
+      "source_location": "L5",
+      "id": "views_applicationsettingsview_axaml_applicationsettingsview",
+      "community": 9,
+      "norm_label": "applicationsettingsview"
+    },
+    {
+      "label": "DebugView.axaml.cs",
+      "file_type": "code",
+      "source_file": "app/MakroPad.App/Views/DebugView.axaml.cs",
+      "source_location": "L1",
+      "id": "app_makropad_app_views_debugview_axaml_cs",
+      "community": 9,
+      "norm_label": "debugview.axaml.cs"
+    },
+    {
+      "label": "DebugView",
+      "file_type": "code",
+      "source_file": "app/MakroPad.App/Views/DebugView.axaml.cs",
+      "source_location": "L5",
+      "id": "views_debugview_axaml_debugview",
+      "community": 9,
+      "norm_label": "debugview"
+    },
+    {
+      "label": "DeviceView.axaml.cs",
+      "file_type": "code",
+      "source_file": "app/MakroPad.App/Views/DeviceView.axaml.cs",
+      "source_location": "L1",
+      "id": "app_makropad_app_views_deviceview_axaml_cs",
+      "community": 9,
+      "norm_label": "deviceview.axaml.cs"
+    },
+    {
+      "label": "DeviceView",
+      "file_type": "code",
+      "source_file": "app/MakroPad.App/Views/DeviceView.axaml.cs",
+      "source_location": "L5",
+      "id": "views_deviceview_axaml_deviceview",
+      "community": 9,
+      "norm_label": "deviceview"
+    },
+    {
+      "label": "DisplayEditorView.axaml.cs",
+      "file_type": "code",
+      "source_file": "app/MakroPad.App/Views/DisplayEditorView.axaml.cs",
+      "source_location": "L1",
+      "id": "app_makropad_app_views_displayeditorview_axaml_cs",
+      "community": 9,
+      "norm_label": "displayeditorview.axaml.cs"
+    },
+    {
+      "label": "DisplayEditorView",
+      "file_type": "code",
+      "source_file": "app/MakroPad.App/Views/DisplayEditorView.axaml.cs",
+      "source_location": "L5",
+      "id": "views_displayeditorview_axaml_displayeditorview",
+      "community": 9,
+      "norm_label": "displayeditorview"
+    },
+    {
+      "label": "MacrosView.axaml.cs",
+      "file_type": "code",
+      "source_file": "app/MakroPad.App/Views/MacrosView.axaml.cs",
+      "source_location": "L1",
+      "id": "app_makropad_app_views_macrosview_axaml_cs",
+      "community": 9,
+      "norm_label": "macrosview.axaml.cs"
+    },
+    {
+      "label": "MacrosView",
+      "file_type": "code",
+      "source_file": "app/MakroPad.App/Views/MacrosView.axaml.cs",
+      "source_location": "L12",
+      "id": "views_macrosview_axaml_macrosview",
+      "community": 9,
+      "norm_label": "macrosview"
+    },
+    {
+      "label": ".OnKeyDown()",
+      "file_type": "code",
+      "source_file": "app/MakroPad.App/Views/MacrosView.axaml.cs",
+      "source_location": "L22",
+      "id": "views_macrosview_axaml_macrosview_onkeydown",
+      "community": 9,
+      "norm_label": ".onkeydown()"
+    },
+    {
+      "label": ".BrowseOpenApp_Click()",
+      "file_type": "code",
+      "source_file": "app/MakroPad.App/Views/MacrosView.axaml.cs",
+      "source_location": "L46",
+      "id": "views_macrosview_axaml_macrosview_browseopenapp_click",
+      "community": 9,
+      "norm_label": ".browseopenapp_click()"
+    },
+    {
+      "label": ".FormatShortcut()",
+      "file_type": "code",
+      "source_file": "app/MakroPad.App/Views/MacrosView.axaml.cs",
+      "source_location": "L80",
+      "id": "views_macrosview_axaml_macrosview_formatshortcut",
+      "community": 9,
+      "norm_label": ".formatshortcut()"
+    },
+    {
+      "label": ".NormalizeKey()",
+      "file_type": "code",
+      "source_file": "app/MakroPad.App/Views/MacrosView.axaml.cs",
+      "source_location": "L113",
+      "id": "views_macrosview_axaml_macrosview_normalizekey",
+      "community": 9,
+      "norm_label": ".normalizekey()"
+    },
+    {
       "label": "MainWindow.axaml.cs",
       "file_type": "code",
       "source_file": "app/MakroPad.App/Views/MainWindow.axaml.cs",
@@ -5247,7 +5463,7 @@
       "label": "MainWindow",
       "file_type": "code",
       "source_file": "app/MakroPad.App/Views/MainWindow.axaml.cs",
-      "source_location": "L12",
+      "source_location": "L6",
       "id": "views_mainwindow_axaml_mainwindow",
       "community": 24,
       "norm_label": "mainwindow"
@@ -5262,40 +5478,40 @@
       "norm_label": "window"
     },
     {
-      "label": ".OnKeyDown()",
+      "label": "ProfilesSettingsView.axaml.cs",
       "file_type": "code",
-      "source_file": "app/MakroPad.App/Views/MainWindow.axaml.cs",
-      "source_location": "L23",
-      "id": "views_mainwindow_axaml_mainwindow_onkeydown",
-      "community": 24,
-      "norm_label": ".onkeydown()"
+      "source_file": "app/MakroPad.App/Views/ProfilesSettingsView.axaml.cs",
+      "source_location": "L1",
+      "id": "app_makropad_app_views_profilessettingsview_axaml_cs",
+      "community": 9,
+      "norm_label": "profilessettingsview.axaml.cs"
     },
     {
-      "label": ".BrowseOpenApp_Click()",
+      "label": "ProfilesSettingsView",
       "file_type": "code",
-      "source_file": "app/MakroPad.App/Views/MainWindow.axaml.cs",
-      "source_location": "L47",
-      "id": "views_mainwindow_axaml_mainwindow_browseopenapp_click",
-      "community": 24,
-      "norm_label": ".browseopenapp_click()"
+      "source_file": "app/MakroPad.App/Views/ProfilesSettingsView.axaml.cs",
+      "source_location": "L5",
+      "id": "views_profilessettingsview_axaml_profilessettingsview",
+      "community": 9,
+      "norm_label": "profilessettingsview"
     },
     {
-      "label": ".FormatShortcut()",
+      "label": "SimulationView.axaml.cs",
       "file_type": "code",
-      "source_file": "app/MakroPad.App/Views/MainWindow.axaml.cs",
-      "source_location": "L81",
-      "id": "views_mainwindow_axaml_mainwindow_formatshortcut",
-      "community": 24,
-      "norm_label": ".formatshortcut()"
+      "source_file": "app/MakroPad.App/Views/SimulationView.axaml.cs",
+      "source_location": "L1",
+      "id": "app_makropad_app_views_simulationview_axaml_cs",
+      "community": 9,
+      "norm_label": "simulationview.axaml.cs"
     },
     {
-      "label": ".NormalizeKey()",
+      "label": "SimulationView",
       "file_type": "code",
-      "source_file": "app/MakroPad.App/Views/MainWindow.axaml.cs",
-      "source_location": "L114",
-      "id": "views_mainwindow_axaml_mainwindow_normalizekey",
-      "community": 24,
-      "norm_label": ".normalizekey()"
+      "source_file": "app/MakroPad.App/Views/SimulationView.axaml.cs",
+      "source_location": "L5",
+      "id": "views_simulationview_axaml_simulationview",
+      "community": 9,
+      "norm_label": "simulationview"
     },
     {
       "label": "ActionFeedbackCoordinatorTests.cs",
@@ -5303,7 +5519,7 @@
       "source_file": "app/MakroPad.App.Tests/Services/ActionFeedbackCoordinatorTests.cs",
       "source_location": "L1",
       "id": "app_makropad_app_tests_services_actionfeedbackcoordinatortests_cs",
-      "community": 22,
+      "community": 153,
       "norm_label": "actionfeedbackcoordinatortests.cs"
     },
     {
@@ -5312,7 +5528,7 @@
       "source_file": "app/MakroPad.App.Tests/Services/ActionFeedbackCoordinatorTests.cs",
       "source_location": "L8",
       "id": "services_actionfeedbackcoordinatortests_actionfeedbackcoordinatortests",
-      "community": 22,
+      "community": 150,
       "norm_label": "actionfeedbackcoordinatortests"
     },
     {
@@ -5321,7 +5537,7 @@
       "source_file": "app/MakroPad.App.Tests/Services/ActionFeedbackCoordinatorTests.cs",
       "source_location": "L10",
       "id": "services_actionfeedbackcoordinatortests_actionfeedbackcoordinatortests_formatactionresultreturnspipelinemessageforunboundinput",
-      "community": 22,
+      "community": 150,
       "norm_label": ".formatactionresultreturnspipelinemessageforunboundinput()"
     },
     {
@@ -5330,7 +5546,7 @@
       "source_file": "app/MakroPad.App.Tests/Services/ActionFeedbackCoordinatorTests.cs",
       "source_location": "L20",
       "id": "services_actionfeedbackcoordinatortests_actionfeedbackcoordinatortests_formatactionresultdescribesexecutedaction",
-      "community": 22,
+      "community": 150,
       "norm_label": ".formatactionresultdescribesexecutedaction()"
     },
     {
@@ -5339,7 +5555,7 @@
       "source_file": "app/MakroPad.App.Tests/Services/ActionFeedbackCoordinatorTests.cs",
       "source_location": "L34",
       "id": "services_actionfeedbackcoordinatortests_actionfeedbackcoordinatortests_formatactionresultreturnspipelinemessagewhenexecutiondetailsaremissing",
-      "community": 22,
+      "community": 150,
       "norm_label": ".formatactionresultreturnspipelinemessagewhenexecutiondetailsaremissing()"
     },
     {
@@ -5348,7 +5564,7 @@
       "source_file": "app/MakroPad.App.Tests/Services/ActionFeedbackCoordinatorTests.cs",
       "source_location": "L47",
       "id": "services_actionfeedbackcoordinatortests_actionfeedbackcoordinatortests_handleasyncwithoutactiveconnectionreturnslogwithoutsendingfeedback",
-      "community": 22,
+      "community": 150,
       "norm_label": ".handleasyncwithoutactiveconnectionreturnslogwithoutsendingfeedback()"
     },
     {
@@ -5357,7 +5573,7 @@
       "source_file": "app/MakroPad.App.Tests/Services/ActionFeedbackCoordinatorTests.cs",
       "source_location": "L71",
       "id": "services_actionfeedbackcoordinatortests_actionfeedbackcoordinatortests_handleasyncfallsbacktofirmwarefeedbackwhendisplaytriggersendfails",
-      "community": 22,
+      "community": 150,
       "norm_label": ".handleasyncfallsbacktofirmwarefeedbackwhendisplaytriggersendfails()"
     },
     {
@@ -5366,7 +5582,7 @@
       "source_file": "app/MakroPad.App.Tests/Services/ActionFeedbackCoordinatorTests.cs",
       "source_location": "L117",
       "id": "services_actionfeedbackcoordinatortests_actionfeedbackcoordinatortests_createpipeline",
-      "community": 22,
+      "community": 150,
       "norm_label": ".createpipeline()"
     },
     {
@@ -5375,7 +5591,7 @@
       "source_file": "app/MakroPad.App.Tests/Services/ActionFeedbackCoordinatorTests.cs",
       "source_location": "L129",
       "id": "services_actionfeedbackcoordinatortests_actionfeedbackcoordinatortests_createlogactionconfig",
-      "community": 22,
+      "community": 150,
       "norm_label": ".createlogactionconfig()"
     },
     {
@@ -5411,7 +5627,7 @@
       "source_file": "app/MakroPad.App.Tests/Services/ActionFeedbackCoordinatorTests.cs",
       "source_location": "L178",
       "id": "services_actionfeedbackcoordinatortests_fakesystemlauncher",
-      "community": 22,
+      "community": 153,
       "norm_label": "fakesystemlauncher"
     },
     {
@@ -5420,7 +5636,7 @@
       "source_file": "app/MakroPad.App.Tests/Services/ActionFeedbackCoordinatorTests.cs",
       "source_location": "L180",
       "id": "services_actionfeedbackcoordinatortests_fakesystemlauncher_openurlasync",
-      "community": 22,
+      "community": 153,
       "norm_label": ".openurlasync()"
     },
     {
@@ -5429,7 +5645,7 @@
       "source_file": "app/MakroPad.App.Tests/Services/ActionFeedbackCoordinatorTests.cs",
       "source_location": "L187",
       "id": "services_actionfeedbackcoordinatortests_fakesystemlauncher_openappasync",
-      "community": 22,
+      "community": 153,
       "norm_label": ".openappasync()"
     },
     {
@@ -5600,7 +5816,7 @@
       "source_file": "app/MakroPad.App.Tests/Services/DeviceDisplaySyncServiceTests.cs",
       "source_location": "L57",
       "id": "services_devicedisplaysyncservicetests_recordingconnection",
-      "community": 3,
+      "community": 140,
       "norm_label": "recordingconnection"
     },
     {
@@ -5609,7 +5825,7 @@
       "source_file": "app/MakroPad.App.Tests/Services/DeviceDisplaySyncServiceTests.cs",
       "source_location": "L67",
       "id": "services_devicedisplaysyncservicetests_recordingconnection_getavailableports",
-      "community": 3,
+      "community": 140,
       "norm_label": ".getavailableports()"
     },
     {
@@ -5618,7 +5834,7 @@
       "source_file": "app/MakroPad.App.Tests/Services/DeviceDisplaySyncServiceTests.cs",
       "source_location": "L69",
       "id": "services_devicedisplaysyncservicetests_recordingconnection_connectasync",
-      "community": 3,
+      "community": 140,
       "norm_label": ".connectasync()"
     },
     {
@@ -5627,7 +5843,7 @@
       "source_file": "app/MakroPad.App.Tests/Services/DeviceDisplaySyncServiceTests.cs",
       "source_location": "L76",
       "id": "services_devicedisplaysyncservicetests_recordingconnection_disconnectasync",
-      "community": 3,
+      "community": 140,
       "norm_label": ".disconnectasync()"
     },
     {
@@ -5636,7 +5852,7 @@
       "source_file": "app/MakroPad.App.Tests/Services/DeviceDisplaySyncServiceTests.cs",
       "source_location": "L83",
       "id": "services_devicedisplaysyncservicetests_recordingconnection_senddisplaymessageasync",
-      "community": 3,
+      "community": 140,
       "norm_label": ".senddisplaymessageasync()"
     },
     {
@@ -5645,7 +5861,7 @@
       "source_file": "app/MakroPad.App.Tests/Services/DeviceDisplaySyncServiceTests.cs",
       "source_location": "L89",
       "id": "services_devicedisplaysyncservicetests_recordingconnection_sendlineasync",
-      "community": 3,
+      "community": 140,
       "norm_label": ".sendlineasync()"
     },
     {
@@ -5654,7 +5870,7 @@
       "source_file": "app/MakroPad.App.Tests/Services/DeviceDisplaySyncServiceTests.cs",
       "source_location": "L95",
       "id": "services_devicedisplaysyncservicetests_recordingconnection_raiseevent",
-      "community": 3,
+      "community": 140,
       "norm_label": ".raiseevent()"
     },
     {
@@ -8039,7 +8255,7 @@
       "source_file": "app/MakroPad.Device/IMakroPadConnection.cs",
       "source_location": "L1",
       "id": "app_makropad_device_imakropadconnection_cs",
-      "community": 3,
+      "community": 149,
       "norm_label": "imakropadconnection.cs"
     },
     {
@@ -8048,7 +8264,7 @@
       "source_file": "app/MakroPad.Device/IMakroPadConnection.cs",
       "source_location": "L3",
       "id": "makropad_device_imakropadconnection_imakropadconnection",
-      "community": 3,
+      "community": 149,
       "norm_label": "imakropadconnection"
     },
     {
@@ -8057,7 +8273,7 @@
       "source_file": "app/MakroPad.Device/IMakroPadConnection.cs",
       "source_location": "L11",
       "id": "makropad_device_imakropadconnection_imakropadconnection_getavailableports",
-      "community": 3,
+      "community": 149,
       "norm_label": ".getavailableports()"
     },
     {
@@ -8066,7 +8282,7 @@
       "source_file": "app/MakroPad.Device/IMakroPadConnection.cs",
       "source_location": "L13",
       "id": "makropad_device_imakropadconnection_imakropadconnection_connectasync",
-      "community": 3,
+      "community": 149,
       "norm_label": ".connectasync()"
     },
     {
@@ -8075,7 +8291,7 @@
       "source_file": "app/MakroPad.Device/IMakroPadConnection.cs",
       "source_location": "L15",
       "id": "makropad_device_imakropadconnection_imakropadconnection_disconnectasync",
-      "community": 3,
+      "community": 149,
       "norm_label": ".disconnectasync()"
     },
     {
@@ -8084,7 +8300,7 @@
       "source_file": "app/MakroPad.Device/IMakroPadConnection.cs",
       "source_location": "L17",
       "id": "makropad_device_imakropadconnection_imakropadconnection_senddisplaymessageasync",
-      "community": 3,
+      "community": 149,
       "norm_label": ".senddisplaymessageasync()"
     },
     {
@@ -8093,7 +8309,7 @@
       "source_file": "app/MakroPad.Device/IMakroPadConnection.cs",
       "source_location": "L19",
       "id": "makropad_device_imakropadconnection_imakropadconnection_sendlineasync",
-      "community": 3,
+      "community": 149,
       "norm_label": ".sendlineasync()"
     },
     {
@@ -8264,7 +8480,7 @@
       "source_file": "app/MakroPad.Device/SerialMakroPadConnection.cs",
       "source_location": "L49",
       "id": "makropad_device_serialmakropadconnection_serialmakropadconnection_connectasync",
-      "community": 3,
+      "community": 145,
       "norm_label": ".connectasync()"
     },
     {
@@ -8273,7 +8489,7 @@
       "source_file": "app/MakroPad.Device/SerialMakroPadConnection.cs",
       "source_location": "L91",
       "id": "makropad_device_serialmakropadconnection_serialmakropadconnection_disconnectasync",
-      "community": 3,
+      "community": 145,
       "norm_label": ".disconnectasync()"
     },
     {
@@ -8291,7 +8507,7 @@
       "source_file": "app/MakroPad.Device/SerialMakroPadConnection.cs",
       "source_location": "L152",
       "id": "makropad_device_serialmakropadconnection_serialmakropadconnection_sendlineasync",
-      "community": 3,
+      "community": 145,
       "norm_label": ".sendlineasync()"
     },
     {
@@ -8300,7 +8516,7 @@
       "source_file": "app/MakroPad.Device/SerialMakroPadConnection.cs",
       "source_location": "L170",
       "id": "makropad_device_serialmakropadconnection_serialmakropadconnection_dispose",
-      "community": 3,
+      "community": 145,
       "norm_label": ".dispose()"
     },
     {
@@ -8309,7 +8525,7 @@
       "source_file": "app/MakroPad.Device/SerialMakroPadConnection.cs",
       "source_location": "L177",
       "id": "makropad_device_serialmakropadconnection_serialmakropadconnection_readloopasync",
-      "community": 3,
+      "community": 145,
       "norm_label": ".readloopasync()"
     },
     {
@@ -8318,7 +8534,7 @@
       "source_file": "app/MakroPad.Device/SerialMakroPadConnection.cs",
       "source_location": "L225",
       "id": "makropad_device_serialmakropadconnection_serialmakropadconnection_heartbeatloopasync",
-      "community": 3,
+      "community": 145,
       "norm_label": ".heartbeatloopasync()"
     },
     {
@@ -8327,7 +8543,7 @@
       "source_file": "app/MakroPad.Device/SerialMakroPadConnection.cs",
       "source_location": "L262",
       "id": "makropad_device_serialmakropadconnection_serialmakropadconnection_markdeviceseen",
-      "community": 3,
+      "community": 145,
       "norm_label": ".markdeviceseen()"
     },
     {
@@ -8336,7 +8552,7 @@
       "source_file": "app/MakroPad.Device/SerialMakroPadConnection.cs",
       "source_location": "L273",
       "id": "makropad_device_serialmakropadconnection_serialmakropadconnection_closeafterreadfailure",
-      "community": 3,
+      "community": 145,
       "norm_label": ".closeafterreadfailure()"
     },
     {
@@ -8345,7 +8561,7 @@
       "source_file": "app/MakroPad.Device/SerialMakroPadConnection.cs",
       "source_location": "L285",
       "id": "makropad_device_serialmakropadconnection_serialmakropadconnection_raiseevent",
-      "community": 3,
+      "community": 145,
       "norm_label": ".raiseevent()"
     },
     {
@@ -8354,7 +8570,7 @@
       "source_file": "app/MakroPad.Device/SerialMakroPadConnection.cs",
       "source_location": "L290",
       "id": "makropad_device_serialmakropadconnection_serialmakropadconnection_tryparse",
-      "community": 3,
+      "community": 145,
       "norm_label": ".tryparse()"
     },
     {
@@ -8363,7 +8579,7 @@
       "source_file": "app/MakroPad.Device/SimulatedMakroPadConnection.cs",
       "source_location": "L1",
       "id": "app_makropad_device_simulatedmakropadconnection_cs",
-      "community": 3,
+      "community": 142,
       "norm_label": "simulatedmakropadconnection.cs"
     },
     {
@@ -8372,7 +8588,7 @@
       "source_file": "app/MakroPad.Device/SimulatedMakroPadConnection.cs",
       "source_location": "L5",
       "id": "makropad_device_simulatedmakropadconnection_simulatedmakropadconnection",
-      "community": 3,
+      "community": 142,
       "norm_label": "simulatedmakropadconnection"
     },
     {
@@ -8381,7 +8597,7 @@
       "source_file": "app/MakroPad.Device/SimulatedMakroPadConnection.cs",
       "source_location": "L7",
       "id": "app_makropad_device_simulatedmakropadconnection_cs_deviceconnectionstate",
-      "community": 3,
+      "community": 142,
       "norm_label": "deviceconnectionstate"
     },
     {
@@ -8390,7 +8606,7 @@
       "source_file": "app/MakroPad.Device/SimulatedMakroPadConnection.cs",
       "source_location": "L28",
       "id": "makropad_device_simulatedmakropadconnection_simulatedmakropadconnection_getavailableports",
-      "community": 3,
+      "community": 142,
       "norm_label": ".getavailableports()"
     },
     {
@@ -8399,7 +8615,7 @@
       "source_file": "app/MakroPad.Device/SimulatedMakroPadConnection.cs",
       "source_location": "L33",
       "id": "makropad_device_simulatedmakropadconnection_simulatedmakropadconnection_connectasync",
-      "community": 3,
+      "community": 142,
       "norm_label": ".connectasync()"
     },
     {
@@ -8408,7 +8624,7 @@
       "source_file": "app/MakroPad.Device/SimulatedMakroPadConnection.cs",
       "source_location": "L44",
       "id": "makropad_device_simulatedmakropadconnection_simulatedmakropadconnection_disconnectasync",
-      "community": 3,
+      "community": 142,
       "norm_label": ".disconnectasync()"
     },
     {
@@ -8417,7 +8633,7 @@
       "source_file": "app/MakroPad.Device/SimulatedMakroPadConnection.cs",
       "source_location": "L50",
       "id": "makropad_device_simulatedmakropadconnection_simulatedmakropadconnection_senddisplaymessageasync",
-      "community": 3,
+      "community": 142,
       "norm_label": ".senddisplaymessageasync()"
     },
     {
@@ -8426,7 +8642,7 @@
       "source_file": "app/MakroPad.Device/SimulatedMakroPadConnection.cs",
       "source_location": "L64",
       "id": "makropad_device_simulatedmakropadconnection_simulatedmakropadconnection_sendlineasync",
-      "community": 3,
+      "community": 142,
       "norm_label": ".sendlineasync()"
     },
     {
@@ -8435,7 +8651,7 @@
       "source_file": "app/MakroPad.Device/SimulatedMakroPadConnection.cs",
       "source_location": "L70",
       "id": "makropad_device_simulatedmakropadconnection_simulatedmakropadconnection_simulatebuttonpress",
-      "community": 3,
+      "community": 142,
       "norm_label": ".simulatebuttonpress()"
     },
     {
@@ -8444,7 +8660,7 @@
       "source_file": "app/MakroPad.Device/SimulatedMakroPadConnection.cs",
       "source_location": "L76",
       "id": "makropad_device_simulatedmakropadconnection_simulatedmakropadconnection_simulatesliderchange",
-      "community": 3,
+      "community": 142,
       "norm_label": ".simulatesliderchange()"
     },
     {
@@ -8453,7 +8669,7 @@
       "source_file": "app/MakroPad.Device/SimulatedMakroPadConnection.cs",
       "source_location": "L81",
       "id": "makropad_device_simulatedmakropadconnection_simulatedmakropadconnection_send",
-      "community": 3,
+      "community": 142,
       "norm_label": ".send()"
     },
     {
@@ -8462,7 +8678,7 @@
       "source_file": "app/MakroPad.Device/SimulatedMakroPadConnection.cs",
       "source_location": "L86",
       "id": "makropad_device_simulatedmakropadconnection_simulatedmakropadconnection_receive",
-      "community": 3,
+      "community": 142,
       "norm_label": ".receive()"
     },
     {
@@ -8471,7 +8687,7 @@
       "source_file": "app/MakroPad.Device/SimulatedMakroPadConnection.cs",
       "source_location": "L91",
       "id": "makropad_device_simulatedmakropadconnection_simulatedmakropadconnection_tryparse",
-      "community": 3,
+      "community": 142,
       "norm_label": ".tryparse()"
     },
     {
@@ -8595,7 +8811,7 @@
       "label": "code:powershell (dotnet build app\\MakroPad.sln)",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L66",
+      "source_location": "L67",
       "id": "makropad_readme_codeblock_1",
       "community": 71,
       "norm_label": "code:powershell (dotnet build app\\makropad.sln)"
@@ -8901,7 +9117,7 @@
       "label": "Supported Actions",
       "file_type": "document",
       "source_file": "docs/HANDOFF.md",
-      "source_location": "L101",
+      "source_location": "L115",
       "id": "docs_handoff_supported_actions",
       "community": 66,
       "norm_label": "supported actions"
@@ -8910,7 +9126,7 @@
       "label": "OLED Behavior",
       "file_type": "document",
       "source_file": "docs/HANDOFF.md",
-      "source_location": "L119",
+      "source_location": "L133",
       "id": "docs_handoff_oled_behavior",
       "community": 66,
       "norm_label": "oled behavior"
@@ -8919,7 +9135,7 @@
       "label": "Known Limitations",
       "file_type": "document",
       "source_file": "docs/HANDOFF.md",
-      "source_location": "L167",
+      "source_location": "L181",
       "id": "docs_handoff_known_limitations",
       "community": 66,
       "norm_label": "known limitations"
@@ -8928,7 +9144,7 @@
       "label": "Verification Baseline",
       "file_type": "document",
       "source_file": "docs/HANDOFF.md",
-      "source_location": "L196",
+      "source_location": "L210",
       "id": "docs_handoff_verification_baseline",
       "community": 66,
       "norm_label": "verification baseline"
@@ -8937,7 +9153,7 @@
       "label": "code:powershell (dotnet build app\\MakroPad.sln)",
       "file_type": "document",
       "source_file": "docs/HANDOFF.md",
-      "source_location": "L200",
+      "source_location": "L214",
       "id": "docs_handoff_codeblock_1",
       "community": 66,
       "norm_label": "code:powershell (dotnet build app\\makropad.sln)"
@@ -8946,7 +9162,7 @@
       "label": "Recommended Next Steps",
       "file_type": "document",
       "source_file": "docs/HANDOFF.md",
-      "source_location": "L208",
+      "source_location": "L222",
       "id": "docs_handoff_recommended_next_steps",
       "community": 66,
       "norm_label": "recommended next steps"
@@ -8955,7 +9171,7 @@
       "label": "Graphify Notes",
       "file_type": "document",
       "source_file": "docs/HANDOFF.md",
-      "source_location": "L228",
+      "source_location": "L242",
       "id": "docs_handoff_graphify_notes",
       "community": 66,
       "norm_label": "graphify notes"
@@ -9798,6 +10014,42 @@
       "norm_label": "code:text (button;id=12;state=down)"
     },
     {
+      "label": ".OnKeyDown()",
+      "file_type": "code",
+      "source_file": "app/MakroPad.App/Views/MainWindow.axaml.cs",
+      "source_location": "L23",
+      "community": 24,
+      "norm_label": ".onkeydown()",
+      "id": "views_mainwindow_axaml_mainwindow_onkeydown"
+    },
+    {
+      "label": ".BrowseOpenApp_Click()",
+      "file_type": "code",
+      "source_file": "app/MakroPad.App/Views/MainWindow.axaml.cs",
+      "source_location": "L47",
+      "community": 24,
+      "norm_label": ".browseopenapp_click()",
+      "id": "views_mainwindow_axaml_mainwindow_browseopenapp_click"
+    },
+    {
+      "label": ".FormatShortcut()",
+      "file_type": "code",
+      "source_file": "app/MakroPad.App/Views/MainWindow.axaml.cs",
+      "source_location": "L81",
+      "community": 24,
+      "norm_label": ".formatshortcut()",
+      "id": "views_mainwindow_axaml_mainwindow_formatshortcut"
+    },
+    {
+      "label": ".NormalizeKey()",
+      "file_type": "code",
+      "source_file": "app/MakroPad.App/Views/MainWindow.axaml.cs",
+      "source_location": "L114",
+      "community": 24,
+      "norm_label": ".normalizekey()",
+      "id": "views_mainwindow_axaml_mainwindow_normalizekey"
+    },
+    {
       "label": "Slider",
       "file_type": "document",
       "source_file": "docs/HARDWARE.md",
@@ -10045,7 +10297,7 @@
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
       "source_location": "L1058",
-      "community": 102,
+      "community": 62,
       "norm_label": ".renderoledpreview()",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_renderoledpreview"
     },
@@ -10054,7 +10306,7 @@
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
       "source_location": "L1063",
-      "community": 102,
+      "community": 62,
       "norm_label": ".createdevicedisplaystate()",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_createdevicedisplaystate"
     },
@@ -10495,7 +10747,7 @@
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
       "source_location": "L1829",
-      "community": 16,
+      "community": 2,
       "norm_label": ".formatactionresult()",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_formatactionresult"
     },
@@ -10747,7 +10999,7 @@
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
       "source_location": "L2118",
-      "community": 2,
+      "community": 16,
       "norm_label": ".issupportedinput()",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_issupportedinput"
     },
@@ -10792,7 +11044,7 @@
       "file_type": "code",
       "source_file": "",
       "source_location": "",
-      "community": 3,
+      "community": 142,
       "norm_label": "imakropadconnection",
       "id": "imakropadconnection"
     },
@@ -10927,7 +11179,7 @@
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
       "source_location": "L949",
-      "community": 102,
+      "community": 62,
       "norm_label": ".runnowplayingloopasync()",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_runnowplayingloopasync"
     },
@@ -10936,7 +11188,7 @@
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
       "source_location": "L972",
-      "community": 102,
+      "community": 62,
       "norm_label": ".updatenowplayingasync()",
       "id": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_updatenowplayingasync"
     },
@@ -11143,7 +11395,7 @@
       "file_type": "code",
       "source_file": "MakroPad.Actions/NoopApplicationVolumeController.cs",
       "source_location": "L1",
-      "community": 132,
+      "community": 146,
       "norm_label": "noopapplicationvolumecontroller.cs",
       "id": "makropad_actions_noopapplicationvolumecontroller_cs"
     },
@@ -11152,7 +11404,7 @@
       "file_type": "code",
       "source_file": "MakroPad.Actions/NoopKeyboardController.cs",
       "source_location": "L1",
-      "community": 11,
+      "community": 12,
       "norm_label": "noopkeyboardcontroller.cs",
       "id": "makropad_actions_noopkeyboardcontroller_cs"
     },
@@ -11161,7 +11413,7 @@
       "file_type": "code",
       "source_file": "MakroPad.Actions/NoopSystemMediaController.cs",
       "source_location": "L1",
-      "community": 9,
+      "community": 5,
       "norm_label": "noopsystemmediacontroller.cs",
       "id": "makropad_actions_noopsystemmediacontroller_cs"
     },
@@ -11179,7 +11431,7 @@
       "file_type": "code",
       "source_file": "MakroPad.Actions/SystemLauncher.cs",
       "source_location": "L1",
-      "community": 11,
+      "community": 151,
       "norm_label": "systemlauncher.cs",
       "id": "makropad_actions_systemlauncher_cs"
     },
@@ -11260,7 +11512,7 @@
       "file_type": "code",
       "source_file": "MakroPad.Actions/WindowsSystemMediaController.cs",
       "source_location": "L1",
-      "community": 5,
+      "community": 137,
       "norm_label": "windowssystemmediacontroller.cs",
       "id": "makropad_actions_windowssystemmediacontroller_cs"
     },
@@ -11269,7 +11521,7 @@
       "file_type": "code",
       "source_file": "MakroPad.Actions/WindowsSystemMediaController.cs",
       "source_location": "L8",
-      "community": 5,
+      "community": 137,
       "norm_label": "ushort",
       "id": "makropad_actions_windowssystemmediacontroller_cs_ushort"
     },
@@ -11278,7 +11530,7 @@
       "file_type": "code",
       "source_file": "MakroPad.Actions/WindowsSystemMediaController.cs",
       "source_location": "L15",
-      "community": 5,
+      "community": 137,
       "norm_label": "uint",
       "id": "makropad_actions_windowssystemmediacontroller_cs_uint"
     },
@@ -11674,7 +11926,7 @@
       "file_type": "code",
       "source_file": "MakroPad.Device/IMakroPadConnection.cs",
       "source_location": "L1",
-      "community": 3,
+      "community": 149,
       "norm_label": "imakropadconnection.cs",
       "id": "makropad_device_imakropadconnection_cs"
     },
@@ -11746,7 +11998,7 @@
       "file_type": "code",
       "source_file": "MakroPad.Device/SimulatedMakroPadConnection.cs",
       "source_location": "L1",
-      "community": 3,
+      "community": 142,
       "norm_label": "simulatedmakropadconnection.cs",
       "id": "makropad_device_simulatedmakropadconnection_cs"
     },
@@ -11755,7 +12007,7 @@
       "file_type": "code",
       "source_file": "MakroPad.Device/SimulatedMakroPadConnection.cs",
       "source_location": "L7",
-      "community": 3,
+      "community": 142,
       "norm_label": "deviceconnectionstate",
       "id": "makropad_device_simulatedmakropadconnection_cs_deviceconnectionstate"
     },
@@ -11768,7 +12020,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 4,
+      "community": 152,
       "norm_label": "makropad agent workflow",
       "id": "agents_makropad_agent_workflow"
     },
@@ -11781,7 +12033,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 4,
+      "community": 152,
       "norm_label": "german collaboration rules",
       "id": "agents_german_collaboration"
     },
@@ -11794,7 +12046,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 4,
+      "community": 152,
       "norm_label": "repository editing rules",
       "id": "agents_repository_editing_rules"
     },
@@ -11820,7 +12072,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 4,
+      "community": 152,
       "norm_label": "git commit workflow",
       "id": "agents_git_commit_workflow"
     },
@@ -12574,6 +12826,26 @@
     }
   ],
   "links": [
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".claude/settings.local.json",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "claude_settings_local_json",
+      "target": "claude_settings_local_permissions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".claude/settings.local.json",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "claude_settings_local_permissions",
+      "target": "claude_settings_local_permissions_allow",
+      "confidence_score": 1.0
+    },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
@@ -15818,6 +16090,107 @@
       "confidence_score": 1.0,
       "source": "makropad_app_viewlocator_cs",
       "target": "makropad_app_viewlocator_viewlocator"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/MakroPad.App/Controls/PageHeader.axaml.cs",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "app_makropad_app_controls_pageheader_axaml_cs",
+      "target": "controls_pageheader_axaml_pageheader",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "app/MakroPad.App/Controls/PageHeader.axaml.cs",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "controls_pageheader_axaml_pageheader",
+      "target": "usercontrol",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "app/MakroPad.App/Controls/PageHeader.axaml.cs",
+      "source_location": "L17",
+      "weight": 1.0,
+      "context": "field",
+      "source": "controls_pageheader_axaml_pageheader",
+      "target": "styledproperty",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "app/MakroPad.App/Views/ApplicationSettingsView.axaml.cs",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "views_applicationsettingsview_axaml_applicationsettingsview",
+      "target": "usercontrol",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "app/MakroPad.App/Views/DebugView.axaml.cs",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "views_debugview_axaml_debugview",
+      "target": "usercontrol",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "app/MakroPad.App/Views/DeviceView.axaml.cs",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "views_deviceview_axaml_deviceview",
+      "target": "usercontrol",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "app/MakroPad.App/Views/DisplayEditorView.axaml.cs",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "views_displayeditorview_axaml_displayeditorview",
+      "target": "usercontrol",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "app/MakroPad.App/Views/MacrosView.axaml.cs",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "views_macrosview_axaml_macrosview",
+      "target": "usercontrol",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "app/MakroPad.App/Views/ProfilesSettingsView.axaml.cs",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "views_profilessettingsview_axaml_profilessettingsview",
+      "target": "usercontrol",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "app/MakroPad.App/Views/SimulationView.axaml.cs",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "views_simulationview_axaml_simulationview",
+      "target": "usercontrol",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -20250,6 +20623,36 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
+      "source_location": "L197",
+      "weight": 1.0,
+      "source": "viewmodels_mainwindowviewmodel_mainwindowviewmodel",
+      "target": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_onisdarkthemechanged",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
+      "source_location": "L203",
+      "weight": 1.0,
+      "source": "viewmodels_mainwindowviewmodel_mainwindowviewmodel",
+      "target": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_toggletheme",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
+      "source_location": "L209",
+      "weight": 1.0,
+      "source": "viewmodels_mainwindowviewmodel_mainwindowviewmodel",
+      "target": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_applythemevariant",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
       "source_location": "L187",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -22054,6 +22457,17 @@
       "confidence_score": 1.0,
       "source": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_onconnectionstatuschanged",
       "target": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_refreshdisplaytriggerpreview"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
+      "source_location": "L199",
+      "weight": 1.0,
+      "source": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_onisdarkthemechanged",
+      "target": "viewmodels_mainwindowviewmodel_mainwindowviewmodel_applythemevariant",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -24360,6 +24774,118 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "app/MakroPad.App/Views/ApplicationSettingsView.axaml.cs",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "app_makropad_app_views_applicationsettingsview_axaml_cs",
+      "target": "views_applicationsettingsview_axaml_applicationsettingsview",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/MakroPad.App/Views/DebugView.axaml.cs",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "app_makropad_app_views_debugview_axaml_cs",
+      "target": "views_debugview_axaml_debugview",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/MakroPad.App/Views/DeviceView.axaml.cs",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "app_makropad_app_views_deviceview_axaml_cs",
+      "target": "views_deviceview_axaml_deviceview",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/MakroPad.App/Views/DisplayEditorView.axaml.cs",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "app_makropad_app_views_displayeditorview_axaml_cs",
+      "target": "views_displayeditorview_axaml_displayeditorview",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/MakroPad.App/Views/MacrosView.axaml.cs",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "app_makropad_app_views_macrosview_axaml_cs",
+      "target": "views_macrosview_axaml_macrosview",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "app/MakroPad.App/Views/MacrosView.axaml.cs",
+      "source_location": "L22",
+      "weight": 1.0,
+      "source": "views_macrosview_axaml_macrosview",
+      "target": "views_macrosview_axaml_macrosview_onkeydown",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "app/MakroPad.App/Views/MacrosView.axaml.cs",
+      "source_location": "L46",
+      "weight": 1.0,
+      "source": "views_macrosview_axaml_macrosview",
+      "target": "views_macrosview_axaml_macrosview_browseopenapp_click",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "app/MakroPad.App/Views/MacrosView.axaml.cs",
+      "source_location": "L80",
+      "weight": 1.0,
+      "source": "views_macrosview_axaml_macrosview",
+      "target": "views_macrosview_axaml_macrosview_formatshortcut",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "app/MakroPad.App/Views/MacrosView.axaml.cs",
+      "source_location": "L113",
+      "weight": 1.0,
+      "source": "views_macrosview_axaml_macrosview",
+      "target": "views_macrosview_axaml_macrosview_normalizekey",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "app/MakroPad.App/Views/MacrosView.axaml.cs",
+      "source_location": "L37",
+      "weight": 1.0,
+      "source": "views_macrosview_axaml_macrosview_onkeydown",
+      "target": "views_macrosview_axaml_macrosview_formatshortcut",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "app/MakroPad.App/Views/MacrosView.axaml.cs",
+      "source_location": "L82",
+      "weight": 1.0,
+      "source": "views_macrosview_axaml_macrosview_formatshortcut",
+      "target": "views_macrosview_axaml_macrosview_normalizekey",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "app/MakroPad.App/Views/MainWindow.axaml.cs",
       "source_location": "L12",
       "weight": 1.0,
@@ -24428,26 +24954,24 @@
       "target": "views_mainwindow_axaml_mainwindow"
     },
     {
-      "relation": "calls",
-      "context": "call",
+      "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "MakroPad.App/Views/MainWindow.axaml.cs",
-      "source_location": "L37",
+      "source_file": "app/MakroPad.App/Views/ProfilesSettingsView.axaml.cs",
+      "source_location": "L5",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "views_mainwindow_axaml_mainwindow_onkeydown",
-      "target": "views_mainwindow_axaml_mainwindow_formatshortcut"
+      "source": "app_makropad_app_views_profilessettingsview_axaml_cs",
+      "target": "views_profilessettingsview_axaml_profilessettingsview",
+      "confidence_score": 1.0
     },
     {
-      "relation": "calls",
-      "context": "call",
+      "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "MakroPad.App/Views/MainWindow.axaml.cs",
-      "source_location": "L82",
+      "source_file": "app/MakroPad.App/Views/SimulationView.axaml.cs",
+      "source_location": "L5",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "views_mainwindow_axaml_mainwindow_formatshortcut",
-      "target": "views_mainwindow_axaml_mainwindow_normalizekey"
+      "source": "app_makropad_app_views_simulationview_axaml_cs",
+      "target": "views_simulationview_axaml_simulationview",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -30999,6 +31523,28 @@
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
+      "source_file": "MakroPad.App/Views/MainWindow.axaml.cs",
+      "source_location": "L37",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "views_mainwindow_axaml_mainwindow_onkeydown",
+      "target": "views_mainwindow_axaml_mainwindow_formatshortcut"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "MakroPad.App/Views/MainWindow.axaml.cs",
+      "source_location": "L82",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "views_mainwindow_axaml_mainwindow_formatshortcut",
+      "target": "views_mainwindow_axaml_mainwindow_normalizekey"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
       "source_file": "app/MakroPad.App/ViewModels/MainWindowViewModel.cs",
       "source_location": "L96",
       "weight": 1.0,
@@ -33336,5 +33882,5 @@
       "source_file": "app/README.md"
     }
   ],
-  "built_at_commit": "87d52122bf9373af4bc111f6d2cd840b89d494d4"
+  "built_at_commit": "1bed730bcccf77f71ffba821f0339d86ff4b5982"
 }
