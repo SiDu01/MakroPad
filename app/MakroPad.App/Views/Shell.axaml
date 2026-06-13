@@ -105,6 +105,12 @@
 
                 <!-- Footer -->
                 <StackPanel Grid.Row="2" Spacing="12">
+                    <Button Classes="primary"
+                            HorizontalAlignment="Stretch"
+                            Content="Speichern"
+                            Command="{Binding SaveConfigCommand}"
+                            ToolTip.Tip="Konfiguration speichern" />
+
                     <Border Classes="statusPill">
                         <StackPanel Orientation="Horizontal" Spacing="10">
                             <Ellipse Width="9"
