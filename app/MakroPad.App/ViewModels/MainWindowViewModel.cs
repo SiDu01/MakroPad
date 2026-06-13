@@ -131,6 +131,43 @@ public partial class MainWindowViewModel : ViewModelBase
     public IReadOnlyList<int> AvailableSliderIds { get; } =
         Enumerable.Range(1, 3).ToArray();
 
+    /// <summary>
+    /// Raised on the UI thread whenever an input (button or slider) fires, whether from real
+    /// hardware or the simulator. Carries the input id, e.g. "button:7" or "slider:1".
+    /// </summary>
+    public event Action<string>? InputActivated;
+
+    /// <summary>
+    /// Simulates a single input on the simulator connection. Accepts "button:N" or "slider:N".
+    /// Returns false when no simulator connection is active.
+    /// </summary>
+    public bool TrySimulateInput(string input)
+    {
+        if (string.IsNullOrWhiteSpace(input))
+        {
+            return false;
+        }
+
+        var parts = input.Split(':', 2);
+        if (parts.Length != 2 || !int.TryParse(parts[1], out var id))
+        {
+            return false;
+        }
+
+        if (parts[0].Equals("button", StringComparison.OrdinalIgnoreCase))
+        {
+            return deviceSessionService.TrySimulateButtonPress(id);
+        }
+
+        if (parts[0].Equals("slider", StringComparison.OrdinalIgnoreCase))
+        {
+            LastSliderValue = LastSliderValue >= 4000 ? 0 : LastSliderValue + 512;
+            return deviceSessionService.TrySimulateSliderChange(id, LastSliderValue);
+        }
+
+        return false;
+    }
+
     public MainWindowViewModel()
     {
         ConfigPath = GetDefaultConfigPath();
@@ -584,6 +621,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
         if (inputEvent is ButtonReleasedInputEvent button)
         {
+            InputActivated?.Invoke(button.Input);
             var showedActionResult = await HandleConfiguredInputAsync(button.Input);
             if (!showedActionResult)
             {
@@ -595,6 +633,7 @@ public partial class MainWindowViewModel : ViewModelBase
         if (inputEvent is SliderChangedInputEvent slider)
         {
             LastSliderValue = slider.Value;
+            InputActivated?.Invoke(slider.Input);
             var showedActionResult = await HandleConfiguredInputAsync(slider.Input, slider.Value.ToString());
             if (!showedActionResult)
             {

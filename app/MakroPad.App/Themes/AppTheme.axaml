@@ -365,4 +365,113 @@
         <Setter Property="Margin" Value="12,16,0,2" />
     </Style>
 
+    <!-- Pad key tiles -->
+    <Style Selector="Button.keyTile">
+        <Setter Property="Width" Value="106" />
+        <Setter Property="Height" Value="88" />
+        <Setter Property="Margin" Value="5" />
+        <Setter Property="Padding" Value="10" />
+        <Setter Property="Background" Value="{DynamicResource AppSurfaceElevatedBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource AppBorderBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="{StaticResource AppRadiusMd}" />
+        <Setter Property="Foreground" Value="{DynamicResource AppTextPrimaryBrush}" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Stretch" />
+    </Style>
+
+    <Style Selector="Button.keyTile:pointerover /template/ ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource AppListHoverBrush}" />
+    </Style>
+
+    <Style Selector="Button.keyTile.bound">
+        <Setter Property="BorderBrush" Value="{DynamicResource AppAccentBrush}" />
+    </Style>
+
+    <Style Selector="Button.keyTile.selected">
+        <Setter Property="BorderBrush" Value="{DynamicResource AppAccentBrush}" />
+        <Setter Property="BorderThickness" Value="2" />
+        <Setter Property="Background" Value="{DynamicResource AppAccentSoftBrush}" />
+    </Style>
+
+    <Style Selector="Button.keyTile.active /template/ ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource AppAccentBrush}" />
+    </Style>
+
+    <Style Selector="Button.sliderStrip">
+        <Setter Property="Width" Value="66" />
+        <Setter Property="Height" Value="280" />
+        <Setter Property="Margin" Value="5" />
+        <Setter Property="Padding" Value="8,12" />
+        <Setter Property="Background" Value="{DynamicResource AppSurfaceElevatedBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource AppBorderBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="{StaticResource AppRadiusMd}" />
+        <Setter Property="Foreground" Value="{DynamicResource AppTextPrimaryBrush}" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Stretch" />
+    </Style>
+
+    <Style Selector="Button.sliderStrip:pointerover /template/ ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource AppListHoverBrush}" />
+    </Style>
+
+    <Style Selector="Button.sliderStrip.bound">
+        <Setter Property="BorderBrush" Value="{DynamicResource AppAccentBrush}" />
+    </Style>
+
+    <Style Selector="Button.sliderStrip.selected">
+        <Setter Property="BorderBrush" Value="{DynamicResource AppAccentBrush}" />
+        <Setter Property="BorderThickness" Value="2" />
+        <Setter Property="Background" Value="{DynamicResource AppAccentSoftBrush}" />
+    </Style>
+
+    <Style Selector="Button.sliderStrip.active /template/ ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource AppAccentBrush}" />
+    </Style>
+
+    <Style Selector="TextBlock.keyNumber">
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Foreground" Value="{DynamicResource AppTextMutedBrush}" />
+    </Style>
+
+    <Style Selector="TextBlock.keyAction">
+        <Setter Property="FontSize" Value="11" />
+        <Setter Property="TextWrapping" Value="Wrap" />
+        <Setter Property="TextAlignment" Value="Center" />
+    </Style>
+
+    <!-- Segmented mode toggle -->
+    <Style Selector="Button.segment">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Foreground" Value="{DynamicResource AppTextMutedBrush}" />
+        <Setter Property="Padding" Value="16,7" />
+        <Setter Property="CornerRadius" Value="{StaticResource AppRadiusSm}" />
+        <Setter Property="FontWeight" Value="Medium" />
+    </Style>
+
+    <Style Selector="Button.segment.active">
+        <Setter Property="Background" Value="{DynamicResource AppAccentBrush}" />
+        <Setter Property="Foreground" Value="#FFFFFF" />
+    </Style>
+
+    <Style Selector="Border.segmentTrack">
+        <Setter Property="Background" Value="{DynamicResource AppSurfaceElevatedBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource AppBorderBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="9" />
+        <Setter Property="Padding" Value="3" />
+    </Style>
+
+    <!-- Inspector panel -->
+    <Style Selector="Border.inspector">
+        <Setter Property="Background" Value="{DynamicResource AppSurfaceBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource AppBorderSubtleBrush}" />
+        <Setter Property="BorderThickness" Value="1,0,0,0" />
+        <Setter Property="Padding" Value="20" />
+        <Setter Property="Width" Value="340" />
+    </Style>
+
 </Styles>

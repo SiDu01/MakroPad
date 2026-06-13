@@ -19,6 +19,14 @@ public enum AppSection
 /// </summary>
 public partial class ShellViewModel : MainWindowViewModel
 {
+    public ShellViewModel()
+    {
+        Pad = new PadViewModel(ProfilesEditor, TrySimulateInput);
+        InputActivated += Pad.OnInputActivated;
+    }
+
+    public PadViewModel Pad { get; }
+
     [ObservableProperty]
     private AppSection selectedSection = AppSection.Pad;
 

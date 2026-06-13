@@ -3,18 +3,161 @@
              xmlns:vm="using:MakroPad.App.ViewModels"
              x:Class="MakroPad.App.Views.PadView"
              x:DataType="vm:ShellViewModel">
-    <ScrollViewer Classes="pageContent">
-        <StackPanel Spacing="16" MaxWidth="980" HorizontalAlignment="Left">
-            <StackPanel Spacing="4">
+
+    <Grid RowDefinitions="Auto,*">
+
+        <!-- Header: title, mode toggle, profile bar -->
+        <Grid Grid.Row="0"
+              ColumnDefinitions="Auto,*,Auto"
+              Margin="24,20,24,12"
+              ColumnSpacing="16">
+            <StackPanel Grid.Column="0" Spacing="2" VerticalAlignment="Center">
                 <TextBlock Classes="sectionTitle" Text="Pad" />
-                <TextBlock Classes="muted"
-                           Text="Geraete-Grid mit Tasten und Slidern. Taste waehlen zum Bearbeiten oder im Testmodus ausloesen." />
+                <TextBlock Classes="muted" Text="Taste waehlen zum Bearbeiten – oder im Testmodus ausloesen." />
             </StackPanel>
-            <Border Classes="panel">
-                <TextBlock Classes="muted"
-                           TextWrapping="Wrap"
-                           Text="Das Tasten-Grid und der Inspector werden im naechsten Schritt aufgebaut." />
+
+            <Border Grid.Column="1" Classes="segmentTrack" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <StackPanel Orientation="Horizontal" Spacing="2">
+                    <Button Classes="segment"
+                            Classes.active="{Binding Pad.IsEditMode}"
+                            Command="{Binding Pad.SetEditModeCommand}"
+                            Content="Bearbeiten" />
+                    <Button Classes="segment"
+                            Classes.active="{Binding Pad.IsTestMode}"
+                            Command="{Binding Pad.SetTestModeCommand}"
+                            Content="Testen" />
+                </StackPanel>
             </Border>
-        </StackPanel>
-    </ScrollViewer>
+
+            <StackPanel Grid.Column="2"
+                        Orientation="Horizontal"
+                        Spacing="10"
+                        VerticalAlignment="Center">
+                <TextBlock Classes="label" Text="Profil" VerticalAlignment="Center" />
+                <ComboBox MinWidth="160"
+                          ItemsSource="{Binding ProfilesEditor.ProfileNames}"
+                          SelectedItem="{Binding ProfilesEditor.ActiveProfileName}" />
+                <Button Classes="secondary" Content="Profile…">
+                    <Button.Flyout>
+                        <Flyout>
+                            <StackPanel Spacing="10" Width="248">
+                                <TextBlock Classes="label" Text="Profilname" />
+                                <TextBox Text="{Binding ProfilesEditor.ProfileEditorName}" />
+                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                    <Button Classes="primary"
+                                            Content="Hinzufuegen"
+                                            Command="{Binding ProfilesEditor.AddProfileCommand}" />
+                                    <Button Classes="secondary"
+                                            Content="Umbenennen"
+                                            Command="{Binding ProfilesEditor.RenameProfileCommand}" />
+                                </StackPanel>
+                                <Button Classes="danger"
+                                        HorizontalAlignment="Stretch"
+                                        Content="Profil loeschen"
+                                        Command="{Binding ProfilesEditor.DeleteProfileCommand}" />
+                                <TextBlock Classes="muted"
+                                           TextWrapping="Wrap"
+                                           Text="{Binding ProfilesEditor.BindingEditorValidationMessage}" />
+                            </StackPanel>
+                        </Flyout>
+                    </Button.Flyout>
+                </Button>
+            </StackPanel>
+        </Grid>
+
+        <!-- Body: device grid + inspector -->
+        <Grid Grid.Row="1" ColumnDefinitions="*,Auto" DataContext="{Binding Pad}">
+
+            <ScrollViewer Grid.Column="0"
+                          Classes="pageContent"
+                          HorizontalScrollBarVisibility="Auto"
+                          VerticalScrollBarVisibility="Auto">
+                <StackPanel Orientation="Horizontal" Spacing="24" HorizontalAlignment="Left">
+
+                    <!-- Button grid -->
+                    <ItemsControl ItemsSource="{Binding Keys}" VerticalAlignment="Top">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid Columns="5" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="vm:KeyViewModel">
+                                <Button Classes="keyTile"
+                                        Classes.bound="{Binding HasBinding}"
+                                        Classes.selected="{Binding IsSelected}"
+                                        Classes.active="{Binding IsActive}"
+                                        Command="{Binding $parent[ItemsControl].DataContext.SelectSlotCommand}"
+                                        CommandParameter="{Binding}">
+                                    <Grid RowDefinitions="Auto,*">
+                                        <TextBlock Grid.Row="0" Classes="keyNumber" Text="{Binding Number}" />
+                                        <TextBlock Grid.Row="1"
+                                                   Classes="keyAction"
+                                                   VerticalAlignment="Center"
+                                                   Text="{Binding ActionLabel}" />
+                                    </Grid>
+                                </Button>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <!-- Slider strips -->
+                    <ItemsControl ItemsSource="{Binding Sliders}" VerticalAlignment="Top">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="vm:SliderViewModel">
+                                <Button Classes="sliderStrip"
+                                        Classes.bound="{Binding HasBinding}"
+                                        Classes.selected="{Binding IsSelected}"
+                                        Classes.active="{Binding IsActive}"
+                                        Command="{Binding $parent[ItemsControl].DataContext.SelectSlotCommand}"
+                                        CommandParameter="{Binding}">
+                                    <Grid RowDefinitions="Auto,*,Auto" RowSpacing="8">
+                                        <TextBlock Grid.Row="0"
+                                                   Classes="keyNumber"
+                                                   HorizontalAlignment="Center"
+                                                   Text="{Binding Number}" />
+                                        <Border Grid.Row="1"
+                                                Width="8"
+                                                HorizontalAlignment="Center"
+                                                CornerRadius="4"
+                                                Background="{DynamicResource AppBorderSubtleBrush}" />
+                                        <TextBlock Grid.Row="2"
+                                                   Classes="keyAction"
+                                                   Text="{Binding ActionLabel}" />
+                                    </Grid>
+                                </Button>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- Inspector -->
+            <Border Grid.Column="1" Classes="inspector">
+                <StackPanel Spacing="14">
+                    <StackPanel Spacing="2">
+                        <TextBlock Classes="sectionTitle"
+                                   FontSize="18"
+                                   Text="{Binding SelectedSlot.Label, FallbackValue='Inspector'}" />
+                        <TextBlock Classes="muted"
+                                   Text="{Binding SelectedSlot.Input, FallbackValue='Keine Taste gewaehlt'}" />
+                    </StackPanel>
+                    <Border Classes="panelElevated">
+                        <StackPanel Spacing="6">
+                            <TextBlock Classes="label" Text="Aktion" />
+                            <TextBlock Text="{Binding SelectedSlot.ActionLabel, FallbackValue='—'}" />
+                        </StackPanel>
+                    </Border>
+                    <TextBlock Classes="muted"
+                               TextWrapping="Wrap"
+                               Text="Der vollstaendige Binding-Editor folgt im naechsten Schritt." />
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Grid>
 </UserControl>
