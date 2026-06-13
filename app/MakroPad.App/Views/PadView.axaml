@@ -139,24 +139,107 @@
 
             <!-- Inspector -->
             <Border Grid.Column="1" Classes="inspector">
-                <StackPanel Spacing="14">
-                    <StackPanel Spacing="2">
-                        <TextBlock Classes="sectionTitle"
-                                   FontSize="18"
-                                   Text="{Binding SelectedSlot.Label, FallbackValue='Inspector'}" />
-                        <TextBlock Classes="muted"
-                                   Text="{Binding SelectedSlot.Input, FallbackValue='Keine Taste gewaehlt'}" />
-                    </StackPanel>
-                    <Border Classes="panelElevated">
-                        <StackPanel Spacing="6">
-                            <TextBlock Classes="label" Text="Aktion" />
-                            <TextBlock Text="{Binding SelectedSlot.ActionLabel, FallbackValue='—'}" />
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Spacing="14">
+                        <StackPanel Spacing="2">
+                            <TextBlock Classes="sectionTitle"
+                                       FontSize="18"
+                                       Text="{Binding SelectedSlot.Label, FallbackValue='Inspector'}" />
+                            <TextBlock Classes="muted"
+                                       FontFamily="Consolas"
+                                       Text="{Binding SelectedSlot.Input, FallbackValue='Keine Taste gewaehlt'}" />
                         </StackPanel>
-                    </Border>
-                    <TextBlock Classes="muted"
-                               TextWrapping="Wrap"
-                               Text="Der vollstaendige Binding-Editor folgt im naechsten Schritt." />
-                </StackPanel>
+
+                        <!-- Empty state -->
+                        <TextBlock IsVisible="{Binding !HasSelection}"
+                                   Classes="muted"
+                                   TextWrapping="Wrap"
+                                   Text="Waehle links eine Taste oder einen Slider, um eine Aktion zuzuweisen." />
+
+                        <!-- Binding editor -->
+                        <StackPanel IsVisible="{Binding HasSelection}" Spacing="12">
+                            <StackPanel Spacing="6">
+                                <TextBlock Classes="label" Text="Aktion" />
+                                <ComboBox HorizontalAlignment="Stretch"
+                                          ItemsSource="{Binding Profiles.ActionEditor.AvailableActions}"
+                                          SelectedItem="{Binding Profiles.ActionEditor.Action}" />
+                            </StackPanel>
+
+                            <!-- Structured parameter -->
+                            <StackPanel IsVisible="{Binding Profiles.ActionEditor.HasStructuredParameter}" Spacing="6">
+                                <TextBlock Classes="label" Text="{Binding Profiles.ActionEditor.StructuredParameterLabel}" />
+                                <TextBox IsVisible="{Binding Profiles.ActionEditor.ShowsStructuredTextInput}"
+                                         Text="{Binding Profiles.ActionEditor.StructuredParameterValue}" />
+                                <ComboBox IsVisible="{Binding Profiles.ActionEditor.IsAppVolumeAction}"
+                                          HorizontalAlignment="Stretch"
+                                          ItemsSource="{Binding Profiles.ActionEditor.AvailableAudioProcessNames}"
+                                          SelectedItem="{Binding Profiles.ActionEditor.StructuredParameterValue}" />
+                                <TextBlock Text="{Binding Profiles.ActionEditor.StructuredParameterValidationMessage}"
+                                           Foreground="{DynamicResource AppWarningBrush}"
+                                           FontSize="12"
+                                           TextWrapping="Wrap" />
+                            </StackPanel>
+
+                            <!-- Specialized helpers -->
+                            <Button IsVisible="{Binding Profiles.ActionEditor.IsKeyboardShortcutAction}"
+                                    Classes="secondary"
+                                    HorizontalAlignment="Stretch"
+                                    Content="Shortcut aufnehmen"
+                                    Command="{Binding Profiles.ActionEditor.StartShortcutRecordingCommand}" />
+                            <Button IsVisible="{Binding Profiles.ActionEditor.IsOpenAppAction}"
+                                    Classes="secondary"
+                                    HorizontalAlignment="Stretch"
+                                    Content="App/Datei waehlen"
+                                    Click="BrowseOpenApp_Click" />
+
+                            <!-- Raw parameters -->
+                            <StackPanel Spacing="6">
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <TextBlock Classes="label" Text="Parameter (roh)" VerticalAlignment="Center" />
+                                    <Button Grid.Column="1"
+                                            Classes="secondary"
+                                            Padding="10,4"
+                                            Content="Beispiel"
+                                            Command="{Binding Profiles.ActionEditor.UseParameterExampleCommand}" />
+                                </Grid>
+                                <TextBox PlaceholderText="{Binding Profiles.ActionEditor.ParameterPlaceholder}"
+                                         Text="{Binding Profiles.ActionEditor.Parameters}" />
+                            </StackPanel>
+
+                            <!-- Hints / status -->
+                            <TextBlock Text="{Binding Profiles.ActionEditor.ActionDescription}"
+                                       Classes="muted"
+                                       FontSize="12"
+                                       TextWrapping="Wrap" />
+                            <TextBlock Text="{Binding Profiles.ActionEditor.ParameterHint}"
+                                       Classes="muted"
+                                       FontFamily="Consolas"
+                                       FontSize="12"
+                                       TextWrapping="Wrap" />
+                            <TextBlock Text="{Binding Profiles.ActionEditor.ShortcutRecordingStatus}"
+                                       Classes="muted"
+                                       FontSize="12"
+                                       TextWrapping="Wrap" />
+                            <TextBlock Text="{Binding Profiles.BindingEditorValidationMessage}"
+                                       Foreground="{DynamicResource AppErrorBrush}"
+                                       FontSize="12"
+                                       TextWrapping="Wrap" />
+
+                            <!-- Actions -->
+                            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8" Margin="0,4,0,0">
+                                <Button Grid.Column="0"
+                                        Classes="primary"
+                                        HorizontalAlignment="Stretch"
+                                        Content="Speichern"
+                                        Command="{Binding SaveSlotCommand}" />
+                                <Button Grid.Column="1"
+                                        Classes="danger"
+                                        Content="Leeren"
+                                        Command="{Binding ClearSlotCommand}" />
+                            </Grid>
+                        </StackPanel>
+                    </StackPanel>
+                </ScrollViewer>
             </Border>
         </Grid>
     </Grid>

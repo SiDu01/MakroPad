@@ -46,6 +46,9 @@ public partial class PadViewModel : ObservableObject
 
     public ObservableCollection<SliderViewModel> Sliders { get; } = [];
 
+    /// <summary>Exposes the underlying profile/binding editor for the inspector bindings.</summary>
+    public ProfilesEditorViewModel Profiles => profiles;
+
     [ObservableProperty]
     private bool isTestMode;
 
@@ -58,6 +61,13 @@ public partial class PadViewModel : ObservableObject
 
     [ObservableProperty]
     private PadSlotViewModel? selectedSlot;
+
+    public bool HasSelection => SelectedSlot is not null;
+
+    partial void OnSelectedSlotChanged(PadSlotViewModel? value)
+    {
+        OnPropertyChanged(nameof(HasSelection));
+    }
 
     [RelayCommand]
     private void SetEditMode() => IsTestMode = false;
@@ -86,6 +96,44 @@ public partial class PadViewModel : ObservableObject
 
         SelectedSlot = slot;
         LoadSlotIntoEditor(slot);
+    }
+
+    /// <summary>Persists the editor content to the selected slot's binding.</summary>
+    [RelayCommand]
+    private void SaveSlot()
+    {
+        if (SelectedSlot is null)
+        {
+            return;
+        }
+
+        if (profiles.SelectedBinding is null)
+        {
+            profiles.AddBindingCommand.Execute(null);
+        }
+        else
+        {
+            profiles.ApplyBindingCommand.Execute(null);
+        }
+
+        LoadSlotIntoEditor(SelectedSlot);
+    }
+
+    /// <summary>Removes the binding from the selected slot and resets the editor.</summary>
+    [RelayCommand]
+    private void ClearSlot()
+    {
+        if (SelectedSlot is null)
+        {
+            return;
+        }
+
+        if (profiles.SelectedBinding is not null)
+        {
+            profiles.RemoveBindingCommand.Execute(null);
+        }
+
+        LoadSlotIntoEditor(SelectedSlot);
     }
 
     /// <summary>Pulses the matching slot when an input fires (hardware or simulator).</summary>
