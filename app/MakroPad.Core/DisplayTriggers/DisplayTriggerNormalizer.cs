@@ -73,6 +73,7 @@ public static class DisplayTriggerNormalizer
         return value?.ToLowerInvariant() switch
         {
             "html" => "html",
+            "markdown" => "markdown",
             "layout" => "layout",
             _ => "normal"
         };

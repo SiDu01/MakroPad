@@ -1,3 +1,4 @@
+using System.Linq;
 using MakroPad.Core.Configuration;
 using MakroPad.Core.DisplayTriggers;
 
@@ -91,13 +92,71 @@ public sealed class DisplayTriggerRendererTests
     }
 
     [Fact]
-    public void RenderHtmlLikeTextConvertsKnownTagsStripsOthersAndDecodesEntities()
+    public void RenderHtmlLinesConvertsKnownTagsStripsOthersAndDecodesEntities()
     {
         const string html = "<h1>Title</h1><div>A<br/>B</div><ul><li>One</li><li>Two &amp; Three</li></ul>";
 
-        var result = DisplayTriggerRenderer.RenderHtmlLikeText(html);
+        var result = DisplayTriggerRenderer.RenderHtmlLines(html);
 
-        Assert.Equal("Title\nA\nB\n- One\n- Two & Three", result);
+        Assert.Equal(["Title", "A", "B", "- One", "- Two & Three"], result.Select(line => line.Text));
+        Assert.Equal(2, result[0].NormalizedTextSize);
+    }
+
+    [Fact]
+    public void RenderHtmlLinesNumbersOrderedListsAndRendersDivider()
+    {
+        const string html = "<ol><li>First</li><li>Second</li></ol><hr><p>End</p>";
+
+        var result = DisplayTriggerRenderer.RenderHtmlLines(html).Select(line => line.Text).ToList();
+
+        Assert.Equal("1. First", result[0]);
+        Assert.Equal("2. Second", result[1]);
+        Assert.StartsWith("---", result[2]);
+        Assert.Equal("End", result[3]);
+    }
+
+    [Fact]
+    public void RenderHtmlLinesKeepsTextOfInlineTags()
+    {
+        var result = DisplayTriggerRenderer.RenderHtmlLines("<p>Status: <b>Connected</b></p>");
+
+        Assert.Equal("Status: Connected", result[0].Text);
+    }
+
+    [Fact]
+    public void RenderMarkdownLinesParsesHeadingsListsAndDividers()
+    {
+        const string markdown = "# Title\nStatus: ok\n---\n- One\n* Two";
+
+        var result = DisplayTriggerRenderer.RenderMarkdownLines(markdown);
+
+        Assert.Equal("Title", result[0].Text);
+        Assert.Equal(2, result[0].NormalizedTextSize);
+        Assert.Equal("Status: ok", result[1].Text);
+        Assert.StartsWith("---", result[2].Text);
+        Assert.Equal("- One", result[3].Text);
+        Assert.Equal("- Two", result[4].Text);
+    }
+
+    [Fact]
+    public void RenderTemplateLinesSupportsMarkdownMode()
+    {
+        var trigger = new DisplayTriggerConfig
+        {
+            TemplateMode = "markdown",
+            Template = "# {profile}\n- {status}"
+        };
+        var context = new DisplayTriggerRenderContext
+        {
+            Profile = "Gaming",
+            Status = "Connected"
+        };
+
+        var result = DisplayTriggerRenderer.RenderTemplateLines(trigger, context);
+
+        Assert.Equal("Gaming", result[0].Text);
+        Assert.Equal(2, result[0].NormalizedTextSize);
+        Assert.Equal("- Connected", result[1].Text);
     }
 
     [Fact]

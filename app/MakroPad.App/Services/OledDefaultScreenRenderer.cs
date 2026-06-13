@@ -143,7 +143,7 @@ public sealed class OledDefaultScreenRenderer
 
     private static IEnumerable<DisplayTemplateLine> RenderHtmlField(DisplayTemplateLine source)
     {
-        return DisplayTriggerRenderer.RenderHtmlLikeLines(source.Text)
+        return DisplayTriggerRenderer.RenderHtmlLines(source.Text)
             .Select(line => new DisplayTemplateLine(
                 line.Text,
                 line.NormalizedTextSize > 1

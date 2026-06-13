@@ -23,7 +23,8 @@ public partial class DisplayTriggersEditorViewModel : ViewModelBase
         new("Now playing", "mediaChanged", "*", "any", "any", "any", 0, 100, 0, 0, "layout", "Media\n{media.artist}\n{media.title}"),
         new("Connection status", "connectionChanged", "*", "any", "any", "any", 0, 100, 0, 2000, "layout", "MakroPad\n{connection.status}"),
         new("Profile changed", "profileChanged", "*", "any", "any", "any", 0, 100, 0, 2000, "layout", "Profile\n{profile}"),
-        new("HTML list", "input", "button:1", "any", "any", "any", 0, 100, 0, 2500, "html", "<h1>{profile}</h1><p>{input}</p><ul><li>{status}</li></ul>")
+        new("HTML list", "input", "button:1", "any", "any", "any", 0, 100, 0, 2500, "html", "<h1>{profile}</h1><p>{input}</p><ul><li>{status}</li></ul>"),
+        new("Markdown", "input", "button:1", "any", "any", "any", 0, 100, 0, 2500, "markdown", "# {profile}\n{input}\n- {status}")
     ];
 
     private static readonly HashSet<string> KnownPlaceholders = new(
@@ -51,7 +52,7 @@ public partial class DisplayTriggersEditorViewModel : ViewModelBase
         ..Enumerable.Range(1, 3).Select(id => $"slider:{id}")
     ];
 
-    public IReadOnlyList<string> AvailableDisplayTemplateModes { get; } = ["normal", "html", "layout"];
+    public IReadOnlyList<string> AvailableDisplayTemplateModes { get; } = ["normal", "markdown", "html", "layout"];
 
     public IReadOnlyList<string> AvailableDisplayTriggerEventTypes { get; } =
         ["input", "actionResult", "mediaChanged", "connectionChanged", "profileChanged"];

@@ -23,14 +23,14 @@ public static partial class DisplayTriggerRenderer
         ArgumentNullException.ThrowIfNull(context);
 
         var text = ReplacePlaceholders(trigger.Template, context);
-        if (DisplayTriggerNormalizer.NormalizeTemplateMode(trigger.TemplateMode) == "html")
+        return DisplayTriggerNormalizer.NormalizeTemplateMode(trigger.TemplateMode) switch
         {
-            return RenderHtmlLikeLines(text);
-        }
-
-        return SplitDisplayTextLines(text)
-            .Select(line => new DisplayTemplateLine(line))
-            .ToList();
+            "html" => RenderHtmlLines(text),
+            "markdown" => RenderMarkdownLines(text),
+            _ => SplitDisplayTextLines(text)
+                .Select(line => new DisplayTemplateLine(line))
+                .ToList()
+        };
     }
 
     public static DisplayLayoutScreen RenderLayoutScreen(
@@ -95,42 +95,6 @@ public static partial class DisplayTriggerRenderer
             .Replace("{connection.status}", context.ConnectionStatus, StringComparison.OrdinalIgnoreCase)
             .Replace("{profile}", context.Profile, StringComparison.OrdinalIgnoreCase)
             .Replace("{status}", context.Status, StringComparison.OrdinalIgnoreCase);
-    }
-
-    public static string RenderHtmlLikeText(string html)
-    {
-        ArgumentNullException.ThrowIfNull(html);
-
-        return string.Join(
-            "\n",
-            RenderHtmlLikeLines(html).Select(line => line.Text));
-    }
-
-    public static IReadOnlyList<DisplayTemplateLine> RenderHtmlLikeLines(string html)
-    {
-        ArgumentNullException.ThrowIfNull(html);
-
-        var text = HeadingTagRegex().Replace(
-            html,
-            match => "\n" + HeadingMarker + StripHtml(match.Groups[1].Value) + "\n");
-        text = BreakTagRegex().Replace(text, "\n");
-        text = BlockClosingTagRegex().Replace(text, "\n");
-        text = ListItemOpeningTagRegex().Replace(text, "- ");
-        text = StripHtml(text);
-
-        return SplitDisplayTextLines(text)
-            .Select(line =>
-            {
-                if (line.StartsWith(HeadingMarker, StringComparison.Ordinal))
-                {
-                    return new DisplayTemplateLine(line[HeadingMarker.Length..].Trim(), 2);
-                }
-
-                return new DisplayTemplateLine(line);
-            })
-            .Where(line => line.Text.Length > 0)
-            .Take(5)
-            .ToList();
     }
 
     public static int MapSliderValueToPercent(int sliderValue)
@@ -246,24 +210,4 @@ public static partial class DisplayTriggerRenderer
         return "";
     }
 
-    private static string StripHtml(string html)
-    {
-        var text = AnyTagRegex().Replace(html, "");
-        return WebUtility.HtmlDecode(text);
-    }
-
-    [GeneratedRegex("(?i)<\\s*br\\s*/?\\s*>")]
-    private static partial Regex BreakTagRegex();
-
-    [GeneratedRegex("(?is)<\\s*h[1-2][^>]*>(.*?)</\\s*h[1-2]\\s*>")]
-    private static partial Regex HeadingTagRegex();
-
-    [GeneratedRegex("(?i)</\\s*(p|div|h[1-6]|li|tr)\\s*>")]
-    private static partial Regex BlockClosingTagRegex();
-
-    [GeneratedRegex("(?i)<\\s*li\\s*>")]
-    private static partial Regex ListItemOpeningTagRegex();
-
-    [GeneratedRegex("<[^>]+>")]
-    private static partial Regex AnyTagRegex();
 }
