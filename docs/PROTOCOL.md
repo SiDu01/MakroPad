@@ -248,7 +248,7 @@ Unterstuetzte Modi fuer Version 1:
 | `profile` | `name` | Aktives Profil anzeigen |
 | `media` | `artist`, `title` | Aktuellen Track anzeigen |
 | `message` | `text` | Freie Statusnachricht anzeigen |
-| `template` | `durationMs`, `line1`..`line5`, optional `line1Size`..`line5Size` | App-gerenderte OLED-Zeilen temporaer anzeigen |
+| `template` | `durationMs`, `line1`..`line5`, optional `line1Size`..`line5Size`, optional `line1Align`..`line5Align` | App-gerenderte OLED-Zeilen temporaer anzeigen |
 | `layout` | `durationMs`, `layout`, `title`, `line1`, `line2`, `value`, `icon` | Semantischen OLED-Screen mit Firmware-Primitives anzeigen |
 | `clear` | keine | Display leeren |
 
@@ -260,6 +260,10 @@ Firmware-Hinweis:
 - `lineXSize` ist optional und aktuell auf `1` oder `2` begrenzt. Ohne Feld
   rendert die Firmware die Zeile mit Groesse `1`. Groessere Zeilen belegen mehr
   Hoehe und haben entsprechend weniger sichtbare Zeichen, bevor sie scrollen.
+- `lineXAlign` ist optional: `left` (Standard), `center` oder `right`. Die
+  Firmware richtet kurze, nicht scrollende Zeilen entsprechend aus; scrollende
+  (zu lange) Zeilen bleiben linksbuendig. Leere Zeilen (`lineX=`) bleiben als
+  leere OLED-Zeile erhalten.
 - Die App sollte keine pixelgenauen Layoutdaten senden. `template` sendet
   bereits gerenderte Textzeilen, aber keine Bitmap- oder Browser-Daten.
 - Bei `template` setzt `durationMs > 0` das Display nach Ablauf wieder auf die
@@ -293,8 +297,9 @@ Felder:
 | `profile` | nein | Aktives Profil fuer den Idle-Screen |
 | `actionResultTimeoutMs` | nein | Dauer fuer `action-result` OLED-Meldungen in Millisekunden; `0` bedeutet ohne automatisches Zuruecksetzen |
 | `preferredDisplay` | nein | `profile` oder `media`; bestimmt, wohin die Firmware nach temporaeren Action-Meldungen zurueckkehrt |
-| `defaultTemplateMode` | nein | `normal` oder `html`; bei `html` rendert die App HTML-artige Defaultscreen-Felder vor dem Senden zu Textzeilen und Groessen |
+| `defaultTemplateMode` | nein | Inhaltsmodus-Hinweis; die App rendert Idle-Inhalte (normal/markdown/html) bereits app-seitig zu Textzeilen und sendet daher `normal` |
 | `defaultTitleSize`, `defaultLine1Size`..`defaultLine4Size` | nein | OLED-Textgroesse `1` oder `2` fuer die Defaultscreen-Zeilen; fehlt das Feld, wird `1` verwendet |
+| `defaultTitleAlign`, `defaultLine1Align`..`defaultLine4Align` | nein | Ausrichtung `left`/`center`/`right` der Idle-Zeilen; fehlt das Feld, wird `left` verwendet |
 
 ### action-result
 

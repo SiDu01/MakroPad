@@ -48,6 +48,7 @@ constexpr int OledResetPin = -1;
 constexpr int MaxTextSizeOneCharacters = 21;
 constexpr int MaxDisplayLines = 5;
 constexpr int DisplayLineHeight = 10;
+constexpr int CharacterWidth = 6;
 constexpr int DisplayScrollGapCharacters = 3;
 constexpr uint32_t DisplayScrollStepMs = 220;
 constexpr uint32_t DisplayScrollPauseMs = 900;
@@ -100,11 +101,17 @@ String defaultScreenLine3;
 uint8_t defaultScreenLine3Size = 1;
 String defaultScreenLine4;
 uint8_t defaultScreenLine4Size = 1;
+String defaultScreenTitleAlign = "left";
+String defaultScreenLine1Align = "left";
+String defaultScreenLine2Align = "left";
+String defaultScreenLine3Align = "left";
+String defaultScreenLine4Align = "left";
 String currentTime;
 String currentDate;
 String currentSystemVolume;
 String activeDisplayLines[MaxDisplayLines];
 uint8_t activeDisplayLineSizes[MaxDisplayLines];
+String activeDisplayLineAligns[MaxDisplayLines];
 uint8_t activeDisplayLineCount = 0;
 uint16_t activeDisplayScrollStep = 0;
 uint32_t lastDisplayScrollMs = 0;
@@ -192,6 +199,7 @@ String renderDisplayLine(const String& line, uint8_t textSize);
 void renderActiveDisplayLines();
 void setDisplayLines(const String lines[], uint8_t count);
 void setDisplayLines(const String lines[], const uint8_t lineSizes[], uint8_t count);
+void setDisplayLines(const String lines[], const uint8_t lineSizes[], const String lineAligns[], uint8_t count);
 void drawLayoutScreen(
   const String& layout,
   const String& title,
@@ -234,6 +242,27 @@ void drawMedia(const String& artist, const String& title);
 
 uint8_t normalizeDisplayTextSize(int textSize) {
   return textSize >= 2 ? 2 : 1;
+}
+
+String normalizeDisplayAlign(String align) {
+  align.toLowerCase();
+  if (align == "center" || align == "right") {
+    return align;
+  }
+  return "left";
+}
+
+int displayAlignOffsetX(const String& rendered, uint8_t textSize, const String& align) {
+  if (align != "center" && align != "right") {
+    return 0;
+  }
+
+  const int width = rendered.length() * CharacterWidth * normalizeDisplayTextSize(textSize);
+  if (width >= ScreenWidth) {
+    return 0;
+  }
+
+  return align == "center" ? (ScreenWidth - width) / 2 : (ScreenWidth - width);
 }
 
 int visibleCharactersForTextSize(uint8_t textSize) {
@@ -317,9 +346,11 @@ void renderActiveDisplayLines() {
       break;
     }
 
+    const String rendered = renderDisplayLine(activeDisplayLines[index], textSize);
+    const int x = displayAlignOffsetX(rendered, textSize, activeDisplayLineAligns[index]);
     display.setTextSize(textSize);
-    display.setCursor(0, y);
-    display.println(renderDisplayLine(activeDisplayLines[index], textSize));
+    display.setCursor(x, y);
+    display.println(rendered);
     y += DisplayLineHeight * textSize;
   }
 
@@ -337,6 +368,7 @@ void clearActiveDisplayLineState() {
   for (uint8_t index = 0; index < MaxDisplayLines; index++) {
     activeDisplayLines[index] = "";
     activeDisplayLineSizes[index] = 1;
+    activeDisplayLineAligns[index] = "left";
   }
 }
 
@@ -481,6 +513,14 @@ void setDisplayLines(const String lines[], uint8_t count) {
 }
 
 void setDisplayLines(const String lines[], const uint8_t lineSizes[], uint8_t count) {
+  String lineAligns[MaxDisplayLines];
+  for (uint8_t index = 0; index < MaxDisplayLines; index++) {
+    lineAligns[index] = "left";
+  }
+  setDisplayLines(lines, lineSizes, lineAligns, count);
+}
+
+void setDisplayLines(const String lines[], const uint8_t lineSizes[], const String lineAligns[], uint8_t count) {
   activeLayoutScreen = false;
   activeLayoutMode = "";
   activeLayoutIcon = "";
@@ -491,11 +531,13 @@ void setDisplayLines(const String lines[], const uint8_t lineSizes[], uint8_t co
   for (uint8_t index = 0; index < cappedCount; index++) {
     activeDisplayLines[index] = lines[index];
     activeDisplayLineSizes[index] = normalizeDisplayTextSize(lineSizes[index]);
+    activeDisplayLineAligns[index] = normalizeDisplayAlign(lineAligns[index]);
   }
 
   for (uint8_t index = cappedCount; index < MaxDisplayLines; index++) {
     activeDisplayLines[index] = "";
     activeDisplayLineSizes[index] = 1;
+    activeDisplayLineAligns[index] = "left";
   }
 
   activeDisplayLineCount = cappedCount;
@@ -560,7 +602,14 @@ void drawIdleStatus() {
       defaultScreenLine3Size,
       defaultScreenLine4Size
     };
-    setDisplayLines(lines, lineSizes, 5);
+    String lineAligns[MaxDisplayLines] = {
+      defaultScreenTitleAlign,
+      defaultScreenLine1Align,
+      defaultScreenLine2Align,
+      defaultScreenLine3Align,
+      defaultScreenLine4Align
+    };
+    setDisplayLines(lines, lineSizes, lineAligns, 5);
     return;
   }
 
@@ -578,7 +627,14 @@ void drawIdleStatus() {
     1,
     1
   };
-  setDisplayLines(lines, lineSizes, 3);
+  String lineAligns[MaxDisplayLines] = {
+    defaultScreenTitleAlign,
+    defaultScreenLine1Align,
+    defaultScreenLine2Align,
+    "left",
+    "left"
+  };
+  setDisplayLines(lines, lineSizes, lineAligns, 3);
 }
 
 void drawPreferredDisplay() {
@@ -784,6 +840,7 @@ void handleDisplayCommand(const String& line) {
   if (mode == "template") {
     String lines[MaxDisplayLines];
     uint8_t lineSizes[MaxDisplayLines];
+    String lineAligns[MaxDisplayLines];
     uint8_t count = 0;
 
     for (uint8_t index = 0; index < MaxDisplayLines; index++) {
@@ -793,11 +850,12 @@ void handleDisplayCommand(const String& line) {
         lines[count] = value;
         lineSizes[count] = normalizeDisplayTextSize(
           protocolValue(line, (key + "Size").c_str()).toInt());
+        lineAligns[count] = normalizeDisplayAlign(protocolValue(line, (key + "Align").c_str()));
         count++;
       }
     }
 
-    setDisplayLines(lines, lineSizes, count);
+    setDisplayLines(lines, lineSizes, lineAligns, count);
 
     const String duration = protocolValue(line, "durationMs");
     temporaryDisplayUntilMs = duration.length() > 0 && duration.toInt() > 0
@@ -868,23 +926,28 @@ void handleProtocolLine(String line) {
       defaultScreenTitle = configuredDefaultTitle;
     }
     defaultScreenTitleSize = normalizeDisplayTextSize(protocolValue(line, "defaultTitleSize").toInt());
+    defaultScreenTitleAlign = normalizeDisplayAlign(protocolValue(line, "defaultTitleAlign"));
 
     const String configuredDefaultLine1 = protocolValue(line, "defaultLine1");
     if (configuredDefaultLine1.length() > 0) {
       defaultScreenLine1 = configuredDefaultLine1;
     }
     defaultScreenLine1Size = normalizeDisplayTextSize(protocolValue(line, "defaultLine1Size").toInt());
+    defaultScreenLine1Align = normalizeDisplayAlign(protocolValue(line, "defaultLine1Align"));
 
     const String configuredDefaultLine2 = protocolValue(line, "defaultLine2");
     if (configuredDefaultLine2.length() > 0) {
       defaultScreenLine2 = configuredDefaultLine2;
     }
     defaultScreenLine2Size = normalizeDisplayTextSize(protocolValue(line, "defaultLine2Size").toInt());
+    defaultScreenLine2Align = normalizeDisplayAlign(protocolValue(line, "defaultLine2Align"));
 
     defaultScreenLine3 = protocolValue(line, "defaultLine3");
     defaultScreenLine3Size = normalizeDisplayTextSize(protocolValue(line, "defaultLine3Size").toInt());
+    defaultScreenLine3Align = normalizeDisplayAlign(protocolValue(line, "defaultLine3Align"));
     defaultScreenLine4 = protocolValue(line, "defaultLine4");
     defaultScreenLine4Size = normalizeDisplayTextSize(protocolValue(line, "defaultLine4Size").toInt());
+    defaultScreenLine4Align = normalizeDisplayAlign(protocolValue(line, "defaultLine4Align"));
 
     currentTime = protocolValue(line, "time");
     currentDate = protocolValue(line, "date");
