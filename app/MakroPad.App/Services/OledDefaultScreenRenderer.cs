@@ -64,9 +64,9 @@ public sealed class OledDefaultScreenRenderer
     {
         var sourceLines = new[]
         {
-            new DisplayTemplateLine(NormalizeLine(state.DefaultScreenTitle, "MakroPad"), state.DefaultScreenTitleSize),
-            new DisplayTemplateLine(NormalizeLine(state.DefaultScreenLine1, "{profile}"), state.DefaultScreenLine1Size),
-            new DisplayTemplateLine(NormalizeLine(state.DefaultScreenLine2, "{status}"), state.DefaultScreenLine2Size),
+            new DisplayTemplateLine(state.DefaultScreenTitle.Trim(), state.DefaultScreenTitleSize),
+            new DisplayTemplateLine(state.DefaultScreenLine1.Trim(), state.DefaultScreenLine1Size),
+            new DisplayTemplateLine(state.DefaultScreenLine2.Trim(), state.DefaultScreenLine2Size),
             new DisplayTemplateLine(state.DefaultScreenLine3.Trim(), state.DefaultScreenLine3Size),
             new DisplayTemplateLine(state.DefaultScreenLine4.Trim(), state.DefaultScreenLine4Size)
         };

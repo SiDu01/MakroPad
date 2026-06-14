@@ -45,9 +45,13 @@ public sealed class IdleScreenOrchestrator : IDisposable
     {
         ObjectDisposedException.ThrowIf(disposed, this);
         this.onActiveChanged = onActiveChanged;
-        timer ??= new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
-        timer.Tick += OnTimerTick;
-        timer.Start();
+        if (timer is null)
+        {
+            timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
+            timer.Tick += OnTimerTick;
+            timer.Start();
+        }
+
         Tick();
     }
 

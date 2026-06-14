@@ -33,6 +33,7 @@ public partial class ShellViewModel : ViewModelBase
     private readonly ActionPipeline actionPipeline = new(new ActionResolver(), new ActionExecutor());
     private readonly ActionFeedbackCoordinator actionFeedbackCoordinator;
     private readonly AppRuntimeLoopService runtimeLoopService = new();
+    private readonly IdleScreenOrchestrator idleScreenOrchestrator = new(new ProcessPresenceProbe());
     private IMakroPadConnection? activeConnection => deviceSessionService.ActiveConnection;
     private MakroPadConfig currentConfig = MakroPadConfig.CreateDefault();
     private bool isLoadingConfig;
@@ -261,6 +262,7 @@ public partial class ShellViewModel : ViewModelBase
     {
         runtimeLoopService.Dispose();
         displayTriggerOrchestrator.Dispose();
+        idleScreenOrchestrator.Dispose();
     }
 
     [RelayCommand]
@@ -343,6 +345,10 @@ public partial class ShellViewModel : ViewModelBase
             currentConfig = loadResult.Config;
             ProfilesEditor.Load(currentConfig);
             LoadPadLayout(currentConfig.AppSettings);
+            idleScreenOrchestrator.Configure(
+                currentConfig.AppSettings.IdleScreens,
+                currentConfig.AppSettings.IdleRotationSeconds);
+            idleScreenOrchestrator.Start(_ => SendDeviceConfigAsync());
             OnPropertyChanged(nameof(ActiveProfileName));
             AutoConnect = currentConfig.AppSettings.AutoConnect;
             DisplaySettings.Load(currentConfig);
@@ -773,13 +779,24 @@ public partial class ShellViewModel : ViewModelBase
     {
         try
         {
-            await deviceDisplaySyncService.SendConfigAsync(activeConnection, DisplaySettings.CreateDeviceDisplayState());
+            await deviceDisplaySyncService.SendConfigAsync(activeConnection, CreateIdleDeviceState());
             RefreshDisplaySettingsRuntime();
         }
         catch (Exception ex)
         {
             AddLog($"Device config send failed: {ex.Message}");
         }
+    }
+
+    private DeviceDisplayState CreateIdleDeviceState()
+    {
+        return IdleScreenDeviceState.Build(
+            idleScreenOrchestrator.Current,
+            ActiveProfileName,
+            ConnectionStatus,
+            DisplaySettings.ActionResultTimeoutMs,
+            DisplaySettings.EnableNowPlayingDisplay,
+            NowPlayingViewModel.LastSentTrack);
     }
 
     private async Task DisconnectActiveConnectionAsync()
@@ -816,7 +833,8 @@ public partial class ShellViewModel : ViewModelBase
 
     private bool DefaultScreenUsesMediaPlaceholder()
     {
-        return DisplaySettings.UsesMediaPlaceholder();
+        return (idleScreenOrchestrator.Current?.Template ?? "")
+            .Contains("{media.", StringComparison.OrdinalIgnoreCase);
     }
 
     private void RefreshDisplaySettingsRuntime()
