@@ -149,12 +149,211 @@ public partial class DisplayTriggersEditorViewModel : ViewModelBase
     [ObservableProperty]
     private string displayTriggerEditorTemplateMode = "normal";
 
-    partial void OnDisplayTriggerEditorTemplateModeChanged(string value) => RefreshPreview();
+    partial void OnDisplayTriggerEditorTemplateModeChanged(string value)
+    {
+        OnPropertyChanged(nameof(IsMarkdownDisplayTrigger));
+        OnPropertyChanged(nameof(ShowsBlockEditor));
+        OnPropertyChanged(nameof(ShowsRawTemplate));
+        if (!IsMarkdownDisplayTrigger)
+        {
+            UseBlockEditor = false;
+        }
+
+        RefreshPreview();
+    }
 
     [ObservableProperty]
     private string displayTriggerEditorTemplate = DisplayTriggerNormalizer.DefaultTemplate;
 
     partial void OnDisplayTriggerEditorTemplateChanged(string value) => RefreshPreview();
+
+    // ----- Visual block ("Baukasten") editor for the Markdown content mode -----
+
+    [ObservableProperty]
+    private bool useBlockEditor;
+
+    partial void OnUseBlockEditorChanged(bool value)
+    {
+        OnPropertyChanged(nameof(ShowsBlockEditor));
+        OnPropertyChanged(nameof(ShowsRawTemplate));
+    }
+
+    public bool IsMarkdownDisplayTrigger =>
+        DisplayTriggerNormalizer.NormalizeTemplateMode(DisplayTriggerEditorTemplateMode) == "markdown";
+
+    public bool ShowsBlockEditor => IsMarkdownDisplayTrigger && UseBlockEditor;
+
+    public bool ShowsRawTemplate => !ShowsBlockEditor;
+
+    public ObservableCollection<DisplayBlockViewModel> DisplayBlocks { get; } = [];
+
+    public IReadOnlyList<string> AvailableDisplayPlaceholders { get; } =
+    [
+        "{profile}", "{status}", "{input}", "{slider.percent}", "{slider.id}",
+        "{media.artist}", "{media.title}", "{media.track}", "{action.message}", "{connection.status}"
+    ];
+
+    private DisplayBlockViewModel? activeBlock;
+    private bool isSyncingBlocks;
+
+    [RelayCommand]
+    private void ToggleBlockEditor()
+    {
+        if (!UseBlockEditor)
+        {
+            ParseBlocksFromTemplate();
+        }
+
+        UseBlockEditor = !UseBlockEditor;
+    }
+
+    [RelayCommand]
+    private void AddHeadingBlock() => AddBlock(DisplayBlockKind.Heading, "Titel");
+
+    [RelayCommand]
+    private void AddTextBlock() => AddBlock(DisplayBlockKind.Text, "Text");
+
+    [RelayCommand]
+    private void AddListBlock() => AddBlock(DisplayBlockKind.ListItem, "Punkt");
+
+    [RelayCommand]
+    private void AddDividerBlock() => AddBlock(DisplayBlockKind.Divider, "");
+
+    [RelayCommand]
+    private void RemoveBlock(DisplayBlockViewModel? block)
+    {
+        if (block is not null && DisplayBlocks.Remove(block))
+        {
+            if (ReferenceEquals(activeBlock, block))
+            {
+                activeBlock = null;
+            }
+
+            SerializeBlocksToTemplate();
+        }
+    }
+
+    [RelayCommand]
+    private void MoveBlockUp(DisplayBlockViewModel? block) => MoveBlock(block, -1);
+
+    [RelayCommand]
+    private void MoveBlockDown(DisplayBlockViewModel? block) => MoveBlock(block, 1);
+
+    [RelayCommand]
+    private void InsertPlaceholder(string? placeholder)
+    {
+        if (string.IsNullOrEmpty(placeholder))
+        {
+            return;
+        }
+
+        var target = activeBlock?.IsEditable == true
+            ? activeBlock
+            : DisplayBlocks.LastOrDefault(b => b.IsEditable);
+        if (target is not null)
+        {
+            target.Text += placeholder;
+        }
+    }
+
+    private void AddBlock(DisplayBlockKind kind, string text)
+    {
+        var block = new DisplayBlockViewModel(kind, text, OnBlockChanged);
+        DisplayBlocks.Add(block);
+        if (block.IsEditable)
+        {
+            activeBlock = block;
+        }
+
+        SerializeBlocksToTemplate();
+    }
+
+    private void MoveBlock(DisplayBlockViewModel? block, int direction)
+    {
+        if (block is null)
+        {
+            return;
+        }
+
+        var index = DisplayBlocks.IndexOf(block);
+        var target = index + direction;
+        if (index < 0 || target < 0 || target >= DisplayBlocks.Count)
+        {
+            return;
+        }
+
+        DisplayBlocks.Move(index, target);
+        SerializeBlocksToTemplate();
+    }
+
+    private void OnBlockChanged(DisplayBlockViewModel block)
+    {
+        activeBlock = block;
+        SerializeBlocksToTemplate();
+    }
+
+    public void ParseBlocksFromTemplate()
+    {
+        isSyncingBlocks = true;
+        DisplayBlocks.Clear();
+        var lines = (DisplayTriggerEditorTemplate ?? "")
+            .Replace("\r\n", "\n")
+            .Replace('\r', '\n')
+            .Split('\n');
+        foreach (var raw in lines)
+        {
+            var line = raw.Trim();
+            if (line.Length == 0)
+            {
+                continue;
+            }
+
+            DisplayBlockKind kind;
+            var text = "";
+            if (line.Length >= 3 && line.All(c => c == '-'))
+            {
+                kind = DisplayBlockKind.Divider;
+            }
+            else if (line.StartsWith('#'))
+            {
+                kind = DisplayBlockKind.Heading;
+                text = line.TrimStart('#').Trim();
+            }
+            else if (line.StartsWith("- ", StringComparison.Ordinal) || line.StartsWith("* ", StringComparison.Ordinal))
+            {
+                kind = DisplayBlockKind.ListItem;
+                text = line[2..].Trim();
+            }
+            else
+            {
+                kind = DisplayBlockKind.Text;
+                text = line;
+            }
+
+            DisplayBlocks.Add(new DisplayBlockViewModel(kind, text, OnBlockChanged));
+        }
+
+        activeBlock = DisplayBlocks.LastOrDefault(b => b.IsEditable);
+        isSyncingBlocks = false;
+    }
+
+    public void SerializeBlocksToTemplate()
+    {
+        if (isSyncingBlocks)
+        {
+            return;
+        }
+
+        DisplayTriggerEditorTemplate = string.Join("\n", DisplayBlocks.Select(SerializeBlock));
+    }
+
+    private static string SerializeBlock(DisplayBlockViewModel block) => block.Kind switch
+    {
+        DisplayBlockKind.Heading => "# " + block.Text.Trim(),
+        DisplayBlockKind.ListItem => "- " + block.Text.Trim(),
+        DisplayBlockKind.Divider => "---",
+        _ => block.Text.Trim()
+    };
 
     [ObservableProperty]
     private string displayTriggerEditorValidationMessage = "";
@@ -616,6 +815,7 @@ public partial class DisplayTriggersEditorViewModel : ViewModelBase
             isRefreshingEditor = false;
         }
 
+        UseBlockEditor = false;
         RefreshPreview();
     }
 

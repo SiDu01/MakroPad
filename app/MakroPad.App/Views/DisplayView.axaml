@@ -216,10 +216,89 @@
                                       SelectedItem="{Binding DisplayTriggersEditor.DisplayTriggerEditorConnectionStatus}"
                                       IsVisible="{Binding DisplayTriggersEditor.IsConnectionChangedDisplayTrigger}" />
 
-                            <StackPanel Spacing="4">
-                                <TextBlock Classes="label" Text="Content" />
-                                <TextBox Text="{Binding DisplayTriggersEditor.DisplayTriggerEditorTemplate}"
+                            <StackPanel Spacing="8">
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <TextBlock Classes="label" Text="Content" VerticalAlignment="Center" />
+                                    <StackPanel Grid.Column="1" Orientation="Horizontal"
+                                                IsVisible="{Binding DisplayTriggersEditor.IsMarkdownDisplayTrigger}">
+                                        <Button Classes="secondary" Padding="10,4" Content="Baukasten"
+                                                IsVisible="{Binding !DisplayTriggersEditor.UseBlockEditor}"
+                                                Command="{Binding DisplayTriggersEditor.ToggleBlockEditorCommand}" />
+                                        <Button Classes="secondary" Padding="10,4" Content="Text"
+                                                IsVisible="{Binding DisplayTriggersEditor.UseBlockEditor}"
+                                                Command="{Binding DisplayTriggersEditor.ToggleBlockEditorCommand}" />
+                                    </StackPanel>
+                                </Grid>
+
+                                <!-- Raw text input -->
+                                <TextBox IsVisible="{Binding DisplayTriggersEditor.ShowsRawTemplate}"
+                                         Text="{Binding DisplayTriggersEditor.DisplayTriggerEditorTemplate}"
                                          AcceptsReturn="True" MinHeight="180" TextWrapping="Wrap" />
+
+                                <!-- Block builder -->
+                                <StackPanel IsVisible="{Binding DisplayTriggersEditor.ShowsBlockEditor}" Spacing="10">
+                                    <WrapPanel>
+                                        <Button Classes="secondary" Content="+ Ueberschrift" MinWidth="0" Margin="0,0,8,8"
+                                                Command="{Binding DisplayTriggersEditor.AddHeadingBlockCommand}" />
+                                        <Button Classes="secondary" Content="+ Text" MinWidth="0" Margin="0,0,8,8"
+                                                Command="{Binding DisplayTriggersEditor.AddTextBlockCommand}" />
+                                        <Button Classes="secondary" Content="+ Listenpunkt" MinWidth="0" Margin="0,0,8,8"
+                                                Command="{Binding DisplayTriggersEditor.AddListBlockCommand}" />
+                                        <Button Classes="secondary" Content="+ Trennlinie" MinWidth="0" Margin="0,0,8,8"
+                                                Command="{Binding DisplayTriggersEditor.AddDividerBlockCommand}" />
+                                        <Button Classes="secondary" Content="Platzhalter ▾" MinWidth="0" Margin="0,0,8,8">
+                                            <Button.Flyout>
+                                                <Flyout>
+                                                    <ItemsControl ItemsSource="{Binding DisplayTriggersEditor.AvailableDisplayPlaceholders}"
+                                                                  MinWidth="170">
+                                                        <ItemsControl.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <Button Classes="secondary"
+                                                                        HorizontalAlignment="Stretch"
+                                                                        HorizontalContentAlignment="Left"
+                                                                        Margin="0,0,0,4"
+                                                                        Content="{Binding}"
+                                                                        CommandParameter="{Binding}"
+                                                                        Command="{Binding $parent[ItemsControl].DataContext.DisplayTriggersEditor.InsertPlaceholderCommand}" />
+                                                            </DataTemplate>
+                                                        </ItemsControl.ItemTemplate>
+                                                    </ItemsControl>
+                                                </Flyout>
+                                            </Button.Flyout>
+                                        </Button>
+                                    </WrapPanel>
+
+                                    <ItemsControl ItemsSource="{Binding DisplayTriggersEditor.DisplayBlocks}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate DataType="vm:DisplayBlockViewModel">
+                                                <Border Classes="panelElevated" Margin="0,0,0,8" Padding="10">
+                                                    <Grid ColumnDefinitions="80,*,Auto" ColumnSpacing="8">
+                                                        <TextBlock Text="{Binding KindLabel}" Classes="muted" FontSize="12" VerticalAlignment="Center" />
+                                                        <TextBox Grid.Column="1"
+                                                                 IsVisible="{Binding IsEditable}"
+                                                                 PlaceholderText="{Binding Watermark}"
+                                                                 Text="{Binding Text}" />
+                                                        <TextBlock Grid.Column="1"
+                                                                   IsVisible="{Binding !IsEditable}"
+                                                                   Text="--------------------"
+                                                                   FontFamily="Consolas" Classes="muted" VerticalAlignment="Center" />
+                                                        <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="4">
+                                                            <Button Classes="secondary" Content="↑" Padding="9,4"
+                                                                    Command="{Binding $parent[ItemsControl].DataContext.DisplayTriggersEditor.MoveBlockUpCommand}"
+                                                                    CommandParameter="{Binding}" />
+                                                            <Button Classes="secondary" Content="↓" Padding="9,4"
+                                                                    Command="{Binding $parent[ItemsControl].DataContext.DisplayTriggersEditor.MoveBlockDownCommand}"
+                                                                    CommandParameter="{Binding}" />
+                                                            <Button Classes="danger" Content="✕" Padding="9,4"
+                                                                    Command="{Binding $parent[ItemsControl].DataContext.DisplayTriggersEditor.RemoveBlockCommand}"
+                                                                    CommandParameter="{Binding}" />
+                                                        </StackPanel>
+                                                    </Grid>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
                             </StackPanel>
 
                             <StackPanel Spacing="8" IsVisible="{Binding DisplayTriggersEditor.ShowsDisplayTriggerPreviewValues}">
