@@ -154,8 +154,9 @@ public static partial class DisplayTriggerRenderer
     /// <summary>
     /// Renders a small Markdown-like pseudocode into OLED text lines: lines starting with '#'
     /// become a size-2 heading, lines starting with '- ' or '* ' become bulleted list items,
-    /// a line of three or more dashes becomes a divider, blank lines are dropped, and any other
-    /// line is shown as-is. Placeholders are resolved before this runs. Limited to 5 lines.
+    /// a line of three or more dashes becomes a divider, a blank line stays an empty row, and any
+    /// other line is shown as-is. A leading "[c]"/"[r]"/"[l]" sets the line alignment
+    /// (center/right/left). Placeholders are resolved before this runs. Limited to 5 lines.
     /// </summary>
     public static IReadOnlyList<DisplayTemplateLine> RenderMarkdownLines(string markdown)
     {
@@ -166,31 +167,35 @@ public static partial class DisplayTriggerRenderer
 
         foreach (var raw in rawLines)
         {
-            var line = raw.Trim();
-            if (line.Length == 0)
+            var trimmed = raw.Trim();
+            if (trimmed.Length == 0)
             {
-                continue;
-            }
-
-            if (line.Length >= 3 && line.All(c => c == '-'))
-            {
-                lines.Add(new DisplayTemplateLine(DividerLine));
-            }
-            else if (line.StartsWith('#'))
-            {
-                var heading = line.TrimStart('#').Trim();
-                if (heading.Length > 0)
-                {
-                    lines.Add(new DisplayTemplateLine(heading, 2));
-                }
-            }
-            else if (line.StartsWith("- ", StringComparison.Ordinal) || line.StartsWith("* ", StringComparison.Ordinal))
-            {
-                lines.Add(new DisplayTemplateLine("- " + line[2..].Trim()));
+                lines.Add(new DisplayTemplateLine(""));
             }
             else
             {
-                lines.Add(new DisplayTemplateLine(line));
+                var (alignment, line) = ParseAlignmentPrefix(trimmed);
+
+                if (line.Length >= 3 && line.All(c => c == '-'))
+                {
+                    lines.Add(new DisplayTemplateLine(DividerLine, 1, alignment));
+                }
+                else if (line.StartsWith('#'))
+                {
+                    var heading = line.TrimStart('#').Trim();
+                    if (heading.Length > 0)
+                    {
+                        lines.Add(new DisplayTemplateLine(heading, 2, alignment));
+                    }
+                }
+                else if (line.StartsWith("- ", StringComparison.Ordinal) || line.StartsWith("* ", StringComparison.Ordinal))
+                {
+                    lines.Add(new DisplayTemplateLine("- " + line[2..].Trim(), 1, alignment));
+                }
+                else
+                {
+                    lines.Add(new DisplayTemplateLine(line, 1, alignment));
+                }
             }
 
             if (lines.Count >= 5)
@@ -200,6 +205,29 @@ public static partial class DisplayTriggerRenderer
         }
 
         return lines;
+    }
+
+    /// <summary>Strips a leading alignment tag ("[c]"/"[r]"/"[l]") and returns it with the rest.</summary>
+    public static (string Alignment, string Text) ParseAlignmentPrefix(string line)
+    {
+        ArgumentNullException.ThrowIfNull(line);
+
+        if (line.StartsWith("[c]", StringComparison.OrdinalIgnoreCase))
+        {
+            return ("center", line[3..].TrimStart());
+        }
+
+        if (line.StartsWith("[r]", StringComparison.OrdinalIgnoreCase))
+        {
+            return ("right", line[3..].TrimStart());
+        }
+
+        if (line.StartsWith("[l]", StringComparison.OrdinalIgnoreCase))
+        {
+            return ("left", line[3..].TrimStart());
+        }
+
+        return ("left", line);
     }
 
     /// <summary>

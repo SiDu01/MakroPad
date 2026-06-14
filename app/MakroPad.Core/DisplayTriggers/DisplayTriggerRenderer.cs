@@ -113,7 +113,7 @@ public static partial class DisplayTriggerRenderer
         ArgumentNullException.ThrowIfNull(lines);
 
         return lines
-            .Select(line => FitPreviewLine(line.Text, line.NormalizedTextSize))
+            .Select(line => FitPreviewLine(line.Text, line.NormalizedTextSize, line.NormalizedAlignment))
             .ToList();
     }
 
@@ -129,14 +129,23 @@ public static partial class DisplayTriggerRenderer
     }
 
 
-    private static string FitPreviewLine(string line, int textSize)
+    private static string FitPreviewLine(string line, int textSize, string alignment = "left")
     {
         var trimmed = line.Trim();
         var maxCharacters = Math.Max(1, MaxPreviewCharacters / Math.Clamp(textSize, 1, 2));
 
-        return trimmed.Length <= maxCharacters
-            ? trimmed
-            : $"{trimmed[..Math.Max(1, maxCharacters - 2)]}..";
+        if (trimmed.Length > maxCharacters)
+        {
+            return $"{trimmed[..Math.Max(1, maxCharacters - 2)]}..";
+        }
+
+        var padding = maxCharacters - trimmed.Length;
+        return alignment switch
+        {
+            "center" => new string(' ', padding / 2) + trimmed,
+            "right" => new string(' ', padding) + trimmed,
+            _ => trimmed
+        };
     }
 
     private static string InferLayout(DisplayTriggerConfig trigger, DisplayTriggerRenderContext context)

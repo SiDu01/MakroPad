@@ -139,6 +139,32 @@ public sealed class DisplayTriggerRendererTests
     }
 
     [Fact]
+    public void RenderMarkdownLinesKeepsBlankLinesAndAlignment()
+    {
+        var result = DisplayTriggerRenderer.RenderMarkdownLines("[c]# Titel\n\n[r]rechts");
+
+        Assert.Equal(3, result.Count);
+        Assert.Equal("Titel", result[0].Text);
+        Assert.Equal(2, result[0].NormalizedTextSize);
+        Assert.Equal("center", result[0].NormalizedAlignment);
+        Assert.Equal("", result[1].Text);
+        Assert.Equal("rechts", result[2].Text);
+        Assert.Equal("right", result[2].NormalizedAlignment);
+    }
+
+    [Fact]
+    public void FitPreviewLinesCentersShortLines()
+    {
+        var result = DisplayTriggerRenderer.FitPreviewLines(
+        [
+            new DisplayTemplateLine("Hi", 1, "center")
+        ]);
+
+        Assert.StartsWith(" ", result[0]);
+        Assert.Equal("Hi", result[0].Trim());
+    }
+
+    [Fact]
     public void RenderContentLinesKeepsPlaceholdersForDevice()
     {
         var lines = DisplayTriggerRenderer.RenderContentLines("# {profile}\n- {status}", "markdown");
