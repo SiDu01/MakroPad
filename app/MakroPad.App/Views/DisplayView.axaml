@@ -6,7 +6,7 @@
     <Panel>
 
         <!-- ===================== Overview ===================== -->
-        <Grid IsVisible="{Binding !IsDisplayEditorOpen}"
+        <Grid IsVisible="{Binding IsDisplayOverviewVisible}"
               RowDefinitions="Auto,*" Margin="24,20,24,20" RowSpacing="14">
 
             <StackPanel Grid.Row="0" Spacing="2">
@@ -21,48 +21,38 @@
                     <StackPanel Spacing="16" MinWidth="420">
                         <Border Classes="panel">
                             <StackPanel Spacing="10">
-                                <TextBlock Text="Idle Screen" FontSize="15" FontWeight="SemiBold" />
-                                <Grid ColumnDefinitions="*,96" ColumnSpacing="8">
-                                    <StackPanel Spacing="4">
-                                        <TextBlock Classes="label" Text="Mode" />
-                                        <ComboBox HorizontalAlignment="Stretch"
-                                                  ItemsSource="{Binding DisplaySettings.AvailableOledTemplateModes}"
-                                                  SelectedItem="{Binding DisplaySettings.DefaultScreenTemplateMode}" />
-                                    </StackPanel>
-                                    <StackPanel Grid.Column="1" Spacing="4">
-                                        <TextBlock Classes="label" Text="Rows" />
-                                        <ComboBox Classes="compact"
-                                                  ItemsSource="{Binding DisplaySettings.AvailableOledLayoutRows}"
-                                                  SelectedItem="{Binding DisplaySettings.DefaultScreenRows}" />
-                                    </StackPanel>
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <TextBlock Text="Idle-Screens" FontSize="15" FontWeight="SemiBold" VerticalAlignment="Center" />
+                                    <Button Grid.Column="1" Classes="primary" Content="+ Idle-Screen"
+                                            Command="{Binding CreateIdleScreenCommand}" />
                                 </Grid>
-                                <TextBlock Classes="label" Text="Title" />
-                                <Grid ColumnDefinitions="*,70" ColumnSpacing="8">
-                                    <TextBox Text="{Binding DisplaySettings.DefaultScreenTitle}" />
-                                    <ComboBox Grid.Column="1" Classes="compact"
-                                              ItemsSource="{Binding DisplaySettings.AvailableOledTextSizes}"
-                                              SelectedItem="{Binding DisplaySettings.DefaultScreenTitleSize}" />
+                                <ListBox ItemsSource="{Binding IdleScreensEditor.IdleScreens}"
+                                         Classes="dataList"
+                                         SelectedItem="{Binding IdleScreensEditor.SelectedIdleScreen}"
+                                         DoubleTapped="IdleList_DoubleTapped"
+                                         MinHeight="180">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate DataType="vm:IdleScreenItemViewModel">
+                                            <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="8">
+                                                <TextBlock Text="{Binding Name}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" />
+                                                <TextBlock Grid.Column="1" Text="{Binding ActivationDisplay}" Classes="muted" FontSize="12" VerticalAlignment="Center" />
+                                                <TextBlock Grid.Column="2" Text="{Binding EnabledDisplay}" Classes="muted" FontFamily="Consolas" VerticalAlignment="Center" />
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                                <WrapPanel>
+                                    <Button Content="Bearbeiten" Classes="secondary" Command="{Binding EditIdleScreenCommand}" MinWidth="92" Margin="0,0,8,8" />
+                                    <Button Content="Duplizieren" Classes="secondary" Command="{Binding IdleScreensEditor.DuplicateIdleScreenCommand}" MinWidth="96" Margin="0,0,8,8" />
+                                    <Button Content="Entfernen" Classes="danger" Command="{Binding IdleScreensEditor.RemoveIdleScreenCommand}" MinWidth="92" Margin="0,0,8,8" />
+                                    <Button Content="Up" Classes="secondary" Command="{Binding IdleScreensEditor.MoveIdleScreenUpCommand}" MinWidth="52" Margin="0,0,8,8" />
+                                    <Button Content="Down" Classes="secondary" Command="{Binding IdleScreensEditor.MoveIdleScreenDownCommand}" MinWidth="64" Margin="0,0,8,8" />
+                                </WrapPanel>
+                                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                                    <TextBlock Text="Rotationsintervall (s)" Classes="label" VerticalAlignment="Center" />
+                                    <NumericUpDown Grid.Column="1" Width="120" Minimum="1" Maximum="3600" Increment="1"
+                                                   Value="{Binding IdleScreensEditor.IdleRotationSeconds}" />
                                 </Grid>
-                                <TextBlock Classes="label" Text="Line 1" />
-                                <Grid ColumnDefinitions="*,70" ColumnSpacing="8">
-                                    <TextBox Text="{Binding DisplaySettings.DefaultScreenLine1}" />
-                                    <ComboBox Grid.Column="1" Classes="compact"
-                                              ItemsSource="{Binding DisplaySettings.AvailableOledTextSizes}"
-                                              SelectedItem="{Binding DisplaySettings.DefaultScreenLine1Size}" />
-                                </Grid>
-                                <TextBlock Classes="label" Text="Line 2" />
-                                <Grid ColumnDefinitions="*,70" ColumnSpacing="8">
-                                    <TextBox Text="{Binding DisplaySettings.DefaultScreenLine2}" />
-                                    <ComboBox Grid.Column="1" Classes="compact"
-                                              ItemsSource="{Binding DisplaySettings.AvailableOledTextSizes}"
-                                              SelectedItem="{Binding DisplaySettings.DefaultScreenLine2Size}" />
-                                </Grid>
-                                <TextBox Text="{Binding DisplaySettings.DefaultScreenLine3}"
-                                         PlaceholderText="Line 3"
-                                         IsVisible="{Binding DisplaySettings.UsesFiveLineOledLayout}" />
-                                <TextBox Text="{Binding DisplaySettings.DefaultScreenLine4}"
-                                         PlaceholderText="Line 4"
-                                         IsVisible="{Binding DisplaySettings.UsesFiveLineOledLayout}" />
                             </StackPanel>
                         </Border>
 
@@ -107,23 +97,8 @@
                 <Border Grid.Column="1" Classes="inspector" Width="344">
                     <ScrollViewer VerticalScrollBarVisibility="Auto">
                         <StackPanel Spacing="16">
-                            <TextBlock Text="Idle-Vorschau" FontSize="15" FontWeight="SemiBold" />
-                            <Border Classes="oledPreview" HorizontalAlignment="Left">
-                                <StackPanel Spacing="6" VerticalAlignment="Top">
-                                    <TextBlock Text="{Binding DisplaySettings.OledPreviewTitle}" FontFamily="Consolas"
-                                               FontSize="{Binding DisplaySettings.OledPreviewTitleFontSize}" TextWrapping="NoWrap" />
-                                    <TextBlock Text="{Binding DisplaySettings.OledPreviewLine1}" FontFamily="Consolas"
-                                               FontSize="{Binding DisplaySettings.OledPreviewLine1FontSize}" TextWrapping="NoWrap" />
-                                    <TextBlock Text="{Binding DisplaySettings.OledPreviewLine2}" FontFamily="Consolas"
-                                               FontSize="{Binding DisplaySettings.OledPreviewLine2FontSize}" TextWrapping="NoWrap" />
-                                    <TextBlock IsVisible="{Binding DisplaySettings.UsesFiveLineOledLayout}"
-                                               Text="{Binding DisplaySettings.OledPreviewLine3}" FontFamily="Consolas"
-                                               FontSize="{Binding DisplaySettings.OledPreviewLine3FontSize}" TextWrapping="NoWrap" />
-                                    <TextBlock IsVisible="{Binding DisplaySettings.UsesFiveLineOledLayout}"
-                                               Text="{Binding DisplaySettings.OledPreviewLine4}" FontFamily="Consolas"
-                                               FontSize="{Binding DisplaySettings.OledPreviewLine4FontSize}" TextWrapping="NoWrap" />
-                                </StackPanel>
-                            </Border>
+                            <TextBlock Classes="muted" TextWrapping="Wrap"
+                                       Text="Idle-Screens wechseln nach ihrer Aktivierung (Standard / wenn eine App laeuft) und rotieren, wenn mehrere aktiv sind. Doppelklick oeffnet den Editor mit Vorschau." />
 
                             <Border Classes="panelElevated">
                                 <StackPanel Spacing="10">
@@ -390,6 +365,154 @@
                         </Border>
                         <TextBlock Classes="muted" FontSize="12" TextWrapping="Wrap"
                                    Text="Mit Uebernehmen speicherst du die Regel in der Liste. Globales Speichern schreibt sie in die Konfiguration." />
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Grid>
+
+        <!-- ===================== Single idle-screen editor ===================== -->
+        <Grid IsVisible="{Binding IsIdleEditorOpen}"
+              RowDefinitions="Auto,*" Margin="24,20,24,20" RowSpacing="14">
+
+            <Grid Grid.Row="0" ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                <Button Classes="secondary" Content="← Übersicht" Command="{Binding CloseIdleEditorCommand}" VerticalAlignment="Center" />
+                <StackPanel Grid.Column="1" Spacing="2" VerticalAlignment="Center">
+                    <TextBlock Classes="sectionTitle" Text="Idle-Screen bearbeiten" />
+                    <TextBlock Classes="muted" Text="Name, Aktivierung und OLED-Inhalt dieses Idle-Screens." />
+                </StackPanel>
+            </Grid>
+
+            <Grid Grid.Row="1" ColumnDefinitions="*,344" ColumnSpacing="16" DataContext="{Binding IdleScreensEditor}">
+                <ScrollViewer Grid.Column="0"
+                              HorizontalScrollBarVisibility="Auto"
+                              VerticalScrollBarVisibility="Auto">
+                    <Border Classes="panelElevated" MinWidth="360" IsVisible="{Binding HasSelection}">
+                        <StackPanel Spacing="12">
+                            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                                <StackPanel Spacing="4">
+                                    <TextBlock Classes="label" Text="Name" />
+                                    <TextBox Text="{Binding SelectedIdleScreen.Name}" />
+                                </StackPanel>
+                                <CheckBox Grid.Column="1" Content="Aktiviert" VerticalAlignment="Bottom"
+                                          IsChecked="{Binding SelectedIdleScreen.Enabled}" />
+                            </Grid>
+
+                            <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                                <StackPanel Spacing="4">
+                                    <TextBlock Classes="label" Text="Aktivierung" />
+                                    <ComboBox HorizontalAlignment="Stretch"
+                                              ItemsSource="{Binding AvailableActivations}"
+                                              SelectedItem="{Binding SelectedIdleScreen.Activation}" />
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" Spacing="4" IsVisible="{Binding IsProcessActivation}">
+                                    <TextBlock Classes="label" Text="Prozess (z.B. Spotify)" />
+                                    <TextBox Text="{Binding SelectedIdleScreen.ProcessName}" />
+                                </StackPanel>
+                            </Grid>
+
+                            <StackPanel Spacing="4">
+                                <TextBlock Classes="label" Text="Modus" />
+                                <ComboBox HorizontalAlignment="Left" MinWidth="170"
+                                          ItemsSource="{Binding AvailableModes}"
+                                          SelectedItem="{Binding SelectedIdleScreen.TemplateMode}" />
+                            </StackPanel>
+
+                            <StackPanel Spacing="8">
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <TextBlock Classes="label" Text="Inhalt" VerticalAlignment="Center" />
+                                    <StackPanel Grid.Column="1" Orientation="Horizontal" IsVisible="{Binding IsMarkdown}">
+                                        <Button Classes="secondary" Padding="10,4" Content="Baukasten"
+                                                IsVisible="{Binding !UseBlockEditor}" Command="{Binding ToggleBlockEditorCommand}" />
+                                        <Button Classes="secondary" Padding="10,4" Content="Text"
+                                                IsVisible="{Binding UseBlockEditor}" Command="{Binding ToggleBlockEditorCommand}" />
+                                    </StackPanel>
+                                </Grid>
+
+                                <TextBox IsVisible="{Binding ShowsRawTemplate}"
+                                         Text="{Binding SelectedIdleScreen.Template}"
+                                         AcceptsReturn="True" MinHeight="160" TextWrapping="Wrap" />
+
+                                <StackPanel IsVisible="{Binding ShowsBlockEditor}" Spacing="10">
+                                    <WrapPanel>
+                                        <Button Classes="secondary" Content="+ Ueberschrift" MinWidth="0" Margin="0,0,8,8"
+                                                Command="{Binding AddHeadingBlockCommand}" />
+                                        <Button Classes="secondary" Content="+ Text" MinWidth="0" Margin="0,0,8,8"
+                                                Command="{Binding AddTextBlockCommand}" />
+                                        <Button Classes="secondary" Content="+ Listenpunkt" MinWidth="0" Margin="0,0,8,8"
+                                                Command="{Binding AddListBlockCommand}" />
+                                        <Button Classes="secondary" Content="+ Trennlinie" MinWidth="0" Margin="0,0,8,8"
+                                                Command="{Binding AddDividerBlockCommand}" />
+                                        <Button Classes="secondary" Content="Platzhalter ▾" MinWidth="0" Margin="0,0,8,8">
+                                            <Button.Flyout>
+                                                <Flyout>
+                                                    <ItemsControl ItemsSource="{Binding AvailablePlaceholders}" MinWidth="170">
+                                                        <ItemsControl.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <Button Classes="secondary"
+                                                                        HorizontalAlignment="Stretch"
+                                                                        HorizontalContentAlignment="Left"
+                                                                        Margin="0,0,0,4"
+                                                                        Content="{Binding}"
+                                                                        CommandParameter="{Binding}"
+                                                                        Command="{Binding $parent[ItemsControl].DataContext.InsertPlaceholderCommand}" />
+                                                            </DataTemplate>
+                                                        </ItemsControl.ItemTemplate>
+                                                    </ItemsControl>
+                                                </Flyout>
+                                            </Button.Flyout>
+                                        </Button>
+                                    </WrapPanel>
+
+                                    <ItemsControl ItemsSource="{Binding Blocks}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate DataType="vm:DisplayBlockViewModel">
+                                                <Border Classes="panelElevated" Margin="0,0,0,8" Padding="10">
+                                                    <Grid ColumnDefinitions="80,*,Auto" ColumnSpacing="8">
+                                                        <TextBlock Text="{Binding KindLabel}" Classes="muted" FontSize="12" VerticalAlignment="Center" />
+                                                        <TextBox Grid.Column="1"
+                                                                 IsVisible="{Binding IsEditable}"
+                                                                 PlaceholderText="{Binding Watermark}"
+                                                                 Text="{Binding Text}" />
+                                                        <TextBlock Grid.Column="1"
+                                                                   IsVisible="{Binding !IsEditable}"
+                                                                   Text="--------------------"
+                                                                   FontFamily="Consolas" Classes="muted" VerticalAlignment="Center" />
+                                                        <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="4">
+                                                            <Button Classes="secondary" Content="↑" Padding="9,4"
+                                                                    Command="{Binding $parent[ItemsControl].DataContext.MoveBlockUpCommand}"
+                                                                    CommandParameter="{Binding}" />
+                                                            <Button Classes="secondary" Content="↓" Padding="9,4"
+                                                                    Command="{Binding $parent[ItemsControl].DataContext.MoveBlockDownCommand}"
+                                                                    CommandParameter="{Binding}" />
+                                                            <Button Classes="danger" Content="✕" Padding="9,4"
+                                                                    Command="{Binding $parent[ItemsControl].DataContext.RemoveBlockCommand}"
+                                                                    CommandParameter="{Binding}" />
+                                                        </StackPanel>
+                                                    </Grid>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </ScrollViewer>
+
+                <Border Grid.Column="1" Classes="inspector" Width="344">
+                    <StackPanel Spacing="16">
+                        <TextBlock Text="Vorschau" FontSize="15" FontWeight="SemiBold" />
+                        <Border Classes="oledPreview" HorizontalAlignment="Left">
+                            <StackPanel Spacing="6" VerticalAlignment="Top">
+                                <TextBlock Text="{Binding PreviewLine1}" FontFamily="Consolas" FontSize="16" TextWrapping="NoWrap" />
+                                <TextBlock Text="{Binding PreviewLine2}" FontFamily="Consolas" FontSize="16" TextWrapping="NoWrap" />
+                                <TextBlock Text="{Binding PreviewLine3}" FontFamily="Consolas" FontSize="16" TextWrapping="NoWrap" />
+                                <TextBlock Text="{Binding PreviewLine4}" FontFamily="Consolas" FontSize="16" TextWrapping="NoWrap" />
+                                <TextBlock Text="{Binding PreviewLine5}" FontFamily="Consolas" FontSize="16" TextWrapping="NoWrap" />
+                            </StackPanel>
+                        </Border>
+                        <TextBlock Classes="muted" FontSize="12" TextWrapping="Wrap"
+                                   Text="Aenderungen wirken sofort. Globales Speichern schreibt sie in die Konfiguration." />
                     </StackPanel>
                 </Border>
             </Grid>

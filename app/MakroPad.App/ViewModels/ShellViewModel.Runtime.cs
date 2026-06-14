@@ -126,6 +126,8 @@ public partial class ShellViewModel : ViewModelBase
 
     public DisplayTriggersEditorViewModel DisplayTriggersEditor { get; }
 
+    public IdleScreensEditorViewModel IdleScreensEditor { get; }
+
     public IReadOnlyList<int> AvailableButtonIds { get; } =
         Enumerable.Range(1, 20).ToArray();
 
@@ -193,6 +195,8 @@ public partial class ShellViewModel : ViewModelBase
         DisplayTriggersEditor = new DisplayTriggersEditorViewModel();
         DisplayTriggersEditor.Changed += OnDisplayTriggersEditorChanged;
         DisplayTriggersEditor.TestRequested += OnDisplayTriggerTestRequested;
+        IdleScreensEditor = new IdleScreensEditorViewModel();
+        IdleScreensEditor.Changed += OnIdleScreensChanged;
         deviceSessionService.EventReceived += OnDeviceEventReceived;
         deviceSessionService.StateChanged += OnDeviceStateChanged;
         NowPlayingViewModel = new NowPlayingViewModel(new ProcessWindowNowPlayingProvider());
@@ -345,9 +349,8 @@ public partial class ShellViewModel : ViewModelBase
             currentConfig = loadResult.Config;
             ProfilesEditor.Load(currentConfig);
             LoadPadLayout(currentConfig.AppSettings);
-            idleScreenOrchestrator.Configure(
-                currentConfig.AppSettings.IdleScreens,
-                currentConfig.AppSettings.IdleRotationSeconds);
+            IdleScreensEditor.Load(currentConfig);
+            idleScreenOrchestrator.Configure(IdleScreensEditor.Export(), IdleScreensEditor.IdleRotationSeconds);
             idleScreenOrchestrator.Start(_ => SendDeviceConfigAsync());
             OnPropertyChanged(nameof(ActiveProfileName));
             AutoConnect = currentConfig.AppSettings.AutoConnect;
@@ -403,7 +406,10 @@ public partial class ShellViewModel : ViewModelBase
                     DisplayTriggers = displayTriggers,
                     ButtonRows = PadButtonRows,
                     ButtonColumns = PadButtonColumns,
-                    SliderCount = PadSliderCount
+                    SliderCount = PadSliderCount,
+                    IdleScreens = IdleScreensEditor.Export().ToList(),
+                    IdleRotationSeconds = IdleScreensEditor.IdleRotationSeconds,
+                    IdleScreensInitialized = true
                 }
             };
             await configService.SaveAsync(currentConfig);
@@ -843,6 +849,17 @@ public partial class ShellViewModel : ViewModelBase
             ActiveProfileName,
             ConnectionStatus,
             NowPlayingViewModel.LastSentTrack);
+        IdleScreensEditor.SetRuntime(
+            ActiveProfileName,
+            ConnectionStatus,
+            NowPlayingViewModel.LastSentTrack,
+            deviceDisplaySyncService.LastKnownSystemVolumePercent);
+    }
+
+    private void OnIdleScreensChanged(object? sender, EventArgs e)
+    {
+        idleScreenOrchestrator.Configure(IdleScreensEditor.Export(), IdleScreensEditor.IdleRotationSeconds);
+        idleScreenOrchestrator.Refresh();
     }
 
 }

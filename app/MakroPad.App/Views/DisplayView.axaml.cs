@@ -18,4 +18,12 @@ public partial class DisplayView : UserControl
             shell.EditDisplayRuleCommand.Execute(null);
         }
     }
+
+    private void IdleList_DoubleTapped(object? sender, TappedEventArgs e)
+    {
+        if (DataContext is ShellViewModel shell && shell.EditIdleScreenCommand.CanExecute(null))
+        {
+            shell.EditIdleScreenCommand.Execute(null);
+        }
+    }
 }

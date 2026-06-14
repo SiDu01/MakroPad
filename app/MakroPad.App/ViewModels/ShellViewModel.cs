@@ -80,6 +80,7 @@ public partial class ShellViewModel
         OnPropertyChanged(nameof(IsSettingsSelected));
         OnPropertyChanged(nameof(IsDiagnosticsSelected));
         IsDisplayEditorOpen = false;
+        IsIdleEditorOpen = false;
     }
 
     /// <summary>True while the dedicated single-rule editor page is shown inside Display.</summary>
@@ -106,6 +107,35 @@ public partial class ShellViewModel
 
     [RelayCommand]
     private void CloseDisplayEditor() => IsDisplayEditorOpen = false;
+
+    /// <summary>True while the dedicated single idle-screen editor page is shown inside Display.</summary>
+    [ObservableProperty]
+    private bool isIdleEditorOpen;
+
+    public bool IsDisplayOverviewVisible => !IsDisplayEditorOpen && !IsIdleEditorOpen;
+
+    partial void OnIsDisplayEditorOpenChanged(bool value) => OnPropertyChanged(nameof(IsDisplayOverviewVisible));
+
+    partial void OnIsIdleEditorOpenChanged(bool value) => OnPropertyChanged(nameof(IsDisplayOverviewVisible));
+
+    [RelayCommand]
+    private void CreateIdleScreen()
+    {
+        IdleScreensEditor.AddIdleScreenCommand.Execute(null);
+        IsIdleEditorOpen = true;
+    }
+
+    [RelayCommand]
+    private void EditIdleScreen()
+    {
+        if (IdleScreensEditor.SelectedIdleScreen is not null)
+        {
+            IsIdleEditorOpen = true;
+        }
+    }
+
+    [RelayCommand]
+    private void CloseIdleEditor() => IsIdleEditorOpen = false;
 
     public bool IsPadSelected => SelectedSection == AppSection.Pad;
 
