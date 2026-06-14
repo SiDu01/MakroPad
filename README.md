@@ -40,9 +40,14 @@ Implemented:
 - Windows `system.volume` action.
 - Windows `app.volume` action for active audio sessions.
 - `system.openUrl`, `system.openApp`, `keyboard.shortcut`, and `log` actions.
-- Configurable OLED default screen with preview and placeholders.
+- Multiple configurable idle screens that switch by activation: a default
+  screen, app/process-specific screens that take priority while their process
+  runs, and rotation through several active screens at an adjustable interval
+  (driven app-side, no firmware change).
+- Display content can be authored as plain text, a real HTML subset, or a
+  Markdown-like pseudocode, including a visual block builder ("Baukasten").
 - Configurable OLED display triggers for buttons and sliders with conditions,
-  preview, and normal text or lightweight HTML-like content rendered by the app.
+  preview, and text/HTML/Markdown content rendered by the app.
 - Configurable action-result display triggers replace the default hard-coded
   Action/Action failed screens while keeping firmware fallback compatibility.
 - Configurable media-changed display triggers replace the default visible

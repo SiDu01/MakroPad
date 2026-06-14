@@ -19,6 +19,23 @@ MakroPad has a working vertical prototype across firmware and desktop app:
 
 ## Recent Milestones
 
+- Reworked the display content modes and idle screens. The "html" mode is now a
+  real documented HTML subset (`DisplayTriggerRenderer.RenderHtmlLines`:
+  h1/h2 size, p/div/br/hr, ul/ol/li numbering, nesting, entities); added a
+  Markdown-like "markdown" mode (`RenderMarkdownLines`) and a visual block
+  builder ("Baukasten") that shares parse/serialize via `DisplayBlockMarkup`.
+  Idle screens became a configurable list (`IdleScreenConfig` in `AppSettings`,
+  migrated from the old single default screen): each has content (template/mode)
+  and an activation — a default screen, or "when process X runs". The
+  `IdleScreenOrchestrator` (app-side, no firmware change) picks the active screen
+  each second — process screens beat default screens; multiple active screens
+  rotate every `IdleRotationSeconds` — renders it app-side and pushes it via the
+  existing `config` message (`IdleScreenDeviceState`, sent as mode "normal" with
+  raw placeholders so the firmware still resolves `{profile}`/`{time}`/
+  `{volume.system}`). The Display section now has an idle-screens list plus a
+  dedicated idle editor page beside the rule editor. `ProcessPresenceProbe`
+  detects running processes; new unit tests cover selection/rotation, migration,
+  content rendering and block markup.
 - Rebuilt the desktop UI from scratch into a device-centric layout (Stream-Deck
   style). `ShellViewModel` is the new root (the former `MainWindowViewModel`
   orchestration was merged into it across `ShellViewModel.cs` and
