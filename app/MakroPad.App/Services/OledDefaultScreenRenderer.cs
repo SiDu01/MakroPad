@@ -9,57 +9,6 @@ public sealed class OledDefaultScreenRenderer
 {
     private const int MaxPreviewCharacters = 21;
 
-    public OledDefaultScreenPreview RenderPreview(
-        DeviceDisplayState state,
-        OledDefaultScreenRenderContext context)
-    {
-        var lines = RenderDeviceLines(state);
-        var previewLines = lines
-            .Select(line => FitPreviewLine(RenderTemplate(line.Text, context), line.NormalizedTextSize))
-            .Concat(Enumerable.Repeat("", 5))
-            .Take(5)
-            .ToList();
-
-        return new OledDefaultScreenPreview(
-            previewLines[0],
-            previewLines[1],
-            previewLines[2],
-            previewLines[3],
-            previewLines[4]);
-    }
-
-    public OledDefaultScreenPreview RenderPreview(
-        string title,
-        string line1,
-        string line2,
-        string line3,
-        string line4,
-        OledDefaultScreenRenderContext context)
-    {
-        return new OledDefaultScreenPreview(
-            FitPreviewLine(RenderTemplate(title, context)),
-            FitPreviewLine(RenderTemplate(line1, context)),
-            FitPreviewLine(RenderTemplate(line2, context)),
-            FitPreviewLine(RenderTemplate(line3, context)),
-            FitPreviewLine(RenderTemplate(line4, context)));
-    }
-
-    public OledDefaultScreenPreview RenderPreview(
-        DisplayTemplateLine title,
-        DisplayTemplateLine line1,
-        DisplayTemplateLine line2,
-        DisplayTemplateLine line3,
-        DisplayTemplateLine line4,
-        OledDefaultScreenRenderContext context)
-    {
-        return new OledDefaultScreenPreview(
-            FitPreviewLine(RenderTemplate(title.Text, context), title.NormalizedTextSize),
-            FitPreviewLine(RenderTemplate(line1.Text, context), line1.NormalizedTextSize),
-            FitPreviewLine(RenderTemplate(line2.Text, context), line2.NormalizedTextSize),
-            FitPreviewLine(RenderTemplate(line3.Text, context), line3.NormalizedTextSize),
-            FitPreviewLine(RenderTemplate(line4.Text, context), line4.NormalizedTextSize));
-    }
-
     public static IReadOnlyList<DisplayTemplateLine> RenderDeviceLines(DeviceDisplayState state)
     {
         var sourceLines = new[]
@@ -129,16 +78,6 @@ public sealed class OledDefaultScreenRenderer
     public static string NormalizeLine(string value, string fallback)
     {
         return string.IsNullOrWhiteSpace(value) ? fallback : value.Trim();
-    }
-
-    private static string FitPreviewLine(string line, int textSize = 1)
-    {
-        var trimmed = line.Trim();
-        var maxCharacters = Math.Max(1, MaxPreviewCharacters / NormalizeTextSize(textSize));
-
-        return trimmed.Length <= maxCharacters
-            ? trimmed
-            : trimmed[..Math.Max(1, maxCharacters - 2)] + "..";
     }
 
     private static IEnumerable<DisplayTemplateLine> RenderHtmlField(DisplayTemplateLine source)

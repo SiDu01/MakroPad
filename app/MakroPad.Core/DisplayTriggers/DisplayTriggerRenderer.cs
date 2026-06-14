@@ -1,4 +1,3 @@
-using System.Net;
 using System.Text.RegularExpressions;
 using MakroPad.Core.Configuration;
 
@@ -129,7 +128,6 @@ public static partial class DisplayTriggerRenderer
             && id > 0;
     }
 
-    private const string HeadingMarker = "\u0002";
 
     private static string FitPreviewLine(string line, int textSize)
     {

@@ -190,7 +190,7 @@ public partial class ShellViewModel : ViewModelBase
             actionDefinitionCatalog,
             AudioSessionsViewModel.AvailableAudioProcessNames);
         ProfilesEditor.Changed += OnProfilesEditorChanged;
-        DisplaySettings = new DisplaySettingsViewModel(deviceDisplaySyncService);
+        DisplaySettings = new DisplaySettingsViewModel();
         DisplaySettings.Changed += OnDisplaySettingsChanged;
         DisplayTriggersEditor = new DisplayTriggersEditorViewModel();
         DisplayTriggersEditor.Changed += OnDisplayTriggersEditorChanged;
@@ -845,10 +845,6 @@ public partial class ShellViewModel : ViewModelBase
 
     private void RefreshDisplaySettingsRuntime()
     {
-        DisplaySettings.SetRuntime(
-            ActiveProfileName,
-            ConnectionStatus,
-            NowPlayingViewModel.LastSentTrack);
         IdleScreensEditor.SetRuntime(
             ActiveProfileName,
             ConnectionStatus,

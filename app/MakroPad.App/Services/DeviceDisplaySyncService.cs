@@ -13,7 +13,6 @@ namespace MakroPad.App.Services;
 public sealed class DeviceDisplaySyncService
 {
     private readonly ISystemVolumeController systemVolumeController;
-    private readonly OledDefaultScreenRenderer oledDefaultScreenRenderer = new();
     private readonly DeviceConfigMessageBuilder configMessageBuilder = new();
 
     public int? LastKnownSystemVolumePercent { get; private set; }
@@ -109,22 +108,5 @@ public sealed class DeviceDisplaySyncService
                     ["icon"] = string.IsNullOrWhiteSpace(screen.Icon) ? null : screen.Icon
                 }),
             cancellationToken);
-    }
-
-    public OledDefaultScreenPreview RenderPreview(DeviceDisplayState state)
-    {
-        return oledDefaultScreenRenderer.RenderPreview(
-            state,
-            new OledDefaultScreenRenderContext(
-                state.ActiveProfileName,
-                state.ConnectionStatus,
-                state.NowPlayingTrack,
-                LastKnownSystemVolumePercent,
-                DateTime.Now));
-    }
-
-    public bool UsesMediaPlaceholder(DeviceDisplayState state)
-    {
-        return configMessageBuilder.UsesMediaPlaceholder(state);
     }
 }
