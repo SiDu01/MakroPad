@@ -19,6 +19,15 @@ MakroPad has a working vertical prototype across firmware and desktop app:
 
 ## Recent Milestones
 
+- Added blank lines and per-line text alignment to Markdown/block display
+  content. `DisplayTemplateLine` carries an alignment; the Markdown renderer and
+  `DisplayBlockMarkup` keep empty lines (blank block) and read a leading
+  "[c]"/"[r]"/"[l]" tag (block editor: a "Leerzeile" block and an alignment
+  dropdown). Alignment flows to the device via new `defaultLineNAlign`/
+  `lineNAlign` protocol fields; `DeviceDisplayState` now carries the rendered
+  `DefaultLines` (text+size+align) and the config path was simplified
+  accordingly. The firmware renders left/center/right for short non-scrolling
+  lines (flash + hardware test still pending).
 - Reworked the display content modes and idle screens. The "html" mode is now a
   real documented HTML subset (`DisplayTriggerRenderer.RenderHtmlLines`:
   h1/h2 size, p/div/br/hr, ul/ol/li numbering, nesting, entities); added a

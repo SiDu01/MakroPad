@@ -46,6 +46,8 @@ Implemented:
   (driven app-side, no firmware change).
 - Display content can be authored as plain text, a real HTML subset, or a
   Markdown-like pseudocode, including a visual block builder ("Baukasten").
+  Markdown/block content supports blank lines and per-line alignment
+  (left/center/right); the firmware centers/right-aligns short lines.
 - Configurable OLED display triggers for buttons and sliders with conditions,
   preview, and text/HTML/Markdown content rendered by the app.
 - Configurable action-result display triggers replace the default hard-coded
