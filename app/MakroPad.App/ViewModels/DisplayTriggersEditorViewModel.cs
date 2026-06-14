@@ -296,41 +296,9 @@ public partial class DisplayTriggersEditorViewModel : ViewModelBase
     {
         isSyncingBlocks = true;
         DisplayBlocks.Clear();
-        var lines = (DisplayTriggerEditorTemplate ?? "")
-            .Replace("\r\n", "\n")
-            .Replace('\r', '\n')
-            .Split('\n');
-        foreach (var raw in lines)
+        foreach (var block in DisplayBlockMarkup.Parse(DisplayTriggerEditorTemplate))
         {
-            var line = raw.Trim();
-            if (line.Length == 0)
-            {
-                continue;
-            }
-
-            DisplayBlockKind kind;
-            var text = "";
-            if (line.Length >= 3 && line.All(c => c == '-'))
-            {
-                kind = DisplayBlockKind.Divider;
-            }
-            else if (line.StartsWith('#'))
-            {
-                kind = DisplayBlockKind.Heading;
-                text = line.TrimStart('#').Trim();
-            }
-            else if (line.StartsWith("- ", StringComparison.Ordinal) || line.StartsWith("* ", StringComparison.Ordinal))
-            {
-                kind = DisplayBlockKind.ListItem;
-                text = line[2..].Trim();
-            }
-            else
-            {
-                kind = DisplayBlockKind.Text;
-                text = line;
-            }
-
-            DisplayBlocks.Add(new DisplayBlockViewModel(kind, text, OnBlockChanged));
+            DisplayBlocks.Add(new DisplayBlockViewModel(block.Kind, block.Text, OnBlockChanged));
         }
 
         activeBlock = DisplayBlocks.LastOrDefault(b => b.IsEditable);
@@ -344,16 +312,9 @@ public partial class DisplayTriggersEditorViewModel : ViewModelBase
             return;
         }
 
-        DisplayTriggerEditorTemplate = string.Join("\n", DisplayBlocks.Select(SerializeBlock));
+        DisplayTriggerEditorTemplate = DisplayBlockMarkup.Serialize(
+            DisplayBlocks.Select(block => new DisplayBlock(block.Kind, block.Text)));
     }
-
-    private static string SerializeBlock(DisplayBlockViewModel block) => block.Kind switch
-    {
-        DisplayBlockKind.Heading => "# " + block.Text.Trim(),
-        DisplayBlockKind.ListItem => "- " + block.Text.Trim(),
-        DisplayBlockKind.Divider => "---",
-        _ => block.Text.Trim()
-    };
 
     [ObservableProperty]
     private string displayTriggerEditorValidationMessage = "";

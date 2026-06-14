@@ -10,7 +10,57 @@ public static class DisplayTriggerConfigMigrator
 
         config = EnsureDefaultActionResultTriggers(config);
         config = EnsureDefaultMediaChangedTrigger(config);
+        config = EnsureDefaultIdleScreen(config);
         return UpgradeLegacyDefaultTriggerModes(config);
+    }
+
+    private static MakroPadConfig EnsureDefaultIdleScreen(MakroPadConfig config)
+    {
+        if (config.AppSettings.IdleScreensInitialized)
+        {
+            return config;
+        }
+
+        var display = config.Hardware.Display;
+        var rows = display.DefaultLayoutRows == 5 ? 5 : 3;
+        var fields = new (string Text, int Size)[]
+        {
+            (display.DefaultTitle, display.DefaultTitleSize),
+            (display.DefaultLine1, display.DefaultLine1Size),
+            (display.DefaultLine2, display.DefaultLine2Size),
+            (display.DefaultLine3, display.DefaultLine3Size),
+            (display.DefaultLine4, display.DefaultLine4Size)
+        };
+
+        var template = string.Join(
+            "\n",
+            fields
+                .Take(rows)
+                .Where(field => !string.IsNullOrWhiteSpace(field.Text))
+                .Select(field => field.Size >= 2 ? "# " + field.Text.Trim() : field.Text.Trim()));
+
+        if (string.IsNullOrWhiteSpace(template))
+        {
+            template = "{profile}\n{status}";
+        }
+
+        var standard = new IdleScreenConfig
+        {
+            Name = "Standard",
+            Enabled = true,
+            Template = template,
+            TemplateMode = "markdown",
+            Activation = "default"
+        };
+
+        return config with
+        {
+            AppSettings = config.AppSettings with
+            {
+                IdleScreensInitialized = true,
+                IdleScreens = [standard]
+            }
+        };
     }
 
     private static MakroPadConfig EnsureDefaultActionResultTriggers(MakroPadConfig config)

@@ -139,6 +139,16 @@ public sealed class DisplayTriggerRendererTests
     }
 
     [Fact]
+    public void RenderContentLinesKeepsPlaceholdersForDevice()
+    {
+        var lines = DisplayTriggerRenderer.RenderContentLines("# {profile}\n- {status}", "markdown");
+
+        Assert.Equal("{profile}", lines[0].Text);
+        Assert.Equal(2, lines[0].NormalizedTextSize);
+        Assert.Equal("- {status}", lines[1].Text);
+    }
+
+    [Fact]
     public void RenderTemplateLinesSupportsMarkdownMode()
     {
         var trigger = new DisplayTriggerConfig

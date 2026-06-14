@@ -131,7 +131,7 @@ public sealed class PadViewModelTests
 
         pad.ApplyLayout(rows: 0, columns: 0, sliderCount: -5);
 
-        Assert.Equal(1, pad.Keys.Count);
+        Assert.Single(pad.Keys);
         Assert.Equal(1, pad.Columns);
         Assert.Empty(pad.Sliders);
     }

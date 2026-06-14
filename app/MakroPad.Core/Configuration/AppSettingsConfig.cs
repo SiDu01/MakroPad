@@ -20,5 +20,11 @@ public sealed record AppSettingsConfig
 
     public bool MediaTriggerDefaultsInitialized { get; init; }
 
+    public List<IdleScreenConfig> IdleScreens { get; init; } = [];
+
+    public bool IdleScreensInitialized { get; init; }
+
+    public int IdleRotationSeconds { get; init; } = 8;
+
     public string? LastPort { get; init; }
 }

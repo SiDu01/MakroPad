@@ -202,6 +202,25 @@ public static partial class DisplayTriggerRenderer
         return lines;
     }
 
+    /// <summary>
+    /// Renders a content template (without resolving placeholders) to OLED lines for the given
+    /// content mode (normal/markdown/html). Used for idle screens and previews so that idle and
+    /// rule content render identically.
+    /// </summary>
+    public static IReadOnlyList<DisplayTemplateLine> RenderContentLines(string template, string mode)
+    {
+        ArgumentNullException.ThrowIfNull(template);
+
+        return DisplayTriggerNormalizer.NormalizeTemplateMode(mode) switch
+        {
+            "html" => RenderHtmlLines(template),
+            "markdown" => RenderMarkdownLines(template),
+            _ => SplitDisplayTextLines(template)
+                .Select(line => new DisplayTemplateLine(line))
+                .ToList()
+        };
+    }
+
     private static string CollapseWhitespace(string value) => WhitespaceRegex().Replace(value, " ");
 
     [GeneratedRegex("\\s+")]
