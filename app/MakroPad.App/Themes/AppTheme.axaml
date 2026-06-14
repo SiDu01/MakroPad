@@ -5,49 +5,51 @@
         <ResourceDictionary>
             <ResourceDictionary.ThemeDictionaries>
                 <ResourceDictionary x:Key="Dark">
-                    <SolidColorBrush x:Key="AppBackgroundBrush" Color="#080C12" />
-                    <SolidColorBrush x:Key="AppSurfaceBrush" Color="#0F1724" />
-                    <SolidColorBrush x:Key="AppSurfaceElevatedBrush" Color="#152033" />
-                    <SolidColorBrush x:Key="AppBorderBrush" Color="#243247" />
-                    <SolidColorBrush x:Key="AppBorderSubtleBrush" Color="#1A2738" />
-                    <SolidColorBrush x:Key="AppAccentBrush" Color="#3B9EFF" />
-                    <SolidColorBrush x:Key="AppAccentSoftBrush" Color="#1B3D66" />
-                    <SolidColorBrush x:Key="AppTextPrimaryBrush" Color="#F1F5FB" />
-                    <SolidColorBrush x:Key="AppTextMutedBrush" Color="#8FA3BC" />
-                    <SolidColorBrush x:Key="AppTopBarBrush" Color="#101A28" />
-                    <SolidColorBrush x:Key="AppListHoverBrush" Color="#142033" />
-                    <SolidColorBrush x:Key="AppSecondaryHoverBrush" Color="#1C2B42" />
+                    <SolidColorBrush x:Key="AppBackgroundBrush" Color="#0E1011" />
+                    <SolidColorBrush x:Key="AppSurfaceBrush" Color="#161A1B" />
+                    <SolidColorBrush x:Key="AppSurfaceElevatedBrush" Color="#1E2426" />
+                    <SolidColorBrush x:Key="AppBorderBrush" Color="#2D3438" />
+                    <SolidColorBrush x:Key="AppBorderSubtleBrush" Color="#232A2C" />
+                    <SolidColorBrush x:Key="AppAccentBrush" Color="#2DD4BF" />
+                    <SolidColorBrush x:Key="AppAccentSoftBrush" Color="#163331" />
+                    <SolidColorBrush x:Key="AppAccentForegroundBrush" Color="#06302B" />
+                    <SolidColorBrush x:Key="AppTextPrimaryBrush" Color="#ECF1F0" />
+                    <SolidColorBrush x:Key="AppTextMutedBrush" Color="#99A6A4" />
+                    <SolidColorBrush x:Key="AppTopBarBrush" Color="#14191A" />
+                    <SolidColorBrush x:Key="AppListHoverBrush" Color="#1B2123" />
+                    <SolidColorBrush x:Key="AppSecondaryHoverBrush" Color="#232B2D" />
                     <SolidColorBrush x:Key="AppDangerBackgroundBrush" Color="#3A1A22" />
                     <SolidColorBrush x:Key="AppDangerForegroundBrush" Color="#FFB4B4" />
                     <SolidColorBrush x:Key="AppDangerBorderBrush" Color="#6A2A36" />
                     <SolidColorBrush x:Key="AppDangerHoverBrush" Color="#4A202A" />
-                    <SolidColorBrush x:Key="AppNavGroupBrush" Color="#6E829B" />
+                    <SolidColorBrush x:Key="AppNavGroupBrush" Color="#7B8A87" />
                 </ResourceDictionary>
                 <ResourceDictionary x:Key="Light">
-                    <SolidColorBrush x:Key="AppBackgroundBrush" Color="#EEF2F7" />
+                    <SolidColorBrush x:Key="AppBackgroundBrush" Color="#EDF1F0" />
                     <SolidColorBrush x:Key="AppSurfaceBrush" Color="#FFFFFF" />
-                    <SolidColorBrush x:Key="AppSurfaceElevatedBrush" Color="#F8FAFC" />
-                    <SolidColorBrush x:Key="AppBorderBrush" Color="#D5DEE8" />
-                    <SolidColorBrush x:Key="AppBorderSubtleBrush" Color="#E2E8F0" />
-                    <SolidColorBrush x:Key="AppAccentBrush" Color="#2563EB" />
-                    <SolidColorBrush x:Key="AppAccentSoftBrush" Color="#DBEAFE" />
-                    <SolidColorBrush x:Key="AppTextPrimaryBrush" Color="#0F172A" />
-                    <SolidColorBrush x:Key="AppTextMutedBrush" Color="#64748B" />
+                    <SolidColorBrush x:Key="AppSurfaceElevatedBrush" Color="#F5F8F7" />
+                    <SolidColorBrush x:Key="AppBorderBrush" Color="#D2DAD8" />
+                    <SolidColorBrush x:Key="AppBorderSubtleBrush" Color="#E2E8E6" />
+                    <SolidColorBrush x:Key="AppAccentBrush" Color="#0D9488" />
+                    <SolidColorBrush x:Key="AppAccentSoftBrush" Color="#CDEAE5" />
+                    <SolidColorBrush x:Key="AppAccentForegroundBrush" Color="#FFFFFF" />
+                    <SolidColorBrush x:Key="AppTextPrimaryBrush" Color="#14201E" />
+                    <SolidColorBrush x:Key="AppTextMutedBrush" Color="#5B6A68" />
                     <SolidColorBrush x:Key="AppTopBarBrush" Color="#FFFFFF" />
-                    <SolidColorBrush x:Key="AppListHoverBrush" Color="#F1F5F9" />
-                    <SolidColorBrush x:Key="AppSecondaryHoverBrush" Color="#E2E8F0" />
+                    <SolidColorBrush x:Key="AppListHoverBrush" Color="#EEF3F1" />
+                    <SolidColorBrush x:Key="AppSecondaryHoverBrush" Color="#E1E8E6" />
                     <SolidColorBrush x:Key="AppDangerBackgroundBrush" Color="#FEE2E2" />
                     <SolidColorBrush x:Key="AppDangerForegroundBrush" Color="#B91C1C" />
                     <SolidColorBrush x:Key="AppDangerBorderBrush" Color="#FECACA" />
                     <SolidColorBrush x:Key="AppDangerHoverBrush" Color="#FECACA" />
-                    <SolidColorBrush x:Key="AppNavGroupBrush" Color="#94A3B8" />
+                    <SolidColorBrush x:Key="AppNavGroupBrush" Color="#8A9794" />
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>
 
             <SolidColorBrush x:Key="AppSuccessBrush" Color="#5EE0A8" />
             <SolidColorBrush x:Key="AppWarningBrush" Color="#F0B55A" />
             <SolidColorBrush x:Key="AppErrorBrush" Color="#F08080" />
-            <SolidColorBrush x:Key="AppOledFrameBrush" Color="#2A5F94" />
+            <SolidColorBrush x:Key="AppOledFrameBrush" Color="#2E6157" />
             <SolidColorBrush x:Key="AppOledBackgroundBrush" Color="#02060C" />
             <CornerRadius x:Key="AppRadiusSm">6</CornerRadius>
             <CornerRadius x:Key="AppRadiusMd">10</CornerRadius>
@@ -133,7 +135,7 @@
         <Setter Property="Width" Value="256" />
         <Setter Property="Height" Value="128" />
         <Setter Property="Padding" Value="12" />
-        <Setter Property="BoxShadow" Value="0 0 18 2 #203B5C88" />
+        <Setter Property="BoxShadow" Value="0 0 18 2 #1E4D4788" />
     </Style>
 
     <Style Selector="Path.navIcon">
@@ -183,12 +185,12 @@
 
     <Style Selector="Button.primary">
         <Setter Property="Background" Value="{DynamicResource AppAccentBrush}" />
-        <Setter Property="Foreground" Value="#FFFFFF" />
+        <Setter Property="Foreground" Value="{DynamicResource AppAccentForegroundBrush}" />
         <Setter Property="BorderThickness" Value="0" />
     </Style>
 
     <Style Selector="Button.primary:pointerover /template/ ContentPresenter">
-        <Setter Property="Background" Value="#5AADFF" />
+        <Setter Property="Background" Value="#3FE6D2" />
     </Style>
 
     <Style Selector="Button.secondary">
@@ -454,7 +456,7 @@
 
     <Style Selector="Button.segment.active">
         <Setter Property="Background" Value="{DynamicResource AppAccentBrush}" />
-        <Setter Property="Foreground" Value="#FFFFFF" />
+        <Setter Property="Foreground" Value="{DynamicResource AppAccentForegroundBrush}" />
     </Style>
 
     <Style Selector="Border.segmentTrack">

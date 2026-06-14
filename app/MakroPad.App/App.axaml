@@ -20,12 +20,12 @@
         <FluentTheme>
             <FluentTheme.Palettes>
                 <ColorPaletteResources x:Key="Dark"
-                                       Accent="#3B9EFF"
-                                       RegionColor="#080C12"
+                                       Accent="#2DD4BF"
+                                       RegionColor="#0E1011"
                                        ErrorText="#F08080" />
                 <ColorPaletteResources x:Key="Light"
-                                       Accent="#2563EB"
-                                       RegionColor="#EEF2F7"
+                                       Accent="#0D9488"
+                                       RegionColor="#EDF1F0"
                                        ErrorText="#DC2626" />
             </FluentTheme.Palettes>
         </FluentTheme>
