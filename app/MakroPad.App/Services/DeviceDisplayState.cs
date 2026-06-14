@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using MakroPad.Core.DisplayTriggers;
+
 namespace MakroPad.App.Services;
 
 public sealed record DeviceDisplayState(
@@ -5,16 +8,6 @@ public sealed record DeviceDisplayState(
     string ConnectionStatus,
     int ActionResultTimeoutMs,
     int DefaultScreenRows,
-    string DefaultScreenTemplateMode,
-    string DefaultScreenTitle,
-    int DefaultScreenTitleSize,
-    string DefaultScreenLine1,
-    int DefaultScreenLine1Size,
-    string DefaultScreenLine2,
-    int DefaultScreenLine2Size,
-    string DefaultScreenLine3,
-    int DefaultScreenLine3Size,
-    string DefaultScreenLine4,
-    int DefaultScreenLine4Size,
+    IReadOnlyList<DisplayTemplateLine> DefaultLines,
     bool EnableNowPlayingDisplay,
     NowPlayingTrack? NowPlayingTrack);

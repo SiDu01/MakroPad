@@ -77,6 +77,11 @@ public sealed class DeviceDisplaySyncService
             {
                 values[$"line{index + 1}Size"] = line.NormalizedTextSize.ToString();
             }
+
+            if (line.NormalizedAlignment != "left")
+            {
+                values[$"line{index + 1}Align"] = line.NormalizedAlignment;
+            }
         }
 
         await connection.SendLineAsync(ProtocolCodec.Format("display", values), cancellationToken);

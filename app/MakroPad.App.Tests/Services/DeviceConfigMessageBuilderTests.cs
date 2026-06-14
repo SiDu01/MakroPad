@@ -1,4 +1,5 @@
 using MakroPad.App.Services;
+using MakroPad.Core.DisplayTriggers;
 using MakroPad.Core.Protocol;
 
 namespace MakroPad.App.Tests.Services;
@@ -14,17 +15,11 @@ public sealed class DeviceConfigMessageBuilderTests
             "Connected",
             3000,
             3,
-            "normal",
-            "MakroPad",
-            2,
-            "{profile}",
-            1,
-            "{status}",
-            1,
-            "",
-            1,
-            "",
-            1,
+            [
+                new DisplayTemplateLine("MakroPad", 2),
+                new DisplayTemplateLine("{profile}"),
+                new DisplayTemplateLine("{status}")
+            ],
             true,
             new NowPlayingTrack("Artist", "Title"));
 
@@ -48,17 +43,11 @@ public sealed class DeviceConfigMessageBuilderTests
             "Connected",
             3000,
             3,
-            "normal",
-            "MakroPad",
-            1,
-            "{media.track}",
-            1,
-            "{status}",
-            1,
-            "",
-            1,
-            "",
-            1,
+            [
+                new DisplayTemplateLine("MakroPad"),
+                new DisplayTemplateLine("{media.track}"),
+                new DisplayTemplateLine("{status}")
+            ],
             true,
             new NowPlayingTrack("Artist", "Title"));
 
@@ -69,7 +58,7 @@ public sealed class DeviceConfigMessageBuilderTests
     }
 
     [Fact]
-    public void HtmlDefaultScreenRendersHeadingSizesIntoConfigLines()
+    public void BuildSendsLineSizeAndAlignment()
     {
         var builder = new DeviceConfigMessageBuilder();
         var state = new DeviceDisplayState(
@@ -77,26 +66,20 @@ public sealed class DeviceConfigMessageBuilderTests
             "Connected",
             3000,
             3,
-            "html",
-            "<h1>{profile}</h1>",
-            1,
-            "<div>{status}</div>",
-            1,
-            "",
-            1,
-            "",
-            1,
-            "",
-            1,
+            [
+                new DisplayTemplateLine("Titel", 2, "center"),
+                new DisplayTemplateLine("Zeile")
+            ],
             false,
             null);
 
         var message = ProtocolCodec.Parse(builder.Build(state, DateTime.Now, null));
 
-        Assert.Equal("html", message.GetValue("defaultTemplateMode"));
-        Assert.Equal("{profile}", message.GetValue("defaultTitle"));
+        Assert.Equal("normal", message.GetValue("defaultTemplateMode"));
+        Assert.Equal("Titel", message.GetValue("defaultTitle"));
         Assert.Equal("2", message.GetValue("defaultTitleSize"));
-        Assert.Equal("{status}", message.GetValue("defaultLine1"));
-        Assert.Null(message.GetValue("defaultLine1Size"));
+        Assert.Equal("center", message.GetValue("defaultTitleAlign"));
+        Assert.Equal("Zeile", message.GetValue("defaultLine1"));
+        Assert.Null(message.GetValue("defaultLine1Align"));
     }
 }

@@ -21,10 +21,6 @@ public static class IdleScreenDeviceState
         var template = string.IsNullOrWhiteSpace(screen?.Template) ? "{profile}\n{status}" : screen!.Template;
         var mode = screen?.TemplateMode ?? "markdown";
         var lines = DisplayTriggerRenderer.RenderContentLines(template, mode);
-
-        DisplayTemplateLine Line(int index) =>
-            index < lines.Count ? lines[index] : new DisplayTemplateLine("", 1);
-
         var rows = lines.Count > 3 ? 5 : 3;
 
         return new DeviceDisplayState(
@@ -32,12 +28,7 @@ public static class IdleScreenDeviceState
             connectionStatus,
             actionResultTimeoutMs,
             rows,
-            "normal",
-            Line(0).Text, Line(0).NormalizedTextSize,
-            Line(1).Text, Line(1).NormalizedTextSize,
-            Line(2).Text, Line(2).NormalizedTextSize,
-            Line(3).Text, Line(3).NormalizedTextSize,
-            Line(4).Text, Line(4).NormalizedTextSize,
+            lines,
             enableNowPlayingDisplay,
             nowPlayingTrack);
     }
