@@ -1,16 +1,16 @@
 # Graph Report - MakroPad  (2026-06-14)
 
 ## Corpus Check
-- 157 files · ~40,460 words
+- 156 files · ~39,654 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1697 nodes · 2463 edges · 166 communities (109 shown, 57 thin omitted)
+- 1699 nodes · 2467 edges · 167 communities (110 shown, 57 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 23 edges (avg confidence: 0.81)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `8cb39420`
+- Built from commit: `12e82911`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -129,7 +129,7 @@
 1. `MainWindowViewModel` - 205 edges
 2. `DisplayTriggersEditorViewModel` - 83 edges
 3. `ShellViewModel` - 65 edges
-4. `IdleScreensEditorViewModel` - 39 edges
+4. `IdleScreensEditorViewModel` - 41 edges
 5. `DisplaySettingsViewModel` - 34 edges
 6. `SerialMakroPadConnection` - 30 edges
 7. `ProfilesEditorViewModel` - 26 edges
@@ -154,7 +154,7 @@
 - **Input to Action Flow** — hardware_buttons_gpio_pullup, hardware_sliders_adc1, protocol_button_message, protocol_slider_message, app_readme_action_pipeline [EXTRACTED 1.00]
 - **OLED Display Configuration Flow** — hardware_oled_i2c_ssd1306, protocol_display_message, protocol_config_message, protocol_action_result_message, app_readme_oled_default_screen [EXTRACTED 1.00]
 
-## Communities (166 total, 57 thin omitted)
+## Communities (167 total, 57 thin omitted)
 
 ### Community 0 - "Community 0"
 Cohesion: 0.18
@@ -273,12 +273,12 @@ Cohesion: 0.11
 Nodes (6): int, string, string, DisplayTriggerRenderer, DisplayTriggerRenderer, ListContext
 
 ### Community 90 - "Community 90"
-Cohesion: 0.20
-Nodes (5): ISystemVolumeController, OledDefaultScreenRenderer, DeviceConfigMessageBuilder, OledDefaultScreenRenderer, DeviceDisplaySyncService
+Cohesion: 0.18
+Nodes (5): uint, ushort, uint, ushort, WindowsSystemMediaController
 
 ### Community 92 - "Community 92"
-Cohesion: 0.10
-Nodes (7): bool, DeviceDisplaySyncService, int, NowPlayingTrack, string, NowPlayingTrack, DisplaySettingsViewModel
+Cohesion: 0.11
+Nodes (6): bool, DeviceDisplaySyncService, int, NowPlayingTrack, string, DisplaySettingsViewModel
 
 ### Community 98 - "Community 98"
 Cohesion: 0.33
@@ -317,8 +317,8 @@ Cohesion: 0.07
 Nodes (18): ActionFeedbackCoordinator, ActionDefinitionCatalog, ActionPipeline, BindingEditorService, bool, DeviceDisplaySyncService, DeviceSessionService, DisplayTriggerOrchestrator (+10 more)
 
 ### Community 137 - "Community 137"
-Cohesion: 0.07
-Nodes (10): uint, ushort, ISystemMediaController, NoopSystemMediaController, ActionPipelineTests, FakeMediaController, FakeVolumeController, uint (+2 more)
+Cohesion: 0.10
+Nodes (5): ISystemMediaController, NoopSystemMediaController, ActionPipelineTests, FakeMediaController, FakeVolumeController
 
 ### Community 138 - "Community 138"
 Cohesion: 0.29
@@ -345,7 +345,7 @@ Cohesion: 0.67
 Nodes (4): Serial Heartbeat, Waiting for app Display State, ping Message, pong Message
 
 ### Community 145 - "Community 145"
-Cohesion: 0.10
+Cohesion: 0.09
 Nodes (4): bool, int, AppSection, ShellViewModel
 
 ### Community 147 - "Community 147"
@@ -357,8 +357,8 @@ Cohesion: 0.24
 Nodes (3): INowPlayingProvider, string, NowPlayingViewModel
 
 ### Community 158 - "Community 158"
-Cohesion: 0.08
-Nodes (9): bool, DisplayBlockViewModel, int, NowPlayingTrack, OledDefaultScreenRenderer, string, IdleScreenItemViewModel, IdleScreenDeviceState (+1 more)
+Cohesion: 0.05
+Nodes (15): ISystemVolumeController, OledDefaultScreenRenderer, bool, DisplayBlockViewModel, int, NowPlayingTrack, OledDefaultScreenRenderer, string (+7 more)
 
 ### Community 159 - "Community 159"
 Cohesion: 0.19
@@ -372,16 +372,16 @@ Nodes (5): HashSet, IProcessPresenceProbe, FakeProbe, IdleScreenOrchestratorTest
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `MainWindowViewModel` connect `Community 1` to `Community 2`, `Community 100`, `Community 132`, `Community 102`, `Community 107`, `Community 108`, `Community 13`, `Community 16`, `Community 18`, `Community 147`, `Community 21`, `Community 153`, `Community 90`, `Community 92`, `Community 125`, `Community 62`?**
-  _High betweenness centrality (0.212) - this node is a cross-community bridge._
+- **Why does `MainWindowViewModel` connect `Community 1` to `Community 2`, `Community 100`, `Community 132`, `Community 102`, `Community 107`, `Community 108`, `Community 13`, `Community 16`, `Community 18`, `Community 147`, `Community 21`, `Community 62`, `Community 153`, `Community 125`, `Community 158`?**
+  _High betweenness centrality (0.221) - this node is a cross-community bridge._
 - **Why does `DisplayTriggerInputTracker` connect `Community 18` to `Community 1`?**
-  _High betweenness centrality (0.129) - this node is a cross-community bridge._
+  _High betweenness centrality (0.138) - this node is a cross-community bridge._
 - **What connects `allow`, `PreToolUse`, `ISystemMediaController` to the rest of the system?**
   _311 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 1` be split into smaller, more focused modules?**
-  _Cohesion score 0.034079844206426485 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.034518113465481885 - nodes in this community are weakly interconnected._
 - **Should `Community 2` be split into smaller, more focused modules?**
-  _Cohesion score 0.13306451612903225 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.14942528735632185 - nodes in this community are weakly interconnected._
 - **Should `Community 3` be split into smaller, more focused modules?**
   _Cohesion score 0.05026300409117475 - nodes in this community are weakly interconnected._
 - **Should `Community 6` be split into smaller, more focused modules?**
