@@ -221,6 +221,8 @@
                                                 Command="{Binding DisplayTriggersEditor.AddListBlockCommand}" />
                                         <Button Classes="secondary" Content="+ Trennlinie" MinWidth="0" Margin="0,0,8,8"
                                                 Command="{Binding DisplayTriggersEditor.AddDividerBlockCommand}" />
+                                        <Button Classes="secondary" Content="+ Leerzeile" MinWidth="0" Margin="0,0,8,8"
+                                                Command="{Binding DisplayTriggersEditor.AddBlankBlockCommand}" />
                                         <Button Classes="secondary" Content="Platzhalter ▾" MinWidth="0" Margin="0,0,8,8">
                                             <Button.Flyout>
                                                 <Flyout>
@@ -247,7 +249,7 @@
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate DataType="vm:DisplayBlockViewModel">
                                                 <Border Classes="panelElevated" Margin="0,0,0,8" Padding="10">
-                                                    <Grid ColumnDefinitions="80,*,Auto" ColumnSpacing="8">
+                                                    <Grid ColumnDefinitions="80,*,Auto,Auto" ColumnSpacing="8">
                                                         <TextBlock Text="{Binding KindLabel}" Classes="muted" FontSize="12" VerticalAlignment="Center" />
                                                         <TextBox Grid.Column="1"
                                                                  IsVisible="{Binding IsEditable}"
@@ -255,9 +257,14 @@
                                                                  Text="{Binding Text}" />
                                                         <TextBlock Grid.Column="1"
                                                                    IsVisible="{Binding !IsEditable}"
-                                                                   Text="--------------------"
+                                                                   Text="{Binding NonEditablePreview}"
                                                                    FontFamily="Consolas" Classes="muted" VerticalAlignment="Center" />
-                                                        <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="4">
+                                                        <ComboBox Grid.Column="2" Width="92"
+                                                                  IsVisible="{Binding SupportsAlignment}"
+                                                                  ToolTip.Tip="Ausrichtung"
+                                                                  ItemsSource="{Binding $parent[ItemsControl].DataContext.DisplayTriggersEditor.AvailableAlignments}"
+                                                                  SelectedItem="{Binding Alignment}" />
+                                                        <StackPanel Grid.Column="3" Orientation="Horizontal" Spacing="4">
                                                             <Button Classes="secondary" Content="↑" Padding="9,4"
                                                                     Command="{Binding $parent[ItemsControl].DataContext.DisplayTriggersEditor.MoveBlockUpCommand}"
                                                                     CommandParameter="{Binding}" />
@@ -442,6 +449,8 @@
                                                 Command="{Binding AddListBlockCommand}" />
                                         <Button Classes="secondary" Content="+ Trennlinie" MinWidth="0" Margin="0,0,8,8"
                                                 Command="{Binding AddDividerBlockCommand}" />
+                                        <Button Classes="secondary" Content="+ Leerzeile" MinWidth="0" Margin="0,0,8,8"
+                                                Command="{Binding AddBlankBlockCommand}" />
                                         <Button Classes="secondary" Content="Platzhalter ▾" MinWidth="0" Margin="0,0,8,8">
                                             <Button.Flyout>
                                                 <Flyout>
@@ -467,7 +476,7 @@
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate DataType="vm:DisplayBlockViewModel">
                                                 <Border Classes="panelElevated" Margin="0,0,0,8" Padding="10">
-                                                    <Grid ColumnDefinitions="80,*,Auto" ColumnSpacing="8">
+                                                    <Grid ColumnDefinitions="80,*,Auto,Auto" ColumnSpacing="8">
                                                         <TextBlock Text="{Binding KindLabel}" Classes="muted" FontSize="12" VerticalAlignment="Center" />
                                                         <TextBox Grid.Column="1"
                                                                  IsVisible="{Binding IsEditable}"
@@ -475,9 +484,14 @@
                                                                  Text="{Binding Text}" />
                                                         <TextBlock Grid.Column="1"
                                                                    IsVisible="{Binding !IsEditable}"
-                                                                   Text="--------------------"
+                                                                   Text="{Binding NonEditablePreview}"
                                                                    FontFamily="Consolas" Classes="muted" VerticalAlignment="Center" />
-                                                        <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="4">
+                                                        <ComboBox Grid.Column="2" Width="92"
+                                                                  IsVisible="{Binding SupportsAlignment}"
+                                                                  ToolTip.Tip="Ausrichtung"
+                                                                  ItemsSource="{Binding $parent[ItemsControl].DataContext.AvailableAlignments}"
+                                                                  SelectedItem="{Binding Alignment}" />
+                                                        <StackPanel Grid.Column="3" Orientation="Horizontal" Spacing="4">
                                                             <Button Classes="secondary" Content="↑" Padding="9,4"
                                                                     Command="{Binding $parent[ItemsControl].DataContext.MoveBlockUpCommand}"
                                                                     CommandParameter="{Binding}" />

@@ -231,6 +231,11 @@ public partial class IdleScreensEditorViewModel : ViewModelBase
     private void AddDividerBlock() => AddBlock(DisplayBlockKind.Divider, "");
 
     [RelayCommand]
+    private void AddBlankBlock() => AddBlock(DisplayBlockKind.Blank, "");
+
+    public IReadOnlyList<string> AvailableAlignments { get; } = ["left", "center", "right"];
+
+    [RelayCommand]
     private void RemoveBlock(DisplayBlockViewModel? block)
     {
         if (block is not null && Blocks.Remove(block))
@@ -309,7 +314,7 @@ public partial class IdleScreensEditorViewModel : ViewModelBase
         Blocks.Clear();
         foreach (var block in DisplayBlockMarkup.Parse(SelectedIdleScreen?.Template))
         {
-            Blocks.Add(new DisplayBlockViewModel(block.Kind, block.Text, OnBlockChanged));
+            Blocks.Add(new DisplayBlockViewModel(block.Kind, block.Text, OnBlockChanged, block.Alignment));
         }
 
         activeBlock = Blocks.LastOrDefault(b => b.IsEditable);
@@ -324,7 +329,7 @@ public partial class IdleScreensEditorViewModel : ViewModelBase
         }
 
         SelectedIdleScreen.Template = DisplayBlockMarkup.Serialize(
-            Blocks.Select(block => new DisplayBlock(block.Kind, block.Text)));
+            Blocks.Select(block => new DisplayBlock(block.Kind, block.Text, block.Alignment)));
     }
 
     private void OnItemChanged(IdleScreenItemViewModel item)

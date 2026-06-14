@@ -220,6 +220,11 @@ public partial class DisplayTriggersEditorViewModel : ViewModelBase
     private void AddDividerBlock() => AddBlock(DisplayBlockKind.Divider, "");
 
     [RelayCommand]
+    private void AddBlankBlock() => AddBlock(DisplayBlockKind.Blank, "");
+
+    public IReadOnlyList<string> AvailableAlignments { get; } = ["left", "center", "right"];
+
+    [RelayCommand]
     private void RemoveBlock(DisplayBlockViewModel? block)
     {
         if (block is not null && DisplayBlocks.Remove(block))
@@ -298,7 +303,7 @@ public partial class DisplayTriggersEditorViewModel : ViewModelBase
         DisplayBlocks.Clear();
         foreach (var block in DisplayBlockMarkup.Parse(DisplayTriggerEditorTemplate))
         {
-            DisplayBlocks.Add(new DisplayBlockViewModel(block.Kind, block.Text, OnBlockChanged));
+            DisplayBlocks.Add(new DisplayBlockViewModel(block.Kind, block.Text, OnBlockChanged, block.Alignment));
         }
 
         activeBlock = DisplayBlocks.LastOrDefault(b => b.IsEditable);
@@ -313,7 +318,7 @@ public partial class DisplayTriggersEditorViewModel : ViewModelBase
         }
 
         DisplayTriggerEditorTemplate = DisplayBlockMarkup.Serialize(
-            DisplayBlocks.Select(block => new DisplayBlock(block.Kind, block.Text)));
+            DisplayBlocks.Select(block => new DisplayBlock(block.Kind, block.Text, block.Alignment)));
     }
 
     [ObservableProperty]
