@@ -841,21 +841,21 @@ void handleDisplayCommand(const String& line) {
     String lines[MaxDisplayLines];
     uint8_t lineSizes[MaxDisplayLines];
     String lineAligns[MaxDisplayLines];
-    uint8_t count = 0;
+    uint8_t lastFilled = 0;
 
     for (uint8_t index = 0; index < MaxDisplayLines; index++) {
       const String key = "line" + String(index + 1);
-      const String value = protocolValue(line, key.c_str());
-      if (index == 0 || value.length() > 0) {
-        lines[count] = value;
-        lineSizes[count] = normalizeDisplayTextSize(
-          protocolValue(line, (key + "Size").c_str()).toInt());
-        lineAligns[count] = normalizeDisplayAlign(protocolValue(line, (key + "Align").c_str()));
-        count++;
+      lines[index] = protocolValue(line, key.c_str());
+      lineSizes[index] = normalizeDisplayTextSize(
+        protocolValue(line, (key + "Size").c_str()).toInt());
+      lineAligns[index] = normalizeDisplayAlign(protocolValue(line, (key + "Align").c_str()));
+      if (lines[index].length() > 0) {
+        lastFilled = index;
       }
     }
 
-    setDisplayLines(lines, lineSizes, lineAligns, count);
+    // Keep intermediate blank lines; trim only trailing empty ones.
+    setDisplayLines(lines, lineSizes, lineAligns, static_cast<uint8_t>(lastFilled + 1));
 
     const String duration = protocolValue(line, "durationMs");
     temporaryDisplayUntilMs = duration.length() > 0 && duration.toInt() > 0
@@ -921,24 +921,17 @@ void handleProtocolLine(String line) {
       defaultScreenRows = 3;
     }
 
-    const String configuredDefaultTitle = protocolValue(line, "defaultTitle");
-    if (configuredDefaultTitle.length() > 0) {
-      defaultScreenTitle = configuredDefaultTitle;
-    }
+    // The app always sends the full idle screen in every config message, so empty fields are
+    // intentional blank lines and must overwrite the previous value (matches line3/line4 below).
+    defaultScreenTitle = protocolValue(line, "defaultTitle");
     defaultScreenTitleSize = normalizeDisplayTextSize(protocolValue(line, "defaultTitleSize").toInt());
     defaultScreenTitleAlign = normalizeDisplayAlign(protocolValue(line, "defaultTitleAlign"));
 
-    const String configuredDefaultLine1 = protocolValue(line, "defaultLine1");
-    if (configuredDefaultLine1.length() > 0) {
-      defaultScreenLine1 = configuredDefaultLine1;
-    }
+    defaultScreenLine1 = protocolValue(line, "defaultLine1");
     defaultScreenLine1Size = normalizeDisplayTextSize(protocolValue(line, "defaultLine1Size").toInt());
     defaultScreenLine1Align = normalizeDisplayAlign(protocolValue(line, "defaultLine1Align"));
 
-    const String configuredDefaultLine2 = protocolValue(line, "defaultLine2");
-    if (configuredDefaultLine2.length() > 0) {
-      defaultScreenLine2 = configuredDefaultLine2;
-    }
+    defaultScreenLine2 = protocolValue(line, "defaultLine2");
     defaultScreenLine2Size = normalizeDisplayTextSize(protocolValue(line, "defaultLine2Size").toInt());
     defaultScreenLine2Align = normalizeDisplayAlign(protocolValue(line, "defaultLine2Align"));
 
