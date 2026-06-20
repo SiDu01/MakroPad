@@ -10422,7 +10422,7 @@
       "label": "code:powershell (dotnet build app\\MakroPad.sln)",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L77",
+      "source_location": "L78",
       "id": "makropad_readme_codeblock_1",
       "community": 71,
       "norm_label": "code:powershell (dotnet build app\\makropad.sln)"
@@ -10476,7 +10476,7 @@
       "label": "Handoff",
       "file_type": "document",
       "source_file": "TODO.md",
-      "source_location": "L95",
+      "source_location": "L97",
       "id": "makropad_todo_handoff",
       "community": 70,
       "norm_label": "handoff"
@@ -10674,7 +10674,7 @@
       "label": "Aktuelle Grenzen",
       "file_type": "document",
       "source_file": "docs/DISPLAY_DESIGN.md",
-      "source_location": "L74",
+      "source_location": "L80",
       "id": "docs_display_design_aktuelle_grenzen",
       "community": 69,
       "norm_label": "aktuelle grenzen"
@@ -10683,7 +10683,7 @@
       "label": "Naechste Ausbaustufen",
       "file_type": "document",
       "source_file": "docs/DISPLAY_DESIGN.md",
-      "source_location": "L82",
+      "source_location": "L89",
       "id": "docs_display_design_naechste_ausbaustufen",
       "community": 69,
       "norm_label": "naechste ausbaustufen"
@@ -10719,7 +10719,7 @@
       "label": "Recent Milestones",
       "file_type": "document",
       "source_file": "docs/HANDOFF.md",
-      "source_location": "L20",
+      "source_location": "L21",
       "id": "docs_handoff_recent_milestones",
       "community": 66,
       "norm_label": "recent milestones"
@@ -10728,7 +10728,7 @@
       "label": "Supported Actions",
       "file_type": "document",
       "source_file": "docs/HANDOFF.md",
-      "source_location": "L157",
+      "source_location": "L169",
       "id": "docs_handoff_supported_actions",
       "community": 66,
       "norm_label": "supported actions"
@@ -10737,7 +10737,7 @@
       "label": "OLED Behavior",
       "file_type": "document",
       "source_file": "docs/HANDOFF.md",
-      "source_location": "L175",
+      "source_location": "L187",
       "id": "docs_handoff_oled_behavior",
       "community": 66,
       "norm_label": "oled behavior"
@@ -10746,7 +10746,7 @@
       "label": "Known Limitations",
       "file_type": "document",
       "source_file": "docs/HANDOFF.md",
-      "source_location": "L223",
+      "source_location": "L235",
       "id": "docs_handoff_known_limitations",
       "community": 66,
       "norm_label": "known limitations"
@@ -10755,7 +10755,7 @@
       "label": "Verification Baseline",
       "file_type": "document",
       "source_file": "docs/HANDOFF.md",
-      "source_location": "L253",
+      "source_location": "L265",
       "id": "docs_handoff_verification_baseline",
       "community": 66,
       "norm_label": "verification baseline"
@@ -10764,7 +10764,7 @@
       "label": "code:powershell (dotnet build app\\MakroPad.sln)",
       "file_type": "document",
       "source_file": "docs/HANDOFF.md",
-      "source_location": "L257",
+      "source_location": "L269",
       "id": "docs_handoff_codeblock_1",
       "community": 66,
       "norm_label": "code:powershell (dotnet build app\\makropad.sln)"
@@ -10773,7 +10773,7 @@
       "label": "Recommended Next Steps",
       "file_type": "document",
       "source_file": "docs/HANDOFF.md",
-      "source_location": "L265",
+      "source_location": "L277",
       "id": "docs_handoff_recommended_next_steps",
       "community": 66,
       "norm_label": "recommended next steps"
@@ -10782,7 +10782,7 @@
       "label": "Graphify Notes",
       "file_type": "document",
       "source_file": "docs/HANDOFF.md",
-      "source_location": "L285",
+      "source_location": "L297",
       "id": "docs_handoff_graphify_notes",
       "community": 66,
       "norm_label": "graphify notes"
@@ -11025,7 +11025,7 @@
       "label": "Hardware-Einschaetzung",
       "file_type": "document",
       "source_file": "docs/PROJECT_PLAN.md",
-      "source_location": "L118",
+      "source_location": "L122",
       "id": "docs_project_plan_hardware_einschaetzung",
       "community": 64,
       "norm_label": "hardware-einschaetzung"
@@ -11034,7 +11034,7 @@
       "label": "Kommunikationsmodell",
       "file_type": "document",
       "source_file": "docs/PROJECT_PLAN.md",
-      "source_location": "L144",
+      "source_location": "L148",
       "id": "docs_project_plan_kommunikationsmodell",
       "community": 64,
       "norm_label": "kommunikationsmodell"
@@ -11043,7 +11043,7 @@
       "label": "code:text (hello;fw=0.1.0;device=makropad-s3)",
       "file_type": "document",
       "source_file": "docs/PROJECT_PLAN.md",
-      "source_location": "L151",
+      "source_location": "L155",
       "id": "docs_project_plan_codeblock_1",
       "community": 64,
       "norm_label": "code:text (hello;fw=0.1.0;device=makropad-s3)"
@@ -11052,7 +11052,7 @@
       "label": "code:text (display;mode=media;artist=Daft Punk;title=Digital Love)",
       "file_type": "document",
       "source_file": "docs/PROJECT_PLAN.md",
-      "source_location": "L161",
+      "source_location": "L165",
       "id": "docs_project_plan_codeblock_2",
       "community": 64,
       "norm_label": "code:text (display;mode=media;artist=daft punk;title=digital love)"
@@ -11061,7 +11061,7 @@
       "label": "Konfigurationsmodell",
       "file_type": "document",
       "source_file": "docs/PROJECT_PLAN.md",
-      "source_location": "L172",
+      "source_location": "L176",
       "id": "docs_project_plan_konfigurationsmodell",
       "community": 64,
       "norm_label": "konfigurationsmodell"
@@ -11070,7 +11070,7 @@
       "label": "code:json ({)",
       "file_type": "document",
       "source_file": "docs/PROJECT_PLAN.md",
-      "source_location": "L186",
+      "source_location": "L190",
       "id": "docs_project_plan_codeblock_3",
       "community": 64,
       "norm_label": "code:json ({)"
@@ -11079,7 +11079,7 @@
       "label": "Vorgeschlagene Projektstruktur",
       "file_type": "document",
       "source_file": "docs/PROJECT_PLAN.md",
-      "source_location": "L221",
+      "source_location": "L225",
       "id": "docs_project_plan_vorgeschlagene_projektstruktur",
       "community": 64,
       "norm_label": "vorgeschlagene projektstruktur"
@@ -11088,7 +11088,7 @@
       "label": "code:text (MakroPad/)",
       "file_type": "document",
       "source_file": "docs/PROJECT_PLAN.md",
-      "source_location": "L223",
+      "source_location": "L227",
       "id": "docs_project_plan_codeblock_4",
       "community": 64,
       "norm_label": "code:text (makropad/)"
@@ -11097,7 +11097,7 @@
       "label": "Empfohlener erster Meilenstein",
       "file_type": "document",
       "source_file": "docs/PROJECT_PLAN.md",
-      "source_location": "L274",
+      "source_location": "L278",
       "id": "docs_project_plan_empfohlener_erster_meilenstein",
       "community": 64,
       "norm_label": "empfohlener erster meilenstein"
@@ -11106,7 +11106,7 @@
       "label": "Offene Entscheidungen",
       "file_type": "document",
       "source_file": "docs/PROJECT_PLAN.md",
-      "source_location": "L297",
+      "source_location": "L301",
       "id": "docs_project_plan_offene_entscheidungen",
       "community": 64,
       "norm_label": "offene entscheidungen"
@@ -19365,9 +19365,9 @@
       "source_file": "app/MakroPad.App/Services/DeviceConfigMessageBuilder.cs",
       "source_location": "L64",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "services_deviceconfigmessagebuilder_deviceconfigmessagebuilder",
-      "target": "services_deviceconfigmessagebuilder_deviceconfigmessagebuilder_formatalign",
-      "confidence_score": 1.0
+      "target": "services_deviceconfigmessagebuilder_deviceconfigmessagebuilder_formatalign"
     },
     {
       "relation": "calls",
@@ -19387,9 +19387,9 @@
       "source_file": "app/MakroPad.App/Services/DeviceConfigMessageBuilder.cs",
       "source_location": "L29",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "services_deviceconfigmessagebuilder_deviceconfigmessagebuilder_build",
-      "target": "services_deviceconfigmessagebuilder_deviceconfigmessagebuilder_formatalign",
-      "confidence_score": 1.0
+      "target": "services_deviceconfigmessagebuilder_deviceconfigmessagebuilder_formatalign"
     },
     {
       "relation": "calls",
@@ -21551,9 +21551,9 @@
       "source_file": "app/MakroPad.App/ViewModels/DisplayBlockViewModel.cs",
       "source_location": "L45",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_displayblockviewmodel_displayblockviewmodel",
-      "target": "viewmodels_displayblockviewmodel_displayblockviewmodel_onalignmentchanged",
-      "confidence_score": 1.0
+      "target": "viewmodels_displayblockviewmodel_displayblockviewmodel_onalignmentchanged"
     },
     {
       "relation": "method",
@@ -21561,9 +21561,9 @@
       "source_file": "app/MakroPad.App/ViewModels/DisplayBlockViewModel.cs",
       "source_location": "L75",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_displayblockviewmodel_displayblockviewmodel",
-      "target": "viewmodels_displayblockviewmodel_displayblockviewmodel_normalizealignment",
-      "confidence_score": 1.0
+      "target": "viewmodels_displayblockviewmodel_displayblockviewmodel_normalizealignment"
     },
     {
       "relation": "references",
@@ -22441,9 +22441,9 @@
       "source_file": "app/MakroPad.App/ViewModels/DisplayTriggersEditorViewModel.cs",
       "source_location": "L222",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_displaytriggerseditorviewmodel_displaytriggerseditorviewmodel",
-      "target": "viewmodels_displaytriggerseditorviewmodel_displaytriggerseditorviewmodel_addblankblock",
-      "confidence_score": 1.0
+      "target": "viewmodels_displaytriggerseditorviewmodel_displaytriggerseditorviewmodel_addblankblock"
     },
     {
       "relation": "method",
@@ -23214,9 +23214,9 @@
       "source_file": "app/MakroPad.App/ViewModels/DisplayTriggersEditorViewModel.cs",
       "source_location": "L223",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_displaytriggerseditorviewmodel_displaytriggerseditorviewmodel_addblankblock",
-      "target": "viewmodels_displaytriggerseditorviewmodel_displaytriggerseditorviewmodel_addblock",
-      "confidence_score": 1.0
+      "target": "viewmodels_displaytriggerseditorviewmodel_displaytriggerseditorviewmodel_addblock"
     },
     {
       "relation": "calls",
@@ -24349,9 +24349,9 @@
       "source_file": "app/MakroPad.App/ViewModels/IdleScreensEditorViewModel.cs",
       "source_location": "L233",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_idlescreenseditorviewmodel_idlescreenseditorviewmodel",
-      "target": "viewmodels_idlescreenseditorviewmodel_idlescreenseditorviewmodel_addblankblock",
-      "confidence_score": 1.0
+      "target": "viewmodels_idlescreenseditorviewmodel_idlescreenseditorviewmodel_addblankblock"
     },
     {
       "relation": "method",
@@ -24699,9 +24699,9 @@
       "source_file": "app/MakroPad.App/ViewModels/IdleScreensEditorViewModel.cs",
       "source_location": "L234",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_idlescreenseditorviewmodel_idlescreenseditorviewmodel_addblankblock",
-      "target": "viewmodels_idlescreenseditorviewmodel_idlescreenseditorviewmodel_addblock",
-      "confidence_score": 1.0
+      "target": "viewmodels_idlescreenseditorviewmodel_idlescreenseditorviewmodel_addblock"
     },
     {
       "relation": "calls",
@@ -28347,9 +28347,9 @@
       "source_file": "app/MakroPad.App.Tests/Services/DeviceConfigMessageBuilderTests.cs",
       "source_location": "L60",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "services_deviceconfigmessagebuildertests_deviceconfigmessagebuildertests",
-      "target": "services_deviceconfigmessagebuildertests_deviceconfigmessagebuildertests_buildsendslinesizeandalignment",
-      "confidence_score": 1.0
+      "target": "services_deviceconfigmessagebuildertests_deviceconfigmessagebuildertests_buildsendslinesizeandalignment"
     },
     {
       "relation": "method",
@@ -29198,9 +29198,9 @@
       "source_file": "app/MakroPad.App.Tests/ViewModels/DisplayBlockMarkupTests.cs",
       "source_location": "L22",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "viewmodels_displayblockmarkuptests_displayblockmarkuptests",
-      "target": "viewmodels_displayblockmarkuptests_displayblockmarkuptests_parseandserializehandlesblanklinesandalignment",
-      "confidence_score": 1.0
+      "target": "viewmodels_displayblockmarkuptests_displayblockmarkuptests_parseandserializehandlesblanklinesandalignment"
     },
     {
       "relation": "contains",
@@ -31081,9 +31081,9 @@
       "source_file": "app/MakroPad.Core/DisplayTriggers/DisplayTriggerRenderer.Markup.cs",
       "source_location": "L211",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "displaytriggers_displaytriggerrenderer_markup_displaytriggerrenderer",
-      "target": "displaytriggers_displaytriggerrenderer_markup_displaytriggerrenderer_parsealignmentprefix",
-      "confidence_score": 1.0
+      "target": "displaytriggers_displaytriggerrenderer_markup_displaytriggerrenderer_parsealignmentprefix"
     },
     {
       "relation": "method",
@@ -31144,9 +31144,9 @@
       "source_file": "app/MakroPad.Core/DisplayTriggers/DisplayTriggerRenderer.Markup.cs",
       "source_location": "L177",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "displaytriggers_displaytriggerrenderer_markup_displaytriggerrenderer_rendermarkdownlines",
-      "target": "displaytriggers_displaytriggerrenderer_markup_displaytriggerrenderer_parsealignmentprefix",
-      "confidence_score": 1.0
+      "target": "displaytriggers_displaytriggerrenderer_markup_displaytriggerrenderer_parsealignmentprefix"
     },
     {
       "relation": "calls",
@@ -32686,9 +32686,9 @@
       "source_file": "app/MakroPad.Core.Tests/DisplayTriggers/DisplayTriggerRendererTests.cs",
       "source_location": "L141",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "displaytriggers_displaytriggerrenderertests_displaytriggerrenderertests",
-      "target": "displaytriggers_displaytriggerrenderertests_displaytriggerrenderertests_rendermarkdownlineskeepsblanklinesandalignment",
-      "confidence_score": 1.0
+      "target": "displaytriggers_displaytriggerrenderertests_displaytriggerrenderertests_rendermarkdownlineskeepsblanklinesandalignment"
     },
     {
       "relation": "method",
@@ -32696,9 +32696,9 @@
       "source_file": "app/MakroPad.Core.Tests/DisplayTriggers/DisplayTriggerRendererTests.cs",
       "source_location": "L155",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "displaytriggers_displaytriggerrenderertests_displaytriggerrenderertests",
-      "target": "displaytriggers_displaytriggerrenderertests_displaytriggerrenderertests_fitpreviewlinescentersshortlines",
-      "confidence_score": 1.0
+      "target": "displaytriggers_displaytriggerrenderertests_displaytriggerrenderertests_fitpreviewlinescentersshortlines"
     },
     {
       "relation": "method",
@@ -41617,5 +41617,5 @@
       "source_file": "app/README.md"
     }
   ],
-  "built_at_commit": "f528bc3ba0a68b330768ec5b06c550f9002252cc"
+  "built_at_commit": "b5008af477c23459db03182eb323d8c020e68088"
 }
