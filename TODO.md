@@ -74,9 +74,11 @@ Implementation notes:
 
 ## Technical Debt
 
-- Split `MainWindowViewModel`. It currently owns device connection state,
-  profile editing, binding editing, action helper UI, OLED preview, Now Playing,
-  and audio session refresh.
+- `MainWindowViewModel` was split and folded into `ShellViewModel`
+  (`ShellViewModel.cs` for navigation/pad layout, `ShellViewModel.Runtime.cs`
+  for the app runtime orchestration). The remaining target is to move the device
+  runtime orchestration out of `ShellViewModel.Runtime.cs` into a dedicated app
+  service if it keeps growing.
 - Audio session refresh has been moved into `AudioSessionsViewModel`.
 - OLED default screen rendering/placeholder logic has been moved into
   `OledDefaultScreenRenderer`.

@@ -101,9 +101,14 @@ Aktueller Stand:
 - Windows `app.volume` fuer aktive Audio-Sessions via CoreAudio / NAudio.
 - `system.openUrl`, `system.openApp`, `keyboard.shortcut` und `log` Actions.
 - Strukturierte Editor-Hilfen fuer haeufige Action-Parameter.
-- Dark Sidebar UI mit Makros, Geraet, Simulation, Einstellungen und Debug.
+- Geraetezentrierte UI (Pad-Grid mit Tasten/Slidern, kontextueller Inspector,
+  Profilleiste) mit workflow-geordneter Navigation: Pad, Display, Verbindung,
+  Einstellungen, Diagnose. Grau-Teal-Theme (Dark/Light).
+- Konfigurierbares Pad-Layout (Tasten-Zeilen/-Spalten und Slider-Anzahl).
+- Mehrere Idle-Screens mit Aktivierung (Standard / wenn eine App laeuft) und
+  Rotation; Inhalt als Text, echtem HTML-Subset oder Markdown-Pseudocode inkl.
+  Baukasten, mit Leerzeilen und zeilenweiser Ausrichtung (links/mittig/rechts).
 - Initiales Spotify Now Playing ueber den Spotify-Fenstertitel.
-- Konfigurierbarer OLED-Defaultscreen mit 3/5 Zeilen, Preview und Platzhaltern.
 - Debug-Ansicht mit automatisch aktualisierten aktiven Audio-Sessions.
 - Graphify-Projektgraph unter `graphify-out/`.
 - Tests fuer ProtocolCodec und Action-Pipeline.
@@ -112,7 +117,6 @@ Noch nicht umgesetzt:
 
 - Windows Media Session Metadata als robuste Now-Playing-Quelle.
 - Linux-Implementierungen fuer Media Keys und Lautstaerke.
-- Aufteilung des grossen `MainWindowViewModel` in kleinere ViewModels/Services.
 - Firmware-Aufteilung in Module, sobald der Prototyp stabil ist.
 
 ## Hardware-Einschaetzung
@@ -285,9 +289,9 @@ Der erste vertikale App-Prototyp ist weitgehend umgesetzt:
 8. Button 1 kann Windows Media Play/Pause ausloesen.
 9. Slider 1 kann Windows Master-Volume setzen.
 
-Als naechstes sollten technische Schulden im `MainWindowViewModel`, robuste
-Windows-Media-Session-Metadaten und die weitere Spezialisierung des Config
-Editors angegangen werden. Details stehen in [HANDOFF.md](HANDOFF.md).
+Als naechstes sollten die verbleibende Orchestrierung im `ShellViewModel`,
+robuste Windows-Media-Session-Metadaten und die Firmware-Modularisierung
+angegangen werden. Details stehen in [HANDOFF.md](HANDOFF.md).
 
 Der erste Firmware-Prototyp befindet sich in
 `firmware/MakroPadFirmware/MakroPadFirmware.ino`.

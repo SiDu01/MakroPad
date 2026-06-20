@@ -27,9 +27,10 @@ updates, and an editable configuration UI.
 Implemented:
 
 - Arduino firmware prototype for up to 20 buttons, up to 3 configured sliders,
-  OLED, USB Serial, heartbeat, action-result timeout, and configurable default
-  screen placeholders.
-- Avalonia desktop app prototype.
+  OLED, USB Serial, heartbeat, action-result timeout, and idle/default screen
+  rendering with placeholders, per-line text size and alignment.
+- Avalonia desktop app (device-centric UI, gray-teal light/dark theme),
+  versioned 0.1.0 with a self-contained single-file win-x64 release build.
 - Simulator connection for app development without electronics.
 - Real COM-port connection using the documented serial protocol.
 - Serial heartbeat with `ping`/`pong` and unresponsive connection status.

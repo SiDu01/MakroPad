@@ -1,6 +1,6 @@
 # MakroPad Handoff
 
-Last updated: 2026-06-13
+Last updated: 2026-06-20
 
 ## Current State
 
@@ -10,7 +10,8 @@ MakroPad has a working vertical prototype across firmware and desktop app:
   SSD1306 OLED, speaks the serial protocol, and tracks host heartbeat state.
 - The desktop app is an Avalonia/.NET app with tray behavior, simulator mode,
   real serial connections, auto-connect, config persistence, action execution,
-  OLED config sync, Now Playing updates, and a dark sidebar UI.
+  OLED config sync, Now Playing updates, and a device-centric UI (Pad, Display,
+  Verbindung, Einstellungen, Diagnose) with a gray-teal light/dark theme.
 - Config is stored at `%APPDATA%\MakroPad\config.json`.
 - The serial protocol is documented in `docs/PROTOCOL.md`.
 - Firmware wiring and pin choices are documented in `docs/HARDWARE.md`.
@@ -19,6 +20,14 @@ MakroPad has a working vertical prototype across firmware and desktop app:
 
 ## Recent Milestones
 
+- Built the first local release: `MakroPad.App` is versioned `0.1.0` and a
+  self-contained single-file win-x64 build is produced via `dotnet publish`
+  (artifacts under the git-ignored `release/`). A local `v0.1.0` tag marks the
+  release commit (not pushed).
+- Switched the app palette from blue to neutral gray surfaces with a teal accent
+  (`Themes/AppTheme.axaml` Dark/Light dictionaries + `App.axaml` FluentTheme
+  palettes), adding a theme-aware `AppAccentForegroundBrush` so text stays
+  readable on the accent.
 - Added blank lines and per-line text alignment to Markdown/block display
   content. `DisplayTemplateLine` carries an alignment; the Markdown renderer and
   `DisplayBlockMarkup` keep empty lines (blank block) and read a leading
@@ -27,7 +36,10 @@ MakroPad has a working vertical prototype across firmware and desktop app:
   `lineNAlign` protocol fields; `DeviceDisplayState` now carries the rendered
   `DefaultLines` (text+size+align) and the config path was simplified
   accordingly. The firmware renders left/center/right for short non-scrolling
-  lines (flash + hardware test still pending).
+  lines and a follow-up firmware fix keeps blank lines as empty rows (the config
+  handler overwrites title/line1/line2 unconditionally; the template handler
+  trims only trailing empties). Flashed to the ESP32-S3 via arduino-cli;
+  on-device visual confirmation is the only open item.
 - Reworked the display content modes and idle screens. The "html" mode is now a
   real documented HTML subset (`DisplayTriggerRenderer.RenderHtmlLines`:
   h1/h2 size, p/div/br/hr, ul/ol/li numbering, nesting, entities); added a
@@ -264,7 +276,7 @@ the ESP32-S3-DevKitC-1.
 
 ## Recommended Next Steps
 
-1. Continue refactoring `MainWindowViewModel` only where it still removes a
+1. Continue refactoring `ShellViewModel.Runtime.cs` only where it still removes a
    real responsibility. Next best target: small device/simulator command
    grouping or an app coordinator if more runtime orchestration is added.
 2. Hardware-test the unified Display editor flow against the OLED and adjust
@@ -279,8 +291,8 @@ the ESP32-S3-DevKitC-1.
 
 Recommendation: pause broad refactoring unless a new feature touches the
 remaining root orchestration. Most editor state and background loop ownership
-are now out of `MainWindowViewModel`; future extraction should be driven by
-concrete changes.
+are now out of the root view model (`ShellViewModel`); future extraction should
+be driven by concrete changes.
 
 ## Graphify Notes
 

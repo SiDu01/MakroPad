@@ -62,14 +62,20 @@ Der Display-Trigger-Editor zeigt fuer `templateMode=layout` eine strukturierte
 Preview mit Header, Iconbereich, Text und Prozentbalken. Der Test-Button sendet
 Layout-Trigger ebenfalls als `display;mode=layout`.
 
-Die App-Oberflaeche hat keinen getrennten `OLED Default`- und
-`Display Trigger`-Editor mehr. Beide Bereiche wurden in einem gemeinsamen
-`Display`-Tab zusammengefuehrt:
+Der `Display`-Bereich ist eine Uebersicht mit zwei Listen plus je einer
+dedizierten Editor-Seite:
 
-- `Idle Screen` bearbeitet die dauerhafte Default-Anzeige.
-- `Display Rules` listet ereignisgesteuerte Screens.
-- `Selected Screen Rule` bearbeitet das ausgewaehlte Ereignis.
-- Rechts stehen Idle-Preview, Rule-Preview und Runtime-Optionen zusammen.
+- `Idle-Screens`: mehrere Idle-Screens, die nach Aktivierung wechseln
+  (Standard / wenn ein Prozess laeuft) und bei mehreren aktiven rotieren
+  (globales Intervall). Die App rendert den aktiven Screen app-seitig und pusht
+  ihn per `config` an die Firmware (kein Firmware-Wechsel noetig).
+- `Anzeige-Regeln`: ereignisgesteuerte, temporaere Screens.
+- „Erstellen"/„Bearbeiten" oeffnet jeweils eine eigene Editor-Seite mit
+  Inhalts-Editor und Live-OLED-Vorschau.
+
+Inhalte (Idle-Screens und Regeln) lassen sich als Klartext, echtes HTML-Subset
+oder Markdown-Pseudocode schreiben, inklusive visuellem Baukasten, Leerzeilen
+und zeilenweiser Ausrichtung (links/mittig/rechts).
 
 ## Aktuelle Grenzen
 
@@ -77,7 +83,8 @@ Die App-Oberflaeche hat keinen getrennten `OLED Default`- und
   Textfelder. Der Balken und Icons bleiben statisch.
 - Icons sind einfache firmwareseitig gezeichnete Primitives, keine Bitmaps.
 - Freie Elementlisten wie `e1=header:...;e2=bar:...` sind noch nicht umgesetzt.
-- Defaultscreen-Konfiguration nutzt weiterhin den bestehenden Zeilenmodus.
+- Zentrierte/rechtsbuendige Ausrichtung greift nur bei kurzen, nicht
+  scrollenden Zeilen; zu lange Zeilen scrollen weiterhin linksbuendig.
 
 ## Naechste Ausbaustufen
 
