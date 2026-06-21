@@ -31,7 +31,14 @@ public partial class IdleScreensEditorViewModel : ViewModelBase
 
     public IReadOnlyList<string> AvailableModes { get; } = ["normal", "markdown", "html"];
 
-    public IReadOnlyList<string> AvailableActivations { get; } = ["default", "process"];
+    public IReadOnlyList<string> AvailableConditionTypes { get; } =
+        ["processRunning", "processForeground", "fullscreen", "mediaActive", "systemMetric"];
+
+    public IReadOnlyList<string> AvailableConditionLogic { get; } = ["and", "or"];
+
+    public IReadOnlyList<string> AvailableMetrics { get; } = ["cpu", "memory", "battery", "network"];
+
+    public IReadOnlyList<string> AvailableComparisons { get; } = ["gt", "gte", "lt", "lte"];
 
     public IReadOnlyList<string> AvailablePlaceholders { get; } =
     [
@@ -58,10 +65,10 @@ public partial class IdleScreensEditorViewModel : ViewModelBase
     partial void OnSelectedIdleScreenChanged(IdleScreenItemViewModel? value)
     {
         OnPropertyChanged(nameof(HasSelection));
-        OnPropertyChanged(nameof(IsProcessActivation));
         OnPropertyChanged(nameof(IsMarkdown));
         OnPropertyChanged(nameof(ShowsBlockEditor));
         OnPropertyChanged(nameof(ShowsRawTemplate));
+        RaiseConditionStateChanged();
         UseBlockEditor = false;
         if (value is not null)
         {
@@ -73,8 +80,11 @@ public partial class IdleScreensEditorViewModel : ViewModelBase
 
     public bool HasSelection => SelectedIdleScreen is not null;
 
-    public bool IsProcessActivation =>
-        string.Equals(SelectedIdleScreen?.Activation, "process", StringComparison.OrdinalIgnoreCase);
+    public bool SelectedScreenHasConditions => SelectedIdleScreen is { Conditions.Count: > 0 };
+
+    public bool SelectedScreenHasNoConditions => SelectedIdleScreen is null || SelectedIdleScreen.Conditions.Count == 0;
+
+    public bool SelectedScreenHasMultipleConditions => SelectedIdleScreen is { Conditions.Count: > 1 };
 
     public bool IsMarkdown =>
         string.Equals(SelectedIdleScreen?.TemplateMode, "markdown", StringComparison.OrdinalIgnoreCase);
@@ -208,6 +218,45 @@ public partial class IdleScreensEditorViewModel : ViewModelBase
     }
 
     [RelayCommand]
+    private void AddCondition()
+    {
+        SelectedIdleScreen?.AddCondition(new IdleScreenCondition { Type = "processRunning" });
+    }
+
+    [RelayCommand]
+    private void RemoveCondition(IdleScreenConditionViewModel? condition)
+    {
+        if (condition is not null)
+        {
+            SelectedIdleScreen?.Conditions.Remove(condition);
+        }
+    }
+
+    [RelayCommand]
+    private void MoveConditionUp(IdleScreenConditionViewModel? condition) => MoveCondition(condition, -1);
+
+    [RelayCommand]
+    private void MoveConditionDown(IdleScreenConditionViewModel? condition) => MoveCondition(condition, 1);
+
+    private void MoveCondition(IdleScreenConditionViewModel? condition, int direction)
+    {
+        var conditions = SelectedIdleScreen?.Conditions;
+        if (condition is null || conditions is null)
+        {
+            return;
+        }
+
+        var index = conditions.IndexOf(condition);
+        var target = index + direction;
+        if (index < 0 || target < 0 || target >= conditions.Count)
+        {
+            return;
+        }
+
+        conditions.Move(index, target);
+    }
+
+    [RelayCommand]
     private void ToggleBlockEditor()
     {
         if (!UseBlockEditor)
@@ -336,10 +385,10 @@ public partial class IdleScreensEditorViewModel : ViewModelBase
     {
         if (ReferenceEquals(item, SelectedIdleScreen))
         {
-            OnPropertyChanged(nameof(IsProcessActivation));
             OnPropertyChanged(nameof(IsMarkdown));
             OnPropertyChanged(nameof(ShowsBlockEditor));
             OnPropertyChanged(nameof(ShowsRawTemplate));
+            RaiseConditionStateChanged();
             RefreshPreview();
         }
 
@@ -347,6 +396,13 @@ public partial class IdleScreensEditorViewModel : ViewModelBase
         {
             RaiseChanged();
         }
+    }
+
+    private void RaiseConditionStateChanged()
+    {
+        OnPropertyChanged(nameof(SelectedScreenHasConditions));
+        OnPropertyChanged(nameof(SelectedScreenHasNoConditions));
+        OnPropertyChanged(nameof(SelectedScreenHasMultipleConditions));
     }
 
     private void RefreshPreview()

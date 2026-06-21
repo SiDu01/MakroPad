@@ -18,6 +18,28 @@ public sealed class MakroPadConfigStore
 
     public string ConfigPath { get; }
 
+    /// <summary>
+    /// Reads the existing config synchronously without creating a default. Returns null when the file
+    /// is missing or cannot be parsed. Used at startup to decide whether to show the window.
+    /// </summary>
+    public MakroPadConfig? TryLoadExisting()
+    {
+        try
+        {
+            if (!File.Exists(ConfigPath))
+            {
+                return null;
+            }
+
+            using var stream = File.OpenRead(ConfigPath);
+            return JsonSerializer.Deserialize<MakroPadConfig>(stream, JsonOptions);
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
     public async Task<MakroPadConfig> LoadOrCreateDefaultAsync(CancellationToken cancellationToken = default)
     {
         if (!File.Exists(ConfigPath))

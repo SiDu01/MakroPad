@@ -35,7 +35,7 @@
                                         <DataTemplate DataType="vm:IdleScreenItemViewModel">
                                             <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="8">
                                                 <TextBlock Text="{Binding Name}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" />
-                                                <TextBlock Grid.Column="1" Text="{Binding ActivationDisplay}" Classes="muted" FontSize="12" VerticalAlignment="Center" />
+                                                <TextBlock Grid.Column="1" Text="{Binding ConditionsSummary}" Classes="muted" FontSize="12" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
                                                 <TextBlock Grid.Column="2" Text="{Binding EnabledDisplay}" Classes="muted" FontFamily="Consolas" VerticalAlignment="Center" />
                                             </Grid>
                                         </DataTemplate>
@@ -404,16 +404,83 @@
                                           IsChecked="{Binding SelectedIdleScreen.Enabled}" />
                             </Grid>
 
-                            <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                            <StackPanel Spacing="8">
+                                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                                    <TextBlock Classes="label" Text="Bedingungen" VerticalAlignment="Center" />
+                                    <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8">
+                                        <ComboBox Width="90" ToolTip.Tip="Verknüpfung mehrerer Bedingungen"
+                                                  IsVisible="{Binding SelectedScreenHasMultipleConditions}"
+                                                  ItemsSource="{Binding AvailableConditionLogic}"
+                                                  SelectedItem="{Binding SelectedIdleScreen.ConditionLogic}" />
+                                        <Button Classes="secondary" Content="+ Bedingung" Command="{Binding AddConditionCommand}" />
+                                    </StackPanel>
+                                </Grid>
+
+                                <TextBlock Classes="muted" FontSize="12" TextWrapping="Wrap"
+                                           IsVisible="{Binding SelectedScreenHasNoConditions}"
+                                           Text="Ohne Bedingung ist dieser Screen immer aktiv (Standard)." />
+
+                                <ItemsControl ItemsSource="{Binding SelectedIdleScreen.Conditions}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate DataType="vm:IdleScreenConditionViewModel">
+                                            <Border Classes="panelElevated" Margin="0,0,0,8" Padding="10">
+                                                <StackPanel Spacing="6">
+                                                    <Grid ColumnDefinitions="160,*,Auto" ColumnSpacing="8">
+                                                        <ComboBox Grid.Column="0" HorizontalAlignment="Stretch"
+                                                                  ItemsSource="{Binding $parent[ItemsControl].DataContext.AvailableConditionTypes}"
+                                                                  SelectedItem="{Binding Type}" />
+                                                        <TextBox Grid.Column="1" IsVisible="{Binding UsesTarget}"
+                                                                 PlaceholderText="Prozess (z.B. Spotify), leer = beliebig"
+                                                                 Text="{Binding Target}" />
+                                                        <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="6"
+                                                                    IsVisible="{Binding IsMetric}">
+                                                            <ComboBox Width="100"
+                                                                      ItemsSource="{Binding $parent[ItemsControl].DataContext.AvailableMetrics}"
+                                                                      SelectedItem="{Binding Metric}" />
+                                                            <ComboBox Width="72"
+                                                                      ItemsSource="{Binding $parent[ItemsControl].DataContext.AvailableComparisons}"
+                                                                      SelectedItem="{Binding Comparison}" />
+                                                            <NumericUpDown Width="120" Minimum="0" Maximum="100000" Increment="1"
+                                                                           Value="{Binding Threshold}" />
+                                                        </StackPanel>
+                                                        <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="4">
+                                                            <Button Classes="secondary" Content="↑" Padding="9,4"
+                                                                    Command="{Binding $parent[ItemsControl].DataContext.MoveConditionUpCommand}"
+                                                                    CommandParameter="{Binding}" />
+                                                            <Button Classes="secondary" Content="↓" Padding="9,4"
+                                                                    Command="{Binding $parent[ItemsControl].DataContext.MoveConditionDownCommand}"
+                                                                    CommandParameter="{Binding}" />
+                                                            <Button Classes="danger" Content="✕" Padding="9,4"
+                                                                    Command="{Binding $parent[ItemsControl].DataContext.RemoveConditionCommand}"
+                                                                    CommandParameter="{Binding}" />
+                                                        </StackPanel>
+                                                    </Grid>
+                                                    <CheckBox Content="Negieren (NICHT)" IsChecked="{Binding Negate}" />
+                                                </StackPanel>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+
+                            <Grid ColumnDefinitions="*,*" ColumnSpacing="10" RowDefinitions="Auto,Auto" RowSpacing="10">
                                 <StackPanel Spacing="4">
-                                    <TextBlock Classes="label" Text="Aktivierung" />
-                                    <ComboBox HorizontalAlignment="Stretch"
-                                              ItemsSource="{Binding AvailableActivations}"
-                                              SelectedItem="{Binding SelectedIdleScreen.Activation}" />
+                                    <TextBlock Classes="label" Text="Priorität" ToolTip.Tip="Höchste Priorität gewinnt" />
+                                    <NumericUpDown Minimum="0" Maximum="1000" Increment="1"
+                                                   Value="{Binding SelectedIdleScreen.Priority}" />
                                 </StackPanel>
-                                <StackPanel Grid.Column="1" Spacing="4" IsVisible="{Binding IsProcessActivation}">
-                                    <TextBlock Classes="label" Text="Prozess (z.B. Spotify)" />
-                                    <TextBox Text="{Binding SelectedIdleScreen.ProcessName}" />
+                                <CheckBox Grid.Column="1" VerticalAlignment="Bottom" Margin="0,0,0,6"
+                                          Content="Exklusiv (allein anzeigen)"
+                                          IsChecked="{Binding SelectedIdleScreen.Exclusive}" />
+                                <StackPanel Grid.Row="1" Spacing="4">
+                                    <TextBlock Classes="label" Text="Aktivierungs-Verzögerung (s)" />
+                                    <NumericUpDown Minimum="0" Maximum="3600" Increment="1"
+                                                   Value="{Binding SelectedIdleScreen.ActivationDelaySeconds}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="1" Grid.Column="1" Spacing="4">
+                                    <TextBlock Classes="label" Text="Mindest-Standzeit (s)" />
+                                    <NumericUpDown Minimum="0" Maximum="3600" Increment="1"
+                                                   Value="{Binding SelectedIdleScreen.MinDwellSeconds}" />
                                 </StackPanel>
                             </Grid>
 

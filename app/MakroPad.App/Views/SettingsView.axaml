@@ -54,6 +54,25 @@
 
             <Border Classes="panel">
                 <StackPanel Spacing="12">
+                    <TextBlock Text="Verhalten" FontSize="15" FontWeight="SemiBold" />
+                    <Grid ColumnDefinitions="*,Auto">
+                        <StackPanel Spacing="2" VerticalAlignment="Center">
+                            <TextBlock Text="Im Tray starten" />
+                            <TextBlock Classes="muted" FontSize="12" TextWrapping="Wrap"
+                                       Text="Beim Start kein Fenster oeffnen, nur das Tray-Symbol. Ideal fuer den Autostart." />
+                        </StackPanel>
+                        <ToggleSwitch Grid.Column="1"
+                                      IsChecked="{Binding StartMinimizedToTray}"
+                                      OnContent="An"
+                                      OffContent="Aus" />
+                    </Grid>
+                    <TextBlock Classes="muted" FontSize="12" TextWrapping="Wrap"
+                               Text="Aenderung unten mit Speichern uebernehmen." />
+                </StackPanel>
+            </Border>
+
+            <Border Classes="panel">
+                <StackPanel Spacing="12">
                     <TextBlock Text="Konfiguration" FontSize="15" FontWeight="SemiBold" />
                     <TextBlock Classes="label" Text="Konfigurationsdatei" />
                     <TextBox Text="{Binding ConfigPath}" IsReadOnly="True" />

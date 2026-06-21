@@ -65,10 +65,10 @@ Layout-Trigger ebenfalls als `display;mode=layout`.
 Der `Display`-Bereich ist eine Uebersicht mit zwei Listen plus je einer
 dedizierten Editor-Seite:
 
-- `Idle-Screens`: mehrere Idle-Screens, die nach Aktivierung wechseln
-  (Standard / wenn ein Prozess laeuft) und bei mehreren aktiven rotieren
-  (globales Intervall). Die App rendert den aktiven Screen app-seitig und pusht
-  ihn per `config` an die Firmware (kein Firmware-Wechsel noetig).
+- `Idle-Screens`: mehrere Idle-Screens, die abhaengig von Bedingungen wechseln
+  (siehe „Idle-Screen-Aktivierung") und bei mehreren aktiven rotieren (globales
+  Intervall). Die App rendert den aktiven Screen app-seitig und pusht ihn per
+  `config` an die Firmware (kein Firmware-Wechsel noetig).
 - `Anzeige-Regeln`: ereignisgesteuerte, temporaere Screens.
 - „Erstellen"/„Bearbeiten" oeffnet jeweils eine eigene Editor-Seite mit
   Inhalts-Editor und Live-OLED-Vorschau.
@@ -76,6 +76,45 @@ dedizierten Editor-Seite:
 Inhalte (Idle-Screens und Regeln) lassen sich als Klartext, echtes HTML-Subset
 oder Markdown-Pseudocode schreiben, inklusive visuellem Baukasten, Leerzeilen
 und zeilenweiser Ausrichtung (links/mittig/rechts).
+
+## Idle-Screen-Aktivierung
+
+Jeder Idle-Screen traegt eine Liste von Bedingungen plus Verhaltensregeln. Der
+`IdleScreenOrchestrator` wertet sie sekuendlich gegen einen `SystemStateSnapshot`
+aus (Auswertung komplett app-seitig; die Firmware sieht nur den fertigen Screen).
+
+Bedingungstypen (`IdleScreenCondition.Type`):
+
+- `processRunning` — Prozess `Target` laeuft.
+- `processForeground` — Prozess `Target` ist das fokussierte Fenster.
+- `fullscreen` — das Vordergrundfenster fuellt den Monitor (optional auf `Target`
+  eingeschraenkt; Desktop/Shell zaehlen nicht als Vollbild).
+- `mediaActive` — Prozess `Target` gibt gerade Audio aus (aktive Audio-Session).
+- `systemMetric` — `Metric` (cpu/memory/battery/network) vergleicht via
+  `Comparison` (gt/gte/lt/lte) gegen `Threshold`. `network` ist Kbit/s; `battery`
+  meldet auf Geraeten ohne Akku 100.
+
+Jede Bedingung kann per `Negate` invertiert werden. Mehrere Bedingungen werden
+ueber `ConditionLogic` (`and`/`or`) verknuepft; eine leere Liste bedeutet „immer
+aktiv" (klassischer Standard-Screen).
+
+Auswahl-Praezedenz pro Tick:
+
+1. Ein Screen ist *berechtigt*, wenn er aktiviert ist und seine Bedingungen
+   gelten. Die Bedingungen muessen `ActivationDelaySeconds` lang durchgehend
+   gelten, bevor sie zaehlen (unterdrueckt kurze Blips).
+2. Anti-Flacker: Der aktuell gezeigte Screen wird bis zum Ablauf seiner
+   `MinDwellSeconds` gehalten, auch wenn seine Bedingung wegfaellt — ausser ein
+   hoeher priorisierter `Exclusive`-Screen verdraengt ihn.
+3. Ist ein berechtigter Screen `Exclusive`, wird der mit der hoechsten
+   `Priority` allein gezeigt.
+4. Sonst bilden die berechtigten Screens mit der hoechsten `Priority` das aktive
+   Set und rotieren im globalen Intervall.
+
+Migration: Aeltere Configs mit `Activation`/`ProcessName` werden einmalig in
+Bedingungen ueberfuehrt (`process` -> eine `processRunning`-Bedingung mit
+`Priority` 10, `default` -> leere Bedingungsliste), sodass sich das Verhalten
+nicht aendert. Die Legacy-Felder bleiben fuer die Deserialisierung erhalten.
 
 ## Aktuelle Grenzen
 

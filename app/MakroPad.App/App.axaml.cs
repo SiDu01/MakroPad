@@ -7,6 +7,7 @@ using System.Linq;
 using Avalonia.Markup.Xaml;
 using MakroPad.App.ViewModels;
 using MakroPad.App.Views;
+using MakroPad.Core.Configuration;
 
 namespace MakroPad.App;
 
@@ -25,6 +26,10 @@ public partial class App : Application
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
+            // Tray app: the window can be hidden without exiting, so the process lifetime is driven
+            // by the explicit "Exit" tray command rather than by the window closing.
+            desktop.ShutdownMode = ShutdownMode.OnExplicitShutdown;
+
             mainWindow = new Shell
             {
                 DataContext = new ShellViewModel(),
@@ -43,9 +48,21 @@ public partial class App : Application
 
             desktop.MainWindow = mainWindow;
             trayIcon = CreateTrayIcon(desktop);
+
+            // Honour the "start in tray" setting: skip the initial window show when enabled.
+            if (!ShouldStartMinimizedToTray())
+            {
+                mainWindow.Show();
+            }
         }
 
         base.OnFrameworkInitializationCompleted();
+    }
+
+    private static bool ShouldStartMinimizedToTray()
+    {
+        var store = new MakroPadConfigStore(ShellViewModel.GetDefaultConfigPath());
+        return store.TryLoadExisting()?.AppSettings.StartMinimizedToTray ?? false;
     }
 
     private TrayIcon CreateTrayIcon(IClassicDesktopStyleApplicationLifetime desktop)

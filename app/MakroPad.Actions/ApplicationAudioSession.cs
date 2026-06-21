@@ -5,4 +5,5 @@ public sealed record ApplicationAudioSession(
     int ProcessId,
     string DisplayName,
     int VolumePercent,
-    bool IsMuted);
+    bool IsMuted,
+    bool IsActive = false);

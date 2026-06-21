@@ -1,4 +1,6 @@
 using System;
+using System.Collections.ObjectModel;
+using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using MakroPad.Core.Configuration;
 
@@ -9,6 +11,10 @@ public partial class IdleScreenItemViewModel : ObservableObject
 {
     private readonly Action<IdleScreenItemViewModel>? onChanged;
 
+    // Legacy activation fields are no longer edited but preserved so older configs round-trip.
+    private readonly string legacyActivation;
+    private readonly string legacyProcessName;
+
     public IdleScreenItemViewModel(IdleScreenConfig config, Action<IdleScreenItemViewModel>? onChanged = null)
     {
         this.onChanged = onChanged;
@@ -16,8 +22,17 @@ public partial class IdleScreenItemViewModel : ObservableObject
         enabled = config.Enabled;
         template = config.Template;
         templateMode = string.IsNullOrWhiteSpace(config.TemplateMode) ? "markdown" : config.TemplateMode;
-        activation = string.Equals(config.Activation, "process", StringComparison.OrdinalIgnoreCase) ? "process" : "default";
-        processName = config.ProcessName;
+        conditionLogic = string.Equals(config.ConditionLogic, "or", StringComparison.OrdinalIgnoreCase) ? "or" : "and";
+        priority = config.Priority;
+        exclusive = config.Exclusive;
+        activationDelaySeconds = config.ActivationDelaySeconds;
+        minDwellSeconds = config.MinDwellSeconds;
+        legacyActivation = config.Activation;
+        legacyProcessName = config.ProcessName;
+
+        Conditions = new ObservableCollection<IdleScreenConditionViewModel>(
+            config.Conditions.Select(c => new IdleScreenConditionViewModel(c, NotifyFromCondition)));
+        Conditions.CollectionChanged += (_, _) => Notify();
     }
 
     [ObservableProperty]
@@ -33,26 +48,50 @@ public partial class IdleScreenItemViewModel : ObservableObject
     private string templateMode;
 
     [ObservableProperty]
-    private string activation;
+    private string conditionLogic;
 
     [ObservableProperty]
-    private string processName;
+    private int priority;
 
-    partial void OnNameChanged(string value) => Notify();
+    [ObservableProperty]
+    private bool exclusive;
 
-    partial void OnEnabledChanged(bool value) => Notify();
+    [ObservableProperty]
+    private int activationDelaySeconds;
 
-    partial void OnTemplateChanged(string value) => Notify();
+    [ObservableProperty]
+    private int minDwellSeconds;
 
-    partial void OnTemplateModeChanged(string value) => Notify();
+    public ObservableCollection<IdleScreenConditionViewModel> Conditions { get; }
 
-    partial void OnActivationChanged(string value) => Notify();
+    /// <summary>Adds a condition wired to this screen's change notifications.</summary>
+    public void AddCondition(IdleScreenCondition condition) =>
+        Conditions.Add(new IdleScreenConditionViewModel(condition, NotifyFromCondition));
 
-    partial void OnProcessNameChanged(string value) => Notify();
+    public string ConditionsSummary
+    {
+        get
+        {
+            if (Conditions.Count == 0)
+            {
+                return "Standard";
+            }
 
-    public string ActivationDisplay => string.Equals(Activation, "process", StringComparison.OrdinalIgnoreCase)
-        ? $"App: {(string.IsNullOrWhiteSpace(ProcessName) ? "?" : ProcessName)}"
-        : "Standard";
+            var separator = string.Equals(ConditionLogic, "or", StringComparison.OrdinalIgnoreCase) ? " od. " : " u. ";
+            var summary = string.Join(separator, Conditions.Select(c => c.Summary));
+            if (Priority != 0)
+            {
+                summary += $" · P{Priority}";
+            }
+
+            if (Exclusive)
+            {
+                summary += " · exkl.";
+            }
+
+            return summary;
+        }
+    }
 
     public string EnabledDisplay => Enabled ? "" : "aus";
 
@@ -62,13 +101,39 @@ public partial class IdleScreenItemViewModel : ObservableObject
         Enabled = Enabled,
         Template = Template,
         TemplateMode = TemplateMode,
-        Activation = Activation,
-        ProcessName = ProcessName.Trim()
+        Conditions = Conditions.Select(c => c.ToConfig()).ToList(),
+        ConditionLogic = ConditionLogic,
+        Priority = Priority,
+        Exclusive = Exclusive,
+        ActivationDelaySeconds = ActivationDelaySeconds,
+        MinDwellSeconds = MinDwellSeconds,
+        Activation = legacyActivation,
+        ProcessName = legacyProcessName
     };
+
+    partial void OnNameChanged(string value) => Notify();
+
+    partial void OnEnabledChanged(bool value) => Notify();
+
+    partial void OnTemplateChanged(string value) => Notify();
+
+    partial void OnTemplateModeChanged(string value) => Notify();
+
+    partial void OnConditionLogicChanged(string value) => Notify();
+
+    partial void OnPriorityChanged(int value) => Notify();
+
+    partial void OnExclusiveChanged(bool value) => Notify();
+
+    partial void OnActivationDelaySecondsChanged(int value) => Notify();
+
+    partial void OnMinDwellSecondsChanged(int value) => Notify();
+
+    private void NotifyFromCondition() => Notify();
 
     private void Notify()
     {
-        OnPropertyChanged(nameof(ActivationDisplay));
+        OnPropertyChanged(nameof(ConditionsSummary));
         OnPropertyChanged(nameof(EnabledDisplay));
         onChanged?.Invoke(this);
     }

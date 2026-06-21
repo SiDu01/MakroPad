@@ -11,12 +11,14 @@ public sealed class AppRuntimeLoopService : IDisposable
 {
     private readonly CancellationTokenSource audioSessionsCancellation = new();
     private readonly CancellationTokenSource nowPlayingCancellation = new();
+    private readonly CancellationTokenSource metricsCancellation = new();
     private bool started;
     private bool disposed;
 
     public void Start(
         AudioSessionsViewModel audioSessionsViewModel,
         NowPlayingViewModel nowPlayingViewModel,
+        ISystemMetricsSampler systemMetricsSampler,
         Func<IMakroPadConnection?> getConnection,
         Func<bool> defaultScreenUsesMediaPlaceholder,
         Func<bool> hasMediaChangedDisplayTrigger,
@@ -31,6 +33,7 @@ public sealed class AppRuntimeLoopService : IDisposable
         }
 
         started = true;
+        _ = systemMetricsSampler.RunSampleLoopAsync(metricsCancellation.Token);
         _ = audioSessionsViewModel.RefreshAudioSessionsAsync();
         _ = audioSessionsViewModel.RunRefreshLoopAsync(audioSessionsCancellation.Token);
         _ = nowPlayingViewModel.RunLoopAsync(
@@ -52,6 +55,7 @@ public sealed class AppRuntimeLoopService : IDisposable
 
         audioSessionsCancellation.Cancel();
         nowPlayingCancellation.Cancel();
+        metricsCancellation.Cancel();
     }
 
     public void Dispose()
@@ -64,6 +68,7 @@ public sealed class AppRuntimeLoopService : IDisposable
         Stop();
         audioSessionsCancellation.Dispose();
         nowPlayingCancellation.Dispose();
+        metricsCancellation.Dispose();
         disposed = true;
     }
 }

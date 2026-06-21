@@ -49,4 +49,50 @@ public sealed class IdleScreensEditorViewModelTests
         Assert.True(changed);
         Assert.Equal("Umbenannt", vm.Export()[0].Name);
     }
+
+    [Fact]
+    public void LoadAndExportRoundTripsConditionsAndBehavior()
+    {
+        var vm = new IdleScreensEditorViewModel();
+        vm.Load(ConfigWith(new IdleScreenConfig
+        {
+            Name = "Spotify",
+            Template = "# {media.title}",
+            ConditionLogic = "or",
+            Priority = 20,
+            Exclusive = true,
+            ActivationDelaySeconds = 2,
+            MinDwellSeconds = 5,
+            Conditions = [new IdleScreenCondition { Type = "mediaActive", Target = "Spotify" }]
+        }));
+
+        var exported = vm.Export()[0];
+        Assert.Equal("or", exported.ConditionLogic);
+        Assert.Equal(20, exported.Priority);
+        Assert.True(exported.Exclusive);
+        Assert.Equal(2, exported.ActivationDelaySeconds);
+        Assert.Equal(5, exported.MinDwellSeconds);
+        var condition = Assert.Single(exported.Conditions);
+        Assert.Equal("mediaActive", condition.Type);
+        Assert.Equal("Spotify", condition.Target);
+    }
+
+    [Fact]
+    public void AddAndRemoveConditionUpdatesExportAndRaisesChanged()
+    {
+        var vm = new IdleScreensEditorViewModel();
+        vm.Load(ConfigWith(new IdleScreenConfig { Name = "Standard", Template = "{profile}" }));
+        var changes = 0;
+        vm.Changed += (_, _) => changes++;
+
+        vm.AddConditionCommand.Execute(null);
+        Assert.Single(vm.SelectedIdleScreen!.Conditions);
+        Assert.Single(vm.Export()[0].Conditions);
+        Assert.True(changes > 0);
+
+        var condition = vm.SelectedIdleScreen.Conditions[0];
+        vm.RemoveConditionCommand.Execute(condition);
+        Assert.Empty(vm.SelectedIdleScreen.Conditions);
+        Assert.Empty(vm.Export()[0].Conditions);
+    }
 }

@@ -33,7 +33,9 @@ public partial class ShellViewModel : ViewModelBase
     private readonly ActionPipeline actionPipeline = new(new ActionResolver(), new ActionExecutor());
     private readonly ActionFeedbackCoordinator actionFeedbackCoordinator;
     private readonly AppRuntimeLoopService runtimeLoopService = new();
-    private readonly IdleScreenOrchestrator idleScreenOrchestrator = new(new ProcessPresenceProbe());
+    private readonly SystemMetricsSampler systemMetricsSampler = new();
+    private readonly SystemStateProvider systemStateProvider;
+    private readonly IdleScreenOrchestrator idleScreenOrchestrator;
     private IMakroPadConnection? activeConnection => deviceSessionService.ActiveConnection;
     private MakroPadConfig currentConfig = MakroPadConfig.CreateDefault();
     private bool isLoadingConfig;
@@ -72,6 +74,9 @@ public partial class ShellViewModel : ViewModelBase
 
     [ObservableProperty]
     private bool autoConnect = true;
+
+    [ObservableProperty]
+    private bool startMinimizedToTray;
 
     [ObservableProperty]
     private bool isDarkTheme = true;
@@ -174,6 +179,8 @@ public partial class ShellViewModel : ViewModelBase
     public ShellViewModel()
     {
         ConfigPath = GetDefaultConfigPath();
+        systemStateProvider = new SystemStateProvider(metricsSampler: systemMetricsSampler);
+        idleScreenOrchestrator = new IdleScreenOrchestrator(systemStateProvider);
         configService = new MakroPadConfigService(new MakroPadConfigStore(ConfigPath));
         deviceDisplaySyncService = new DeviceDisplaySyncService(SystemVolumeControllerFactory.Create());
         displayTriggerOrchestrator = new DisplayTriggerOrchestrator(
@@ -208,7 +215,14 @@ public partial class ShellViewModel : ViewModelBase
             }
         };
         AudioSessionsViewModel.SessionsRefreshed += (_, _) =>
+        {
             ProfilesEditor.ActionEditor.NotifyAudioProcessNamesChanged();
+            systemStateProvider.SetMediaActiveProcesses(
+                AudioSessionsViewModel.AudioSessions
+                    .Where(session => session.IsActive)
+                    .Select(session => session.ProcessName));
+            idleScreenOrchestrator.Refresh();
+        };
         NowPlayingViewModel.PropertyChanged += (_, args) =>
         {
             if (args.PropertyName == nameof(NowPlayingViewModel.NowPlayingStatus))
@@ -226,6 +240,7 @@ public partial class ShellViewModel : ViewModelBase
         runtimeLoopService.Start(
             AudioSessionsViewModel,
             NowPlayingViewModel,
+            systemMetricsSampler,
             () => activeConnection,
             DefaultScreenUsesMediaPlaceholder,
             HasMediaChangedDisplayTrigger,
@@ -354,6 +369,7 @@ public partial class ShellViewModel : ViewModelBase
             idleScreenOrchestrator.Start(_ => SendDeviceConfigAsync());
             OnPropertyChanged(nameof(ActiveProfileName));
             AutoConnect = currentConfig.AppSettings.AutoConnect;
+            StartMinimizedToTray = currentConfig.AppSettings.StartMinimizedToTray;
             DisplaySettings.Load(currentConfig);
             NowPlayingViewModel.SetEnabled(DisplaySettings.EnableNowPlayingDisplay);
             LoadDisplayTriggersEditor();
@@ -403,6 +419,7 @@ public partial class ShellViewModel : ViewModelBase
                 AppSettings = displayConfig.AppSettings with
                 {
                     AutoConnect = AutoConnect,
+                    StartMinimizedToTray = StartMinimizedToTray,
                     DisplayTriggers = displayTriggers,
                     ButtonRows = PadButtonRows,
                     ButtonColumns = PadButtonColumns,
@@ -815,7 +832,7 @@ public partial class ShellViewModel : ViewModelBase
         eventLogService.Add(message);
     }
 
-    private static string GetDefaultConfigPath()
+    public static string GetDefaultConfigPath()
     {
         var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
         return Path.Combine(appData, "MakroPad", "config.json");

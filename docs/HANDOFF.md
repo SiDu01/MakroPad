@@ -47,16 +47,24 @@ MakroPad has a working vertical prototype across firmware and desktop app:
   builder ("Baukasten") that shares parse/serialize via `DisplayBlockMarkup`.
   Idle screens became a configurable list (`IdleScreenConfig` in `AppSettings`,
   migrated from the old single default screen): each has content (template/mode)
-  and an activation — a default screen, or "when process X runs". The
-  `IdleScreenOrchestrator` (app-side, no firmware change) picks the active screen
-  each second — process screens beat default screens; multiple active screens
-  rotate every `IdleRotationSeconds` — renders it app-side and pushes it via the
-  existing `config` message (`IdleScreenDeviceState`, sent as mode "normal" with
-  raw placeholders so the firmware still resolves `{profile}`/`{time}`/
-  `{volume.system}`). The Display section now has an idle-screens list plus a
-  dedicated idle editor page beside the rule editor. `ProcessPresenceProbe`
-  detects running processes; new unit tests cover selection/rotation, migration,
-  content rendering and block markup.
+  and a list of activation conditions plus behaviour flags. Conditions
+  (`IdleScreenCondition`) cover `processRunning`, `processForeground`,
+  `fullscreen`, `mediaActive` and `systemMetric` (cpu/memory/battery/network),
+  each optionally negated and combined via `and`/`or`; an empty list means
+  "always active" (the classic default). The `IdleScreenOrchestrator` (app-side,
+  no firmware change) evaluates them each second against a `SystemStateSnapshot`
+  (from `SystemStateProvider`: running processes, media-active set,
+  `WindowsForegroundWindowProbe`, `SystemMetricsSampler`). Precedence:
+  activation-delay -> min-dwell anti-flicker -> exclusive -> highest-priority
+  tier rotates every `IdleRotationSeconds`. The winner is rendered app-side and
+  pushed via the existing `config` message (`IdleScreenDeviceState`, mode
+  "normal" with raw placeholders so the firmware still resolves
+  `{profile}`/`{time}`/`{volume.system}`). The Display section has an
+  idle-screens list plus a dedicated idle editor page (condition list + priority/
+  exclusive/delay/dwell) beside the rule editor. Legacy `Activation`/`ProcessName`
+  configs are migrated into conditions once. New unit tests cover condition
+  evaluation, orchestrator selection (priority/exclusive/delay/dwell), the state
+  provider/metrics sampler, migration and the editor.
 - Rebuilt the desktop UI from scratch into a device-centric layout (Stream-Deck
   style). `ShellViewModel` is the new root (the former `MainWindowViewModel`
   orchestration was merged into it across `ShellViewModel.cs` and

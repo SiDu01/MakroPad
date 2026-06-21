@@ -236,7 +236,8 @@ public sealed class DisplayTriggerConfigMigratorTests
         bool mediaInitialized = false,
         int actionResultTimeoutMs = 3000,
         List<DisplayTriggerConfig>? triggers = null,
-        bool idleInitialized = true)
+        bool idleInitialized = true,
+        bool idleConditionsInitialized = true)
     {
         return new MakroPadConfig
         {
@@ -252,6 +253,7 @@ public sealed class DisplayTriggerConfigMigratorTests
                 DisplayTriggerDefaultsInitialized = actionInitialized,
                 MediaTriggerDefaultsInitialized = mediaInitialized,
                 IdleScreensInitialized = idleInitialized,
+                IdleScreensConditionsInitialized = idleConditionsInitialized,
                 DisplayTriggers = triggers ?? []
             }
         };

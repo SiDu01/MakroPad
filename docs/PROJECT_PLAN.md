@@ -105,9 +105,12 @@ Aktueller Stand:
   Profilleiste) mit workflow-geordneter Navigation: Pad, Display, Verbindung,
   Einstellungen, Diagnose. Grau-Teal-Theme (Dark/Light).
 - Konfigurierbares Pad-Layout (Tasten-Zeilen/-Spalten und Slider-Anzahl).
-- Mehrere Idle-Screens mit Aktivierung (Standard / wenn eine App laeuft) und
-  Rotation; Inhalt als Text, echtem HTML-Subset oder Markdown-Pseudocode inkl.
-  Baukasten, mit Leerzeilen und zeilenweiser Ausrichtung (links/mittig/rechts).
+- Mehrere Idle-Screens mit bedingungsbasierter Aktivierung (App laeuft /
+  fokussiert, Vollbild, aktive Medienwiedergabe, System-Metriken; negierbar und
+  per UND/ODER verknuepfbar) plus Prioritaet, Exklusiv-Modus und Anti-Flacker
+  (Aktivierungs-Verzoegerung, Mindest-Standzeit); Rotation bei mehreren aktiven.
+  Inhalt als Text, echtem HTML-Subset oder Markdown-Pseudocode inkl. Baukasten,
+  mit Leerzeilen und zeilenweiser Ausrichtung (links/mittig/rechts).
 - Initiales Spotify Now Playing ueber den Spotify-Fenstertitel.
 - Debug-Ansicht mit automatisch aktualisierten aktiven Audio-Sessions.
 - Graphify-Projektgraph unter `graphify-out/`.

@@ -11,7 +11,60 @@ public static class DisplayTriggerConfigMigrator
         config = EnsureDefaultActionResultTriggers(config);
         config = EnsureDefaultMediaChangedTrigger(config);
         config = EnsureDefaultIdleScreen(config);
+        config = EnsureIdleScreenConditions(config);
         return UpgradeLegacyDefaultTriggerModes(config);
+    }
+
+    /// <summary>
+    /// Converts the legacy <c>Activation</c>/<c>ProcessName</c> idle-screen fields into the
+    /// condition-based model so existing configs behave identically: a "process" screen becomes a
+    /// single <c>processRunning</c> condition with a higher priority (so it still beats defaults),
+    /// and a "default" screen becomes an unconditional (always eligible) screen.
+    /// </summary>
+    private static MakroPadConfig EnsureIdleScreenConditions(MakroPadConfig config)
+    {
+        if (config.AppSettings.IdleScreensConditionsInitialized)
+        {
+            return config;
+        }
+
+        var migrated = config.AppSettings.IdleScreens
+            .Select(MigrateIdleScreen)
+            .ToList();
+
+        return config with
+        {
+            AppSettings = config.AppSettings with
+            {
+                IdleScreensConditionsInitialized = true,
+                IdleScreens = migrated
+            }
+        };
+    }
+
+    private static IdleScreenConfig MigrateIdleScreen(IdleScreenConfig screen)
+    {
+        // Already condition-based (hand-authored or previously migrated) — leave untouched.
+        if (screen.Conditions.Count > 0)
+        {
+            return screen;
+        }
+
+        var isProcess = string.Equals(screen.Activation, "process", StringComparison.OrdinalIgnoreCase)
+                        && !string.IsNullOrWhiteSpace(screen.ProcessName);
+        if (!isProcess)
+        {
+            return screen;
+        }
+
+        return screen with
+        {
+            Conditions =
+            [
+                new IdleScreenCondition { Type = "processRunning", Target = screen.ProcessName.Trim() }
+            ],
+            Priority = 10
+        };
     }
 
     private static MakroPadConfig EnsureDefaultIdleScreen(MakroPadConfig config)

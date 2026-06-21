@@ -1,4 +1,5 @@
 using NAudio.CoreAudioApi;
+using NAudio.CoreAudioApi.Interfaces;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
@@ -90,7 +91,8 @@ internal sealed class WindowsApplicationVolumeController : IApplicationVolumeCon
                     processId,
                     string.IsNullOrWhiteSpace(session.DisplayName) ? processName : session.DisplayName,
                     (int)Math.Round(volume.Volume * 100),
-                    volume.Mute));
+                    volume.Mute,
+                    session.State == AudioSessionState.AudioSessionStateActive));
             }
         }
         catch (Exception ex) when (ex is InvalidOperationException or COMException)

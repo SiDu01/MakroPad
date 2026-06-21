@@ -4,6 +4,9 @@ public sealed record AppSettingsConfig
 {
     public bool AutoConnect { get; init; } = true;
 
+    /// <summary>When true, the app starts hidden in the system tray instead of showing its window.</summary>
+    public bool StartMinimizedToTray { get; init; }
+
     public bool EnableNowPlayingDisplay { get; init; } = true;
 
     public int VolumeSliderDeadbandPercent { get; init; } = 2;
@@ -23,6 +26,8 @@ public sealed record AppSettingsConfig
     public List<IdleScreenConfig> IdleScreens { get; init; } = [];
 
     public bool IdleScreensInitialized { get; init; }
+
+    public bool IdleScreensConditionsInitialized { get; init; }
 
     public int IdleRotationSeconds { get; init; } = 8;
 

@@ -9,25 +9,35 @@ namespace MakroPad.App.Services;
 
 /// <summary>
 /// Picks the active idle screen from the configured list and pushes it when it changes.
-/// Priority: if any "process" screen's process is running, only those are active; otherwise the
-/// "default" screens are active; otherwise any enabled screen. When more than one screen is
-/// active they rotate every <c>IdleRotationSeconds</c>.
+///
+/// Selection precedence, evaluated every second against a <see cref="SystemStateSnapshot"/>:
+/// <list type="number">
+/// <item>A screen is <i>eligible</i> when it is enabled and its conditions hold (empty conditions =
+/// always eligible). The conditions must hold for <c>ActivationDelaySeconds</c> before counting.</item>
+/// <item>Anti-flicker: the currently shown screen is held until its <c>MinDwellSeconds</c> elapse,
+/// even if its conditions dropped — unless a higher-priority exclusive screen preempts it.</item>
+/// <item>If any eligible screen is <c>Exclusive</c>, the highest-priority one is shown alone.</item>
+/// <item>Otherwise the eligible screens at the highest <c>Priority</c> form the active set and
+/// rotate every <c>IdleRotationSeconds</c>.</item>
+/// </list>
 /// </summary>
 public sealed class IdleScreenOrchestrator : IDisposable
 {
-    private readonly IProcessPresenceProbe processProbe;
+    private readonly ISystemStateProvider stateProvider;
     private List<IdleScreenConfig> screens = [];
+    private DateTime?[] eligibleSince = [];
     private int rotationSeconds = 8;
     private int rotationIndex;
     private DateTime? lastRotationAt;
     private IdleScreenConfig? current;
+    private DateTime? currentShownSince;
     private DispatcherTimer? timer;
     private Func<IdleScreenConfig, Task>? onActiveChanged;
     private bool disposed;
 
-    public IdleScreenOrchestrator(IProcessPresenceProbe processProbe)
+    public IdleScreenOrchestrator(ISystemStateProvider stateProvider)
     {
-        this.processProbe = processProbe;
+        this.stateProvider = stateProvider;
     }
 
     public IdleScreenConfig? Current => current;
@@ -35,10 +45,12 @@ public sealed class IdleScreenOrchestrator : IDisposable
     public void Configure(IEnumerable<IdleScreenConfig> screens, int rotationSeconds)
     {
         this.screens = screens?.ToList() ?? [];
+        eligibleSince = new DateTime?[this.screens.Count];
         this.rotationSeconds = Math.Max(1, rotationSeconds);
         rotationIndex = 0;
         lastRotationAt = null;
         current = null;
+        currentShownSince = null;
     }
 
     public void Start(Func<IdleScreenConfig, Task> onActiveChanged)
@@ -60,15 +72,76 @@ public sealed class IdleScreenOrchestrator : IDisposable
 
     /// <summary>
     /// Pure selection used by the timer and by tests: returns the screen that should be shown at
-    /// <paramref name="now"/>, advancing the rotation index when the interval elapsed.
+    /// <paramref name="now"/>, advancing internal rotation/dwell state as needed.
     /// </summary>
     public IdleScreenConfig? Evaluate(DateTime now)
     {
-        var active = ActiveSet();
-        if (active.Count == 0)
+        var snapshot = stateProvider.Capture();
+        var eligible = ComputeEligible(now, snapshot);
+
+        // Anti-flicker: hold the current screen until its min-dwell elapses, unless a higher-priority
+        // exclusive screen is eligible and may preempt it.
+        if (current is not null)
+        {
+            var dwellElapsed = currentShownSince is null
+                || (now - currentShownSince.Value).TotalSeconds >= current.MinDwellSeconds;
+            if (!dwellElapsed)
+            {
+                var preemptor = eligible
+                    .Where(s => s.Exclusive && s.Priority > current.Priority)
+                    .OrderByDescending(s => s.Priority)
+                    .FirstOrDefault();
+                return preemptor is null ? current : Switch(preemptor, now);
+            }
+        }
+
+        var target = ComputeTarget(now, eligible);
+        return target is null ? current : Switch(target, now);
+    }
+
+    private List<IdleScreenConfig> ComputeEligible(DateTime now, SystemStateSnapshot snapshot)
+    {
+        var eligible = new List<IdleScreenConfig>();
+        for (var i = 0; i < screens.Count; i++)
+        {
+            var screen = screens[i];
+            var raw = screen.Enabled && ConditionEvaluator.IsEligible(screen, snapshot);
+            if (!raw)
+            {
+                eligibleSince[i] = null;
+                continue;
+            }
+
+            eligibleSince[i] ??= now;
+            if ((now - eligibleSince[i]!.Value).TotalSeconds >= screen.ActivationDelaySeconds)
+            {
+                eligible.Add(screen);
+            }
+        }
+
+        return eligible;
+    }
+
+    private IdleScreenConfig? ComputeTarget(DateTime now, List<IdleScreenConfig> eligible)
+    {
+        if (eligible.Count == 0)
         {
             return null;
         }
+
+        var exclusive = eligible
+            .Where(s => s.Exclusive)
+            .OrderByDescending(s => s.Priority)
+            .FirstOrDefault();
+        if (exclusive is not null)
+        {
+            lastRotationAt = now;
+            rotationIndex = 0;
+            return exclusive;
+        }
+
+        var maxPriority = eligible.Max(s => s.Priority);
+        var active = eligible.Where(s => s.Priority == maxPriority).ToList();
 
         if (active.Count == 1)
         {
@@ -87,36 +160,28 @@ public sealed class IdleScreenOrchestrator : IDisposable
         return active[rotationIndex % active.Count];
     }
 
-    private IReadOnlyList<IdleScreenConfig> ActiveSet()
+    private IdleScreenConfig Switch(IdleScreenConfig screen, DateTime now)
     {
-        var enabled = screens.Where(s => s.Enabled).ToList();
-
-        var processActive = enabled
-            .Where(s => string.Equals(s.Activation, "process", StringComparison.OrdinalIgnoreCase)
-                        && processProbe.IsRunning(s.ProcessName))
-            .ToList();
-        if (processActive.Count > 0)
+        if (!ReferenceEquals(screen, current))
         {
-            return processActive;
+            current = screen;
+            currentShownSince = now;
         }
 
-        var defaults = enabled
-            .Where(s => !string.Equals(s.Activation, "process", StringComparison.OrdinalIgnoreCase))
-            .ToList();
-        return defaults.Count > 0 ? defaults : enabled;
+        return screen;
     }
 
     private void OnTimerTick(object? sender, EventArgs e) => Tick();
 
     private void Tick()
     {
+        var previous = current;
         var next = Evaluate(DateTime.UtcNow);
-        if (next is null || Equals(next, current))
+        if (next is null || ReferenceEquals(next, previous))
         {
             return;
         }
 
-        current = next;
         _ = onActiveChanged?.Invoke(next);
     }
 
