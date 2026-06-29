@@ -1,16 +1,16 @@
-# Graph Report - MakroPad  (2026-06-21)
+# Graph Report - MakroPad  (2026-06-29)
 
 ## Corpus Check
-- 172 files · ~45,634 words
+- 172 files · ~45,753 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1868 nodes · 2717 edges · 189 communities (124 shown, 65 thin omitted)
+- 1868 nodes · 2718 edges · 189 communities (124 shown, 65 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 23 edges (avg confidence: 0.81)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `4c9f8c6f`
+- Built from commit: `3cc305c2`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -208,7 +208,7 @@ Cohesion: 0.13
 Nodes (9): Dictionary, uint, ushort, IKeyboardController, NoopKeyboardController, Dictionary, uint, ushort (+1 more)
 
 ### Community 14 - "Community 14"
-Cohesion: 0.18
+Cohesion: 0.19
 Nodes (7): bool, Application, MainWindow, App, bool, Shell, TrayIcon
 
 ### Community 18 - "Community 18"

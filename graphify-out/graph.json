@@ -1962,7 +1962,7 @@
       "label": ".ShouldStartMinimizedToTray()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/App.axaml.cs",
-      "source_location": "L62",
+      "source_location": "L63",
       "id": "makropad_app_app_axaml_app_shouldstartminimizedtotray",
       "community": 14,
       "norm_label": ".shouldstartminimizedtotray()"
@@ -1971,7 +1971,7 @@
       "label": ".CreateTrayIcon()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/App.axaml.cs",
-      "source_location": "L68",
+      "source_location": "L69",
       "id": "makropad_app_app_axaml_app_createtrayicon",
       "community": 14,
       "norm_label": ".createtrayicon()"
@@ -1980,7 +1980,7 @@
       "label": ".ShowMainWindow()",
       "file_type": "code",
       "source_file": "app/MakroPad.App/App.axaml.cs",
-      "source_location": "L97",
+      "source_location": "L98",
       "id": "makropad_app_app_axaml_app_showmainwindow",
       "community": 14,
       "norm_label": ".showmainwindow()"
@@ -20246,9 +20246,9 @@
       "source_file": "app/MakroPad.App/App.axaml.cs",
       "source_location": "L62",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "makropad_app_app_axaml_app",
-      "target": "makropad_app_app_axaml_app_shouldstartminimizedtotray",
-      "confidence_score": 1.0
+      "target": "makropad_app_app_axaml_app_shouldstartminimizedtotray"
     },
     {
       "relation": "method",
@@ -20320,8 +20320,19 @@
       "source_file": "app/MakroPad.App/App.axaml.cs",
       "source_location": "L53",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "makropad_app_app_axaml_app_onframeworkinitializationcompleted",
-      "target": "makropad_app_app_axaml_app_shouldstartminimizedtotray",
+      "target": "makropad_app_app_axaml_app_shouldstartminimizedtotray"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "app/MakroPad.App/App.axaml.cs",
+      "source_location": "L56",
+      "weight": 1.0,
+      "source": "makropad_app_app_axaml_app_onframeworkinitializationcompleted",
+      "target": "makropad_app_app_axaml_app_showmainwindow",
       "confidence_score": 1.0
     },
     {
@@ -33826,9 +33837,9 @@
       "source_file": "app/MakroPad.Core/Configuration/MakroPadConfigStore.cs",
       "source_location": "L25",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "configuration_makropadconfigstore_makropadconfigstore",
-      "target": "configuration_makropadconfigstore_makropadconfigstore_tryloadexisting",
-      "confidence_score": 1.0
+      "target": "configuration_makropadconfigstore_makropadconfigstore_tryloadexisting"
     },
     {
       "relation": "method",
@@ -35447,9 +35458,9 @@
       "source_file": "app/MakroPad.Core.Tests/Configuration/MakroPadConfigStoreTests.cs",
       "source_location": "L33",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "configuration_makropadconfigstoretests_makropadconfigstoretests",
-      "target": "configuration_makropadconfigstoretests_makropadconfigstoretests_tryloadexistingreturnsnullwhenmissingandreadsflagwhenpresent",
-      "confidence_score": 1.0
+      "target": "configuration_makropadconfigstoretests_makropadconfigstoretests_tryloadexistingreturnsnullwhenmissingandreadsflagwhenpresent"
     },
     {
       "relation": "contains",
@@ -45516,5 +45527,5 @@
       "source_file": "app/README.md"
     }
   ],
-  "built_at_commit": "4c9f8c6ff8f6f163a4cc02a2c4f46dc34b721492"
+  "built_at_commit": "3cc305c27598a8c8ce8faed2e3fb8d4832909168"
 }
