@@ -46,13 +46,14 @@ public partial class App : Application
                 mainWindow.Hide();
             };
 
-            desktop.MainWindow = mainWindow;
             trayIcon = CreateTrayIcon(desktop);
 
-            // Honour the "start in tray" setting: skip the initial window show when enabled.
+            // Assigning desktop.MainWindow makes Avalonia auto-show the window. To honour the
+            // "start in tray" setting we must NOT assign/show it when starting hidden; the tray
+            // "Open" command shows it on demand instead.
             if (!ShouldStartMinimizedToTray())
             {
-                mainWindow.Show();
+                ShowMainWindow();
             }
         }
 
@@ -99,6 +100,13 @@ public partial class App : Application
         if (mainWindow is null)
         {
             return;
+        }
+
+        // Assign the main window lazily on first show so a tray start stays hidden, while a normal
+        // start (and later "Open") still gets proper main-window semantics.
+        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime { MainWindow: null } desktop)
+        {
+            desktop.MainWindow = mainWindow;
         }
 
         if (!mainWindow.IsVisible)
