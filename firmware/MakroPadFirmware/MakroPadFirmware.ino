@@ -90,24 +90,36 @@ String currentProfileName = "Default";
 String preferredDisplayMode = "profile";
 String currentMediaArtist;
 String currentMediaTitle;
-uint8_t defaultScreenRows = 3;
-String defaultScreenTitle = "MakroPad";
+uint8_t defaultScreenRows = 5;
+String defaultScreenTitle = "{status}";
 uint8_t defaultScreenTitleSize = 1;
-String defaultScreenLine1 = "{profile}";
+String defaultScreenLine1 = "";
 uint8_t defaultScreenLine1Size = 1;
-String defaultScreenLine2 = "{status}";
+String defaultScreenLine2 = "{date}";
 uint8_t defaultScreenLine2Size = 1;
-String defaultScreenLine3;
-uint8_t defaultScreenLine3Size = 1;
-String defaultScreenLine4;
+String defaultScreenLine3 = "{time}";
+uint8_t defaultScreenLine3Size = 2;
+String defaultScreenLine4 = "";
 uint8_t defaultScreenLine4Size = 1;
-String defaultScreenTitleAlign = "left";
+String defaultScreenTitleAlign = "center";
 String defaultScreenLine1Align = "left";
 String defaultScreenLine2Align = "left";
-String defaultScreenLine3Align = "left";
+String defaultScreenLine3Align = "center";
 String defaultScreenLine4Align = "left";
 String currentTime;
 String currentDate;
+
+// Running clock so {time}/{date} keep advancing while the host app is
+// disconnected (the board has no RTC; time/date arrive via the config
+// message). We remember the last host-provided time and roll it forward
+// with millis().
+bool clockBaseValid = false;
+uint32_t clockBaseMillis = 0;
+long clockBaseSecondsOfDay = 0;
+int clockBaseDay = 1;
+int clockBaseMonth = 1;
+int clockBaseYear = 2000;
+uint32_t lastClockTickMs = 0;
 String currentSystemVolume;
 String activeDisplayLines[MaxDisplayLines];
 uint8_t activeDisplayLineSizes[MaxDisplayLines];
@@ -568,6 +580,80 @@ String formatUptime() {
   return String(buffer);
 }
 
+int daysInClockMonth(int month, int year) {
+  static const int lengths[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+  if (month == 2 && ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0)) {
+    return 29;
+  }
+  return lengths[(month - 1) % 12];
+}
+
+// Remembers the last host-provided time/date ("HH:mm" and "dd.MM.yyyy") as the
+// baseline the running clock rolls forward from.
+void setClockBaseline(const String& time, const String& date) {
+  const int colon = time.indexOf(':');
+  const int dot1 = date.indexOf('.');
+  const int dot2 = dot1 >= 0 ? date.indexOf('.', dot1 + 1) : -1;
+  if (colon <= 0 || dot1 <= 0 || dot2 <= dot1) {
+    clockBaseValid = false;
+    return;
+  }
+
+  const int hours = time.substring(0, colon).toInt();
+  const int minutes = time.substring(colon + 1).toInt();
+  const int day = date.substring(0, dot1).toInt();
+  const int month = date.substring(dot1 + 1, dot2).toInt();
+  const int year = date.substring(dot2 + 1).toInt();
+  if (hours < 0 || hours > 23 || minutes < 0 || minutes > 59
+      || day < 1 || day > 31 || month < 1 || month > 12 || year < 2000) {
+    clockBaseValid = false;
+    return;
+  }
+
+  clockBaseSecondsOfDay = static_cast<long>(hours) * 3600L + static_cast<long>(minutes) * 60L;
+  clockBaseDay = day;
+  clockBaseMonth = month;
+  clockBaseYear = year;
+  clockBaseMillis = millis();
+  clockBaseValid = true;
+}
+
+// Rolls the baseline forward by the elapsed millis() and refreshes
+// currentTime/currentDate so {time}/{date} keep advancing without the host.
+void refreshRunningClock() {
+  if (!clockBaseValid) {
+    return;
+  }
+
+  const long elapsed = static_cast<long>((millis() - clockBaseMillis) / 1000UL);
+  const long total = clockBaseSecondsOfDay + elapsed;
+  long extraDays = total / 86400L;
+  const long secondsOfDay = total % 86400L;
+
+  const int hours = static_cast<int>(secondsOfDay / 3600L);
+  const int minutes = static_cast<int>((secondsOfDay % 3600L) / 60L);
+  char timeBuffer[6];
+  snprintf(timeBuffer, sizeof(timeBuffer), "%02d:%02d", hours, minutes);
+  currentTime = timeBuffer;
+
+  int day = clockBaseDay;
+  int month = clockBaseMonth;
+  int year = clockBaseYear;
+  while (extraDays-- > 0) {
+    day++;
+    if (day > daysInClockMonth(month, year)) {
+      day = 1;
+      if (++month > 12) {
+        month = 1;
+        year++;
+      }
+    }
+  }
+  char dateBuffer[11];
+  snprintf(dateBuffer, sizeof(dateBuffer), "%02d.%02d.%04d", day, month, year);
+  currentDate = dateBuffer;
+}
+
 String renderDefaultScreenLine(String line, const String& status) {
   const String mediaTrack = currentMediaArtist.length() > 0 && currentMediaTitle.length() > 0
     ? currentMediaArtist + " - " + currentMediaTitle
@@ -945,6 +1031,7 @@ void handleProtocolLine(String line) {
     currentTime = protocolValue(line, "time");
     currentDate = protocolValue(line, "date");
     currentSystemVolume = protocolValue(line, "volumeSystem");
+    setClockBaseline(currentTime, currentDate);
 
     if (temporaryDisplayUntilMs == 0) {
       drawPreferredDisplay();
@@ -1175,6 +1262,33 @@ void updateDisplayScroll() {
   }
 }
 
+void updateIdleClock() {
+  if (!clockBaseValid) {
+    return;
+  }
+
+  const uint32_t now = millis();
+  if (static_cast<uint32_t>(now - lastClockTickMs) < 1000) {
+    return;
+  }
+  lastClockTickMs = now;
+
+  const String previousTime = currentTime;
+  refreshRunningClock();
+  if (currentTime == previousTime) {
+    return;  // same minute -> nothing to redraw
+  }
+
+  // Only redraw when the idle/default screen is actually on screen.
+  if (temporaryDisplayUntilMs != 0) {
+    return;
+  }
+  if (preferredDisplayMode == "media" && currentMediaTitle.length() > 0) {
+    return;
+  }
+  drawIdleStatus();
+}
+
 void updateHostTimeout() {
   if (!hostAcknowledged) {
     return;
@@ -1214,6 +1328,7 @@ void loop() {
   updateHidFallbackState();
   updateDisplayTimeout();
   updateDisplayScroll();
+  updateIdleClock();
 
   for (size_t index = 0; index < ActiveButtonCount; index++) {
     pollButton(buttons[index]);
