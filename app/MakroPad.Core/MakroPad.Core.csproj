@@ -1,0 +1,3 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Models, protocol, configuration and runtime. No OS calls. -->
+</Project>

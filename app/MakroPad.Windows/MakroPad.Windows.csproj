@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Windows integrations: CoreAudio, SendInput, media session, foreground window, shell. -->
+  <PropertyGroup>
+    <TargetFramework>$(WindowsTargetFramework)</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MakroPad.Core\MakroPad.Core.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="NAudio" Version="2.3.0" />
+  </ItemGroup>
+</Project>

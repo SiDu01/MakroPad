@@ -1,0 +1,11 @@
+<Project>
+  <PropertyGroup>
+    <!-- OS-neutral projects (Core, Device, tests) use this; Windows-specific ones override it. -->
+    <TargetFramework>net10.0</TargetFramework>
+    <WindowsTargetFramework>net10.0-windows10.0.19041.0</WindowsTargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <Version>0.3.0</Version>
+  </PropertyGroup>
+</Project>

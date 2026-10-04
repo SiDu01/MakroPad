@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Serial connection, port discovery and simulator. -->
+  <ItemGroup>
+    <ProjectReference Include="..\MakroPad.Core\MakroPad.Core.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="System.IO.Ports" Version="9.0.5" />
+  </ItemGroup>
+</Project>

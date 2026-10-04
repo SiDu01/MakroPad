@@ -128,6 +128,11 @@ ADC-Details kennen muss.
 **Fertig, wenn:** `pio run`, `pio test -e native`, `dotnet build`, `dotnet test`
 laufen grün.
 
+**Status (2026-10-04): erledigt.** Firmware baut, 6 native Tests
+(Slider-Filter) grün; Solution baut, 6 Tests (`ProtocolCodec`) grün; App
+startet mit leerem Fenster. `MakroPad.Device.Tests` wird in M1 mit dem
+Simulator angelegt.
+
 ### M1 – Vertikaler Durchstich
 
 Firmware:

@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>$(WindowsTargetFramework)</TargetFramework>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>Assets\makropad.ico</ApplicationIcon>
+    <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+  </PropertyGroup>
+  <ItemGroup>
+    <AvaloniaResource Include="Assets\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="12.0.3" />
+    <PackageReference Include="Avalonia.Desktop" Version="12.0.3" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="12.0.3" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="12.0.3" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MakroPad.Core\MakroPad.Core.csproj" />
+    <ProjectReference Include="..\MakroPad.Device\MakroPad.Device.csproj" />
+    <ProjectReference Include="..\MakroPad.Windows\MakroPad.Windows.csproj" />
+  </ItemGroup>
+</Project>
