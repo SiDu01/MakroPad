@@ -38,12 +38,14 @@
                         <TextBlock Classes="label" Text="{Binding Label}" />
                         <DockPanel>
                             <ToggleButton DockPanel.Dock="Right" Margin="8,0,0,0" MinWidth="112"
-                                          Content="{Binding RecordText}" IsChecked="{Binding IsRecording}"
-                                          Click="OnRecordClicked" />
-                            <TextBox x:Name="ShortcutBox" Text="{Binding Value}" Watermark="{Binding Placeholder}"
-                                     KeyDown="OnShortcutKeyDown" LostFocus="OnShortcutLostFocus" />
+                                          Content="{Binding RecordText}" IsChecked="{Binding IsRecording}" />
+                            <TextBox Text="{Binding Value}" Watermark="{Binding Placeholder}" IsEnabled="{Binding !IsRecording}" />
                         </DockPanel>
-                        <TextBlock Classes="muted" Text="{Binding Hint}" Margin="0,6,0,0" FontSize="12.5" />
+                        <TextBlock Classes="muted" Margin="0,6,0,0" FontSize="12.5" IsVisible="{Binding IsRecording}"
+                                   Text="Auch Kombinationen mit der Windows-Taste werden aufgenommen, ohne dass sie etwas auslösen. Esc bricht ab." />
+                        <TextBlock Classes="caution" Margin="0,6,0,0" Text="{Binding RecordError}"
+                                   IsVisible="{Binding RecordError, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                        <TextBlock Classes="muted" Text="{Binding Hint}" Margin="0,6,0,0" FontSize="12.5" IsVisible="{Binding !IsRecording}" />
                     </StackPanel>
                 </DataTemplate>
                 <DataTemplate DataType="vm:ProcessParameterViewModel">

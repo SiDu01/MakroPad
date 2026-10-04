@@ -73,7 +73,7 @@ public partial class App : Application, IFilePicker
 
         var session = new ConfigSession(config, runtime);
         Func<IReadOnlyList<string>> audioSessions = AppVolumeAction.ListSessionProcesses;
-        var pad = new PadViewModel(session, runtime, oled, this, audioSessions);
+        var pad = new PadViewModel(session, runtime, oled, this, new RecorderAdapter(), audioSessions);
         var settings = new SettingsViewModel(session);
         settings.ThemeChanged += ApplyTheme;
         shell = new ShellViewModel(runtime, pad, new DiagnosticsViewModel(runtime, session, simulator, audioSessions), settings);
@@ -280,6 +280,15 @@ public partial class App : Application, IFilePicker
 
     private static string AppVersion =>
         Assembly.GetExecutingAssembly().GetName().Version?.ToString(3) ?? "0.0.0";
+
+    private sealed class RecorderAdapter : IShortcutRecorder
+    {
+        private readonly ShortcutRecorder recorder = new();
+
+        public Task<string?> RecordAsync() => recorder.RecordAsync();
+
+        public void Cancel() => recorder.Cancel();
+    }
 
     private sealed class AppArguments(string[] args)
     {

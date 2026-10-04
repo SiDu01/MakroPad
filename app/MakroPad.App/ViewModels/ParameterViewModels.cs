@@ -28,14 +28,40 @@ public abstract partial class ParameterViewModel(ParameterDefinition definition)
 
 public sealed class TextParameterViewModel(ParameterDefinition definition) : ParameterViewModel(definition);
 
-public sealed partial class ShortcutParameterViewModel(ParameterDefinition definition) : ParameterViewModel(definition)
+public sealed partial class ShortcutParameterViewModel(ParameterDefinition definition, IShortcutRecorder recorder) : ParameterViewModel(definition)
 {
     [ObservableProperty]
     private bool isRecording;
 
+    [ObservableProperty]
+    private string? recordError;
+
     public string RecordText => IsRecording ? "Drücke die Kombination …" : "Aufnehmen";
 
-    partial void OnIsRecordingChanged(bool value) => OnPropertyChanged(nameof(RecordText));
+    async partial void OnIsRecordingChanged(bool value)
+    {
+        OnPropertyChanged(nameof(RecordText));
+        if (!value)
+        {
+            recorder.Cancel();
+            return;
+        }
+
+        RecordError = null;
+        try
+        {
+            if (await recorder.RecordAsync() is { } shortcut)
+            {
+                Value = shortcut;
+            }
+        }
+        catch (Exception ex) when (ex is System.ComponentModel.Win32Exception or InvalidOperationException)
+        {
+            RecordError = $"Aufnahme nicht möglich: {ex.Message}. Tippe die Kombination stattdessen ein.";
+        }
+
+        IsRecording = false;
+    }
 }
 
 public sealed partial class ProcessParameterViewModel : ParameterViewModel
@@ -89,4 +115,12 @@ public sealed class ProfileParameterViewModel(ParameterDefinition definition, IR
 public interface IFilePicker
 {
     Task<string?> PickProgramAsync();
+}
+
+/// <summary>Captures the next key combination system-wide (see MakroPad.Windows.ShortcutRecorder).</summary>
+public interface IShortcutRecorder
+{
+    Task<string?> RecordAsync();
+
+    void Cancel();
 }

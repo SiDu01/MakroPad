@@ -19,6 +19,7 @@ public sealed partial class PadViewModel : ObservableObject
     private readonly ConfigSession session;
     private readonly MakroPadRuntime runtime;
     private readonly IFilePicker picker;
+    private readonly IShortcutRecorder recorder;
     private readonly Func<IReadOnlyList<string>> listAudioSessions;
 
     [ObservableProperty]
@@ -36,9 +37,10 @@ public sealed partial class PadViewModel : ObservableObject
     [ObservableProperty]
     private string renameText = "";
 
-    public PadViewModel(ConfigSession session, MakroPadRuntime runtime, OledMirror oled, IFilePicker picker, Func<IReadOnlyList<string>> listAudioSessions)
+    public PadViewModel(ConfigSession session, MakroPadRuntime runtime, OledMirror oled, IFilePicker picker, IShortcutRecorder recorder, Func<IReadOnlyList<string>> listAudioSessions)
     {
         this.session = session;
+        this.recorder = recorder;
         this.runtime = runtime;
         this.picker = picker;
         this.listAudioSessions = listAudioSessions;
@@ -202,8 +204,8 @@ public sealed partial class PadViewModel : ObservableObject
 
     private object CreateInspector(PadElementViewModel element) => element switch
     {
-        KeyViewModel key => new BindingInspectorViewModel(key, key.Input, InputKinds.Button, session, runtime, picker, listAudioSessions),
-        FaderViewModel fader => new BindingInspectorViewModel(fader, fader.Input, InputKinds.Slider, session, runtime, picker, listAudioSessions),
+        KeyViewModel key => new BindingInspectorViewModel(key, key.Input, InputKinds.Button, session, runtime, picker, recorder, listAudioSessions),
+        FaderViewModel fader => new BindingInspectorViewModel(fader, fader.Input, InputKinds.Slider, session, runtime, picker, recorder, listAudioSessions),
         DisplayElementViewModel display => new DisplayInspectorViewModel(display, session),
         _ => throw new ArgumentOutOfRangeException(nameof(element))
     };

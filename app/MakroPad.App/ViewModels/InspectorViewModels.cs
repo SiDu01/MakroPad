@@ -27,6 +27,7 @@ public sealed partial class BindingInspectorViewModel : ObservableObject
     private readonly ConfigSession session;
     private readonly MakroPadRuntime runtime;
     private readonly IFilePicker picker;
+    private readonly IShortcutRecorder recorder;
     private readonly Func<IReadOnlyList<string>> listAudioSessions;
     private readonly DispatcherTimer saveTimer;
     private bool loading;
@@ -44,9 +45,11 @@ public sealed partial class BindingInspectorViewModel : ObservableObject
         ConfigSession session,
         MakroPadRuntime runtime,
         IFilePicker picker,
+        IShortcutRecorder recorder,
         Func<IReadOnlyList<string>> listAudioSessions)
     {
         Element = element;
+        this.recorder = recorder;
         Input = input;
         Kind = kind;
         this.session = session;
@@ -130,6 +133,7 @@ public sealed partial class BindingInspectorViewModel : ObservableObject
     /// <summary>Writes pending edits immediately (e.g. before the selection changes).</summary>
     public void Flush()
     {
+        recorder.Cancel();
         if (saveTimer.IsEnabled)
         {
             saveTimer.Stop();
@@ -149,7 +153,7 @@ public sealed partial class BindingInspectorViewModel : ObservableObject
         {
             ParameterViewModel parameter = (SelectedAction.Definition!.Id, definition.Name) switch
             {
-                ("keyboard.shortcut", "keys") => new ShortcutParameterViewModel(definition),
+                ("keyboard.shortcut", "keys") => new ShortcutParameterViewModel(definition, recorder),
                 ("app.volume", "process") => new ProcessParameterViewModel(definition, listAudioSessions),
                 ("system.openApp", "path") => new PathParameterViewModel(definition, picker),
                 ("profile.set", "name") => new ProfileParameterViewModel(definition, [.. session.Config.Profiles.Select(p => p.Name)]),

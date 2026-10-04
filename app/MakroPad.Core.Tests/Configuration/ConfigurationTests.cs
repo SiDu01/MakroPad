@@ -112,6 +112,20 @@ public sealed class ShortcutParserTests
         Assert.Equal((ushort)expected, Assert.Single(keys));
     }
 
+    [Fact]
+    public void RecordedKeysFormatCanonicallyAndParseBack()
+    {
+        // VK_LWIN + VK_RSHIFT + 'E'
+        var text = ShortcutParser.Format([0x5B, 0xA1], 'E');
+        Assert.Equal("Shift+Win+E", text);
+        Assert.True(ShortcutParser.TryParse(text!, out var keys, out _));
+        Assert.Equal([ShortcutParser.Shift, ShortcutParser.Win, (ushort)'E'], keys);
+
+        Assert.Equal("Ctrl+Alt+F13", ShortcutParser.Format([0xA2, 0xA5], 0x7C));
+        Assert.Equal("7", ShortcutParser.Format([], 0x67));
+        Assert.Null(ShortcutParser.Format([], 0xFF));
+    }
+
     [Theory]
     [InlineData("")]
     [InlineData("Ctrl+")]

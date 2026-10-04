@@ -55,6 +55,58 @@ public static class ShortcutParser
         ["period"] = 0xBE
     };
 
+    /// <summary>Canonical names used when recording, in the order <see cref="Format"/> writes them.</summary>
+    private static readonly (ushort Key, string Name)[] ModifierNames =
+    [
+        (Control, "Ctrl"),
+        (Shift, "Shift"),
+        (Alt, "Alt"),
+        (Win, "Win")
+    ];
+
+    private static readonly Dictionary<ushort, string> CanonicalNames = new()
+    {
+        [0x0D] = "Enter", [0x1B] = "Esc", [0x09] = "Tab", [0x20] = "Space", [0x08] = "Backspace",
+        [0x2E] = "Delete", [0x2D] = "Insert", [0x24] = "Home", [0x23] = "End", [0x21] = "PageUp",
+        [0x22] = "PageDown", [0x26] = "Up", [0x28] = "Down", [0x25] = "Left", [0x27] = "Right",
+        [0x2C] = "PrintScreen", [0x13] = "Pause", [0x14] = "CapsLock", [0x90] = "NumLock",
+        [0x91] = "ScrollLock", [0x5D] = "Apps", [0xBB] = "Plus", [0xBD] = "Minus", [0xBC] = "Comma", [0xBE] = "Period"
+    };
+
+    /// <summary>True for Ctrl/Shift/Alt/Win in their generic and left/right variants.</summary>
+    public static bool IsModifier(ushort virtualKey) => ToModifier(virtualKey) is not null;
+
+    /// <summary>Maps left/right modifier codes (e.g. VK_LCONTROL) to the generic code used in shortcuts.</summary>
+    public static ushort? ToModifier(ushort virtualKey) => virtualKey switch
+    {
+        0x11 or 0xA2 or 0xA3 => Control,
+        0x10 or 0xA0 or 0xA1 => Shift,
+        0x12 or 0xA4 or 0xA5 => Alt,
+        0x5B or 0x5C => Win,
+        _ => null
+    };
+
+    /// <summary>Name of a non-modifier key in shortcut syntax, or null if shortcuts cannot use it.</summary>
+    public static string? NameOf(ushort virtualKey) => virtualKey switch
+    {
+        >= 'A' and <= 'Z' or >= '0' and <= '9' => ((char)virtualKey).ToString(),
+        >= 0x60 and <= 0x69 => ((char)('0' + (virtualKey - 0x60))).ToString(),
+        >= 0x70 and <= 0x87 => $"F{virtualKey - 0x70 + 1}",
+        _ => CanonicalNames.GetValueOrDefault(virtualKey)
+    };
+
+    /// <summary>Builds e.g. <c>Ctrl+Shift+Esc</c>; returns null if the main key has no name.</summary>
+    public static string? Format(IEnumerable<ushort> modifiers, ushort mainKey)
+    {
+        if (NameOf(mainKey) is not { } name)
+        {
+            return null;
+        }
+
+        var held = modifiers.Select(m => ToModifier(m) ?? m).ToHashSet();
+        return string.Join('+', ModifierNames.Where(m => held.Contains(m.Key)).Select(m => m.Name).Append(name));
+    }
+
     /// <summary>Keys that need KEYEVENTF_EXTENDEDKEY so they are not read as numpad keys.</summary>
     public static bool IsExtendedKey(ushort virtualKey) => virtualKey is
         0x21 or 0x22 or 0x23 or 0x24 or 0x25 or 0x26 or 0x27 or 0x28 or 0x2C or 0x2D or 0x2E or 0x5B or 0x5D or 0x90;
