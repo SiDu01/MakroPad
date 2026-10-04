@@ -73,10 +73,13 @@ public partial class App : Application, IFilePicker
 
         var session = new ConfigSession(config, runtime);
         Func<IReadOnlyList<string>> audioSessions = AppVolumeAction.ListSessionProcesses;
-        var pad = new PadViewModel(session, runtime, oled, this, new RecorderAdapter(), audioSessions);
+        var recorder = new RecorderAdapter();
+        var diagnostics = new DiagnosticsViewModel(runtime, session, simulator, audioSessions);
+        recorder.Trace += diagnostics.Info;
+        var pad = new PadViewModel(session, runtime, oled, this, recorder, audioSessions);
         var settings = new SettingsViewModel(session);
         settings.ThemeChanged += ApplyTheme;
-        shell = new ShellViewModel(runtime, pad, new DiagnosticsViewModel(runtime, session, simulator, audioSessions), settings);
+        shell = new ShellViewModel(runtime, pad, diagnostics, settings);
 
         profiles.ActiveChanged += (profile, _) =>
         {
@@ -123,6 +126,48 @@ public partial class App : Application, IFilePicker
         {
             _ = TakeScreenshotAsync(args, screenshotPath, desktop);
         }
+
+        if (args.RecorderSelfTest is { } resultPath)
+        {
+            _ = RecorderSelfTestAsync(recorder, resultPath, desktop);
+        }
+    }
+
+    /// <summary>
+    /// Development aid: selects key 5, starts recording through its inspector field like the
+    /// "Aufnehmen" button, sends Win+E, then writes the trace and the saved binding to a file.
+    /// </summary>
+    private async Task RecorderSelfTestAsync(RecorderAdapter recorder, string resultPath, IClassicDesktopStyleApplicationLifetime desktop)
+    {
+        var lines = new List<string>();
+        recorder.Trace += line => { lock (lines) { lines.Add(line); } };
+        await Task.Delay(1500);
+        await Dispatcher.UIThread.InvokeAsync(async () =>
+        {
+            var key = shell!.Pad.Keys.First(k => k.Id == 5);
+            shell.Pad.SelectCommand.Execute(key);
+            var inspector = (BindingInspectorViewModel)shell.Pad.Inspector!;
+            var field = inspector.Parameters.OfType<ShortcutParameterViewModel>().First();
+            field.IsRecording = true;
+            lines.Add($"recording={field.IsRecording} text={field.RecordText}");
+            _ = Task.Run(async () =>
+            {
+                await Task.Delay(400);
+                SelfTestKeys.WinE();
+            });
+            await Task.Delay(1500);
+            lines.Add($"after: recording={field.IsRecording} value={field.Value} error={field.RecordError}");
+            await Task.Delay(800);
+            var saved = config!.Config.FindProfile(runtime!.Profiles.Active.Name)!.Bindings.First(b => b.Input == "button:5");
+            lines.Add($"saved={saved.GetParameter("keys")} status={inspector.Status}");
+        });
+        lock (lines)
+        {
+            File.WriteAllLines(resultPath, lines);
+        }
+
+        exitRequested = true;
+        desktop.Shutdown();
     }
 
     public async Task<string?> PickProgramAsync()
@@ -281,9 +326,29 @@ public partial class App : Application, IFilePicker
     private static string AppVersion =>
         Assembly.GetExecutingAssembly().GetName().Version?.ToString(3) ?? "0.0.0";
 
+    private static class SelfTestKeys
+    {
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        private static extern void keybd_event(byte vk, byte scan, uint flags, nint extra);
+
+        public static void WinE()
+        {
+            keybd_event(0x5B, 0, 1, 0);
+            keybd_event(0x45, 0, 0, 0);
+            keybd_event(0x45, 0, 2, 0);
+            keybd_event(0x5B, 0, 3, 0);
+        }
+    }
+
     private sealed class RecorderAdapter : IShortcutRecorder
     {
         private readonly ShortcutRecorder recorder = new();
+
+        public event Action<string>? Trace
+        {
+            add => recorder.Trace += value;
+            remove => recorder.Trace -= value;
+        }
 
         public Task<string?> RecordAsync() => recorder.RecordAsync();
 
@@ -301,6 +366,8 @@ public partial class App : Application, IFilePicker
         public string? Page => Value("--page");
 
         public string? Select => Value("--select");
+
+        public string? RecorderSelfTest => Value("--selftest-recorder");
 
         /// <summary>Alternative config folder, e.g. for screenshots with sample data.</summary>
         public string? ConfigDirectory => Value("--config-dir");

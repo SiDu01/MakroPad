@@ -111,6 +111,9 @@ public sealed partial class DiagnosticsViewModel : ObservableObject
 
     public string ConfigPath => session.Service.ConfigPath;
 
+    /// <summary>Adds an informational line, e.g. from the shortcut recorder (any thread).</summary>
+    public void Info(string text) => Post(() => Add(LogKind.Info, text));
+
     [RelayCommand]
     private void Clear()
     {
