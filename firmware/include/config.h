@@ -27,6 +27,11 @@ static_assert(ButtonCount == 16, "MakroPad has 16 buttons");
 
 constexpr uint8_t SliderPins[] = { 1, 2, 3 };
 constexpr size_t SliderCount = sizeof(SliderPins) / sizeof(SliderPins[0]);
+// Unwired ADC pins float and spam events. Raise to 3 once sliders 2 and 3 are wired.
+constexpr size_t ActiveSliderCount = 1;
+static_assert(ActiveSliderCount <= SliderCount, "Too many active sliders");
+constexpr uint8_t SliderSampleCount = 9;
+constexpr uint32_t SliderPollIntervalMs = 5;
 
 constexpr uint8_t OledSdaPin = 8;
 constexpr uint8_t OledSclPin = 9;
@@ -38,5 +43,17 @@ constexpr uint32_t SerialBaud = 115200;
 constexpr uint32_t HelloIntervalMs = 1000;
 constexpr uint32_t HostTimeoutMs = 6000;
 constexpr uint32_t DebounceMs = 25;
+constexpr size_t MaxLineLength = 256;
+
+// Display
+constexpr uint32_t DefaultOverlayMs = 1500;
+constexpr uint32_t ScrollStepMs = 220;
+constexpr uint32_t ScrollStartPauseMs = 900;
+
+// HID fallback (active while no app has acknowledged the device)
+constexpr uint32_t HidStartupGraceMs = 2500;
+constexpr uint32_t HidPressMs = 30;
+constexpr int HidVolumeThresholdPermille = 40;
+constexpr uint32_t HidVolumeIntervalMs = 120;
 
 }  // namespace config

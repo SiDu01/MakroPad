@@ -32,13 +32,15 @@ type;key=value;key=value
 ## Verbindung
 
 1. Das Gerät sendet jede Sekunde `hello`, solange keine App bestätigt hat.
-2. Die App antwortet mit `hello-ack`. Passt `proto` nicht, sendet sie nichts
+2. Die App antwortet mit `hello-ack` (auf **jedes** `hello`, auch wenn sie sich
+   für verbunden hält – das Gerät könnte neu gestartet sein). Passt `proto` nicht, sendet sie nichts
    weiter und zeigt den Fehler an.
 3. Die App sendet direkt danach einen vollständigen `state`.
 
 Heartbeat:
 
-- Jede gültige Nachricht der Gegenseite gilt als Lebenszeichen.
+- Jede gültige Nachricht der Gegenseite gilt als Lebenszeichen. Vor dem
+  Handshake ignoriert die Firmware alles außer `hello-ack`.
 - Die App sendet `ping`, wenn sie 2 s nichts gehört hat, und meldet die
   Verbindung nach 6 s Stille als `Unresponsive`.
 - Die Firmware fällt nach 6 s ohne App-Nachricht in den Zustand „keine App“
@@ -80,12 +82,13 @@ slider;id=1;value=734
 | --- | --- | --- |
 | `volume` | `title`, `text`, `value` (0–100) | Header, Beschriftung, große Prozentzahl, Balken |
 | `action` | `title`, `text`, `icon` | Header, Icon, Meldung |
-| `media` | `title`, `text` | Header, Titel, Künstler |
+| `media` | `title` (Track), `text` (Künstler) | Fester Header „Wiedergabe“, darunter Track und Künstler |
 | `profile` | `title`, `text` | Header, Profilname groß |
 | `status` | `title`, `text`, `icon` | Header, Icon, Statusmeldung |
 
 - `icon`: `ok`, `fail`, `warn`, `sync`. Fehlt es, wird kein Icon gezeichnet.
-- `ms`: Anzeigedauer, Standard 1500. Ein neues `screen` ersetzt das laufende.
+- `ms`: Anzeigedauer, Standard 1500; `0` = bis zum nächsten `screen` oder `clear`.
+  Ein neues `screen` ersetzt das laufende.
 - Zu lange Texte scrollen horizontal.
 - Unbekannte Typen werden als `status` gezeichnet.
 

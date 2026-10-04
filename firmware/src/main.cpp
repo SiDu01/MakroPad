@@ -1,30 +1,24 @@
 #include <Arduino.h>
 
-#include "config.h"
+#include "display.h"
+#include "hid.h"
+#include "hostlink.h"
+#include "input.h"
 
-// M0 skeleton: announces the device until the modules (input, protocol,
-// display, hid) are ported in M1. See docs/REWRITE_PLAN.md.
-
-namespace {
-
-uint32_t lastHelloMs = 0;
-
-void sendHello() {
-  Serial.printf("hello;proto=%u;fw=%s;device=%s;buttons=%u;sliders=%u;display=ssd1306-128x64\n",
-                config::ProtocolVersion, config::FirmwareVersion, config::DeviceName,
-                static_cast<unsigned>(config::ButtonCount), static_cast<unsigned>(config::SliderCount));
-}
-
-}  // namespace
+// Wiring only; behaviour lives in the modules. See docs/PROTOCOL.md.
 
 void setup() {
-  Serial.begin(config::SerialBaud);
+  hostlink::setup();
+  hid::setup();
+  input::setup();
+  display::setup();
 }
 
 void loop() {
   const uint32_t now = millis();
-  if (now - lastHelloMs >= config::HelloIntervalMs) {
-    lastHelloMs = now;
-    sendHello();
-  }
+  hostlink::poll(now);
+  input::poll(now);
+  hid::poll(now);
+  display::poll(now);
+  delay(1);
 }
