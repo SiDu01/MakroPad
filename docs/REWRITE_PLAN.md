@@ -153,7 +153,8 @@ App:
 die Systemlautstärke ruckelfrei setzt und das OLED beides kurz anzeigt; Abziehen
 und Wiederanstecken verbindet automatisch neu.
 
-**Status (2026-10-04): umgesetzt, Hardwaretest offen.** Firmware-Module
+**Status (2026-10-04): erledigt, auf Hardware bestätigt** (Taste 1, Slider 1
+inkl. 0/100 %, Reconnect nach Abziehen, HID-Fallback ohne App). Firmware-Module
 (`hostlink`, `input`, `display`, `hid`) und App-Kern (`DeviceSession`,
 `InputRouter`, `LatestWinsQueue`, `MakroPadRuntime`, Windows-Actions für
 Medientasten und Systemlautstärke) sind fertig. 20 native Firmware-Tests und
