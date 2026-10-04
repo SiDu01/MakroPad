@@ -9,7 +9,7 @@ namespace MakroPad.Device.Tests;
 /// <summary>End-to-end: simulated device → runtime → action → OLED feedback line.</summary>
 public sealed class SimulatorRuntimeTests : IAsyncLifetime
 {
-    private static readonly TimeSpan Timeout = TimeSpan.FromSeconds(5);
+    private static readonly TimeSpan Timeout = TimeSpan.FromSeconds(6);
 
     private readonly SimulatedDevice device = new();
     private readonly ConcurrentQueue<string> linesFromApp = new();
@@ -107,11 +107,12 @@ public sealed class SimulatorRuntimeTests : IAsyncLifetime
         await WaitUntil(() => linesFromApp.Contains("state;artist=Daft Punk;title=Digital Love"));
         await WaitUntil(() => linesFromApp.Contains("screen;type=media;title=Digital Love;text=Daft Punk;ms=3000"));
 
-        // Pausing the same track neither repeats the state nor the overlay.
+        // Pausing shows the date again after a grace period; resuming brings the track back without a new overlay.
         media.Play(new NowPlaying("Digital Love", "Daft Punk", false, "Spotify"));
-        media.Play(NowPlaying.None);
         await WaitUntil(() => linesFromApp.Contains("state;artist=;title="));
-        Assert.Single(linesFromApp, line => line == "state;artist=Daft Punk;title=Digital Love");
+        media.Play(new NowPlaying("Digital Love", "Daft Punk", true, "Spotify"));
+        await WaitUntil(() => linesFromApp.Count(line => line == "state;artist=Daft Punk;title=Digital Love") == 2);
+        Assert.Single(linesFromApp, line => line.StartsWith("screen;type=media", StringComparison.Ordinal));
     }
 
     [Fact]

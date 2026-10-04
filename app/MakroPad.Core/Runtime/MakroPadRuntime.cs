@@ -35,7 +35,12 @@ public sealed class MakroPadRuntime : IAsyncDisposable
     private DeviceSession? session;
     private ITimer? clockTimer;
     private AppSettings settings = new();
+    private static readonly TimeSpan PauseGrace = TimeSpan.FromSeconds(2);
+
+    private readonly object mediaGate = new();
     private NowPlaying nowPlaying = NowPlaying.None;
+    private NowPlaying lastAnnounced = NowPlaying.None;
+    private ITimer? pauseTimer;
 
     public MakroPadRuntime(
         IDeviceConnector connector,
@@ -71,7 +76,12 @@ public sealed class MakroPadRuntime : IAsyncDisposable
     /// <summary>Shows what media players report on the idle screen and as a short overlay on track changes.</summary>
     public void Attach(INowPlayingSource source)
     {
-        nowPlaying = source.Current;
+        lock (mediaGate)
+        {
+            nowPlaying = source.Current.IsPlaying ? source.Current : NowPlaying.None;
+            lastAnnounced = nowPlaying;
+        }
+
         source.Changed += OnNowPlayingChanged;
     }
 
@@ -238,18 +248,54 @@ public sealed class MakroPadRuntime : IAsyncDisposable
             Title: track.Title)));
     }
 
+    /// <summary>
+    /// Only playing tracks are shown. Pausing clears the idle screen after a short grace period,
+    /// because players often report "paused" for a moment while skipping to the next track.
+    /// </summary>
     private void OnNowPlayingChanged(NowPlaying track)
     {
-        var previous = nowPlaying;
-        nowPlaying = track;
-        if (previous.IsSameTrack(track))
+        if (!track.IsPlaying || !track.HasTrack)
         {
+            lock (mediaGate)
+            {
+                pauseTimer?.Dispose();
+                pauseTimer = timeProvider.CreateTimer(_ => Show(NowPlaying.None), null, PauseGrace, Timeout.InfiniteTimeSpan);
+            }
+
             return;
         }
 
-        // Only artist and title; the empty strings clear the idle screen when playback ends.
-        session?.TrySend(DeviceMessages.State(new DeviceState(Artist: track.Artist, Title: track.Title)));
-        if (track.HasTrack && track.IsPlaying && Settings.Feedback.TrackChange)
+        lock (mediaGate)
+        {
+            pauseTimer?.Dispose();
+            pauseTimer = null;
+        }
+
+        Show(track);
+    }
+
+    private void Show(NowPlaying track)
+    {
+        bool changed;
+        bool announce;
+        lock (mediaGate)
+        {
+            changed = !nowPlaying.IsSameTrack(track);
+            nowPlaying = track;
+            announce = track.HasTrack && !lastAnnounced.IsSameTrack(track);
+            if (announce)
+            {
+                lastAnnounced = track;
+            }
+        }
+
+        // Only artist and title; the empty strings clear the idle screen.
+        if (changed)
+        {
+            session?.TrySend(DeviceMessages.State(new DeviceState(Artist: track.Artist, Title: track.Title)));
+        }
+
+        if (announce && Settings.Feedback.TrackChange)
         {
             ShowScreen(FeedbackBuilder.ForTrack(track));
         }

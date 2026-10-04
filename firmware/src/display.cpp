@@ -80,6 +80,23 @@ void drawHeader(const std::string& title) {
   oled.setTextColor(SSD1306_WHITE);
 }
 
+// Header with a short right-aligned text (the clock while music plays).
+void drawHeader(const std::string& left, const std::string& right) {
+  oled.fillRect(0, 0, config::ScreenWidth, HeaderHeight, SSD1306_WHITE);
+  oled.setTextColor(SSD1306_BLACK);
+  const int rightWidth = static_cast<int>(right.size()) * CharWidth;
+  const int rightX = config::ScreenWidth - 2 - rightWidth;
+  drawText(2, 2, left, 1, (rightX - 2 - CharWidth) / CharWidth);
+  drawText(rightX, 2, right, 1, static_cast<int>(right.size()));
+  oled.setTextColor(SSD1306_WHITE);
+}
+
+// Track title large, artist below; shared by the idle screen and the media overlay.
+void drawTrack(const std::string& title, const std::string& artist) {
+  drawText(0, 19, title, 2, config::ScreenWidth / (CharWidth * 2), true);
+  drawText(0, 42, artist, 1, config::ScreenWidth / CharWidth, true);
+}
+
 void drawIcon(Icon icon, int x, int y) {
   switch (icon) {
     case Icon::Ok:
@@ -128,7 +145,6 @@ void drawIdle(uint32_t nowMs) {
   } else {
     header = orDefault(state.profile, "MakroPad");
   }
-  drawHeader(header);
 
   char buffer[16];
   if (state.clock.valid()) {
@@ -138,12 +154,19 @@ void drawIdle(uint32_t nowMs) {
   } else {
     snprintf(buffer, sizeof(buffer), "--:--");
   }
+
+  // While music plays the track takes the space and the clock moves into the header.
+  if (!state.title.empty()) {
+    drawHeader(header, buffer);
+    drawTrack(state.title, state.artist);
+    return;
+  }
+
+  drawHeader(header);
   drawText(0, 20, buffer, 3, 7, true);
 
   std::string bottom;
-  if (!state.title.empty()) {
-    bottom = state.artist.empty() ? state.title : state.artist + " - " + state.title;
-  } else if (state.clock.valid()) {
+  if (state.clock.valid()) {
     const makropad::ClockReading now = state.clock.read(nowMs);
     snprintf(buffer, sizeof(buffer), "%02d.%02d.%04d", now.day, now.month, now.year);
     bottom = buffer;
@@ -167,8 +190,7 @@ void drawOverlay() {
     }
     case ScreenType::Media:
       drawHeader("Wiedergabe");
-      drawText(0, 20, overlay.title, 1, FullWidthChars);
-      drawText(0, 36, overlay.text, 1, FullWidthChars);
+      drawTrack(overlay.title, overlay.text);
       break;
     case ScreenType::Profile:
       drawHeader(orDefault(overlay.title, "Profil"));

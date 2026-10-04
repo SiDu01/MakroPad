@@ -202,16 +202,38 @@ public sealed class OledMirror
         DrawText(2, 2, text, 1, (OledCanvas.Width - 4) / CharWidth, on: false);
     }
 
+    private void DrawHeader(string left, string right)
+    {
+        canvas.FillRect(0, 0, OledCanvas.Width, HeaderHeight, true);
+        var rightX = OledCanvas.Width - 2 - (right.Length * CharWidth);
+        DrawText(2, 2, left, 1, (rightX - 2 - CharWidth) / CharWidth, on: false);
+        DrawText(rightX, 2, right, 1, right.Length, on: false);
+    }
+
+    private void DrawTrack(string trackTitle, string trackArtist)
+    {
+        DrawText(0, 19, trackTitle, 2, OledCanvas.Width / (CharWidth * 2), center: true);
+        DrawText(0, 42, trackArtist, 1, OledCanvas.Width / CharWidth, center: true);
+    }
+
     private void DrawIdle()
     {
-        DrawHeader(!hostConnected ? "Keine App" : profile.Length > 0 ? profile : "MakroPad");
-
+        var header = !hostConnected ? "Keine App" : profile.Length > 0 ? profile : "MakroPad";
         var now = Now;
-        DrawText(0, 20, now is { } clock ? clock.ToString("HH:mm", CultureInfo.InvariantCulture) : "--:--", 3, 7, center: true);
+        var time = now is { } clock ? clock.ToString("HH:mm", CultureInfo.InvariantCulture) : "--:--";
 
-        var bottom = title.Length > 0
-            ? artist.Length > 0 ? $"{artist} - {title}" : title
-            : now is { } today ? today.ToString("dd.MM.yyyy", CultureInfo.InvariantCulture)
+        // While music plays the track takes the space and the clock moves into the header.
+        if (title.Length > 0)
+        {
+            DrawHeader(header, time);
+            DrawTrack(title, artist);
+            return;
+        }
+
+        DrawHeader(header);
+        DrawText(0, 20, time, 3, 7, center: true);
+
+        var bottom = now is { } today ? today.ToString("dd.MM.yyyy", CultureInfo.InvariantCulture)
             : !hostConnected ? "Warte auf App" : "";
         DrawText(0, 52, bottom, 1, OledCanvas.Width / CharWidth, center: true);
     }
@@ -229,8 +251,7 @@ public sealed class OledMirror
                 break;
             case ScreenType.Media:
                 DrawHeader("Wiedergabe");
-                DrawText(0, 20, current.Title, 1, fullWidthChars);
-                DrawText(0, 36, current.Text, 1, fullWidthChars);
+                DrawTrack(current.Title, current.Text);
                 break;
             case ScreenType.Profile:
                 DrawHeader(current.Title.Length > 0 ? current.Title : "Profil");

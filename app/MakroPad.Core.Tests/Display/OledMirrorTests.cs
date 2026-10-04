@@ -56,6 +56,25 @@ public sealed class OledMirrorTests
     }
 
     [Fact]
+    public void PlayingTrackMovesClockIntoHeaderAndShowsTitleLarge()
+    {
+        mirror.SetHostConnected(true);
+        mirror.Apply("state;profile=Default;time=18:42:05;date=04.10.2026;artist=Daft Punk;title=Aerodynamic");
+
+        var frame = mirror.Render();
+
+        // Clock right-aligned in the header (black on white), title at size 2 below.
+        var clock = new OledCanvas();
+        clock.FillRect(0, 0, OledCanvas.Width, 12, true);
+        clock.Print(96, 2, DisplayText.ToCp437("18:42"), 1, false);
+        Assert.Equal(Region(clock, 96, 0, 30, 12), Region(frame, 96, 0, 30, 12));
+
+        var title = new OledCanvas();
+        title.Print(4, 19, DisplayText.ToCp437("Aerodynami"), 2, true);
+        Assert.Equal(Region(title, 0, 19, 128, 16), Region(frame, 0, 19, 128, 16));
+    }
+
+    [Fact]
     public void DisconnectShowsNoAppHeader()
     {
         mirror.SetHostConnected(false);
