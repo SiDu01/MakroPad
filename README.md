@@ -23,7 +23,7 @@ als Git-Tag `legacy-v0.2.0` markiert.
 | `firmware/` | PlatformIO-Projekt (Arduino-Framework) |
 | `app/` | .NET-10-/Avalonia-App für Windows |
 | `hardware/case/` | Parametrisches OpenSCAD-Gehäuse |
-| `docs/` | [Protokoll v2](docs/PROTOCOL.md), [Hardware/Pinout](docs/HARDWARE.md) |
+| `docs/` | [Konfiguration](docs/CONFIG.md), [Protokoll v2](docs/PROTOCOL.md), [Hardware/Pinout](docs/HARDWARE.md) |
 
 ## Bauen und testen
 

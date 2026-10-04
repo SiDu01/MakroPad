@@ -1,0 +1,78 @@
+using MakroPad.Core.Actions;
+
+namespace MakroPad.Core.Configuration;
+
+/// <summary>User-authored configuration (<c>config.json</c>). The app never rewrites it on its own.</summary>
+public sealed record MakroPadConfig
+{
+    public const int CurrentSchemaVersion = 1;
+
+    public int SchemaVersion { get; init; } = CurrentSchemaVersion;
+
+    public AppSettings Settings { get; init; } = new();
+
+    public IReadOnlyList<ProfileConfig> Profiles { get; init; } = [];
+
+    public static MakroPadConfig CreateDefault() => new()
+    {
+        Profiles =
+        [
+            new ProfileConfig
+            {
+                Name = "Default",
+                Bindings =
+                [
+                    new Binding("button:1", "media.playPause"),
+                    new Binding("button:2", "media.previousTrack"),
+                    new Binding("button:3", "media.nextTrack"),
+                    new Binding("button:16", "profile.next"),
+                    new Binding("slider:1", "system.volume")
+                ]
+            }
+        ]
+    };
+
+    public ProfileConfig? FindProfile(string? name)
+        => Profiles.FirstOrDefault(profile => string.Equals(profile.Name, name, StringComparison.OrdinalIgnoreCase));
+}
+
+public sealed record ProfileConfig
+{
+    public string Name { get; init; } = "";
+
+    public IReadOnlyList<Binding> Bindings { get; init; } = [];
+}
+
+public sealed record AppSettings
+{
+    /// <summary>Start hidden in the notification area.</summary>
+    public bool StartInTray { get; init; }
+
+    /// <summary>Register the app in the current user's Windows autostart.</summary>
+    public bool StartWithWindows { get; init; }
+
+    /// <summary>Minimum slider change in percent before a volume action runs again (0/100 % always pass).</summary>
+    public int SliderDeadbandPercent { get; init; } = 2;
+
+    public FeedbackSettings Feedback { get; init; } = new();
+}
+
+/// <summary>Which events show a short overlay on the OLED.</summary>
+public sealed record FeedbackSettings
+{
+    public bool Actions { get; init; } = true;
+
+    public bool Volume { get; init; } = true;
+
+    public bool Errors { get; init; } = true;
+
+    public bool ProfileChange { get; init; } = true;
+}
+
+/// <summary>App-owned runtime state (<c>state.json</c>), kept apart from the user's config.</summary>
+public sealed record AppState
+{
+    public string? ActiveProfile { get; init; }
+
+    public string? LastPort { get; init; }
+}

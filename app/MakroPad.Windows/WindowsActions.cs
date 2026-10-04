@@ -12,5 +12,9 @@ public static class WindowsActions
         }
 
         yield return new SystemVolumeAction();
+        yield return new AppVolumeAction();
+        yield return new KeyboardShortcutAction();
+        yield return new OpenUrlAction();
+        yield return new OpenAppAction();
     }
 }

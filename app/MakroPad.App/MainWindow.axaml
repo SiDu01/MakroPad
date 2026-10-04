@@ -7,7 +7,29 @@
         Icon="avares://MakroPad.App/Assets/makropad.ico"
         Width="900" Height="640">
     <DockPanel Margin="16">
-        <TextBlock DockPanel.Dock="Top" Text="{Binding StatusText}" FontSize="18" Margin="0,0,0,12" />
+        <TextBlock DockPanel.Dock="Top" Text="{Binding StatusText}" FontSize="18" Margin="0,0,0,4" />
+
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="8" Margin="0,0,0,12">
+            <TextBlock Text="{Binding ProfileText}" VerticalAlignment="Center" />
+            <Button Content="Nächstes Profil" Command="{Binding NextProfileCommand}" />
+            <Button Content="Konfiguration bearbeiten" Command="{Binding OpenConfigCommand}" ToolTip.Tip="{Binding ConfigPath}" />
+            <Button Content="Ordner" Command="{Binding OpenConfigFolderCommand}" />
+        </StackPanel>
+
+        <Border DockPanel.Dock="Top" IsVisible="{Binding HasConfigProblems}"
+                BorderBrush="{DynamicResource SystemFillColorCautionBrush}" BorderThickness="1"
+                CornerRadius="6" Padding="12" Margin="0,0,0,12">
+            <StackPanel Spacing="4">
+                <TextBlock Text="Probleme in config.json" FontWeight="SemiBold" />
+                <ItemsControl ItemsSource="{Binding ConfigProblems}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="x:String">
+                            <TextBlock Text="{Binding}" TextWrapping="Wrap" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </Border>
 
         <Border DockPanel.Dock="Top" IsVisible="{Binding IsSimulator}"
                 BorderBrush="{DynamicResource SystemControlForegroundBaseLowBrush}" BorderThickness="1"

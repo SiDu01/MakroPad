@@ -1,5 +1,6 @@
 using System.Collections.Concurrent;
 using MakroPad.Core.Actions;
+using MakroPad.Core.Configuration;
 using MakroPad.Core.Device;
 using MakroPad.Core.Protocol;
 
@@ -24,6 +25,7 @@ public sealed class MakroPadRuntime : IAsyncDisposable
 
     private readonly IDeviceConnector connector;
     private readonly ActionRunner actionRunner;
+    private readonly ProfileManager profiles;
     private readonly InputRouter router;
     private readonly TimeProvider timeProvider;
     private readonly string appVersion;
@@ -32,22 +34,36 @@ public sealed class MakroPadRuntime : IAsyncDisposable
     private Task? loop;
     private DeviceSession? session;
     private ITimer? clockTimer;
+    private AppSettings settings = new();
 
     public MakroPadRuntime(
         IDeviceConnector connector,
         ActionRunner actionRunner,
-        InputRouter router,
+        ProfileManager profiles,
         TimeProvider timeProvider,
         string appVersion)
     {
         this.connector = connector;
         this.actionRunner = actionRunner;
-        this.router = router;
+        this.profiles = profiles;
         this.timeProvider = timeProvider;
         this.appVersion = appVersion;
+        router = new InputRouter(profiles.Active.Bindings);
+        profiles.ActiveChanged += OnProfileChanged;
     }
 
-    public string ProfileName { get; set; } = "Default";
+    /// <summary>Settings from config.json; replaced on reload.</summary>
+    public AppSettings Settings
+    {
+        get => settings;
+        set
+        {
+            settings = value;
+            router.SliderDeadbandPercent = value.SliderDeadbandPercent;
+        }
+    }
+
+    public ProfileManager Profiles => profiles;
 
     public ConnectionStatus Status { get; private set; } = ConnectionStatus.Searching;
 
@@ -182,13 +198,26 @@ public sealed class MakroPadRuntime : IAsyncDisposable
     {
         var result = await actionRunner.RunAsync(new ActionContext(binding, input), stopping.Token);
         ActionCompleted?.Invoke(binding, result);
-        ShowScreen(FeedbackBuilder.ForResult(binding, result));
+        if (FeedbackBuilder.IsEnabled(Settings.Feedback, result))
+        {
+            ShowScreen(FeedbackBuilder.ForResult(binding, result));
+        }
+    }
+
+    private void OnProfileChanged(ProfileConfig profile, bool userSwitch)
+    {
+        router.SetBindings(profile.Bindings);
+        SendState();
+        if (userSwitch && Settings.Feedback.ProfileChange)
+        {
+            ShowScreen(FeedbackBuilder.ForProfile(profile.Name));
+        }
     }
 
     private void SendState()
     {
         var now = timeProvider.GetLocalNow().DateTime;
-        session?.TrySend(DeviceMessages.State(new DeviceState(Profile: ProfileName, Now: now)));
+        session?.TrySend(DeviceMessages.State(new DeviceState(Profile: profiles.Active.Name, Now: now)));
     }
 
     private void SetStatus(ConnectionStatus status)

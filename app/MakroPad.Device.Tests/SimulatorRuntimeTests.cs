@@ -1,5 +1,6 @@
 using System.Collections.Concurrent;
 using MakroPad.Core.Actions;
+using MakroPad.Core.Configuration;
 using MakroPad.Core.Device;
 using MakroPad.Core.Runtime;
 
@@ -19,10 +20,25 @@ public sealed class SimulatorRuntimeTests : IAsyncLifetime
     public Task InitializeAsync()
     {
         device.LineFromApp += linesFromApp.Enqueue;
+        var profiles = new ProfileManager();
+        profiles.Load(
+        [
+            new ProfileConfig
+            {
+                Name = "Default",
+                Bindings =
+                [
+                    new Binding("button:1", "media.playPause"),
+                    new Binding("button:16", "profile.next"),
+                    new Binding("slider:1", "system.volume", new Dictionary<string, string> { ["label"] = "Master" })
+                ]
+            },
+            new ProfileConfig { Name = "Gaming", Bindings = [new Binding("button:16", "profile.next")] }
+        ]);
         runtime = new MakroPadRuntime(
             device,
-            new ActionRunner([playPause, volume]),
-            new InputRouter(DefaultBindings.All),
+            new ActionRunner(new IActionHandler[] { playPause, volume }.Concat(new ProfileActions(profiles).Create())),
+            profiles,
             TimeProvider.System,
             "test");
         runtime.Start();
@@ -52,7 +68,33 @@ public sealed class SimulatorRuntimeTests : IAsyncLifetime
     {
         device.MoveSlider(1, 420);
 
-        await WaitUntil(() => linesFromApp.Contains("screen;type=volume;text=system.volume;value=42;ms=1200"));
+        await WaitUntil(() => linesFromApp.Contains("screen;type=volume;text=Master;value=42;ms=1200"));
+    }
+
+    [Fact]
+    public async Task ProfileButtonSwitchesBindingsAndShowsProfile()
+    {
+        device.PressButton(16);
+
+        await WaitUntil(() => linesFromApp.Contains("screen;type=profile;text=Gaming"));
+        Assert.Contains(linesFromApp, line => line.StartsWith("state;profile=Gaming;", StringComparison.Ordinal));
+        Assert.Equal("Gaming", runtime.Profiles.Active.Name);
+
+        device.PressButton(1);
+        await Task.Delay(200);
+        Assert.Equal(0, playPause.Count);
+    }
+
+    [Fact]
+    public async Task DisabledFeedbackSendsNoOverlay()
+    {
+        runtime.Settings = new AppSettings { Feedback = new FeedbackSettings { Actions = false } };
+
+        device.PressButton(1);
+        await WaitUntil(() => playPause.Count == 1);
+        await Task.Delay(200);
+
+        Assert.DoesNotContain(linesFromApp, line => line.StartsWith("screen;", StringComparison.Ordinal));
     }
 
     [Fact]

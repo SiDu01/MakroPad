@@ -176,6 +176,13 @@ Medientasten und Systemlautstärke) sind fertig. 20 native Firmware-Tests und
 **Fertig, wenn:** Alle Actions per Hand-Config auf der Hardware funktionieren,
 Profilwechsel per Taste geht und auf dem OLED erscheint.
 
+**Status (2026-10-04): umgesetzt, Hardwaretest offen.** `config.json`
+(Schema 1, Live-Reload, Validierung gegen `ActionCatalog`, Referenz in
+[CONFIG.md](CONFIG.md)), getrennte `state.json`, `ProfileManager`, neue
+Actions `app.volume`, `keyboard.shortcut`, `system.openUrl`,
+`system.openApp`, `profile.next`, `profile.set`, OLED-Feedback abschaltbar,
+Tray mit Profilmenü, Autostart. 64 App-Tests grün.
+
 ### M3 – Bedienoberfläche
 
 - Pad-Ansicht mit dem 16-Tasten-Layout inkl. OLED-Lücke und 3 Slidern.

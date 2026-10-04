@@ -11,6 +11,7 @@ namespace MakroPad.Core.Runtime;
 public sealed class InputRouter
 {
     private readonly Dictionary<string, int> lastSliderPercent = new(StringComparer.OrdinalIgnoreCase);
+    private readonly object gate = new();
     private IReadOnlyList<Binding> bindings;
 
     public InputRouter(IReadOnlyList<Binding> bindings)
@@ -18,15 +19,26 @@ public sealed class InputRouter
         this.bindings = bindings;
     }
 
-    public int SliderDeadbandPercent { get; init; } = 2;
+    public int SliderDeadbandPercent { get; set; } = 2;
 
     public void SetBindings(IReadOnlyList<Binding> value)
     {
-        bindings = value;
-        lastSliderPercent.Clear();
+        lock (gate)
+        {
+            bindings = value;
+            lastSliderPercent.Clear();
+        }
     }
 
     public Binding? Route(InputEvent input)
+    {
+        lock (gate)
+        {
+            return RouteLocked(input);
+        }
+    }
+
+    private Binding? RouteLocked(InputEvent input)
     {
         if (input is ButtonInput { Pressed: false })
         {

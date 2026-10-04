@@ -14,6 +14,9 @@ public sealed record ActionContext(Binding Binding, InputEvent Input);
 /// <summary>Outcome of an action. <see cref="Percent"/> is set by level-type actions such as volume.</summary>
 public sealed record ActionResult(bool Success, string Message, int? Percent = null)
 {
+    /// <summary>The action shows its own feedback; the runtime skips the generic overlay.</summary>
+    public bool Quiet { get; init; }
+
     public static ActionResult Ok(string message, int? percent = null) => new(true, message, percent);
 
     public static ActionResult Failed(string message) => new(false, message);

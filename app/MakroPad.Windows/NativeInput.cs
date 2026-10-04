@@ -20,6 +20,24 @@ internal static class NativeInput
         ]);
     }
 
+    /// <summary>Presses all keys in order, then releases them in reverse order.</summary>
+    public static void SendChord(IReadOnlyList<ushort> virtualKeys, Func<ushort, bool> isExtended)
+    {
+        var inputs = new List<Input>(virtualKeys.Count * 2);
+        foreach (var key in virtualKeys)
+        {
+            inputs.Add(KeyInput(key, isExtended(key) ? KeyEventExtendedKey : 0));
+        }
+
+        for (var index = virtualKeys.Count - 1; index >= 0; index--)
+        {
+            var key = virtualKeys[index];
+            inputs.Add(KeyInput(key, (isExtended(key) ? KeyEventExtendedKey : 0) | KeyEventKeyUp));
+        }
+
+        Send([.. inputs]);
+    }
+
     private static Input KeyInput(ushort virtualKey, uint flags) => new()
     {
         Type = InputKeyboard,
