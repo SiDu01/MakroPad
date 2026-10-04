@@ -1,0 +1,67 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!--
+        Colours of the physical MakroPad (hardware/case/makropad_case.scad): sage lid, cream keycaps,
+        orange fader caps, silver OLED frame. Orange is reserved for the faders and the current selection.
+    -->
+    <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+            <SolidColorBrush x:Key="WorkspaceBrush" Color="#E4E9E7" />
+            <SolidColorBrush x:Key="PanelBrush" Color="#F4F6F5" />
+            <SolidColorBrush x:Key="InkBrush" Color="#1D2927" />
+            <SolidColorBrush x:Key="InkMutedBrush" Color="#5B6B68" />
+            <SolidColorBrush x:Key="LineBrush" Color="#C9D2CF" />
+            <SolidColorBrush x:Key="LidBrush" Color="#8FB3AD" />
+            <SolidColorBrush x:Key="LidRimBrush" Color="#5F7F7A" />
+            <SolidColorBrush x:Key="LidWellBrush" Color="#7C9C97" />
+            <SolidColorBrush x:Key="LidInkBrush" Color="#1F3632" />
+            <SolidColorBrush x:Key="KeycapBrush" Color="#D9D4C7" />
+            <SolidColorBrush x:Key="KeycapPressedBrush" Color="#CCC6B7" />
+            <SolidColorBrush x:Key="KeycapSkirtBrush" Color="#AEA897" />
+            <SolidColorBrush x:Key="KeycapInkBrush" Color="#28312F" />
+            <SolidColorBrush x:Key="KeycapNumberBrush" Color="#8A8679" />
+            <SolidColorBrush x:Key="FaderCapBrush" Color="#E0662B" />
+            <SolidColorBrush x:Key="FaderShadeBrush" Color="#A3461A" />
+            <SolidColorBrush x:Key="SlotBrush" Color="#3A4E4A" />
+            <SolidColorBrush x:Key="OledFrameBrush" Color="#C9CCD1" />
+            <SolidColorBrush x:Key="OledGlassBrush" Color="#101820" />
+            <SolidColorBrush x:Key="OledPixelBrush" Color="#D4E6F4" />
+            <SolidColorBrush x:Key="SelectionBrush" Color="#E0662B" />
+            <SolidColorBrush x:Key="CautionBrush" Color="#9C4413" />
+            <SolidColorBrush x:Key="OnlineBrush" Color="#2F7A68" />
+            <SolidColorBrush x:Key="OfflineBrush" Color="#8E9895" />
+            <SolidColorBrush x:Key="LogBrush" Color="#FBFCFB" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+            <SolidColorBrush x:Key="WorkspaceBrush" Color="#1B2221" />
+            <SolidColorBrush x:Key="PanelBrush" Color="#222B2A" />
+            <SolidColorBrush x:Key="InkBrush" Color="#E3EAE8" />
+            <SolidColorBrush x:Key="InkMutedBrush" Color="#93A39F" />
+            <SolidColorBrush x:Key="LineBrush" Color="#35423F" />
+            <SolidColorBrush x:Key="LidBrush" Color="#7A9E98" />
+            <SolidColorBrush x:Key="LidRimBrush" Color="#0F1615" />
+            <SolidColorBrush x:Key="LidWellBrush" Color="#698983" />
+            <SolidColorBrush x:Key="LidInkBrush" Color="#132522" />
+            <SolidColorBrush x:Key="KeycapBrush" Color="#D2CDC0" />
+            <SolidColorBrush x:Key="KeycapPressedBrush" Color="#C2BCAD" />
+            <SolidColorBrush x:Key="KeycapSkirtBrush" Color="#9F998A" />
+            <SolidColorBrush x:Key="KeycapInkBrush" Color="#28312F" />
+            <SolidColorBrush x:Key="KeycapNumberBrush" Color="#878377" />
+            <SolidColorBrush x:Key="FaderCapBrush" Color="#E86F33" />
+            <SolidColorBrush x:Key="FaderShadeBrush" Color="#9A4119" />
+            <SolidColorBrush x:Key="SlotBrush" Color="#263532" />
+            <SolidColorBrush x:Key="OledFrameBrush" Color="#B9BCC2" />
+            <SolidColorBrush x:Key="OledGlassBrush" Color="#0B1117" />
+            <SolidColorBrush x:Key="OledPixelBrush" Color="#D4E6F4" />
+            <SolidColorBrush x:Key="SelectionBrush" Color="#F07A3E" />
+            <SolidColorBrush x:Key="CautionBrush" Color="#F2A26F" />
+            <SolidColorBrush x:Key="OnlineBrush" Color="#7FC4B2" />
+            <SolidColorBrush x:Key="OfflineBrush" Color="#6B7976" />
+            <SolidColorBrush x:Key="LogBrush" Color="#1E2625" />
+        </ResourceDictionary>
+    </ResourceDictionary.ThemeDictionaries>
+
+    <!-- Bahnschrift is DIN 1451, the lettering of technical labels, and ships with Windows. -->
+    <FontFamily x:Key="UiFont">Bahnschrift</FontFamily>
+    <FontFamily x:Key="LogFont">Cascadia Mono, Consolas</FontFamily>
+</ResourceDictionary>

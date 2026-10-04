@@ -1,0 +1,47 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:MakroPad.App.ViewModels"
+             x:Class="MakroPad.App.Views.DisplayInspectorView"
+             x:DataType="vm:DisplayInspectorViewModel">
+    <StackPanel Spacing="22">
+        <StackPanel Spacing="8">
+            <TextBlock Classes="h1" Text="Display" />
+            <TextBlock Classes="muted"
+                       Text="Hier siehst du live, was das Display am MakroPad gerade zeigt. Im Ruhezustand stehen dort Profil, Uhrzeit und Datum." />
+        </StackPanel>
+
+        <StackPanel Spacing="6">
+            <StackPanel.Styles>
+                <Style Selector="ToggleSwitch">
+                    <Setter Property="OnContent" Value="" />
+                    <Setter Property="OffContent" Value="" />
+                    <Setter Property="MinWidth" Value="0" />
+                </Style>
+                <Style Selector="DockPanel > TextBlock">
+                    <Setter Property="FontSize" Value="15" />
+                    <Setter Property="VerticalAlignment" Value="Center" />
+                </Style>
+            </StackPanel.Styles>
+            <TextBlock Classes="label" Text="Kurz einblenden" />
+            <DockPanel>
+                <ToggleSwitch DockPanel.Dock="Right" IsChecked="{Binding Actions}" />
+                <TextBlock Text="Nach einer Aktion" />
+            </DockPanel>
+            <DockPanel>
+                <ToggleSwitch DockPanel.Dock="Right" IsChecked="{Binding Volume}" />
+                <TextBlock Text="Beim Ändern einer Lautstärke" />
+            </DockPanel>
+            <DockPanel>
+                <ToggleSwitch DockPanel.Dock="Right" IsChecked="{Binding Errors}" />
+                <TextBlock Text="Wenn eine Aktion fehlschlägt" />
+            </DockPanel>
+            <DockPanel>
+                <ToggleSwitch DockPanel.Dock="Right" IsChecked="{Binding ProfileChange}" />
+                <TextBlock Text="Beim Profilwechsel" />
+            </DockPanel>
+        </StackPanel>
+
+        <TextBlock Classes="muted" FontSize="12.5"
+                   Text="Welcher Text eingeblendet wird, legst du bei der jeweiligen Taste unter „Beschriftung“ fest." />
+    </StackPanel>
+</UserControl>

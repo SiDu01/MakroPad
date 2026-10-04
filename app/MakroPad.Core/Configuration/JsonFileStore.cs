@@ -52,8 +52,9 @@ public sealed class JsonFileStore<T> where T : class
         }
         catch (JsonException ex)
         {
-            var where = ex.LineNumber is { } line ? $" (Zeile {line + 1})" : "";
-            return new LoadResult<T>(createDefault(), $"Ungültiges JSON{where}: {ex.Message}");
+            var where = ex.LineNumber is { } line ? $" in Zeile {line + 1}, Zeichen {(ex.BytePositionInLine ?? 0) + 1}" : "";
+            var path = string.IsNullOrEmpty(ex.Path) || ex.Path == "$" ? "" : $" (bei {ex.Path})";
+            return new LoadResult<T>(createDefault(), $"Fehler im JSON{where}{path}. Häufige Ursachen: fehlendes Komma, fehlendes Anführungszeichen oder ein einzelner \\ in einem Pfad (schreibe \\\\ oder /).");
         }
         catch (IOException ex)
         {

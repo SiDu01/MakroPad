@@ -103,6 +103,9 @@ public sealed class MakroPadRuntime : IAsyncDisposable
         stopping.Dispose();
     }
 
+    /// <summary>Runs a binding as if its input fired (used by the editor's test button).</summary>
+    public Task TriggerAsync(Binding binding, InputEvent input) => ExecuteAsync(binding, input);
+
     /// <summary>Sends an overlay to the device (no-op while disconnected).</summary>
     public bool ShowScreen(ScreenRequest screen) => session?.TrySend(DeviceMessages.Screen(screen)) ?? false;
 

@@ -14,6 +14,7 @@ public sealed class ConfigService : IDisposable
     private readonly object gate = new();
     private FileSystemWatcher? watcher;
     private Timer? reloadTimer;
+    private string? lastWrittenJson;
 
     public ConfigService(string directory)
     {
@@ -57,6 +58,22 @@ public sealed class ConfigService : IDisposable
         Notices = notices;
     }
 
+    /// <summary>
+    /// Saves a config edited in the app and makes it current. The file watcher ignores this write,
+    /// so <see cref="ConfigChanged"/> is only raised for edits made outside the app.
+    /// </summary>
+    public void Save(MakroPadConfig config)
+    {
+        lock (gate)
+        {
+            configStore.Save(config);
+            lastWrittenJson = SafeRead(ConfigPath);
+            Config = config;
+            LoadError = null;
+            Issues = ConfigValidator.Validate(config);
+        }
+    }
+
     public void SaveState(AppState state)
     {
         lock (gate)
@@ -94,6 +111,14 @@ public sealed class ConfigService : IDisposable
 
     private void ReloadFromDisk()
     {
+        lock (gate)
+        {
+            if (lastWrittenJson is not null && SafeRead(ConfigPath) == lastWrittenJson)
+            {
+                return;
+            }
+        }
+
         LoadConfig();
         ConfigChanged?.Invoke();
     }
@@ -106,6 +131,18 @@ public sealed class ConfigService : IDisposable
             Config = result.Value;
             LoadError = result.Error;
             Issues = result.Error is null ? ConfigValidator.Validate(result.Value) : [];
+        }
+    }
+
+    private static string? SafeRead(string path)
+    {
+        try
+        {
+            return File.ReadAllText(path);
+        }
+        catch (IOException)
+        {
+            return null;
         }
     }
 

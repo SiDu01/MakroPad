@@ -1,0 +1,160 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:MakroPad.App.ViewModels"
+             xmlns:c="using:MakroPad.App.Controls"
+             xmlns:v="using:MakroPad.App.Views"
+             x:Class="MakroPad.App.Views.PadView"
+             x:DataType="vm:PadViewModel">
+    <Grid ColumnDefinitions="*,400">
+
+        <!-- Left: profiles and the pad itself -->
+        <DockPanel Margin="36,22,36,28">
+            <Panel DockPanel.Dock="Top" Margin="0,0,0,22">
+                <StackPanel Orientation="Horizontal" Spacing="4" IsVisible="{Binding !IsRenaming}">
+                    <ItemsControl ItemsSource="{Binding Profiles}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal" Spacing="4" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="vm:ProfileTabViewModel">
+                                <Button Classes="profile" Classes.active="{Binding IsActive}"
+                                        Content="{Binding Name}"
+                                        Command="{Binding $parent[v:PadView].((vm:PadViewModel)DataContext).ActivateProfileCommand}"
+                                        CommandParameter="{Binding}" />
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <Button Classes="quiet" Content="Profil hinzufügen" Command="{Binding AddProfileCommand}" Margin="8,0,0,0" />
+                    <Button Classes="quiet" Content="Profil bearbeiten …">
+                        <Button.Flyout>
+                            <MenuFlyout Placement="BottomEdgeAlignedLeft">
+                                <MenuItem Header="Umbenennen" Command="{Binding StartRenameCommand}" />
+                                <MenuItem Header="Duplizieren" Command="{Binding DuplicateProfileCommand}" />
+                                <MenuItem Header="Nach links verschieben" Command="{Binding MoveProfileLeftCommand}" />
+                                <MenuItem Header="Nach rechts verschieben" Command="{Binding MoveProfileRightCommand}" />
+                                <Separator />
+                                <MenuItem Header="Löschen" Command="{Binding DeleteProfileCommand}" IsEnabled="{Binding CanDeleteProfile}" />
+                            </MenuFlyout>
+                        </Button.Flyout>
+                    </Button>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Spacing="8" IsVisible="{Binding IsRenaming}">
+                    <TextBox x:Name="RenameBox" Text="{Binding RenameText}" Width="240" FontSize="15" />
+                    <Button Content="Umbenennen" Command="{Binding CommitRenameCommand}" IsDefault="True" />
+                    <Button Classes="quiet" Content="Abbrechen" Command="{Binding CancelRenameCommand}" IsCancel="True" />
+                </StackPanel>
+            </Panel>
+
+            <TextBlock DockPanel.Dock="Top" Classes="caution" Text="{Binding ProfileError}"
+                       IsVisible="{Binding ProfileError, Converter={x:Static ObjectConverters.IsNotNull}}" Margin="0,-12,0,16" />
+
+            <!-- The pad, drawn from above in its printed colours -->
+            <Viewbox Stretch="Uniform" VerticalAlignment="Top" HorizontalAlignment="Left" MaxHeight="760">
+                <Panel Width="1010" Height="590">
+                    <Border Margin="10,16,10,0" CornerRadius="18" Background="{DynamicResource LidRimBrush}" />
+                    <Border Margin="0,0,0,14" CornerRadius="16" Background="{DynamicResource LidBrush}">
+                        <Canvas Margin="46">
+                            <!-- Recessed switch well: an L around the keys, open where the OLED sits -->
+                            <Border Canvas.Left="-10" Canvas.Top="-10" Width="380" Height="258"
+                                    CornerRadius="10,10,0,0" Background="{DynamicResource LidWellBrush}" />
+                            <Border Canvas.Left="-10" Canvas.Top="238" Width="628" Height="256"
+                                    CornerRadius="10,0,10,10" Background="{DynamicResource LidWellBrush}" />
+
+                            <ItemsControl ItemsSource="{Binding Keys}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <Canvas Width="608" Height="484" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.Styles>
+                                    <Style Selector="ItemsControl > ContentPresenter" x:DataType="vm:KeyViewModel">
+                                        <Setter Property="Canvas.Left" Value="{Binding X}" />
+                                        <Setter Property="Canvas.Top" Value="{Binding Y}" />
+                                    </Style>
+                                </ItemsControl.Styles>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate x:DataType="vm:KeyViewModel">
+                                        <Button Classes="keycap" Classes.selected="{Binding IsSelected}" Classes.held="{Binding IsPressed}"
+                                                Command="{Binding $parent[v:PadView].((vm:PadViewModel)DataContext).SelectCommand}"
+                                                CommandParameter="{Binding}"
+                                                AutomationProperties.Name="{Binding Title}">
+                                            <Grid RowDefinitions="Auto,*">
+                                                <TextBlock Text="{Binding Id}" FontSize="12.5" Foreground="{DynamicResource KeycapNumberBrush}" />
+                                                <TextBlock Grid.Row="1" Text="{Binding Legend}" VerticalAlignment="Bottom"
+                                                           FontSize="{Binding LegendFontSize}" FontWeight="SemiBold"
+                                                           LineHeight="18" TextWrapping="Wrap" MaxLines="3" TextTrimming="CharacterEllipsis"
+                                                           Foreground="{DynamicResource KeycapInkBrush}" />
+                                            </Grid>
+                                        </Button>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+
+                            <!-- OLED in its silver frame, filling the 2x2 block -->
+                            <Button Classes="part" Classes.selected="{Binding Display.IsSelected}"
+                                    Canvas.Left="366" Canvas.Top="-6" Width="248" Height="248"
+                                    Command="{Binding SelectCommand}" CommandParameter="{Binding Display}"
+                                    AutomationProperties.Name="Display">
+                                <Border CornerRadius="12" Background="{DynamicResource OledFrameBrush}" Padding="12,0">
+                                    <Border CornerRadius="3" Background="{DynamicResource OledGlassBrush}" Padding="5"
+                                            VerticalAlignment="Center" Margin="0,0,0,18">
+                                        <c:OledView Mirror="{Binding Oled}"
+                                                    PixelBrush="{DynamicResource OledPixelBrush}"
+                                                    GlassBrush="{DynamicResource OledGlassBrush}" />
+                                    </Border>
+                                </Border>
+                            </Button>
+
+                            <!-- Three faders right of the keys -->
+                            <ItemsControl Canvas.Left="636" Canvas.Top="-6" ItemsSource="{Binding Faders}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal" Spacing="0" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate x:DataType="vm:FaderViewModel">
+                                        <Button Classes="part" Classes.selected="{Binding IsSelected}" Width="96"
+                                                Command="{Binding $parent[v:PadView].((vm:PadViewModel)DataContext).SelectCommand}"
+                                                CommandParameter="{Binding}"
+                                                AutomationProperties.Name="{Binding Title}">
+                                            <StackPanel Spacing="12">
+                                                <c:FaderView Value="{Binding Value}" Height="420" Width="54" CapHeight="78"
+                                                             HorizontalAlignment="Center"
+                                                             SlotBrush="{DynamicResource SlotBrush}"
+                                                             CapBrush="{DynamicResource FaderCapBrush}"
+                                                             CapShadeBrush="{DynamicResource FaderShadeBrush}" />
+                                                <TextBlock Text="{Binding Legend}" TextAlignment="Center" Height="40"
+                                                           FontSize="15" FontWeight="SemiBold"
+                                                           TextWrapping="Wrap" MaxLines="2" TextTrimming="CharacterEllipsis"
+                                                           Foreground="{DynamicResource LidInkBrush}" />
+                                            </StackPanel>
+                                        </Button>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </Canvas>
+                    </Border>
+                </Panel>
+            </Viewbox>
+        </DockPanel>
+
+        <!-- Right: inspector -->
+        <Border Grid.Column="1" Background="{DynamicResource PanelBrush}"
+                BorderBrush="{DynamicResource LineBrush}" BorderThickness="1,0,0,0">
+            <ScrollViewer>
+                <Panel Margin="30,30,30,30">
+                    <StackPanel Spacing="10" IsVisible="{Binding !HasSelection}">
+                        <TextBlock Classes="h2" Text="{Binding ActiveProfile}" />
+                        <TextBlock Classes="muted"
+                                   Text="Klicke eine Taste, einen Slider oder das Display an, um festzulegen, was passiert. Drückst du eine Taste am MakroPad, sinkt sie auch hier ein." />
+                    </StackPanel>
+                    <ContentControl Content="{Binding Inspector}" />
+                </Panel>
+            </ScrollViewer>
+        </Border>
+    </Grid>
+</UserControl>

@@ -1,0 +1,158 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Style Selector="Window">
+        <Setter Property="FontFamily" Value="{StaticResource UiFont}" />
+        <Setter Property="Background" Value="{DynamicResource WorkspaceBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource InkBrush}" />
+    </Style>
+
+    <!-- Type scale: 12 / 13.5 / 15 / 18 / 26 -->
+    <Style Selector="TextBlock.h1">
+        <Setter Property="FontSize" Value="26" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="LetterSpacing" Value="-0.2" />
+    </Style>
+    <Style Selector="TextBlock.h2">
+        <Setter Property="FontSize" Value="18" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+    </Style>
+    <Style Selector="TextBlock.label">
+        <Setter Property="FontSize" Value="13.5" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Margin" Value="0,0,0,6" />
+    </Style>
+    <Style Selector="TextBlock.muted">
+        <Setter Property="Foreground" Value="{DynamicResource InkMutedBrush}" />
+        <Setter Property="FontSize" Value="13.5" />
+        <Setter Property="TextWrapping" Value="Wrap" />
+        <Setter Property="LineHeight" Value="19" />
+    </Style>
+    <Style Selector="TextBlock.caution">
+        <Setter Property="Foreground" Value="{DynamicResource CautionBrush}" />
+        <Setter Property="FontSize" Value="13.5" />
+        <Setter Property="TextWrapping" Value="Wrap" />
+    </Style>
+
+    <!-- Page tabs in the top bar: text only, the active one is underlined in ink. -->
+    <Style Selector="Button.tab">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource InkMutedBrush}" />
+        <Setter Property="FontSize" Value="15" />
+        <Setter Property="Padding" Value="2,0" />
+        <Setter Property="Margin" Value="0,0,26,0" />
+        <Setter Property="VerticalAlignment" Value="Stretch" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Grid Background="Transparent">
+                    <ContentPresenter Content="{TemplateBinding Content}" VerticalAlignment="Center"
+                                      Padding="{TemplateBinding Padding}" />
+                    <Border x:Name="underline" Height="2" VerticalAlignment="Bottom"
+                            Background="{DynamicResource InkBrush}" IsVisible="False" />
+                </Grid>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+    <Style Selector="Button.tab:pointerover">
+        <Setter Property="Foreground" Value="{DynamicResource InkBrush}" />
+    </Style>
+    <Style Selector="Button.tab.active">
+        <Setter Property="Foreground" Value="{DynamicResource InkBrush}" />
+    </Style>
+    <Style Selector="Button.tab.active /template/ Border#underline">
+        <Setter Property="IsVisible" Value="True" />
+    </Style>
+
+    <!-- Profile tabs above the pad: the active profile sits on a sheet, like a label clipped to the lid. -->
+    <Style Selector="Button.profile">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource InkMutedBrush}" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="6" />
+        <Setter Property="Padding" Value="14,7" />
+        <Setter Property="FontSize" Value="15" />
+    </Style>
+    <Style Selector="Button.profile.active">
+        <Setter Property="Background" Value="{DynamicResource PanelBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource LineBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource InkBrush}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+    </Style>
+    <Style Selector="Button.profile:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Foreground" Value="{DynamicResource InkBrush}" />
+        <Setter Property="Background" Value="{DynamicResource PanelBrush}" />
+    </Style>
+
+    <!-- Quiet text buttons (secondary actions). -->
+    <Style Selector="Button.quiet">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource InkMutedBrush}" />
+        <Setter Property="Padding" Value="10,6" />
+    </Style>
+    <Style Selector="Button.quiet:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Foreground" Value="{DynamicResource InkBrush}" />
+    </Style>
+
+    <!-- Keycap: cream face on a darker skirt; it sinks while the physical key is held. -->
+    <Style Selector="Button.keycap">
+        <Setter Property="Width" Value="124" />
+        <Setter Property="Height" Value="124" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Panel Background="Transparent">
+                    <Border x:Name="ring" CornerRadius="14" BorderThickness="3"
+                            BorderBrush="{DynamicResource SelectionBrush}" IsVisible="False" />
+                    <Border x:Name="skirt" Margin="6" CornerRadius="10" Background="{DynamicResource KeycapSkirtBrush}" />
+                    <Border x:Name="face" CornerRadius="8" Margin="13,10,13,19"
+                            Background="{DynamicResource KeycapBrush}">
+                        <Border.Transitions>
+                            <Transitions>
+                                <ThicknessTransition Property="Margin" Duration="0:0:0.06" />
+                            </Transitions>
+                        </Border.Transitions>
+                        <ContentPresenter Content="{TemplateBinding Content}" Padding="9,7" />
+                    </Border>
+                </Panel>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+    <Style Selector="Button.keycap:pointerover /template/ Border#skirt">
+        <Setter Property="Background" Value="{DynamicResource KeycapNumberBrush}" />
+    </Style>
+    <Style Selector="Button.keycap.selected /template/ Border#ring">
+        <Setter Property="IsVisible" Value="True" />
+    </Style>
+    <Style Selector="Button.keycap.held /template/ Border#face">
+        <Setter Property="Margin" Value="13,15,13,14" />
+        <Setter Property="Background" Value="{DynamicResource KeycapPressedBrush}" />
+    </Style>
+    <Style Selector="Button.keycap:focus-visible /template/ Border#ring">
+        <Setter Property="IsVisible" Value="True" />
+        <Setter Property="BorderBrush" Value="{DynamicResource InkBrush}" />
+    </Style>
+
+    <!-- Plain hit area for the OLED and the faders, with the same selection ring as the keys. -->
+    <Style Selector="Button.part">
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Panel Background="Transparent">
+                    <Border x:Name="ring" CornerRadius="14" BorderThickness="3"
+                            BorderBrush="{DynamicResource SelectionBrush}" IsVisible="False" />
+                    <ContentPresenter Content="{TemplateBinding Content}" Margin="6" />
+                </Panel>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+    <Style Selector="Button.part.selected /template/ Border#ring">
+        <Setter Property="IsVisible" Value="True" />
+    </Style>
+    <Style Selector="Button.part:focus-visible /template/ Border#ring">
+        <Setter Property="IsVisible" Value="True" />
+        <Setter Property="BorderBrush" Value="{DynamicResource InkBrush}" />
+    </Style>
+</Styles>

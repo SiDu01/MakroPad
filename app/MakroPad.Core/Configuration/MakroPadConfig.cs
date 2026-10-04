@@ -55,6 +55,9 @@ public sealed record AppSettings
     public int SliderDeadbandPercent { get; init; } = 2;
 
     public FeedbackSettings Feedback { get; init; } = new();
+
+    /// <summary><c>system</c>, <c>light</c> or <c>dark</c>.</summary>
+    public string Theme { get; init; } = "system";
 }
 
 /// <summary>Which events show a short overlay on the OLED.</summary>

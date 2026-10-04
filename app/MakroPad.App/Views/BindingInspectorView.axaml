@@ -1,0 +1,118 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:MakroPad.App.ViewModels"
+             x:Class="MakroPad.App.Views.BindingInspectorView"
+             x:DataType="vm:BindingInspectorViewModel">
+    <StackPanel Spacing="22">
+        <StackPanel Spacing="2">
+            <TextBlock Classes="h1" Text="{Binding Title}" />
+            <TextBlock Classes="muted" Text="{Binding ProfileName, StringFormat='im Profil {0}'}" />
+        </StackPanel>
+
+        <StackPanel>
+            <TextBlock Classes="label" Text="Was soll passieren?" />
+            <ComboBox ItemsSource="{Binding Actions}" SelectedItem="{Binding SelectedAction}"
+                      HorizontalAlignment="Stretch" MaxDropDownHeight="480">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate x:DataType="vm:ActionOption">
+                        <DockPanel>
+                            <TextBlock DockPanel.Dock="Right" Text="{Binding Category}" FontSize="12.5" Margin="16,0,0,0"
+                                       Foreground="{DynamicResource InkMutedBrush}" VerticalAlignment="Center" />
+                            <TextBlock Text="{Binding Name}" FontSize="15" VerticalAlignment="Center" />
+                        </DockPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <TextBlock Classes="muted" Text="{Binding SelectedAction.Description}" Margin="0,8,0,0" />
+        </StackPanel>
+
+        <ItemsControl ItemsSource="{Binding Parameters}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Spacing="20" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.DataTemplates>
+                <DataTemplate DataType="vm:ShortcutParameterViewModel">
+                    <StackPanel>
+                        <TextBlock Classes="label" Text="{Binding Label}" />
+                        <DockPanel>
+                            <ToggleButton DockPanel.Dock="Right" Margin="8,0,0,0" MinWidth="112"
+                                          Content="{Binding RecordText}" IsChecked="{Binding IsRecording}"
+                                          Click="OnRecordClicked" />
+                            <TextBox x:Name="ShortcutBox" Text="{Binding Value}" Watermark="{Binding Placeholder}"
+                                     KeyDown="OnShortcutKeyDown" LostFocus="OnShortcutLostFocus" />
+                        </DockPanel>
+                        <TextBlock Classes="muted" Text="{Binding Hint}" Margin="0,6,0,0" FontSize="12.5" />
+                    </StackPanel>
+                </DataTemplate>
+                <DataTemplate DataType="vm:ProcessParameterViewModel">
+                    <StackPanel>
+                        <TextBlock Classes="label" Text="{Binding Label}" />
+                        <TextBox Text="{Binding Value}" Watermark="{Binding Placeholder}" />
+                        <TextBlock Classes="muted" Margin="0,10,0,4" FontSize="12.5"
+                                   Text="Spielt gerade Audio ab:" IsVisible="{Binding HasSessions}" />
+                        <TextBlock Classes="muted" Margin="0,10,0,4" FontSize="12.5"
+                                   Text="Gerade spielt kein Programm Audio ab. Starte es und klicke auf Aktualisieren."
+                                   IsVisible="{Binding !HasSessions}" />
+                        <WrapPanel>
+                            <ItemsControl ItemsSource="{Binding Sessions}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate x:DataType="x:String">
+                                        <Button Content="{Binding}" Margin="0,0,6,6" Padding="10,4"
+                                                Command="{Binding $parent[ItemsControl].((vm:ProcessParameterViewModel)DataContext).UseCommand}"
+                                                CommandParameter="{Binding}" />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                            <Button Classes="quiet" Content="Aktualisieren" Command="{Binding RefreshCommand}" Margin="0,0,0,6" />
+                        </WrapPanel>
+                    </StackPanel>
+                </DataTemplate>
+                <DataTemplate DataType="vm:PathParameterViewModel">
+                    <StackPanel>
+                        <TextBlock Classes="label" Text="{Binding Label}" />
+                        <DockPanel>
+                            <Button DockPanel.Dock="Right" Margin="8,0,0,0" Content="Durchsuchen …" Command="{Binding BrowseCommand}" />
+                            <TextBox Text="{Binding Value}" Watermark="{Binding Placeholder}" />
+                        </DockPanel>
+                        <TextBlock Classes="muted" Text="{Binding Hint}" Margin="0,6,0,0" FontSize="12.5" />
+                    </StackPanel>
+                </DataTemplate>
+                <DataTemplate DataType="vm:ProfileParameterViewModel">
+                    <StackPanel>
+                        <TextBlock Classes="label" Text="{Binding Label}" />
+                        <ComboBox ItemsSource="{Binding Profiles}" SelectedItem="{Binding Value}" HorizontalAlignment="Stretch" />
+                    </StackPanel>
+                </DataTemplate>
+                <DataTemplate DataType="vm:TextParameterViewModel">
+                    <StackPanel>
+                        <TextBlock Classes="label" Text="{Binding Label}" />
+                        <TextBox Text="{Binding Value}" Watermark="{Binding Placeholder}" />
+                        <TextBlock Classes="muted" Text="{Binding Hint}" Margin="0,6,0,0" FontSize="12.5" />
+                    </StackPanel>
+                </DataTemplate>
+            </ItemsControl.DataTemplates>
+        </ItemsControl>
+
+        <ItemsControl ItemsSource="{Binding Issues}" IsVisible="{Binding HasIssues}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate x:DataType="x:String">
+                    <TextBlock Classes="caution" Text="{Binding}" Margin="0,0,0,4" />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <StackPanel Orientation="Horizontal" Spacing="8">
+            <Button Content="Jetzt auslösen" Command="{Binding TestCommand}" IsVisible="{Binding CanTest}" />
+            <Button Classes="quiet" Content="Belegung entfernen" Command="{Binding RemoveCommand}" IsVisible="{Binding IsBound}" />
+        </StackPanel>
+
+        <TextBlock Classes="muted" Text="{Binding Status}" FontSize="12.5" />
+    </StackPanel>
+</UserControl>

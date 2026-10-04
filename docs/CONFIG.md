@@ -23,6 +23,7 @@ ersetzt.
     "startInTray": false,          // ohne Fenster im Infobereich starten
     "startWithWindows": false,     // Autostart für den aktuellen Benutzer
     "sliderDeadbandPercent": 2,    // Mindeständerung für Lautstärke-Slider (0–25)
+    "theme": "system",             // system, light oder dark
     "feedback": {                  // kurze OLED-Einblendungen
       "actions": true,
       "volume": true,
@@ -65,7 +66,8 @@ nur einmal belegt sein. Tasten lösen beim Drücken aus.
 
 ## Aktionen
 
-`label` ist bei allen Aktionen mit Parametern optional und ersetzt den Text der
+`label` (in der App „Beschriftung“) ist bei allen Aktionen mit Parametern
+optional. Der Text steht dann auf der Taste in der App und in der
 OLED-Einblendung.
 
 | Aktion | Eingabe | Parameter | Wirkung |

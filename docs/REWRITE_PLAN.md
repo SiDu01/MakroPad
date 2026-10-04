@@ -176,7 +176,8 @@ Medientasten und Systemlautstärke) sind fertig. 20 native Firmware-Tests und
 **Fertig, wenn:** Alle Actions per Hand-Config auf der Hardware funktionieren,
 Profilwechsel per Taste geht und auf dem OLED erscheint.
 
-**Status (2026-10-04): umgesetzt, Hardwaretest offen.** `config.json`
+**Status (2026-10-04): erledigt, auf Hardware bestätigt** (alle neuen Actions,
+Live-Reload, Profilwechsel per Taste). `config.json`
 (Schema 1, Live-Reload, Validierung gegen `ActionCatalog`, Referenz in
 [CONFIG.md](CONFIG.md)), getrennte `state.json`, `ProfileManager`, neue
 Actions `app.volume`, `keyboard.shortcut`, `system.openUrl`,
@@ -194,6 +195,13 @@ Tray mit Profilmenü, Autostart. 64 App-Tests grün.
 
 **Fertig, wenn:** Eine komplette Belegung ohne Handbearbeitung der JSON möglich
 ist.
+
+**Status (2026-10-04): umgesetzt, Test durch Nutzer offen.** Pad-Seite mit dem
+Gerät in Gehäusefarben, pixelgenauem OLED-Spiegel (`OledMirror`), Inspector
+(Aktion, Parameter, Shortcut-Aufnahme, Audio-Sessions, Dateiauswahl, Jetzt
+auslösen), Profilleiste (anlegen, umbenennen, duplizieren, verschieben,
+löschen), Diagnose (Verbindung, Config-Probleme, Audio, Protokoll, Simulator)
+und Einstellungen. Gestaltung: [UI_DESIGN.md](UI_DESIGN.md).
 
 ### M4 – Kontext
 

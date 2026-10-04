@@ -30,6 +30,11 @@ public static partial class ConfigValidator
             issues.Add(new ConfigIssue("settings.sliderDeadbandPercent", "Muss zwischen 0 und 25 liegen"));
         }
 
+        if (config.Settings.Theme is not ("system" or "light" or "dark"))
+        {
+            issues.Add(new ConfigIssue("settings.theme", "Erlaubt sind system, light oder dark"));
+        }
+
         var names = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         foreach (var profile in config.Profiles)
         {

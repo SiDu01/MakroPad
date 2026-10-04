@@ -3,21 +3,27 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using Avalonia.Media.Imaging;
+using Avalonia.Platform.Storage;
+using Avalonia.Styling;
 using Avalonia.Threading;
+using MakroPad.App.Services;
+using MakroPad.App.ViewModels;
 using MakroPad.Core.Actions;
 using MakroPad.Core.Configuration;
 using MakroPad.Core.Device;
+using MakroPad.Core.Display;
 using MakroPad.Core.Runtime;
 using MakroPad.Device;
 using MakroPad.Windows;
 
 namespace MakroPad.App;
 
-public partial class App : Application
+public partial class App : Application, IFilePicker
 {
     private ConfigService? config;
     private MakroPadRuntime? runtime;
-    private MainViewModel? viewModel;
+    private ShellViewModel? shell;
     private MainWindow? window;
     private TrayIcon? trayIcon;
     private NativeMenuItem? profileMenu;
@@ -37,26 +43,40 @@ public partial class App : Application
 
     private void Compose(IClassicDesktopStyleApplicationLifetime desktop)
     {
-        var args = desktop.Args ?? [];
-        var useSimulator = args.Contains("--simulator", StringComparer.OrdinalIgnoreCase);
+        var args = new AppArguments(desktop.Args ?? []);
 
-        config = new ConfigService(ConfigService.DefaultDirectory);
+        config = new ConfigService(args.ConfigDirectory ?? ConfigService.DefaultDirectory);
         config.Load();
+        ApplyTheme(config.Config.Settings.Theme);
 
-        var simulator = useSimulator ? new SimulatedDevice() : null;
-        var serial = useSimulator ? null : new SerialDeviceConnector { PreferredPort = config.State.LastPort };
+        var simulator = args.Simulator ? new SimulatedDevice() : null;
+        var serial = args.Simulator ? null : new SerialDeviceConnector { PreferredPort = config.State.LastPort };
         IDeviceConnector connector = simulator is not null ? simulator : serial!;
 
         var profiles = new ProfileManager();
         var actions = new ActionRunner(WindowsActions.CreateAll().Concat(new ProfileActions(profiles).Create()));
         runtime = new MakroPadRuntime(connector, actions, profiles, TimeProvider.System, AppVersion);
-
-        viewModel = new MainViewModel(runtime, simulator, config);
-        viewModel.ReportConfig(config.Notices);
-
         profiles.Load(config.Config.Profiles, config.State.ActiveProfile);
         runtime.Settings = config.Config.Settings;
         ApplyAutostart(config.Config.Settings);
+
+        // The OLED preview receives exactly the lines the device receives.
+        var oled = new OledMirror(TimeProvider.System);
+        runtime.LineLogged += (direction, line) =>
+        {
+            if (direction == LineDirection.ToDevice)
+            {
+                oled.Apply(line);
+            }
+        };
+        runtime.StatusChanged += status => oled.SetHostConnected(status == ConnectionStatus.Connected);
+
+        var session = new ConfigSession(config, runtime);
+        Func<IReadOnlyList<string>> audioSessions = AppVolumeAction.ListSessionProcesses;
+        var pad = new PadViewModel(session, runtime, oled, this, audioSessions);
+        var settings = new SettingsViewModel(session);
+        settings.ThemeChanged += ApplyTheme;
+        shell = new ShellViewModel(runtime, pad, new DiagnosticsViewModel(runtime, session, simulator, audioSessions), settings);
 
         profiles.ActiveChanged += (profile, _) =>
         {
@@ -70,12 +90,17 @@ public partial class App : Application
                 config.SaveState(config.State with { LastPort = port });
             }
         };
-        config.ConfigChanged += () => Dispatcher.UIThread.Post(OnConfigChanged);
+        session.Changed += _ =>
+        {
+            ApplyAutostart(config.Config.Settings);
+            ApplyTheme(config.Config.Settings.Theme);
+            RebuildProfileMenu();
+        };
         config.StartWatching();
 
         // Tray app: closing the window only hides it; "Beenden" in the tray menu exits.
         desktop.ShutdownMode = ShutdownMode.OnExplicitShutdown;
-        window = new MainWindow { DataContext = viewModel };
+        window = new MainWindow { DataContext = shell };
         window.Closing += (_, e) =>
         {
             if (!exitRequested)
@@ -87,30 +112,47 @@ public partial class App : Application
         trayIcon = CreateTrayIcon(desktop);
         desktop.ShutdownRequested += (_, _) => Shutdown();
 
-        var startHidden = args.Contains("--tray", StringComparer.OrdinalIgnoreCase) || config.Config.Settings.StartInTray;
-        if (!startHidden)
+        if (!args.Tray && !config.Config.Settings.StartInTray || args.Screenshot is not null)
         {
             ShowWindow();
         }
 
         runtime.Start();
+
+        if (args.Screenshot is { } screenshotPath)
+        {
+            _ = TakeScreenshotAsync(args, screenshotPath, desktop);
+        }
     }
 
-    private void OnConfigChanged()
+    public async Task<string?> PickProgramAsync()
     {
-        if (config is null || runtime is null || viewModel is null)
+        if (window?.StorageProvider is not { } storage)
         {
-            return;
+            return null;
         }
 
-        if (config.LoadError is null)
+        var files = await storage.OpenFilePickerAsync(new FilePickerOpenOptions
         {
-            runtime.Profiles.Load(config.Config.Profiles);
-            runtime.Settings = config.Config.Settings;
-            ApplyAutostart(config.Config.Settings);
-        }
+            Title = "Programm oder Datei wählen",
+            AllowMultiple = false,
+            FileTypeFilter =
+            [
+                new FilePickerFileType("Programme") { Patterns = ["*.exe", "*.lnk", "*.bat", "*.cmd"] },
+                FilePickerFileTypes.All
+            ]
+        });
+        return files.Count > 0 ? files[0].TryGetLocalPath() : null;
+    }
 
-        viewModel.ReportConfig(["Konfiguration neu geladen"]);
+    private void ApplyTheme(string theme)
+    {
+        RequestedThemeVariant = theme switch
+        {
+            "light" => ThemeVariant.Light,
+            "dark" => ThemeVariant.Dark,
+            _ => ThemeVariant.Default
+        };
     }
 
     private static void ApplyAutostart(AppSettings settings)
@@ -128,9 +170,6 @@ public partial class App : Application
 
         profileMenu = new NativeMenuItem("Profil") { Menu = new NativeMenu() };
 
-        var editConfig = new NativeMenuItem("Konfiguration bearbeiten");
-        editConfig.Click += (_, _) => viewModel?.OpenConfigCommand.Execute(null);
-
         var exit = new NativeMenuItem("Beenden");
         exit.Click += (_, _) =>
         {
@@ -140,9 +179,9 @@ public partial class App : Application
 
         var icon = new TrayIcon
         {
-            Icon = new WindowIcon(AssetLoader("avares://MakroPad.App/Assets/makropad.ico")),
+            Icon = new WindowIcon(Avalonia.Platform.AssetLoader.Open(new Uri("avares://MakroPad.App/Assets/makropad.ico"))),
             ToolTipText = "MakroPad",
-            Menu = [open, profileMenu, editConfig, new NativeMenuItemSeparator(), exit],
+            Menu = [open, profileMenu, new NativeMenuItemSeparator(), exit],
             IsVisible = true
         };
         icon.Clicked += (_, _) => ShowWindow();
@@ -192,6 +231,45 @@ public partial class App : Application
         window.Activate();
     }
 
+    /// <summary>Development aid: <c>--screenshot file.png [--page diagnose|einstellungen] [--select button:5]</c>.</summary>
+    private async Task TakeScreenshotAsync(AppArguments args, string path, IClassicDesktopStyleApplicationLifetime desktop)
+    {
+        await Task.Delay(TimeSpan.FromSeconds(2.5));
+        await Dispatcher.UIThread.InvokeAsync(async () =>
+        {
+            if (shell is null || window is null)
+            {
+                return;
+            }
+
+            shell.Page = args.Page switch
+            {
+                "diagnose" => AppPage.Diagnostics,
+                "einstellungen" => AppPage.Settings,
+                _ => AppPage.Pad
+            };
+            if (args.Select is { } select)
+            {
+                PadElementViewModel? element = select == "display"
+                    ? shell.Pad.Display
+                    : (PadElementViewModel?)shell.Pad.Keys.FirstOrDefault(k => k.Input == select)
+                      ?? shell.Pad.Faders.FirstOrDefault(f => f.Input == select);
+                if (element is not null)
+                {
+                    shell.Pad.SelectCommand.Execute(element);
+                }
+            }
+
+            await Task.Delay(600);
+            var size = new PixelSize((int)window.Bounds.Width, (int)window.Bounds.Height);
+            using var bitmap = new RenderTargetBitmap(size);
+            bitmap.Render(window);
+            bitmap.Save(path);
+            exitRequested = true;
+            desktop.Shutdown();
+        });
+    }
+
     private void Shutdown()
     {
         exitRequested = true;
@@ -200,8 +278,30 @@ public partial class App : Application
         runtime?.DisposeAsync().AsTask().GetAwaiter().GetResult();
     }
 
-    private static Stream AssetLoader(string uri) => Avalonia.Platform.AssetLoader.Open(new Uri(uri));
-
     private static string AppVersion =>
         Assembly.GetExecutingAssembly().GetName().Version?.ToString(3) ?? "0.0.0";
+
+    private sealed class AppArguments(string[] args)
+    {
+        public bool Simulator => Has("--simulator");
+
+        public bool Tray => Has("--tray");
+
+        public string? Screenshot => Value("--screenshot");
+
+        public string? Page => Value("--page");
+
+        public string? Select => Value("--select");
+
+        /// <summary>Alternative config folder, e.g. for screenshots with sample data.</summary>
+        public string? ConfigDirectory => Value("--config-dir");
+
+        private bool Has(string name) => args.Contains(name, StringComparer.OrdinalIgnoreCase);
+
+        private string? Value(string name)
+        {
+            var index = Array.FindIndex(args, a => string.Equals(a, name, StringComparison.OrdinalIgnoreCase));
+            return index >= 0 && index + 1 < args.Length ? args[index + 1] : null;
+        }
+    }
 }

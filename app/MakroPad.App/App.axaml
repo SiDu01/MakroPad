@@ -1,13 +1,33 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:MakroPad.App.ViewModels"
+             xmlns:v="using:MakroPad.App.Views"
              x:Class="MakroPad.App.App"
-             RequestedThemeVariant="Dark">
+             RequestedThemeVariant="Default">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="avares://MakroPad.App/Themes/Tokens.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+
+    <Application.DataTemplates>
+        <DataTemplate DataType="vm:PadViewModel"><v:PadView /></DataTemplate>
+        <DataTemplate DataType="vm:DiagnosticsViewModel"><v:DiagnosticsView /></DataTemplate>
+        <DataTemplate DataType="vm:SettingsViewModel"><v:SettingsView /></DataTemplate>
+        <DataTemplate DataType="vm:BindingInspectorViewModel"><v:BindingInspectorView /></DataTemplate>
+        <DataTemplate DataType="vm:DisplayInspectorViewModel"><v:DisplayInspectorView /></DataTemplate>
+    </Application.DataTemplates>
+
     <Application.Styles>
+        <!-- Controls take the sage of the case; orange stays reserved for the pad itself. -->
         <FluentTheme>
             <FluentTheme.Palettes>
-                <ColorPaletteResources x:Key="Dark" Accent="#2DD4BF" RegionColor="#0E1011" ErrorText="#F08080" />
-                <ColorPaletteResources x:Key="Light" Accent="#0D9488" RegionColor="#EDF1F0" ErrorText="#DC2626" />
+                <ColorPaletteResources x:Key="Light" Accent="#3E6E66" RegionColor="#F4F6F5" ErrorText="#9C4413" />
+                <ColorPaletteResources x:Key="Dark" Accent="#8FB3AD" RegionColor="#222B2A" ErrorText="#F2A26F" />
             </FluentTheme.Palettes>
         </FluentTheme>
+        <StyleInclude Source="avares://MakroPad.App/Themes/Styles.axaml" />
     </Application.Styles>
 </Application>
