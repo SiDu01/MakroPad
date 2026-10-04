@@ -5,9 +5,10 @@
 Dieses Dokument beschreibt den ersten Hardware-Entwurf fuer das MakroPad auf
 Basis des ESP32-S3-DevKitC-1.
 
-Geplantes Maximum:
+Finale Hardware:
 
-- 20 mechanische Keyboard-Switches.
+- 16 mechanische Keyboard-Switches (5x4-Raster, oben rechts ersetzt das OLED
+  einen 2x2-Block, siehe `hardware/case`).
 - 3 analoge Slider, Typ B103 bzw. 10 kOhm Potentiometer.
 - 1 OLED Display, 128x64 px, I2C, 4 Pin.
 - USB-Verbindung zum PC.
@@ -126,28 +127,33 @@ die ADC1-Pins fuer Slider und die USB-Pins frei bleiben.
 
 ### Buttons
 
-| Button | GPIO |
-| --- | ---: |
-| B01 | GPIO4 |
-| B02 | GPIO5 |
-| B03 | GPIO6 |
-| B04 | GPIO7 |
-| B05 | GPIO10 |
-| B06 | GPIO11 |
-| B07 | GPIO12 |
-| B08 | GPIO13 |
-| B09 | GPIO14 |
-| B10 | GPIO15 |
-| B11 | GPIO16 |
-| B12 | GPIO17 |
-| B13 | GPIO18 |
-| B14 | GPIO21 |
-| B15 | GPIO39 |
-| B16 | GPIO40 |
-| B17 | GPIO41 |
-| B18 | GPIO42 |
-| B19 | GPIO47 |
-| B20 | GPIO48 |
+Nummerierung zeilenweise von links oben (`·` = OLED):
+
+```text
+ 1  2  3  ·  ·
+ 4  5  6  ·  ·
+ 7  8  9 10 11
+12 13 14 15 16
+```
+
+| Button | GPIO | Button | GPIO |
+| --- | ---: | --- | ---: |
+| B01 | GPIO4 | B09 | GPIO14 |
+| B02 | GPIO5 | B10 | GPIO15 |
+| B03 | GPIO6 | B11 | GPIO16 |
+| B04 | GPIO7 | B12 | GPIO17 |
+| B05 | GPIO10 | B13 | GPIO18 |
+| B06 | GPIO11 | B14 | GPIO21 |
+| B07 | GPIO12 | B15 | GPIO39 |
+| B08 | GPIO13 | B16 | GPIO40 |
+
+Gegenüber dem 20-Tasten-Entwurf entfallen GPIO41/GPIO42 (JTAG) und
+GPIO47/GPIO48 (GPIO48 = RGB-LED bei DevKitC v1.0). Sie bleiben frei für
+spätere Erweiterungen. Die Pins sind in `firmware/include/config.h`
+definiert.
+
+Aktuell verdrahtet (Stand 2026-10-04): B01 an GPIO4, Slider 1 an GPIO1, OLED
+an GPIO8/GPIO9.
 
 ## Pins, die vorerst frei bleiben sollten
 
@@ -167,24 +173,8 @@ die ADC1-Pins fuer Slider und die USB-Pins frei bleiben.
 
 ## Board-Revision pruefen
 
-Vor dem finalen Wiring sollte die konkrete Board-Revision geprueft werden.
-
-Wenn es ein DevKitC-1 v1.1 ist:
-
-- GPIO38 nicht fuer Buttons verwenden, weil dort die RGB LED haengt.
-- GPIO48 kann fuer Button B20 verwendet werden.
-
-Wenn es ein DevKitC-1 v1.0 ist:
-
-- GPIO48 nicht fuer Buttons verwenden, weil dort die RGB LED haengt.
-- Button B20 stattdessen auf GPIO38 legen.
-
-Alternative, falls die Board-Revision unklar bleibt:
-
-- B20 vorerst nicht fest verdrahten.
-- Erst mit 19 Buttons testen.
-- Danach mit einem kleinen Blink-/Input-Test pruefen, ob GPIO38 oder GPIO48
-  unproblematischer ist.
+Mit 16 Tasten wird weder GPIO38 noch GPIO48 benötigt. Die Revision ist nur
+noch für die RGB-LED relevant (v1.1: GPIO38, v1.0: GPIO48).
 
 ## Erster Prototyp
 

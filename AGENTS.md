@@ -21,14 +21,24 @@ Diese Datei beschreibt, wie Codex in diesem Repository arbeiten soll.
 
 ## Tests und Verifikation
 
-- Nach App-/Core-/Action-Aenderungen ausfuehren:
+Neubau-Stand: siehe `docs/REWRITE_PLAN.md`. Der alte Code liegt nur zum
+Nachschlagen in `legacy/` und wird nicht mehr gebaut.
+
+- Nach App-Aenderungen:
 
 ```powershell
 dotnet build app\MakroPad.sln
 dotnet test app\MakroPad.sln
 ```
 
-- Firmware kann in dieser Umgebung meist nicht mit der Arduino-Toolchain kompiliert werden. Wenn Firmware geaendert wurde, im Abschluss klar sagen, dass ein Flash-/Hardwaretest noetig ist.
+- Nach Firmware-Aenderungen (PlatformIO, im Ordner `firmware/`):
+
+```powershell
+pio run
+pio test -e native
+```
+
+- Hardware-Verhalten (Flash, OLED, Slider) muss am Geraet getestet werden; im Abschluss klar sagen, wenn das noch offen ist.
 - Bei UI-Aenderungen auf kompilierte Avalonia-Bindings achten; ein erfolgreicher Build ist Pflicht.
 
 ## Git
@@ -39,14 +49,14 @@ dotnet test app\MakroPad.sln
 
 ## Projektfokus
 
-Aktuelle Schwerpunkte:
+Leitlinie: Taste oder Slider bedienen -> am PC passiert zuverlaessig etwas ->
+das OLED bestaetigt es kurz. Features ausserhalb des aktuellen Meilensteins in
+`docs/REWRITE_PLAN.md` nicht vorziehen.
 
-- ESP32-S3 Firmware fuer Buttons, Slider und OLED.
-- Avalonia Companion App fuer Windows, perspektivisch Linux.
-- Serial-Protokoll zwischen App und MakroPad.
-- Konfigurierbare Makros, App-/System-Actions und OLED-Defaultscreen.
-- Gute Debugbarkeit fuer Audio-Sessions, Device-Verbindung und Display-Zustand.
-- Handoff und Graphify als Orientierung fuer laengere Entwicklungsabschnitte.
+- Firmware: PlatformIO, Arduino-Framework, modular, reine Logik in
+  `firmware/lib/makropad_core` mit nativen Tests.
+- App: C#/.NET 10 + Avalonia, nur Windows.
+- Protokoll v2 (`docs/PROTOCOL.md`), Display als feste Firmware-Screens.
 
 ## Abschlussformat
 

@@ -1,82 +1,43 @@
 # MakroPad
 
-MakroPad is a custom ESP32-S3 based macro and media controller with mechanical
-keyboard switches, analog sliders, and a 128x64 I2C OLED display.
+Selbstgebautes Makro- und Mediapad auf Basis eines ESP32-S3-DevKitC-1:
+16 mechanische Tasten, 3 analoge Slider und ein 128×64-OLED, per USB mit einer
+Windows-Companion-App verbunden.
 
-The project is split into two main parts:
+> Taste oder Slider bedienen → am PC passiert zuverlässig etwas → das OLED
+> bestätigt es kurz.
 
-- ESP32-S3 firmware for reading hardware inputs, driving the OLED, and
-  communicating with the host PC over USB.
-- A desktop companion app for profile management, complex actions, media
-  integration, and tray/background operation.
+## Status
 
-See [docs/PROJECT_PLAN.md](docs/PROJECT_PLAN.md) for the current requirements
-and architecture. The current continuation notes live in
-[docs/HANDOFF.md](docs/HANDOFF.md).
+Das Projekt wird neu aufgebaut (Branch `rewrite`). Plan und Meilensteine:
+[docs/REWRITE_PLAN.md](docs/REWRITE_PLAN.md), Bestandsaufnahme des alten
+Stands: [docs/REWRITE_NOTES.md](docs/REWRITE_NOTES.md).
 
-The first Arduino firmware prototype lives in
-[firmware/MakroPadFirmware](firmware/MakroPadFirmware).
+Der alte Stand (App/Firmware 0.2.0) liegt zum Nachschlagen in `legacy/` und ist
+als Git-Tag `legacy-v0.2.0` markiert.
 
-The desktop companion app lives in [app](app). It already includes a simulator,
-real serial-port support, tray/background behavior, JSON configuration, action
-execution, Windows media controls, system/app volume control, Now Playing OLED
-updates, and an editable configuration UI.
+## Aufbau
 
-## Current Status
+| Ordner | Inhalt |
+| --- | --- |
+| `firmware/` | PlatformIO-Projekt (Arduino-Framework) |
+| `app/` | .NET-10-/Avalonia-App für Windows |
+| `hardware/case/` | Parametrisches OpenSCAD-Gehäuse |
+| `docs/` | [Protokoll v2](docs/PROTOCOL.md), [Hardware/Pinout](docs/HARDWARE.md) |
 
-Implemented:
-
-- Arduino firmware prototype for up to 20 buttons, up to 3 configured sliders,
-  OLED, USB Serial, heartbeat, action-result timeout, and idle/default screen
-  rendering with placeholders, per-line text size and alignment.
-- Avalonia desktop app (device-centric UI, gray-teal light/dark theme),
-  versioned 0.1.0 with a self-contained single-file win-x64 release build.
-- Simulator connection for app development without electronics.
-- Real COM-port connection using the documented serial protocol.
-- Serial heartbeat with `ping`/`pong` and unresponsive connection status.
-- Tray icon with open and exit commands.
-- JSON config at `%APPDATA%\MakroPad\config.json`.
-- Editable profile and binding overview in the UI.
-- Windows media actions.
-- Windows `system.volume` action.
-- Windows `app.volume` action for active audio sessions.
-- `system.openUrl`, `system.openApp`, `keyboard.shortcut`, and `log` actions.
-- Multiple configurable idle screens that switch by activation: a default
-  screen, app/process-specific screens that take priority while their process
-  runs, and rotation through several active screens at an adjustable interval
-  (driven app-side, no firmware change).
-- Display content can be authored as plain text, a real HTML subset, or a
-  Markdown-like pseudocode, including a visual block builder ("Baukasten").
-  Markdown/block content supports blank lines and per-line alignment
-  (left/center/right); the firmware centers/right-aligns short lines.
-- Configurable OLED display triggers for buttons and sliders with conditions,
-  preview, and text/HTML/Markdown content rendered by the app.
-- Configurable action-result display triggers replace the default hard-coded
-  Action/Action failed screens while keeping firmware fallback compatibility.
-- Configurable media-changed display triggers replace the default visible
-  Now Playing screen while preserving firmware media-state synchronization.
-- Configurable connection-changed display triggers can react to connected,
-  connecting, unresponsive, and disconnected states.
-- Configurable profile-changed display triggers can show custom profile switch
-  screens.
-- Display trigger presets, editable preview values, match diagnostics, and
-  independently accumulated slider thresholds make trigger authoring testable
-  without generating every real device event.
-- Initial Spotify Now Playing OLED display via the Spotify window title.
-- Device-centric UI rebuilt around the physical pad: a Pad screen with a
-  20-key grid and 3 slider strips, an Edit/Test mode toggle, live input
-  highlighting, an inline profile bar, and a contextual binding inspector.
-  Workflow-ordered navigation (Pad, Display, Verbindung, Einstellungen,
-  Diagnose), a persistent live OLED preview in the Display designer, a runtime
-  light/dark theme toggle, and a MakroPad app icon.
-- Debug view for active Windows audio sessions.
-- Graphify project graph in `graphify-out/` for architecture navigation.
-- Unit tests for protocol and action behavior.
-
-Useful commands:
+## Bauen und testen
 
 ```powershell
+# Firmware (im Ordner firmware/)
+pio run
+pio run -t upload
+pio test -e native
+
+# App
 dotnet build app\MakroPad.sln
 dotnet test app\MakroPad.sln
-dotnet run --project app\MakroPad.App\MakroPad.App.csproj
+dotnet run --project app\MakroPad.App
 ```
+
+Voraussetzungen: PlatformIO Core, .NET SDK 10, für die nativen Firmware-Tests
+ein Host-gcc (z. B. WinLibs).
