@@ -48,10 +48,10 @@ public sealed class KeyViewModel(int id, int row, int column) : PadElementViewMo
 
     public int Column { get; } = column;
 
-    /// <summary>Position on the drawn pad (key pitch 124 units, like 19.05 mm on the real plate).</summary>
-    public double X => (Column * PadGeometry.KeyPitch) - PadGeometry.RingInset;
+    /// <summary>Position inside the key area, which starts one ring inset left of and above key 1.</summary>
+    public double X => Column * PadGeometry.KeyPitch;
 
-    public double Y => (Row * PadGeometry.KeyPitch) - PadGeometry.RingInset;
+    public double Y => Row * PadGeometry.KeyPitch;
 
     public override string Title => $"Taste {Id}";
 }

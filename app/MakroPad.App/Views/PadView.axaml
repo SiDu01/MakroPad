@@ -63,10 +63,11 @@
                             <Border Canvas.Left="-10" Canvas.Top="238" Width="628" Height="256"
                                     CornerRadius="10,0,10,10" Background="{DynamicResource LidWellBrush}" />
 
-                            <ItemsControl ItemsSource="{Binding Keys}">
+                            <!-- Shifted by the ring inset so the selection ring of edge keys is not clipped -->
+                            <ItemsControl ItemsSource="{Binding Keys}" Canvas.Left="-6" Canvas.Top="-6">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
-                                        <Canvas Width="608" Height="484" />
+                                        <Canvas Width="620" Height="496" />
                                     </ItemsPanelTemplate>
                                 </ItemsControl.ItemsPanel>
                                 <ItemsControl.Styles>
