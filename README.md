@@ -37,6 +37,7 @@ pio test -e native
 dotnet build app\MakroPad.sln
 dotnet test app\MakroPad.sln
 dotnet run --project app\MakroPad.App
+dotnet run --project app\MakroPad.App -- --simulator   # ohne Hardware
 ```
 
 Voraussetzungen: PlatformIO Core, .NET SDK 10, für die nativen Firmware-Tests

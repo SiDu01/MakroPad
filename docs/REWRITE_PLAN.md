@@ -153,6 +153,13 @@ App:
 die Systemlautstärke ruckelfrei setzt und das OLED beides kurz anzeigt; Abziehen
 und Wiederanstecken verbindet automatisch neu.
 
+**Status (2026-10-04): umgesetzt, Hardwaretest offen.** Firmware-Module
+(`hostlink`, `input`, `display`, `hid`) und App-Kern (`DeviceSession`,
+`InputRouter`, `LatestWinsQueue`, `MakroPadRuntime`, Windows-Actions für
+Medientasten und Systemlautstärke) sind fertig. 20 native Firmware-Tests und
+30 App-Tests grün, inkl. Ende-zu-Ende mit dem Simulator
+(`dotnet run --project app\MakroPad.App -- --simulator`).
+
 ### M2 – Profile, Bindings, Actions
 
 - Config v1 (versioniert, `schemaVersion`), atomares Speichern, Default-Config.
