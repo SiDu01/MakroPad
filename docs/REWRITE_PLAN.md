@@ -196,7 +196,8 @@ Tray mit Profilmenü, Autostart. 64 App-Tests grün.
 **Fertig, wenn:** Eine komplette Belegung ohne Handbearbeitung der JSON möglich
 ist.
 
-**Status (2026-10-04): umgesetzt, Test durch Nutzer offen.** Pad-Seite mit dem
+**Status (2026-10-04): erledigt, auf Hardware bestätigt** (inkl. Aufnahme von
+Win-Kombinationen über einen Low-Level-Hook auf eigenem Thread). Pad-Seite mit dem
 Gerät in Gehäusefarben, pixelgenauem OLED-Spiegel (`OledMirror`), Inspector
 (Aktion, Parameter, Shortcut-Aufnahme, Audio-Sessions, Dateiauswahl, Jetzt
 auslösen), Profilleiste (anlegen, umbenennen, duplizieren, verschieben,
