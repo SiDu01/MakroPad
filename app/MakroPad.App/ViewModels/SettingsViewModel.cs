@@ -29,9 +29,10 @@ public sealed partial class SettingsViewModel : ObservableObject
     [ObservableProperty]
     private string? status;
 
-    public SettingsViewModel(ConfigSession session)
+    public SettingsViewModel(ConfigSession session, AutoProfileViewModel autoProfile)
     {
         this.session = session;
+        AutoProfile = autoProfile;
         theme = Themes[0];
         Load();
         session.Changed += external =>
@@ -49,6 +50,8 @@ public sealed partial class SettingsViewModel : ObservableObject
         new("light", "Hell"),
         new("dark", "Dunkel")
     ];
+
+    public AutoProfileViewModel AutoProfile { get; }
 
     public string ConfigPath => session.Service.ConfigPath;
 

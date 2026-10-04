@@ -28,8 +28,14 @@ ersetzt.
       "actions": true,
       "volume": true,
       "errors": true,
-      "profileChange": true
+      "profileChange": true,
+      "trackChange": true          // Titel und Künstler bei einem neuen Titel
     }
+  },
+  "autoProfile": {                 // Profil nach Programm im Vordergrund
+    "enabled": true,
+    "rules": [ { "process": "Discord", "profile": "Discord" } ],
+    "fallbackProfile": null        // Profil für alle anderen Programme, null = beibehalten
   },
   "profiles": [
     {
@@ -81,11 +87,29 @@ OLED-Einblendung.
 | `media.volumeDown` | Taste | – | Leiser (ein Schritt) |
 | `system.volume` | Slider | – | Lautstärke des Standard-Ausgabegeräts |
 | `app.volume` | Slider | `process` (z. B. `Spotify`, ohne `.exe`) | Lautstärke aller Audio-Sessions des Programms; es muss gerade Audio ausgeben |
+| `app.volume.foreground` | Slider | – | Lautstärke des Programms, das gerade im Vordergrund ist |
+| `app.volume.others` | Slider | – | Lautstärke aller Programme außer dem im Vordergrund |
 | `keyboard.shortcut` | Taste | `keys` (z. B. `Ctrl+Shift+Esc`) | Tastenkombination an das aktive Fenster |
 | `system.openUrl` | Taste | `url` (http/https) | Adresse im Standardbrowser öffnen |
 | `system.openApp` | Taste | `path`, optional `args` | Programm starten oder Datei öffnen; Umgebungsvariablen wie `%USERPROFILE%` werden aufgelöst |
 | `profile.next` | Taste | – | Nächstes Profil (in Listenreihenfolge, danach wieder das erste) |
 | `profile.set` | Taste | `name` | Bestimmtes Profil aktivieren |
+
+## Automatischer Profilwechsel
+
+Kommt ein Programm in den Vordergrund, für das eine Regel existiert, wird dessen
+Profil aktiv. Für Programme ohne Regel gilt `fallbackProfile`; ist es `null`,
+bleibt das aktuelle Profil. Gewechselt wird nur, wenn ein anderes Programm in
+den Vordergrund kommt: Ein von Hand gewähltes Profil bleibt also aktiv, bis du
+das Programm wechselst. Das MakroPad-Fenster selbst löst keinen Wechsel aus.
+`process` ist der Prozessname ohne `.exe` (siehe App → Diagnose → Vordergrund).
+
+## Now Playing
+
+Die App liest Titel und Künstler aus der Medienwiedergabe von Windows (dieselbe
+Anzeige wie im Lautstärke-Popup) – das funktioniert mit Spotify, Browsern, VLC
+und anderen Playern. Der Ruhebildschirm zeigt den Titel, ein neuer Titel wird
+kurz eingeblendet (`feedback.trackChange`).
 
 ### Tasten für `keyboard.shortcut`
 

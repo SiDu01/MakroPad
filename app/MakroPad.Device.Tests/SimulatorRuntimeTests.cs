@@ -98,6 +98,23 @@ public sealed class SimulatorRuntimeTests : IAsyncLifetime
     }
 
     [Fact]
+    public async Task NowPlayingUpdatesIdleScreenAndShowsNewTracks()
+    {
+        var media = new FakeMedia();
+        runtime.Attach(media);
+
+        media.Play(new NowPlaying("Digital Love", "Daft Punk", true, "Spotify"));
+        await WaitUntil(() => linesFromApp.Contains("state;artist=Daft Punk;title=Digital Love"));
+        await WaitUntil(() => linesFromApp.Contains("screen;type=media;title=Digital Love;text=Daft Punk;ms=3000"));
+
+        // Pausing the same track neither repeats the state nor the overlay.
+        media.Play(new NowPlaying("Digital Love", "Daft Punk", false, "Spotify"));
+        media.Play(NowPlaying.None);
+        await WaitUntil(() => linesFromApp.Contains("state;artist=;title="));
+        Assert.Single(linesFromApp, line => line == "state;artist=Daft Punk;title=Digital Love");
+    }
+
+    [Fact]
     public async Task ReconnectsAfterUnplug()
     {
         var statuses = new ConcurrentQueue<ConnectionStatus>();
@@ -119,6 +136,19 @@ public sealed class SimulatorRuntimeTests : IAsyncLifetime
             }
 
             await Task.Delay(20);
+        }
+    }
+
+    private sealed class FakeMedia : INowPlayingSource
+    {
+        public NowPlaying Current { get; private set; } = NowPlaying.None;
+
+        public event Action<NowPlaying>? Changed;
+
+        public void Play(NowPlaying track)
+        {
+            Current = track;
+            Changed?.Invoke(track);
         }
     }
 

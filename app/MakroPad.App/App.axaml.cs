@@ -26,6 +26,8 @@ public partial class App : Application, IFilePicker
     private ShellViewModel? shell;
     private MainWindow? window;
     private TrayIcon? trayIcon;
+    private ForegroundWatcher? foreground;
+    private MediaSessionWatcher? media;
     private NativeMenuItem? profileMenu;
     private bool exitRequested;
 
@@ -77,7 +79,17 @@ public partial class App : Application, IFilePicker
         var diagnostics = new DiagnosticsViewModel(runtime, session, simulator, audioSessions);
         recorder.Trace += diagnostics.Info;
         var pad = new PadViewModel(session, runtime, oled, this, recorder, audioSessions);
-        var settings = new SettingsViewModel(session);
+        // Context: foreground program for automatic profiles, media sessions for the idle screen.
+        foreground = new ForegroundWatcher();
+        var switcher = new AutoProfileSwitcher(profiles, [Path.GetFileNameWithoutExtension(Environment.ProcessPath ?? "MakroPad.App")]);
+        switcher.Apply(config.Config.AutoProfile);
+        foreground.Changed += switcher.OnForegroundChanged;
+        switcher.Switched += (process, profile) => diagnostics.Info($"{process} im Vordergrund: Profil {profile} aktiviert");
+        session.Changed += _ => switcher.Apply(config.Config.AutoProfile);
+        diagnostics.Attach(foreground);
+        _ = AttachMediaAsync(runtime, diagnostics);
+
+        var settings = new SettingsViewModel(session, new AutoProfileViewModel(session, foreground));
         settings.ThemeChanged += ApplyTheme;
         shell = new ShellViewModel(runtime, pad, diagnostics, settings);
 
@@ -168,6 +180,13 @@ public partial class App : Application, IFilePicker
 
         exitRequested = true;
         desktop.Shutdown();
+    }
+
+    private async Task AttachMediaAsync(MakroPadRuntime target, DiagnosticsViewModel diagnostics)
+    {
+        media = await MediaSessionWatcher.StartAsync();
+        target.Attach(media);
+        diagnostics.Attach(media);
     }
 
     public async Task<string?> PickProgramAsync()
@@ -319,6 +338,8 @@ public partial class App : Application, IFilePicker
     {
         exitRequested = true;
         trayIcon?.Dispose();
+        foreground?.Dispose();
+        media?.Dispose();
         config?.Dispose();
         runtime?.DisposeAsync().AsTask().GetAwaiter().GetResult();
     }

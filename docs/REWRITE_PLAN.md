@@ -212,6 +212,11 @@ und Einstellungen. Gestaltung: [UI_DESIGN.md](UI_DESIGN.md).
   Profil, Fallback-Profil).
 - Lautstärke-Ziele: Vordergrund-App, „alle außer Vordergrund-App“.
 
+**Status (2026-10-04): umgesetzt, Hardwaretest offen.** `MediaSessionWatcher`
+(GSMTC) → `state;artist;title` plus Einblendung bei neuem Titel,
+`ForegroundWatcher` + `AutoProfileSwitcher` mit Regeln und Ausweichprofil
+(Einstellungen), Actions `app.volume.foreground` und `app.volume.others`.
+
 ### M5 – Makros und Eingabe-Gesten
 
 - Action-Sequenzen (mehrere Schritte, Verzögerung dazwischen).

@@ -46,6 +46,16 @@ public static class ActionCatalog
             new("process", true, "Prozessname ohne .exe", "Spotify"),
             new("label", false, "Steht auf der Taste und in der Einblendung statt des Programmnamens", "Musik")
         ]),
+        new("app.volume.foreground", "Lautstärke im Vordergrund", "Lautstärke", InputKinds.Slider,
+            "Setzt die Lautstärke des Programms, das gerade im Vordergrund ist",
+        [
+            new("label", false, "Steht auf der Beschriftung und in der Einblendung", "Fokus")
+        ]),
+        new("app.volume.others", "Lautstärke aller anderen", "Lautstärke", InputKinds.Slider,
+            "Setzt die Lautstärke aller Programme außer dem im Vordergrund",
+        [
+            new("label", false, "Steht auf der Beschriftung und in der Einblendung", "Hintergrund")
+        ]),
         new("keyboard.shortcut", "Tastenkombination", "Tastatur", InputKinds.Button, "Sendet eine Tastenkombination an das aktive Fenster",
         [
             new("keys", true, "Tasten mit + verbunden: Ctrl, Shift, Alt, Win, A-Z, 0-9, F1-F24, Enter, Esc, Tab, Space, Pfeiltasten …", "Ctrl+Shift+Esc"),

@@ -27,6 +27,8 @@ public static class FeedbackBuilder
 
     public static ScreenRequest ForProfile(string name) => new(ScreenType.Profile, Text: name);
 
+    public static ScreenRequest ForTrack(NowPlaying track) => new(ScreenType.Media, track.Title, track.Artist, DurationMs: 3000);
+
     /// <summary>Whether the user enabled an overlay for this result.</summary>
     public static bool IsEnabled(FeedbackSettings settings, ActionResult result)
     {

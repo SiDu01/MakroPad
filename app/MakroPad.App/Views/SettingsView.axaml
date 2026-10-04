@@ -34,6 +34,78 @@
                            Text="Das Fenster zu schließen beendet die App nicht. Sie läuft im Infobereich weiter, beenden kannst du sie über ihr Menü dort." />
             </StackPanel>
 
+            <StackPanel Spacing="8" DataContext="{Binding AutoProfile}" x:DataType="vm:AutoProfileViewModel">
+                <TextBlock Classes="h2" Text="Profile automatisch wechseln" />
+                <DockPanel Classes="row">
+                    <ToggleSwitch DockPanel.Dock="Right" IsChecked="{Binding Enabled}" />
+                    <TextBlock Text="Profil wechseln, wenn ein anderes Programm in den Vordergrund kommt" TextWrapping="Wrap" />
+                </DockPanel>
+                <TextBlock Classes="muted"
+                           Text="Ein Profil, das du selbst gewählt hast, bleibt aktiv, bis du zu einem anderen Programm wechselst. Das MakroPad-Fenster selbst löst keinen Wechsel aus." />
+
+                <StackPanel Spacing="8" IsEnabled="{Binding Enabled}" Margin="0,8,0,0">
+                    <TextBlock Classes="muted" Text="Noch keine Regeln. Lege unten fest, welches Profil bei welchem Programm aktiv sein soll."
+                               IsVisible="{Binding !HasRules}" />
+                    <ItemsControl ItemsSource="{Binding Rules}" IsVisible="{Binding HasRules}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="vm:ProfileRuleRow">
+                                <Border BorderBrush="{DynamicResource LineBrush}" BorderThickness="0,0,0,1" Padding="0,8">
+                                    <DockPanel>
+                                        <Button DockPanel.Dock="Right" Classes="quiet" Content="Entfernen"
+                                                Command="{Binding $parent[ItemsControl].((vm:AutoProfileViewModel)DataContext).RemoveRuleCommand}"
+                                                CommandParameter="{Binding}" />
+                                        <TextBlock VerticalAlignment="Center" FontSize="15">
+                                            <Run Text="{Binding Process}" FontWeight="SemiBold" />
+                                            <Run Text=" im Vordergrund aktiviert " Foreground="{DynamicResource InkMutedBrush}" />
+                                            <Run Text="{Binding Profile}" FontWeight="SemiBold" />
+                                        </TextBlock>
+                                    </DockPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <Grid ColumnDefinitions="*,Auto,180,Auto" Margin="0,8,0,0">
+                        <TextBox Text="{Binding NewProcess}" Watermark="Programm, z. B. Discord" />
+                        <TextBlock Grid.Column="1" Text="aktiviert" VerticalAlignment="Center" Margin="10,0"
+                                   Foreground="{DynamicResource InkMutedBrush}" />
+                        <ComboBox Grid.Column="2" ItemsSource="{Binding ProfileNames}" SelectedItem="{Binding NewProfile}"
+                                  HorizontalAlignment="Stretch" />
+                        <Button Grid.Column="3" Content="Regel hinzufügen" Command="{Binding AddRuleCommand}" Margin="8,0,0,0" />
+                    </Grid>
+                    <StackPanel IsVisible="{Binding HasRecent}">
+                        <TextBlock Classes="muted" FontSize="12.5" Text="Zuletzt im Vordergrund:" Margin="0,2,0,4" />
+                        <ItemsControl ItemsSource="{Binding Recent}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="x:String">
+                                    <Button Content="{Binding}" Margin="0,0,6,6" Padding="10,4"
+                                            Command="{Binding $parent[ItemsControl].((vm:AutoProfileViewModel)DataContext).UseProcessCommand}"
+                                            CommandParameter="{Binding}" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+
+                    <DockPanel Classes="row" Margin="0,10,0,0">
+                        <ComboBox DockPanel.Dock="Right" ItemsSource="{Binding FallbackOptions}" SelectedItem="{Binding Fallback}" MinWidth="180">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate x:DataType="vm:FallbackOption">
+                                    <TextBlock Text="{Binding Name}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                        <TextBlock Text="Bei allen anderen Programmen" />
+                    </DockPanel>
+                    <TextBlock Classes="caution" Text="{Binding Error}"
+                               IsVisible="{Binding Error, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                </StackPanel>
+            </StackPanel>
+
             <StackPanel Spacing="8">
                 <TextBlock Classes="h2" Text="Darstellung" />
                 <DockPanel Classes="row">

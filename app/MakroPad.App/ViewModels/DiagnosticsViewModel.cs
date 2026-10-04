@@ -111,6 +111,28 @@ public sealed partial class DiagnosticsViewModel : ObservableObject
 
     public string ConfigPath => session.Service.ConfigPath;
 
+    [ObservableProperty]
+    private string nowPlayingText = "–";
+
+    [ObservableProperty]
+    private string foregroundText = "–";
+
+    public void Attach(INowPlayingSource media)
+    {
+        void Show(NowPlaying track) => NowPlayingText = !track.HasTrack
+            ? "Nichts"
+            : $"{(track.Artist.Length > 0 ? track.Artist + " – " : "")}{track.Title}{(track.IsPlaying ? "" : " (pausiert)")}{(track.Source.Length > 0 ? $", über {track.Source}" : "")}";
+
+        Post(() => Show(media.Current));
+        media.Changed += track => Post(() => Show(track));
+    }
+
+    public void Attach(IForegroundSource foreground)
+    {
+        Post(() => ForegroundText = foreground.Current ?? "–");
+        foreground.Changed += name => Post(() => ForegroundText = name);
+    }
+
     /// <summary>Adds an informational line, e.g. from the shortcut recorder (any thread).</summary>
     public void Info(string text) => Post(() => Add(LogKind.Info, text));
 

@@ -35,6 +35,7 @@ public sealed class MakroPadRuntime : IAsyncDisposable
     private DeviceSession? session;
     private ITimer? clockTimer;
     private AppSettings settings = new();
+    private NowPlaying nowPlaying = NowPlaying.None;
 
     public MakroPadRuntime(
         IDeviceConnector connector,
@@ -64,6 +65,15 @@ public sealed class MakroPadRuntime : IAsyncDisposable
     }
 
     public ProfileManager Profiles => profiles;
+
+    public NowPlaying NowPlaying => nowPlaying;
+
+    /// <summary>Shows what media players report on the idle screen and as a short overlay on track changes.</summary>
+    public void Attach(INowPlayingSource source)
+    {
+        nowPlaying = source.Current;
+        source.Changed += OnNowPlayingChanged;
+    }
 
     public ConnectionStatus Status { get; private set; } = ConnectionStatus.Searching;
 
@@ -220,7 +230,29 @@ public sealed class MakroPadRuntime : IAsyncDisposable
     private void SendState()
     {
         var now = timeProvider.GetLocalNow().DateTime;
-        session?.TrySend(DeviceMessages.State(new DeviceState(Profile: profiles.Active.Name, Now: now)));
+        var track = nowPlaying;
+        session?.TrySend(DeviceMessages.State(new DeviceState(
+            Profile: profiles.Active.Name,
+            Now: now,
+            Artist: track.Artist,
+            Title: track.Title)));
+    }
+
+    private void OnNowPlayingChanged(NowPlaying track)
+    {
+        var previous = nowPlaying;
+        nowPlaying = track;
+        if (previous.IsSameTrack(track))
+        {
+            return;
+        }
+
+        // Only artist and title; the empty strings clear the idle screen when playback ends.
+        session?.TrySend(DeviceMessages.State(new DeviceState(Artist: track.Artist, Title: track.Title)));
+        if (track.HasTrack && track.IsPlaying && Settings.Feedback.TrackChange)
+        {
+            ShowScreen(FeedbackBuilder.ForTrack(track));
+        }
     }
 
     private void SetStatus(ConnectionStatus status)

@@ -26,6 +26,8 @@ public static class BindingText
             "app.volume" when binding.GetParameter("process") is { Length: > 0 } process => process,
             "profile.set" when binding.GetParameter("name") is { Length: > 0 } name => name,
             "system.volume" => "System",
+            "app.volume.foreground" => "Vordergrund",
+            "app.volume.others" => "Alle anderen",
             _ => ActionCatalog.Find(binding.Action)?.DisplayName ?? binding.Action
         };
     }

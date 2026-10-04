@@ -13,6 +13,8 @@ public static class WindowsActions
 
         yield return new SystemVolumeAction();
         yield return new AppVolumeAction();
+        yield return new ForegroundVolumeAction();
+        yield return new OtherAppsVolumeAction();
         yield return new KeyboardShortcutAction();
         yield return new OpenUrlAction();
         yield return new OpenAppAction();

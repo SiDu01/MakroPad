@@ -231,6 +231,9 @@ public sealed partial class DisplayInspectorViewModel : ObservableObject
     [ObservableProperty]
     private bool profileChange;
 
+    [ObservableProperty]
+    private bool trackChange;
+
     public DisplayInspectorViewModel(DisplayElementViewModel element, ConfigSession session)
     {
         Element = element;
@@ -240,6 +243,7 @@ public sealed partial class DisplayInspectorViewModel : ObservableObject
         volume = feedback.Volume;
         errors = feedback.Errors;
         profileChange = feedback.ProfileChange;
+        trackChange = feedback.TrackChange;
         loading = false;
     }
 
@@ -253,6 +257,8 @@ public sealed partial class DisplayInspectorViewModel : ObservableObject
 
     partial void OnProfileChangeChanged(bool value) => Save();
 
+    partial void OnTrackChangeChanged(bool value) => Save();
+
     private void Save()
     {
         if (loading)
@@ -264,7 +270,7 @@ public sealed partial class DisplayInspectorViewModel : ObservableObject
         {
             Settings = config.Settings with
             {
-                Feedback = new FeedbackSettings { Actions = Actions, Volume = Volume, Errors = Errors, ProfileChange = ProfileChange }
+                Feedback = new FeedbackSettings { Actions = Actions, Volume = Volume, Errors = Errors, ProfileChange = ProfileChange, TrackChange = TrackChange }
             }
         });
     }

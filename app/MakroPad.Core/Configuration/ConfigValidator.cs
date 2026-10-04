@@ -35,6 +35,30 @@ public static partial class ConfigValidator
             issues.Add(new ConfigIssue("settings.theme", "Erlaubt sind system, light oder dark"));
         }
 
+        var ruleProcesses = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        foreach (var rule in config.AutoProfile.Rules)
+        {
+            var location = $"autoProfile / {rule.Process}";
+            if (string.IsNullOrWhiteSpace(rule.Process))
+            {
+                issues.Add(new ConfigIssue("autoProfile", "Regel ohne Programm"));
+            }
+            else if (!ruleProcesses.Add(rule.Process.Trim()))
+            {
+                issues.Add(new ConfigIssue(location, "Für dieses Programm gibt es mehrere Regeln"));
+            }
+
+            if (config.FindProfile(rule.Profile) is null)
+            {
+                issues.Add(new ConfigIssue(location, $"Profil \"{rule.Profile}\" existiert nicht"));
+            }
+        }
+
+        if (config.AutoProfile.FallbackProfile is { Length: > 0 } fallback && config.FindProfile(fallback) is null)
+        {
+            issues.Add(new ConfigIssue("autoProfile.fallbackProfile", $"Profil \"{fallback}\" existiert nicht"));
+        }
+
         var names = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         foreach (var profile in config.Profiles)
         {

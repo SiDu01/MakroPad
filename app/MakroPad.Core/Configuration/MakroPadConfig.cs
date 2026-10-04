@@ -13,6 +13,8 @@ public sealed record MakroPadConfig
 
     public IReadOnlyList<ProfileConfig> Profiles { get; init; } = [];
 
+    public AutoProfileSettings AutoProfile { get; init; } = new();
+
     public static MakroPadConfig CreateDefault() => new()
     {
         Profiles =
@@ -70,7 +72,24 @@ public sealed record FeedbackSettings
     public bool Errors { get; init; } = true;
 
     public bool ProfileChange { get; init; } = true;
+
+    /// <summary>Show title and artist briefly when the playing track changes.</summary>
+    public bool TrackChange { get; init; } = true;
 }
+
+/// <summary>Switches the profile when another program comes to the foreground.</summary>
+public sealed record AutoProfileSettings
+{
+    public bool Enabled { get; init; } = true;
+
+    public IReadOnlyList<ProfileRule> Rules { get; init; } = [];
+
+    /// <summary>Profile for programs without a rule; null keeps the current profile.</summary>
+    public string? FallbackProfile { get; init; }
+}
+
+/// <summary><see cref="Process"/> is the process name without <c>.exe</c>, e.g. <c>Discord</c>.</summary>
+public sealed record ProfileRule(string Process, string Profile);
 
 /// <summary>App-owned runtime state (<c>state.json</c>), kept apart from the user's config.</summary>
 public sealed record AppState

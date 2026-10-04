@@ -41,7 +41,12 @@ public static class ConfigEditor
                     Name = SameName(profile.Name, oldName) ? newName : profile.Name,
                     Bindings = [.. profile.Bindings.Select(binding => RetargetProfileSet(binding, oldName, newName))]
                 })
-            ]
+            ],
+            AutoProfile = config.AutoProfile with
+            {
+                Rules = [.. config.AutoProfile.Rules.Select(r => SameName(r.Profile, oldName) ? r with { Profile = newName } : r)],
+                FallbackProfile = config.AutoProfile.FallbackProfile is { } fallback && SameName(fallback, oldName) ? newName : config.AutoProfile.FallbackProfile
+            }
         };
     }
 
@@ -52,7 +57,49 @@ public static class ConfigEditor
             throw new InvalidOperationException("Das letzte Profil kann nicht gelöscht werden.");
         }
 
-        return config with { Profiles = [.. config.Profiles.Where(p => !SameName(p.Name, name))] };
+        return config with
+        {
+            Profiles = [.. config.Profiles.Where(p => !SameName(p.Name, name))],
+            AutoProfile = config.AutoProfile with
+            {
+                Rules = [.. config.AutoProfile.Rules.Where(r => !SameName(r.Profile, name))],
+                FallbackProfile = config.AutoProfile.FallbackProfile is { } fallback && SameName(fallback, name) ? null : config.AutoProfile.FallbackProfile
+            }
+        };
+    }
+
+    /// <summary>Adds a rule or replaces the rule for the same program.</summary>
+    public static MakroPadConfig SetProfileRule(MakroPadConfig config, ProfileRule rule)
+    {
+        var process = NormalizeProcess(rule.Process);
+        if (process.Length == 0)
+        {
+            throw new InvalidOperationException("Gib den Namen eines Programms an, z. B. Discord.");
+        }
+
+        if (config.FindProfile(rule.Profile) is null)
+        {
+            throw new InvalidOperationException($"Profil \"{rule.Profile}\" existiert nicht.");
+        }
+
+        var rules = config.AutoProfile.Rules.Where(r => !SameName(NormalizeProcess(r.Process), process)).Append(new ProfileRule(process, rule.Profile));
+        return config with { AutoProfile = config.AutoProfile with { Rules = [.. rules] } };
+    }
+
+    public static MakroPadConfig RemoveProfileRule(MakroPadConfig config, string process)
+        => config with
+        {
+            AutoProfile = config.AutoProfile with
+            {
+                Rules = [.. config.AutoProfile.Rules.Where(r => !SameName(NormalizeProcess(r.Process), NormalizeProcess(process)))]
+            }
+        };
+
+    /// <summary><c>Discord.exe</c> → <c>Discord</c>.</summary>
+    public static string NormalizeProcess(string process)
+    {
+        var trimmed = (process ?? "").Trim();
+        return trimmed.EndsWith(".exe", StringComparison.OrdinalIgnoreCase) ? trimmed[..^4] : trimmed;
     }
 
     public static MakroPadConfig MoveProfile(MakroPadConfig config, string name, int offset)

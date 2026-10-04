@@ -7,7 +7,7 @@
         <StackPanel Spacing="8">
             <TextBlock Classes="h1" Text="Display" />
             <TextBlock Classes="muted"
-                       Text="Hier siehst du live, was das Display am MakroPad gerade zeigt. Im Ruhezustand stehen dort Profil, Uhrzeit und Datum." />
+                       Text="Hier siehst du live, was das Display am MakroPad gerade zeigt. Im Ruhezustand stehen dort Profil und Uhrzeit, darunter der laufende Titel oder das Datum." />
         </StackPanel>
 
         <StackPanel Spacing="6">
@@ -38,6 +38,10 @@
             <DockPanel>
                 <ToggleSwitch DockPanel.Dock="Right" IsChecked="{Binding ProfileChange}" />
                 <TextBlock Text="Beim Profilwechsel" />
+            </DockPanel>
+            <DockPanel>
+                <ToggleSwitch DockPanel.Dock="Right" IsChecked="{Binding TrackChange}" />
+                <TextBlock Text="Bei einem neuen Titel" />
             </DockPanel>
         </StackPanel>
 
