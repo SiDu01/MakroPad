@@ -38,6 +38,8 @@ constexpr uint8_t OledSclPin = 9;
 constexpr uint8_t OledAddress = 0x3C;
 constexpr int ScreenWidth = 128;
 constexpr int ScreenHeight = 64;
+// The case mounts the OLED upside down (pins at the bottom), so rotate by 180 degrees.
+constexpr uint8_t OledRotation = 2;
 
 constexpr uint32_t SerialBaud = 115200;
 constexpr uint32_t HelloIntervalMs = 1000;

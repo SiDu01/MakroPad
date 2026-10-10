@@ -260,6 +260,7 @@ void setup() {
     return;
   }
   oled.cp437(true);
+  oled.setRotation(config::OledRotation);
   render(millis());
 }
 

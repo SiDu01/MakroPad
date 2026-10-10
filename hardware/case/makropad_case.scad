@@ -35,7 +35,7 @@ corner_r = 2;       // Eckenradius aussen
 margin_left = 14;   // Deckelrand links bis Tastenfeld
 margin_right = 14;  // Deckelrand rechts bis Slider-Modul
 margin_front = 12;  // Deckelrand vorne bis Slider-Modul
-margin_back = 15;   // Deckelrand hinten bis Slider-Modul (Platz fuer den ESP32 hinten)
+margin_back = 17;   // Deckelrand hinten bis Slider-Modul (Platz fuer den ESP32 hinten)
 section_gap = 9;    // Abstand Tastenfeld <-> Slider (Platz fuer zwei Schraubsaeulen)
 fit = 0.2;          // Spiel fuer Passungen
 
@@ -74,7 +74,6 @@ plate_t = 3;         // Gesamtstaerke der versenkten Switch-Platte
 well_depth = 7.5;    // Platten-Oberseite -> Deckel-Oberflaeche (~ Unterkante Keycap in Ruhe)
 well_gap = 0.5;      // Spiel Mulde <-> Keycap-Raster
 well_wall = 2;       // Wandstaerke der Mulde
-insert_fit = 0.2;    // Spiel Switch-Platte <-> Deckelausschnitt
 tab_len = 5;         // Laschen der Switch-Platte (unter dem Deckel)
 tab_w = 8;
 tab_t = 2.5;
@@ -90,6 +89,7 @@ slider_travel = 60;             // Hub (gemessen)
 slider_slot_w = 3;              // Schlitzbreite fuer den Hebel
 slider_slot_extra = 5;          // Hebelbreite + Spiel in Hubrichtung -> Schlitz 65 mm (gemessen)
 slider_slot_offset = 0;         // Versatz des Schlitzes entlang der Laenge (NACHMESSEN)
+slider_pot_offset = 3.5;        // Poti sitzt aussermittig: Rand 2 mm / 9 mm -> Schlitz 3.5 mm nach rechts (gemessen)
 slider_pot_top = 7;             // Platinen-Oberseite -> Oberkante Poti-Gehaeuse (gemessen)
 slider_hole_inset = [3, 3];     // Lochmitte vom Platinenrand [quer, laengs] -> Lochabstand 15 x 85 mm (gemessen)
 slider_standoff_d = 5.5;
@@ -110,17 +110,29 @@ oled_frame_screw_d = 2.2;          // Durchgang in der Auflage (Rahmen von unten
 oled_frame_screw_inset = 1.9;      // Abstand der Rahmenschrauben von der Rahmenecke
 oled_frame_gap = 2.5;              // Steg zwischen Rahmen und Tastenfeld-Ausschnitt
 oled_frame_proud = 0.6;            // Ueberstand des Rahmens ueber die Deckel-Oberflaeche
-oled_frame_ch = 0.6;               // Fase an der Rahmen-Oberkante
+oled_angle = 60;                   // Winkel des Displays zum Tisch (Deckel ist um tilt geneigt)
+oled_face_len = 33;                // Laenge der schraegen Display-Flaeche
+oled_wall = 2;                     // Wandstaerke des Display-Gehaeuses
+oled_back = 10;                    // Tiefe des Gehaeuses hinter der Display-Flaeche
+oled_comp_h = 3;                   // Bauteile auf der Platinen-Rueckseite
+// Das Display steht kopfueber (Anschluesse unten, Firmware dreht das Bild): oben steckt die
+// Platine unter einer Haltelippe, unten halten 2 Schrauben.
+oled_slide = 2.5;                  // Schiebeweg beim Einsetzen unter die Lippe
+oled_lip_len = 2;                  // Ueberdeckung der Lippe am oberen Platinenrand
+oled_lip_t = 1.5;                  // Staerke der Lippe
+oled_groove = 0.5;                 // Luft hinter dem oberen Platinenrand
+oled_pcb_band = 1.8;               // Platinenstaerke + Spiel in der Nut
 oled_frame_fit = 0.15;             // Spiel Rahmen <-> Tasche
 
 /* [ESP32-S3-DevKitC-1] */
-esp_l = 63;           // Laenge (NACHMESSEN)
-esp_w = 25.5;         // Breite
+esp_l = 74;           // Gesamtlaenge (gemessen)
+esp_w = 28;           // Breite am USB-Ende (gemessen)
+esp_tip = [6, 18];    // schmales Ende gegenueber USB: [Laenge, Breite] (gemessen)
 esp_pcb_t = 1.6;
 esp_pins = 8.5;       // Stiftleisten unter der Platine
 esp_x0 = 14;          // USB-Ende der Platine (Abstand zur linken Deckelkante)
-esp_y0 = 77;          // Vorderkante der Platine (Weltkoordinate)
-usb_slot = [26, 8];   // Ausschnitt in der linken Seitenwand (deckt beide USB-C-Buchsen ab)
+esp_y0 = 76.5;        // Vorderkante der Platine (Weltkoordinate)
+usb_slot = [27, 8];   // Ausschnitt in der linken Seitenwand (deckt beide USB-C-Buchsen ab)
 usb_conn_h = 3.2;
 
 /* [Fuesse] */
@@ -152,7 +164,8 @@ sl_y0 = margin_front + (content_d - sl_d) / 2;
 // Switch-Platte (Masse fuer Mulde und Deckelausschnitt)
 plate_bot = -(well_depth + plate_t);
 well_out = well_gap + well_wall;               // Aussenkante der Muldenwand ab Tastenraster
-cut_out = well_out + insert_fit;               // Kante des Deckelausschnitts ab Tastenraster
+cut_out = well_gap;                            // Kante des Deckelausschnitts ab Tastenraster (= Muldeninnenkante,
+                                               // die Muldenwand der Switch-Platte endet unter dem Deckel)
 
 // OLED-Rahmen: fuellt den 2x2-Block; rechte und hintere Kante fluchten mit dem
 // Deckelausschnitt des Tastenfelds, zu den Tasten bleibt ein gleichmaessiger Steg.
@@ -177,7 +190,7 @@ tray_in_y = [lid_ys + tray_offset[1] + wall, lid_ys + Dw - tray_offset[1] - wall
 pillar_y = [tray_in_y[0] + fit + pillar_d / 2, tray_in_y[1] - fit - pillar_d / 2];
 gap_x = (keys_x0 + keys_w + well_gap + well_wall + sl_x0) / 2;   // Mitte der Luecke Tasten/Slider
 boss_pos = [[keys_x0 + key_pitch, pillar_y[0]], [gap_x, pillar_y[0]],
-            [gap_x, pillar_y[1]], [keys_x0 + 4 * key_pitch, pillar_y[1]]];
+            [gap_x, pillar_y[1]], [keys_x0 + 4.4 * key_pitch, pillar_y[1]]];
 // Schnapphaken: [Punkt auf der Innenwand der Schale, Richtung nach aussen]
 hooks = [[[tray_in_x[1], lid_ys + 30], [1, 0]], [[tray_in_x[1], lid_ys + Dw - 30], [1, 0]],
          [[keys_x0 + 1.5 * key_pitch, tray_in_y[1]], [0, 1]], [[sl_x0 + sl_w / 2, tray_in_y[1]], [0, 1]]];
@@ -200,9 +213,7 @@ oled_holes = [for (sx = [-1, 1], sy = [-1, 1])
     [sx * oled_hole_spacing[0] / 2, sy * oled_hole_spacing[1] / 2]];
 // Hoehen im Deckel-System: Rahmen sitzt auf einer Auflage im Deckel, Display steckt von unten im Rahmen
 oled_frame_bot = lid_bot + oled_ledge;
-oled_frame_h = oled_frame_proud - oled_frame_bot;
-oled_glass_top = oled_frame_proud - oled_recess;
-oled_pcb_top = oled_glass_top - oled_glass[2];
+oled_face_t = oled_recess + oled_glass[2];       // Display-Flaeche -> Platinen-Oberseite
 oled_frame_screws = [for (s = [-1, 1]) s * (oled_frame_size / 2 - [oled_frame_screw_inset, oled_frame_screw_inset])];
 
 // Switch-Platte
@@ -288,7 +299,7 @@ module lid_cuts() {
     // Slider-Schlitze + Kernloecher in den Abstandshaltern
     for (i = [0 : slider_n - 1]) {
         s = slider_c(i);
-        translate([s[0], s[1] + slider_slot_offset]) chamfered_cut(0.8) slot2d(slider_slot_len, slider_slot_w);
+        translate([s[0] + slider_pot_offset, s[1] + slider_slot_offset]) chamfered_cut(0.8) slot2d(slider_slot_len, slider_slot_w);
         for (h = slider_holes)
             translate([s[0] + h[0], s[1] + h[1], lid_bot - slider_pot_top - 1]) cylinder(d = slider_pilot_d, h = 9);
     }
@@ -358,8 +369,8 @@ module switch_plate() {
         union() {
             // Platte
             translate([0, 0, plate_bot]) linear_extrude(plate_t) keys_outline(well_out);
-            // Muldenwand bis zur Deckel-Oberflaeche
-            translate([0, 0, plate_bot]) linear_extrude(-plate_bot) difference() {
+            // Muldenwand bis zur Deckel-Unterseite (oberer Teil der Mulde ist der Deckel selbst)
+            translate([0, 0, plate_bot]) linear_extrude(lid_bot - plate_bot) difference() {
                 keys_outline(well_out);
                 keys_outline(well_gap);
             }
@@ -390,53 +401,100 @@ module tab_box(t, z, h, len) {
 }
 
 // ---------- OLED-Rahmen (Deckel-System, eingebaute Lage) ----------
+// Display-System: Ursprung an der Vorderkante der schraegen Flaeche, y entlang der
+// Flaeche nach oben, z = Normale nach aussen. Die Flaeche steht oled_angle zum Tisch.
+module oled_face() {
+    translate([0, -oled_frame_size[1] / 2, oled_frame_proud]) rotate([oled_angle - tilt, 0, 0]) children();
+}
+
+// keilfoermiges Display-Gehaeuse (Deckel-System, eingebaute Lage): Zapfen in der
+// Deckeltasche, darueber schraege Display-Flaeche; Display steckt von unten im Gehaeuse
 module oled_frame() {
-    z = function(zt) zt - oled_frame_bot;   // Deckel-System -> Rahmen-lokal
-    translate([oled_frame_c[0], oled_frame_c[1], oled_frame_bot]) difference() {
-        hull() {
-            linear_extrude(oled_frame_h - oled_frame_ch) rr2d_c(oled_frame_size, 1.5);
-            linear_extrude(oled_frame_h) offset(delta = -oled_frame_ch) rr2d_c(oled_frame_size, 1.5);
-        }
-        // Tasche fuer die Platine (von unten)
-        translate([0, 0, -1]) linear_extrude(z(oled_pcb_top) + 1)
-            square(oled_pcb + [oled_pcb_fit, oled_pcb_fit], center = true);
-        // Tasche fuer das Glas
-        translate([0, 0, z(oled_pcb_top) - 0.01]) linear_extrude(oled_glass[2] + 0.01)
-            square([oled_glass[0], oled_glass[1]] + [oled_pcb_fit, oled_pcb_fit], center = true);
-        // Freiraum fuer die Loetstellen am oberen Platinenrand
-        translate([-oled_header[0] / 2, oled_pcb[1] / 2 - 1 - oled_header[1], z(oled_pcb_top) - 0.01])
-            cube([oled_header[0], oled_header[1] + 1, oled_header[2]]);
-        // Fenster mit Fase nach oben
-        translate([0, oled_window_offset]) {
-            translate([0, 0, z(oled_glass_top) - 0.01]) linear_extrude(oled_recess + 1)
-                offset(r = 0.5) offset(delta = -0.5) square(oled_window, center = true);
-            hull() {
-                translate([0, 0, oled_frame_h - 1.2]) linear_extrude(0.01)
-                    offset(r = 0.5) offset(delta = -0.5) square(oled_window, center = true);
-                translate([0, 0, oled_frame_h]) linear_extrude(0.01)
-                    offset(r = 1.7) offset(delta = -0.5) square(oled_window, center = true);
+    S = oled_frame_size; w = oled_wall; Lf = oled_face_len;
+    translate([oled_frame_c[0], oled_frame_c[1], 0]) difference() {
+        union() {
+            difference() {
+                union() {
+                    intersection() {
+                        hull() {
+                            translate([0, 0, -0.01]) linear_extrude(oled_frame_proud + 0.01) rr2d_c(S, 1.5);
+                            oled_face() translate([-S[0] / 2, 0, -0.01]) cube([S[0], Lf, 0.01]);
+                            oled_face() translate([-S[0] / 2, 0, -oled_back]) cube([S[0], Lf, 0.01]);
+                        }
+                        linear_extrude(100) rr2d_c(S, 1.5);
+                    }
+                    translate([0, 0, oled_frame_bot]) linear_extrude(-oled_frame_bot + 0.01) rr2d_c(S, 1.5);
+                }
+                // Innenraum, unten offen
+                hull() {
+                    translate([0, 0, oled_frame_bot - 1]) linear_extrude(0.01) square(S - [2 * w, 2 * w], center = true);
+                    oled_face() translate([-(S[0] / 2 - w), w, -oled_face_t]) cube([S[0] - 2 * w, Lf - 2 * w, 0.01]);
+                    oled_face() translate([-(S[0] / 2 - w), w, -(oled_back - w)]) cube([S[0] - 2 * w, Lf - 2 * w, 0.01]);
+                }
             }
+            // Eckbloecke fuer die Rahmenschrauben
+            intersection() {
+                for (h = oled_frame_screws)
+                    translate([h[0] - 2.2, h[1] - 2.2, oled_frame_bot]) cube([4.4, 4.4, -oled_frame_bot]);
+                translate([0, 0, oled_frame_bot]) linear_extrude(-oled_frame_bot) rr2d_c(S, 1.5);
+            }
+            // Block fuer Nut und Haltelippe am oberen Platinenrand
+            oled_face() translate([-(S[0] / 2 - w) - 0.01, Lf / 2 + oled_pcb[1] / 2 - oled_lip_len, -oled_face_t - oled_pcb_band - oled_lip_t])
+                cube([S[0] - 2 * w + 0.02, Lf / 2 - oled_pcb[1] / 2 + oled_lip_len, oled_face_t + oled_pcb_band + oled_lip_t]);
         }
-        // Kernloecher: OLED-Schrauben (von unten durch die Platine) und Rahmenschrauben (durch die Auflage)
-        for (h = oled_holes)
-            translate([h[0], h[1], z(oled_pcb_top) - 0.01]) cylinder(d = oled_pilot_d, h = 2.5);
+
+        // Display-Halterung in der schraegen Flaeche
+        oled_face() translate([0, Lf / 2, 0]) {
+            // Fenster mit Fase nach aussen (Display kopfueber -> Versatz gespiegelt)
+            translate([0, -oled_window_offset]) {
+                translate([0, 0, -oled_recess - 0.01]) linear_extrude(oled_recess + 1)
+                    offset(r = 0.5) offset(delta = -0.5) square(oled_window, center = true);
+                hull() {
+                    translate([0, 0, -1.2]) linear_extrude(0.01)
+                        offset(r = 0.5) offset(delta = -0.5) square(oled_window, center = true);
+                    linear_extrude(0.01) offset(r = 1.7) offset(delta = -0.5) square(oled_window, center = true);
+                }
+            }
+            g = [oled_glass[0], oled_glass[1]] + [oled_pcb_fit, oled_pcb_fit];
+            p = oled_pcb + [oled_pcb_fit, oled_pcb_fit];
+            // Glas (nach unten um den Schiebeweg verlaengert)
+            translate([-g[0] / 2, -g[1] / 2 - oled_slide, -oled_face_t - 0.01])
+                cube([g[0], g[1] + oled_slide, oled_glass[2] + 0.01]);
+            // Platine: Nut bis unter die Lippe
+            translate([-p[0] / 2, -p[1] / 2 - oled_slide, -oled_face_t - oled_pcb_band])
+                cube([p[0], p[1] + oled_slide + oled_groove, oled_pcb_band + 0.01]);
+            // Bauteile auf der Rueckseite (Lippe bleibt stehen)
+            translate([-p[0] / 2, -p[1] / 2 - oled_slide, -oled_face_t - 1.6 - oled_comp_h])
+                cube([p[0], p[1] + oled_slide - oled_lip_len, 1.6 + oled_comp_h - oled_pcb_band + 0.01]);
+            // Loetstellen der Anschluesse (jetzt unten) auf der Vorderseite
+            translate([-oled_header[0] / 2, -oled_pcb[1] / 2 - oled_slide, -oled_face_t - 0.01])
+                cube([oled_header[0], 1 + oled_header[1] + oled_slide, oled_header[2]]);
+            // Kernloecher fuer die beiden unteren OLED-Schrauben (von innen durch die Platine)
+            for (h = oled_holes) if (h[1] < 0)
+                translate([h[0], h[1], -oled_face_t - 0.01]) cylinder(d = oled_pilot_d, h = 2.5);
+        }
+        // Kernloecher fuer die Rahmenschrauben (von unten durch die Auflage im Deckel)
         for (h = oled_frame_screws)
-            translate([h[0], h[1], -0.01]) cylinder(d = oled_pilot_d, h = 3);
+            translate([h[0], h[1], oled_frame_bot - 0.01]) cylinder(d = oled_pilot_d, h = 3);
     }
 }
 
 // ---------- Unterschale ----------
 module esp_cradle() {
-    support_w = 16;   // nur zwischen den Stiftleisten abstuetzen
+    support_w = 16;   // am USB-Ende nur zwischen den Stiftleisten abstuetzen
+    tip_x0 = esp_x1 - esp_tip[0];
     // Auflage am USB-Ende
     translate([esp_x0 + 0.5, esp_cy - support_w / 2, 0]) cube([3, support_w, esp_zb]);
-    // Auflage + Anschlag am anderen Ende
-    translate([esp_x1 - 2.5, esp_cy - support_w / 2, 0]) cube([2.5, support_w, esp_zb]);
-    translate([esp_x1 + fit, esp_cy - support_w / 2, 0]) cube([2.3 - fit, support_w, esp_zb + 3]);
-    // seitliche Fuehrungen an beiden Enden
-    for (sy = [-1, 1], x = [esp_x0 + 4, esp_x1 - 6])
-        translate([x, esp_cy + sy * (esp_w / 2 + fit) + (sy < 0 ? -1.6 : 0), 0])
+    // Auflage unter dem schmalen Ende + Anschlag
+    translate([tip_x0 + 0.5, esp_cy - esp_tip[1] / 2 + 1, 0]) cube([esp_tip[0] - 0.5, esp_tip[1] - 2, esp_zb]);
+    translate([esp_x1 + fit, esp_cy - esp_tip[1] / 2 + 1, 0]) cube([2.3 - fit, esp_tip[1] - 2, esp_zb + 3]);
+    // seitliche Fuehrungen: am USB-Ende (volle Breite) und am schmalen Ende
+    for (sy = [-1, 1]) {
+        translate([esp_x0 + 4, esp_cy + sy * (esp_w / 2 + fit) + (sy < 0 ? -1.6 : 0), 0])
             cube([6, 1.6, esp_zb + esp_pcb_t + 2]);
+        translate([tip_x0 + 0.5, esp_cy + sy * (esp_tip[1] / 2 + fit) + (sy < 0 ? -1.6 : 0), 0])
+            cube([esp_tip[0] - 0.5, 1.6, esp_zb + esp_pcb_t + 2]);
+    }
 }
 
 // Freiraum der Bauteile, der von den Saeulen frei bleiben muss
@@ -507,18 +565,22 @@ module dummies() {
         }
         for (i = [0 : slider_n - 1]) {
             s = slider_c(i);
-            color("#2b2b2b") translate([s[0] - 1, s[1] + slider_slot_offset - 2, 0]) cube([2, 4, 8]);
-            color("#e0662b") translate([s[0] - 6, s[1] + slider_slot_offset - 9, 8]) cube([12, 18, 10]);
+            color("#2b2b2b") translate([s[0] + slider_pot_offset - 1, s[1] + slider_slot_offset - 2, 0]) cube([2, 4, 8]);
+            color("#e0662b") translate([s[0] + slider_pot_offset - 6, s[1] + slider_slot_offset - 9, 8]) cube([12, 18, 10]);
             color("#2f6f5e", 0.6) translate([s[0] - slider_pcb[0] / 2, s[1] - slider_pcb[1] / 2, lid_bot - slider_pot_top - 1.6])
                 cube([slider_pcb[0], slider_pcb[1], 1.6]);
         }
-        color("#101820") translate([oled_c[0] - oled_window[0] / 2, oled_c[1] + oled_window_offset - oled_window[1] / 2, oled_glass_top - 0.5])
-            cube([oled_window[0], oled_window[1], 0.5]);
+        color("#101820") translate([oled_frame_c[0], oled_frame_c[1], 0]) oled_face()
+            translate([-oled_window[0] / 2, oled_face_len / 2 - oled_window_offset - oled_window[1] / 2, -oled_recess - 0.5])
+                cube([oled_window[0], oled_window[1], 0.5]);
     }
 }
 
 module esp_dummy() {
-    color("#1d3b8a", 0.8) translate([esp_x0, esp_y0, esp_zb]) cube([esp_l, esp_w, esp_pcb_t]);
+    color("#1d3b8a", 0.8) translate([esp_x0, esp_y0, esp_zb]) {
+        cube([esp_l - esp_tip[0], esp_w, esp_pcb_t]);
+        translate([esp_l - esp_tip[0], (esp_w - esp_tip[1]) / 2, 0]) cube([esp_tip[0], esp_tip[1], esp_pcb_t]);
+    }
 }
 
 // ---------- Ausgabe ----------
@@ -531,9 +593,8 @@ if (part == "lid") {
 } else if (part == "tray") {
     tray();
 } else if (part == "oled_frame") {
-    // Sichtseite nach unten
-    translate([0, 0, oled_frame_h]) rotate([180, 0, 0])
-        translate([-oled_frame_c[0], -oled_frame_c[1], -oled_frame_bot]) oled_frame();
+    // aufrecht drucken (Zapfen auf dem Druckbett)
+    translate([-oled_frame_c[0], -oled_frame_c[1], -oled_frame_bot]) oled_frame();
 } else if (part != "none") {
     dz = part == "exploded" ? 45 : 0;
     color("#5f7f7a") tray();
