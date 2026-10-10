@@ -94,7 +94,8 @@ public sealed class SerialLineTransport : ILineTransport
             catch (TimeoutException)
             {
             }
-            catch (Exception ex) when (ex is IOException or InvalidOperationException or UnauthorizedAccessException or ObjectDisposedException)
+            // OperationCanceledException: Windows cancels the pending read when the port goes away (e.g. at shutdown).
+            catch (Exception ex) when (ex is IOException or InvalidOperationException or UnauthorizedAccessException or ObjectDisposedException or OperationCanceledException)
             {
                 if (!disposed)
                 {
