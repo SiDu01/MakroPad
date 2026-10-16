@@ -155,6 +155,69 @@ definiert.
 Aktuell verdrahtet (Stand 2026-10-04): B01 an GPIO4, Slider 1 an GPIO1, OLED
 an GPIO8/GPIO9.
 
+## ESP32-S3-DevKitC-1 Pinout (Belegung MakroPad)
+
+Beide Stiftleisten von oben gesehen, USB-Buchsen unten. Pin 1 liegt jeweils am
+Antennenende (oben). Die Leistenbelegung folgt dem Espressif User Guide v1.1;
+vor dem Löten mit dem Aufdruck auf der eigenen Platine abgleichen.
+
+```text
+              Antenne
+      J1                    J3
+ 3V3   [ 1]  ●      ●  [ 1]  GND
+ 3V3   [ 2]  ●      ●  [ 2]  GPIO43  (UART TX, frei)
+ RST   [ 3]  ●      ●  [ 3]  GPIO44  (UART RX, frei)
+ B01   [ 4]  ●      ●  [ 4]  GPIO1   Slider 1
+ B02   [ 5]  ●      ●  [ 5]  GPIO2   Slider 2
+ B03   [ 6]  ●      ●  [ 6]  GPIO42  frei
+ B04   [ 7]  ●      ●  [ 7]  GPIO41  frei
+ B10   [ 8]  ●      ●  [ 8]  GPIO40  B16
+ B11   [ 9]  ●      ●  [ 9]  GPIO39  B15
+ B12   [10]  ●      ●  [10]  GPIO38  RGB-LED (v1.1)
+ B13   [11]  ●      ●  [11]  GPIO37  meiden
+ SDA   [12]  ●      ●  [12]  GPIO36  meiden
+ S3    [13]  ●      ●  [13]  GPIO35  meiden
+ —     [14]  ●      ●  [14]  GPIO0   Boot, meiden
+ SCL   [15]  ●      ●  [15]  GPIO45  meiden
+ B05   [16]  ●      ●  [16]  GPIO48  frei (RGB-LED bei v1.0)
+ B06   [17]  ●      ●  [17]  GPIO47  frei
+ B07   [18]  ●      ●  [18]  GPIO21  B14
+ B08   [19]  ●      ●  [19]  GPIO20  USB D+
+ B09   [20]  ●      ●  [20]  GPIO19  USB D−
+ 5V    [21]  ●      ●  [21]  GND
+ GND   [22]  ●      ●  [22]  GND
+           [USB-UART] [USB]
+```
+
+| J1 | GPIO | MakroPad | | J3 | GPIO | MakroPad |
+| ---: | --- | --- | --- | ---: | --- | --- |
+| 1 | 3V3 | Slider + OLED VCC | | 1 | GND | |
+| 2 | 3V3 | | | 2 | GPIO43 | frei (UART0 TX) |
+| 3 | RST | – | | 3 | GPIO44 | frei (UART0 RX) |
+| 4 | GPIO4 | Taste 1 | | 4 | GPIO1 | Slider 1 |
+| 5 | GPIO5 | Taste 2 | | 5 | GPIO2 | Slider 2 |
+| 6 | GPIO6 | Taste 3 | | 6 | GPIO42 | frei (JTAG) |
+| 7 | GPIO7 | Taste 4 | | 7 | GPIO41 | frei (JTAG) |
+| 8 | GPIO15 | Taste 10 | | 8 | GPIO40 | Taste 16 |
+| 9 | GPIO16 | Taste 11 | | 9 | GPIO39 | Taste 15 |
+| 10 | GPIO17 | Taste 12 | | 10 | GPIO38 | RGB-LED (v1.1) |
+| 11 | GPIO18 | Taste 13 | | 11 | GPIO37 | meiden (Flash/PSRAM) |
+| 12 | GPIO8 | OLED SDA | | 12 | GPIO36 | meiden (Flash/PSRAM) |
+| 13 | GPIO3 | Slider 3 | | 13 | GPIO35 | meiden (Flash/PSRAM) |
+| 14 | GPIO46 | meiden (Strapping) | | 14 | GPIO0 | meiden (Boot) |
+| 15 | GPIO9 | OLED SCL | | 15 | GPIO45 | meiden (Strapping) |
+| 16 | GPIO10 | Taste 5 | | 16 | GPIO48 | frei (RGB-LED bei v1.0) |
+| 17 | GPIO11 | Taste 6 | | 17 | GPIO47 | frei |
+| 18 | GPIO12 | Taste 7 | | 18 | GPIO21 | Taste 14 |
+| 19 | GPIO13 | Taste 8 | | 19 | GPIO20 | USB D+ |
+| 20 | GPIO14 | Taste 9 | | 20 | GPIO19 | USB D− |
+| 21 | 5V | – | | 21 | GND | |
+| 22 | GND | Tasten, Slider, OLED GND | | 22 | GND | |
+
+Alle Tasten schalten gegen GND (interne Pullups), die Slider liegen zwischen
+3V3 und GND mit dem Schleifer am GPIO. Quelle der Zuordnung:
+`firmware/include/config.h`.
+
 ## Pins, die vorerst frei bleiben sollten
 
 | GPIO | Grund |
