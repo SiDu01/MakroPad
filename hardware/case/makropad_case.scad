@@ -22,7 +22,7 @@
 // Masse mit "NACHMESSEN" sind Annahmen und sollten am echten Bauteil geprueft werden.
 
 /* [Ausgabe] */
-part = "assembly"; // [assembly, exploded, lid, switch_plate, tray, oled_frame]
+part = "assembly"; // [assembly, exploded, lid, switch_plate, tray, oled_frame, esp_adapter]
 show_dummies = true; // Tastenkappen/Slider/OLED/ESP32 in der Vorschau anzeigen
 
 /* [Gehaeuse] */
@@ -125,9 +125,10 @@ oled_pcb_band = 1.8;               // Platinenstaerke + Spiel in der Nut
 oled_frame_fit = 0.15;             // Spiel Rahmen <-> Tasche
 
 /* [ESP32-S3-DevKitC-1] */
-esp_l = 74;           // Gesamtlaenge (gemessen)
+esp_l = 64;           // Gesamtlaenge (gemessen)
 esp_w = 28;           // Breite am USB-Ende (gemessen)
 esp_tip = [6, 18];    // schmales Ende gegenueber USB: [Laenge, Breite] (gemessen)
+esp_adapter_old_l = 74; // Boardlaenge, fuer die eine bereits gedruckte Schale gebaut ist (Adapter)
 esp_pcb_t = 1.6;
 esp_pins = 8.5;       // Stiftleisten unter der Platine
 esp_x0 = 14;          // USB-Ende der Platine (Abstand zur linken Deckelkante)
@@ -497,6 +498,43 @@ module esp_cradle() {
     }
 }
 
+// Adapter fuer eine Schale, die fuer ein laengeres Board (esp_adapter_old_l) gedruckt wurde
+// (Welt, eingebaute Lage). Er steht auf dem Boden, liegt mit einer Bruecke auf der alten
+// Auflage, greift mit zwei Zapfen in die Spalten neben ihr und hakt hinter dem alten Anschlag ein.
+module esp_adapter() {
+    old_x1 = esp_x0 + esp_adapter_old_l;
+    old_sup_x0 = old_x1 - esp_tip[0] + 0.5;                  // alte Auflage: old_sup_x0 .. old_x1
+    old_stop = [old_x1 + fit, old_x1 + 2.3];                  // alter Anschlag (x)
+    tip_x0 = esp_x1 - esp_tip[0];
+    half_sup = esp_tip[1] / 2 - 1;                            // halbe Breite von Auflage und Anschlag
+    half_gd = esp_tip[1] / 2 + fit;                           // Innenkante der alten Fuehrungen
+    half_out = half_gd + 1.6;                                 // Aussenkante der Fuehrungen
+    h = esp_zb - floor_t;                                     // Auflagehoehe ueber dem Boden
+    stop_top = h + 3;                                         // Oberkante des alten Anschlags
+    top = stop_top + 1.6;                                     // Oberkante von Bruecke und Haken
+    finger_t = half_gd - half_sup - 0.2;
+    translate([0, esp_cy, floor_t]) {
+        // Sockel unter dem schmalen Ende des neuen Boards
+        translate([tip_x0 + 0.5, -half_out, 0]) cube([old_sup_x0 - 0.2 - tip_x0 - 0.5, 2 * half_out, h]);
+        // Seitenfuehrungen am schmalen Ende
+        for (sy = [-1, 1])
+            translate([tip_x0 + 0.5, sy > 0 ? half_gd : -half_out, 0])
+                cube([esp_tip[0] - 0.5, 1.6, h + esp_pcb_t + 2]);
+        // Bruecke: Anschlag fuer das neue Board, liegt auf der alten Auflage (zwischen den alten Fuehrungen)
+        translate([esp_x1 + fit, -(half_gd - 0.2), h]) cube([old_x1 - 0.1 - esp_x1 - fit, 2 * (half_gd - 0.2), top - h]);
+        // Haken ueber den alten Anschlag, Lippe mit Fase (druckbar)
+        translate([old_x1 - 0.11, -half_sup, stop_top + 0.1]) cube([old_stop[1] - old_x1 + 0.31 + 1.5, 2 * half_sup, top - stop_top - 0.1]);
+        hull() {
+            translate([old_stop[1] + 0.2, -half_sup, stop_top - 0.5]) cube([1.5, 2 * half_sup, top - stop_top + 0.5]);
+            translate([old_stop[1] + 0.2, -half_sup, stop_top - 2]) cube([0.4, 2 * half_sup, 0.01]);
+        }
+        // Zapfen in die Spalten zwischen alter Auflage und alten Fuehrungen
+        for (sy = [-1, 1])
+            translate([old_sup_x0 - 0.21, sy > 0 ? half_sup + 0.1 : -half_sup - 0.1 - finger_t, 0])
+                cube([old_x1 - 0.1 - old_sup_x0 + 0.21, finger_t, h + 0.01]);
+    }
+}
+
 // Freiraum der Bauteile, der von den Saeulen frei bleiben muss
 module component_clearance() {
     tilted() for (i = [0 : slider_n - 1]) {
@@ -592,6 +630,8 @@ if (part == "lid") {
     translate([0, 0, -plate_bot]) switch_plate();
 } else if (part == "tray") {
     tray();
+} else if (part == "esp_adapter") {
+    translate([-esp_x0, -esp_cy, -floor_t]) esp_adapter();
 } else if (part == "oled_frame") {
     // aufrecht drucken (Zapfen auf dem Druckbett)
     translate([-oled_frame_c[0], -oled_frame_c[1], -oled_frame_bot]) oled_frame();

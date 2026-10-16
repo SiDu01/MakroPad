@@ -27,7 +27,7 @@ foreach ($p in "lid", "switch_plate", "tray", "oled_frame") {
 }
 ```
 
-`part` = `assembly` | `exploded` | `lid` | `switch_plate` | `tray` | `oled_frame`.
+`part` = `assembly` | `exploded` | `lid` | `switch_plate` | `tray` | `oled_frame` | `esp_adapter`.
 Alle Maße stehen oben in der Datei (im OpenSCAD-Customizer editierbar).
 Werte mit `NACHMESSEN` sind Annahmen.
 
@@ -50,8 +50,11 @@ Keines der Teile braucht Stützen. PLA/PETG, 0.2 mm Schicht, 3–4 Wände
    Das Poti sitzt außermittig: der schmale 2-mm-Rand neben dem Poti zeigt nach rechts
    (zur Außenkante), sonst trifft der Hebel den Schlitz nicht.
    Stiftleisten möglichst seitlich/abgewinkelt, nach unten ist wenig Platz.
-5. ESP32 (74 × 28 mm, schmales Ende 18 mm) waagerecht in die Halterung der Schale legen,
+5. ESP32 (64 × 28 mm, schmales Ende 18 mm) waagerecht in die Halterung der Schale legen,
    USB-C zur linken Wand, das schmale Ende rechts in den Anschlag.
+   Schale noch für das 74-mm-Board gedruckt? Dann `esp_adapter` drucken (Sockel auf dem Bett,
+   Stützen nur unter dem Haken) und von oben einsetzen: die Zapfen greifen in die Spalten neben
+   der alten Auflage, die Brücke liegt auf ihr auf, der Haken greift hinter den alten Anschlag.
 6. Deckel aufsetzen, bis die 4 Schnapphaken (rechts und hinten) einrasten, dann
    4× M2×10 Zylinderkopf (DIN 912) von unten durch die Kanäle der Schale in die Dome
    am Deckel schrauben (vorne links, vorne und hinten zwischen Tasten und Slidern,
