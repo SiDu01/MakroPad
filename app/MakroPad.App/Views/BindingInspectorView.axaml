@@ -3,8 +3,80 @@
              xmlns:vm="using:MakroPad.App.ViewModels"
              x:Class="MakroPad.App.Views.BindingInspectorView"
              x:DataType="vm:BindingInspectorViewModel">
+    <!-- Parameter editors; declared here so the binding and every macro step use the same ones. -->
+    <UserControl.DataTemplates>
+        <DataTemplate DataType="vm:ShortcutParameterViewModel">
+            <StackPanel>
+                <TextBlock Classes="label" Text="{Binding Label}" />
+                <DockPanel>
+                    <ToggleButton DockPanel.Dock="Right" Margin="8,0,0,0" MinWidth="112"
+                                  Content="{Binding RecordText}" IsChecked="{Binding IsRecording}" />
+                    <TextBox Text="{Binding Value}" PlaceholderText="{Binding Placeholder}" IsEnabled="{Binding !IsRecording}" />
+                </DockPanel>
+                <TextBlock Classes="muted" Margin="0,6,0,0" FontSize="12.5" IsVisible="{Binding IsRecording}"
+                           Text="Auch Kombinationen mit der Windows-Taste werden aufgenommen, ohne dass sie etwas auslösen. Esc bricht ab." />
+                <TextBlock Classes="caution" Margin="0,6,0,0" Text="{Binding RecordError}"
+                           IsVisible="{Binding RecordError, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                <TextBlock Classes="muted" Text="{Binding Hint}" Margin="0,6,0,0" FontSize="12.5" IsVisible="{Binding !IsRecording}" />
+            </StackPanel>
+        </DataTemplate>
+        <DataTemplate DataType="vm:ProcessParameterViewModel">
+            <StackPanel>
+                <TextBlock Classes="label" Text="{Binding Label}" />
+                <TextBox Text="{Binding Value}" PlaceholderText="{Binding Placeholder}" />
+                <TextBlock Classes="muted" Margin="0,10,0,4" FontSize="12.5"
+                           Text="Spielt gerade Audio ab:" IsVisible="{Binding HasSessions}" />
+                <TextBlock Classes="muted" Margin="0,10,0,4" FontSize="12.5"
+                           Text="Gerade spielt kein Programm Audio ab. Starte es und klicke auf Aktualisieren."
+                           IsVisible="{Binding !HasSessions}" />
+                <WrapPanel>
+                    <ItemsControl ItemsSource="{Binding Sessions}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="x:String">
+                                <Button Content="{Binding}" Margin="0,0,6,6" Padding="10,4"
+                                        Command="{Binding $parent[ItemsControl].((vm:ProcessParameterViewModel)DataContext).UseCommand}"
+                                        CommandParameter="{Binding}" />
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <Button Classes="quiet" Content="Aktualisieren" Command="{Binding RefreshCommand}" Margin="0,0,0,6" />
+                </WrapPanel>
+            </StackPanel>
+        </DataTemplate>
+        <DataTemplate DataType="vm:PathParameterViewModel">
+            <StackPanel>
+                <TextBlock Classes="label" Text="{Binding Label}" />
+                <DockPanel>
+                    <Button DockPanel.Dock="Right" Margin="8,0,0,0" Content="Durchsuchen …" Command="{Binding BrowseCommand}" />
+                    <TextBox Text="{Binding Value}" PlaceholderText="{Binding Placeholder}" />
+                </DockPanel>
+                <TextBlock Classes="muted" Text="{Binding Hint}" Margin="0,6,0,0" FontSize="12.5" />
+            </StackPanel>
+        </DataTemplate>
+        <DataTemplate DataType="vm:ProfileParameterViewModel">
+            <StackPanel>
+                <TextBlock Classes="label" Text="{Binding Label}" />
+                <ComboBox ItemsSource="{Binding Profiles}" SelectedItem="{Binding Value}" HorizontalAlignment="Stretch" />
+            </StackPanel>
+        </DataTemplate>
+        <DataTemplate DataType="vm:TextParameterViewModel">
+            <StackPanel>
+                <TextBlock Classes="label" Text="{Binding Label}" />
+                <TextBox Text="{Binding Value}" PlaceholderText="{Binding Placeholder}"
+                         AcceptsReturn="{Binding IsMultiline}" TextWrapping="Wrap"
+                         MinHeight="{Binding IsMultiline, Converter={x:Static vm:InspectorConverters.MultilineHeight}}" />
+                <TextBlock Classes="muted" Text="{Binding Hint}" Margin="0,6,0,0" FontSize="12.5" />
+            </StackPanel>
+        </DataTemplate>
+    </UserControl.DataTemplates>
+
     <StackPanel Spacing="22">
-        <StackPanel Spacing="2">
+        <StackPanel Spacing="2" IsVisible="{Binding ShowTitle}">
             <TextBlock Classes="h1" Text="{Binding Title}" />
             <TextBlock Classes="muted" Text="{Binding ProfileName, StringFormat='im Profil {0}'}" />
         </StackPanel>
@@ -32,75 +104,61 @@
                     <StackPanel Spacing="20" />
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
-            <ItemsControl.DataTemplates>
-                <DataTemplate DataType="vm:ShortcutParameterViewModel">
-                    <StackPanel>
-                        <TextBlock Classes="label" Text="{Binding Label}" />
-                        <DockPanel>
-                            <ToggleButton DockPanel.Dock="Right" Margin="8,0,0,0" MinWidth="112"
-                                          Content="{Binding RecordText}" IsChecked="{Binding IsRecording}" />
-                            <TextBox Text="{Binding Value}" PlaceholderText="{Binding Placeholder}" IsEnabled="{Binding !IsRecording}" />
-                        </DockPanel>
-                        <TextBlock Classes="muted" Margin="0,6,0,0" FontSize="12.5" IsVisible="{Binding IsRecording}"
-                                   Text="Auch Kombinationen mit der Windows-Taste werden aufgenommen, ohne dass sie etwas auslösen. Esc bricht ab." />
-                        <TextBlock Classes="caution" Margin="0,6,0,0" Text="{Binding RecordError}"
-                                   IsVisible="{Binding RecordError, Converter={x:Static ObjectConverters.IsNotNull}}" />
-                        <TextBlock Classes="muted" Text="{Binding Hint}" Margin="0,6,0,0" FontSize="12.5" IsVisible="{Binding !IsRecording}" />
-                    </StackPanel>
-                </DataTemplate>
-                <DataTemplate DataType="vm:ProcessParameterViewModel">
-                    <StackPanel>
-                        <TextBlock Classes="label" Text="{Binding Label}" />
-                        <TextBox Text="{Binding Value}" PlaceholderText="{Binding Placeholder}" />
-                        <TextBlock Classes="muted" Margin="0,10,0,4" FontSize="12.5"
-                                   Text="Spielt gerade Audio ab:" IsVisible="{Binding HasSessions}" />
-                        <TextBlock Classes="muted" Margin="0,10,0,4" FontSize="12.5"
-                                   Text="Gerade spielt kein Programm Audio ab. Starte es und klicke auf Aktualisieren."
-                                   IsVisible="{Binding !HasSessions}" />
-                        <WrapPanel>
-                            <ItemsControl ItemsSource="{Binding Sessions}">
-                                <ItemsControl.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <WrapPanel />
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate x:DataType="x:String">
-                                        <Button Content="{Binding}" Margin="0,0,6,6" Padding="10,4"
-                                                Command="{Binding $parent[ItemsControl].((vm:ProcessParameterViewModel)DataContext).UseCommand}"
-                                                CommandParameter="{Binding}" />
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                            <Button Classes="quiet" Content="Aktualisieren" Command="{Binding RefreshCommand}" Margin="0,0,0,6" />
-                        </WrapPanel>
-                    </StackPanel>
-                </DataTemplate>
-                <DataTemplate DataType="vm:PathParameterViewModel">
-                    <StackPanel>
-                        <TextBlock Classes="label" Text="{Binding Label}" />
-                        <DockPanel>
-                            <Button DockPanel.Dock="Right" Margin="8,0,0,0" Content="Durchsuchen …" Command="{Binding BrowseCommand}" />
-                            <TextBox Text="{Binding Value}" PlaceholderText="{Binding Placeholder}" />
-                        </DockPanel>
-                        <TextBlock Classes="muted" Text="{Binding Hint}" Margin="0,6,0,0" FontSize="12.5" />
-                    </StackPanel>
-                </DataTemplate>
-                <DataTemplate DataType="vm:ProfileParameterViewModel">
-                    <StackPanel>
-                        <TextBlock Classes="label" Text="{Binding Label}" />
-                        <ComboBox ItemsSource="{Binding Profiles}" SelectedItem="{Binding Value}" HorizontalAlignment="Stretch" />
-                    </StackPanel>
-                </DataTemplate>
-                <DataTemplate DataType="vm:TextParameterViewModel">
-                    <StackPanel>
-                        <TextBlock Classes="label" Text="{Binding Label}" />
-                        <TextBox Text="{Binding Value}" PlaceholderText="{Binding Placeholder}" />
-                        <TextBlock Classes="muted" Text="{Binding Hint}" Margin="0,6,0,0" FontSize="12.5" />
-                    </StackPanel>
-                </DataTemplate>
-            </ItemsControl.DataTemplates>
         </ItemsControl>
+
+        <!-- Macro steps: numbered because they run in this order. -->
+        <StackPanel Spacing="10" IsVisible="{Binding IsMacro}">
+            <TextBlock Classes="label" Text="Schritte" Margin="0" />
+            <ItemsControl ItemsSource="{Binding Steps}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Spacing="8" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="vm:MacroStepViewModel">
+                        <Border BorderBrush="{DynamicResource LineBrush}" BorderThickness="1" CornerRadius="6" Padding="12,10">
+                            <StackPanel Spacing="12">
+                                <DockPanel>
+                                    <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Margin="6,0,0,0">
+                                        <Button Classes="quiet" Content="↑" Padding="8,4" ToolTip.Tip="Nach oben"
+                                                Command="{Binding $parent[ItemsControl].((vm:BindingInspectorViewModel)DataContext).MoveStepUpCommand}"
+                                                CommandParameter="{Binding}" />
+                                        <Button Classes="quiet" Content="↓" Padding="8,4" ToolTip.Tip="Nach unten"
+                                                Command="{Binding $parent[ItemsControl].((vm:BindingInspectorViewModel)DataContext).MoveStepDownCommand}"
+                                                CommandParameter="{Binding}" />
+                                        <Button Classes="quiet" Content="✕" Padding="8,4" ToolTip.Tip="Schritt entfernen"
+                                                Command="{Binding $parent[ItemsControl].((vm:BindingInspectorViewModel)DataContext).RemoveStepCommand}"
+                                                CommandParameter="{Binding}" />
+                                    </StackPanel>
+                                    <TextBlock DockPanel.Dock="Left" Text="{Binding Number}" Width="22" FontSize="15" FontWeight="SemiBold"
+                                               VerticalAlignment="Center" Foreground="{DynamicResource InkMutedBrush}" />
+                                    <ComboBox ItemsSource="{x:Static vm:MacroStepViewModel.Options}" SelectedItem="{Binding SelectedAction}"
+                                              HorizontalAlignment="Stretch" MaxDropDownHeight="420">
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate x:DataType="vm:ActionOption">
+                                                <TextBlock Text="{Binding Name}" />
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                    </ComboBox>
+                                </DockPanel>
+                                <ItemsControl ItemsSource="{Binding Parameters}" Margin="22,0,0,0">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel Spacing="14" />
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                </ItemsControl>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            <StackPanel Orientation="Horizontal" Spacing="8" IsEnabled="{Binding CanAddStep}">
+                <Button Content="Aktion hinzufügen" Command="{Binding AddStepCommand}" />
+                <Button Content="Pause hinzufügen" Command="{Binding AddDelayCommand}" />
+            </StackPanel>
+        </StackPanel>
 
         <ItemsControl ItemsSource="{Binding Issues}" IsVisible="{Binding HasIssues}">
             <ItemsControl.ItemTemplate>

@@ -84,6 +84,24 @@
         <Setter Property="Background" Value="{DynamicResource PanelBrush}" />
     </Style>
 
+    <!-- Gesture segments in the key inspector. -->
+    <Style Selector="Button.gesture">
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource InkMutedBrush}" />
+        <Setter Property="CornerRadius" Value="5" />
+        <Setter Property="Padding" Value="8,6" />
+        <Setter Property="FontSize" Value="14" />
+    </Style>
+    <Style Selector="Button.gesture.active /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource WorkspaceBrush}" />
+    </Style>
+    <Style Selector="Button.gesture.active">
+        <Setter Property="Foreground" Value="{DynamicResource InkBrush}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+    </Style>
+
     <!-- Quiet text buttons (secondary actions). -->
     <Style Selector="Button.quiet">
         <Setter Property="Background" Value="Transparent" />

@@ -26,7 +26,10 @@ public abstract partial class ParameterViewModel(ParameterDefinition definition)
     partial void OnValueChanged(string value) => Edited?.Invoke();
 }
 
-public sealed class TextParameterViewModel(ParameterDefinition definition) : ParameterViewModel(definition);
+public sealed class TextParameterViewModel(ParameterDefinition definition, bool multiline = false) : ParameterViewModel(definition)
+{
+    public bool IsMultiline { get; } = multiline;
+}
 
 public sealed partial class ShortcutParameterViewModel(ParameterDefinition definition, IShortcutRecorder recorder) : ParameterViewModel(definition)
 {

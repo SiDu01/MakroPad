@@ -121,6 +121,22 @@
             </StackPanel>
 
             <StackPanel Spacing="8">
+                <TextBlock Classes="h2" Text="Tasten" />
+                <DockPanel Classes="row">
+                    <NumericUpDown DockPanel.Dock="Right" Value="{Binding LongPressMs}" Minimum="200" Maximum="3000"
+                                   Increment="50" FormatString="0' ms'" MinWidth="140" />
+                    <TextBlock Text="Langer Druck ab" />
+                </DockPanel>
+                <DockPanel Classes="row">
+                    <NumericUpDown DockPanel.Dock="Right" Value="{Binding DoublePressMs}" Minimum="100" Maximum="1000"
+                                   Increment="50" FormatString="0' ms'" MinWidth="140" />
+                    <TextBlock Text="Doppeldruck innerhalb von" />
+                </DockPanel>
+                <TextBlock Classes="muted"
+                           Text="Gilt nur für Tasten, die auch lang oder doppelt belegt sind. Bei allen anderen löst ein Druck sofort aus." />
+            </StackPanel>
+
+            <StackPanel Spacing="8">
                 <TextBlock Classes="h2" Text="Slider" />
                 <DockPanel Classes="row">
                     <NumericUpDown DockPanel.Dock="Right" Value="{Binding SliderDeadbandPercent}" Minimum="0" Maximum="25"

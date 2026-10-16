@@ -35,6 +35,10 @@ public sealed class SimulatedDevice : IDeviceConnector
         current?.Emit($"button;id={id};state=up");
     }
 
+    public void ButtonDown(int id) => current?.Emit($"button;id={id};state=down");
+
+    public void ButtonUp(int id) => current?.Emit($"button;id={id};state=up");
+
     public void MoveSlider(int id, int value)
         => current?.Emit($"slider;id={id};value={Math.Clamp(value, 0, SliderInput.MaxValue).ToString(CultureInfo.InvariantCulture)}");
 

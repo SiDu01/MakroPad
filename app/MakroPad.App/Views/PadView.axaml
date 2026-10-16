@@ -83,7 +83,11 @@
                                                 CommandParameter="{Binding}"
                                                 AutomationProperties.Name="{Binding Title}">
                                             <Grid RowDefinitions="Auto,*">
-                                                <TextBlock Text="{Binding Id}" FontSize="12.5" Foreground="{DynamicResource KeycapNumberBrush}" />
+                                                <DockPanel>
+                                                    <TextBlock DockPanel.Dock="Right" Text="{Binding GestureHint}" FontSize="11"
+                                                               Foreground="{DynamicResource KeycapNumberBrush}" />
+                                                    <TextBlock Text="{Binding Id}" FontSize="12.5" Foreground="{DynamicResource KeycapNumberBrush}" />
+                                                </DockPanel>
                                                 <TextBlock Grid.Row="1" Text="{Binding Legend}" VerticalAlignment="Bottom"
                                                            FontSize="{Binding LegendFontSize}" FontWeight="SemiBold"
                                                            LineHeight="18" TextWrapping="Wrap" MaxLines="3" TextTrimming="CharacterEllipsis"

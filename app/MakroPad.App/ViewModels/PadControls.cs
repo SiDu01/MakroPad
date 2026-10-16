@@ -38,8 +38,12 @@ public abstract partial class PadElementViewModel : ObservableObject
     }
 }
 
-public sealed class KeyViewModel(int id, int row, int column) : PadElementViewModel
+public sealed partial class KeyViewModel(int id, int row, int column) : PadElementViewModel
 {
+    /// <summary>"lang", "doppelt" or both when those gestures are bound; empty otherwise.</summary>
+    [ObservableProperty]
+    private string gestureHint = "";
+
     public int Id { get; } = id;
 
     public string Input => $"button:{Id}";

@@ -18,9 +18,7 @@ public sealed partial class PadViewModel : ObservableObject
 
     private readonly ConfigSession session;
     private readonly MakroPadRuntime runtime;
-    private readonly IFilePicker picker;
-    private readonly IShortcutRecorder recorder;
-    private readonly Func<IReadOnlyList<string>> listAudioSessions;
+    private readonly ParameterFactory factory;
 
     [ObservableProperty]
     private PadElementViewModel? selected;
@@ -40,10 +38,9 @@ public sealed partial class PadViewModel : ObservableObject
     public PadViewModel(ConfigSession session, MakroPadRuntime runtime, OledMirror oled, IFilePicker picker, IShortcutRecorder recorder, Func<IReadOnlyList<string>> listAudioSessions)
     {
         this.session = session;
-        this.recorder = recorder;
+
         this.runtime = runtime;
-        this.picker = picker;
-        this.listAudioSessions = listAudioSessions;
+        factory = new ParameterFactory(picker, recorder, listAudioSessions, () => [.. session.Config.Profiles.Select(p => p.Name)]);
         Oled = oled;
 
         // 5x4 grid, the OLED takes the top-right 2x2 block (docs/HARDWARE.md).
@@ -103,7 +100,7 @@ public sealed partial class PadViewModel : ObservableObject
             return;
         }
 
-        (Inspector as BindingInspectorViewModel)?.Flush();
+        (Inspector as IFlushable)?.Flush();
         if (Selected is not null)
         {
             Selected.IsSelected = false;
@@ -118,7 +115,7 @@ public sealed partial class PadViewModel : ObservableObject
     [RelayCommand]
     private void ClearSelection()
     {
-        (Inspector as BindingInspectorViewModel)?.Flush();
+        (Inspector as IFlushable)?.Flush();
         if (Selected is not null)
         {
             Selected.IsSelected = false;
@@ -132,7 +129,7 @@ public sealed partial class PadViewModel : ObservableObject
     [RelayCommand]
     private void ActivateProfile(ProfileTabViewModel tab)
     {
-        (Inspector as BindingInspectorViewModel)?.Flush();
+        (Inspector as IFlushable)?.Flush();
         runtime.Profiles.Set(tab.Name);
     }
 
@@ -187,7 +184,7 @@ public sealed partial class PadViewModel : ObservableObject
 
     private void EditProfiles(Func<MakroPadConfig, (MakroPadConfig Config, string? Activate)> edit)
     {
-        (Inspector as BindingInspectorViewModel)?.Flush();
+        (Inspector as IFlushable)?.Flush();
         string? activate = null;
         ProfileError = session.Update(config =>
         {
@@ -204,8 +201,12 @@ public sealed partial class PadViewModel : ObservableObject
 
     private object CreateInspector(PadElementViewModel element) => element switch
     {
-        KeyViewModel key => new BindingInspectorViewModel(key, key.Input, InputKinds.Button, session, runtime, picker, recorder, listAudioSessions),
-        FaderViewModel fader => new BindingInspectorViewModel(fader, fader.Input, InputKinds.Slider, session, runtime, picker, recorder, listAudioSessions),
+        KeyViewModel key => new KeyInspectorViewModel(
+            key,
+            (Inspector as KeyInspectorViewModel) is { } previous && ReferenceEquals(Selected, key) ? previous.Gesture : Gesture.Press,
+            input => new BindingInspectorViewModel(key, input, InputKinds.Button, session, runtime, factory) { ShowTitle = false },
+            input => Find(session.Config.FindProfile(ActiveProfile) ?? runtime.Profiles.Active, input) is not null),
+        FaderViewModel fader => new BindingInspectorViewModel(fader, fader.Input, InputKinds.Slider, session, runtime, factory),
         DisplayElementViewModel display => new DisplayInspectorViewModel(display, session),
         _ => throw new ArgumentOutOfRangeException(nameof(element))
     };
@@ -216,6 +217,9 @@ public sealed partial class PadViewModel : ObservableObject
         foreach (var key in Keys)
         {
             key.Legend = BindingText.Legend(Find(profile, key.Input));
+            key.GestureHint = BindingText.GestureHint(
+                Find(profile, key.Input + GestureInput.LongSuffix) is not null,
+                Find(profile, key.Input + GestureInput.DoubleSuffix) is not null);
         }
 
         foreach (var fader in Faders)
@@ -237,6 +241,10 @@ public sealed partial class PadViewModel : ObservableObject
         if (rebuildInspector && Selected is not null)
         {
             Inspector = CreateInspector(Selected);
+        }
+        else
+        {
+            (Inspector as KeyInspectorViewModel)?.RefreshMarks();
         }
     }
 

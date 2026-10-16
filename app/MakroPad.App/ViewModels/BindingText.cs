@@ -26,6 +26,9 @@ public static class BindingText
             "app.volume" when binding.GetParameter("process") is { Length: > 0 } process => process,
             "profile.set" when binding.GetParameter("name") is { Length: > 0 } name => name,
             "system.volume" => "System",
+            "keyboard.text" when binding.GetParameter("text") is { Length: > 0 } text => text.Replace("\\n", " ", StringComparison.Ordinal).Replace('\n', ' '),
+            "system.run" when binding.GetParameter("command") is { Length: > 0 } command => MakroPad.Windows.RunCommandAction.Describe(command),
+            "http.request" when Uri.TryCreate(binding.GetParameter("url"), UriKind.Absolute, out var target) => SiteName(target.Host),
             "app.volume.foreground" => "Vordergrund",
             "app.volume.others" => "Alle anderen",
             _ => ActionCatalog.Find(binding.Action)?.DisplayName ?? binding.Action
@@ -49,6 +52,14 @@ public static class BindingText
         return parts.Count > 0 ? string.Join('.', parts) : host;
     }
 
+    public static string GestureHint(bool longBound, bool doubleBound) => (longBound, doubleBound) switch
+    {
+        (true, true) => "lang, doppelt",
+        (true, false) => "lang",
+        (false, true) => "doppelt",
+        _ => ""
+    };
+
     /// <summary>German field labels for catalog parameters.</summary>
     public static string ParameterLabel(string name) => name switch
     {
@@ -59,6 +70,12 @@ public static class BindingText
         "args" => "Argumente",
         "name" => "Profil",
         "label" => "Beschriftung",
+        "text" => "Text",
+        "command" => "Befehl",
+        "method" => "Methode",
+        "body" => "Inhalt",
+        "contentType" => "Inhaltstyp",
+        "ms" => "Millisekunden",
         _ => name
     };
 }

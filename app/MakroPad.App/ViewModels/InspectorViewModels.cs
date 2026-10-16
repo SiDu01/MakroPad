@@ -19,16 +19,132 @@ public sealed record ActionOption(ActionDefinition? Definition)
     public string Description => Definition?.Description ?? "Die Eingabe löst keine Aktion aus.";
 }
 
-/// <summary>Edits what one key or slider does in the active profile. Every change is saved right away.</summary>
-public sealed partial class BindingInspectorViewModel : ObservableObject
+/// <summary>An inspector that may hold unsaved edits.</summary>
+public interface IFlushable
+{
+    void Flush();
+}
+
+/// <summary>Builds the right editor for each action parameter; shared by bindings and macro steps.</summary>
+public sealed class ParameterFactory(
+    IFilePicker picker,
+    IShortcutRecorder recorder,
+    Func<IReadOnlyList<string>> listAudioSessions,
+    Func<IReadOnlyList<string>> listProfiles)
+{
+    public IShortcutRecorder Recorder => recorder;
+
+    public ParameterViewModel Create(string actionId, ParameterDefinition definition) => (actionId, definition.Name) switch
+    {
+        ("keyboard.shortcut", "keys") => new ShortcutParameterViewModel(definition, recorder),
+        ("app.volume", "process") => new ProcessParameterViewModel(definition, listAudioSessions),
+        ("system.openApp", "path") => new PathParameterViewModel(definition, picker),
+        ("profile.set", "name") => new ProfileParameterViewModel(definition, listProfiles()),
+        ("keyboard.text", "text") or ("http.request", "body") => new TextParameterViewModel(definition, multiline: true),
+        _ => new TextParameterViewModel(definition)
+    };
+
+    /// <summary>Editors for all parameters of an action, filled from <paramref name="values"/>.</summary>
+    public List<ParameterViewModel> CreateAll(ActionDefinition? action, Func<string, string?> values, bool includeLabel = true)
+    {
+        var result = new List<ParameterViewModel>();
+        foreach (var definition in action?.Parameters ?? [])
+        {
+            if (!includeLabel && definition.Name == "label")
+            {
+                continue;
+            }
+
+            var parameter = Create(action!.Id, definition);
+            parameter.Value = values(definition.Name) ?? "";
+            result.Add(parameter);
+        }
+
+        return result;
+    }
+
+    public static Dictionary<string, string>? Collect(IEnumerable<ParameterViewModel> parameters)
+    {
+        var values = parameters
+            .Where(p => !string.IsNullOrWhiteSpace(p.Value))
+            .ToDictionary(p => p.Name, p => p.Value.Trim('\r', '\n', ' '), StringComparer.OrdinalIgnoreCase);
+        return values.Count == 0 ? null : values;
+    }
+}
+
+/// <summary>One step of a macro in the editor.</summary>
+public sealed partial class MacroStepViewModel : ObservableObject
+{
+    private readonly ParameterFactory factory;
+    private bool loading;
+
+    [ObservableProperty]
+    private ActionOption selectedAction;
+
+    [ObservableProperty]
+    private int number;
+
+    public MacroStepViewModel(MacroStep step, ParameterFactory factory)
+    {
+        this.factory = factory;
+        loading = true;
+        selectedAction = Options.FirstOrDefault(o => string.Equals(o.Definition!.Id, step.Action, StringComparison.OrdinalIgnoreCase))
+                         ?? Options[0];
+        Build(step.GetParameter);
+        loading = false;
+    }
+
+    public static IReadOnlyList<ActionOption> Options { get; } = [.. ActionCatalog.MacroStepActions.Select(a => new ActionOption(a))];
+
+    public ObservableCollection<ParameterViewModel> Parameters { get; } = [];
+
+    public bool IsDelay => SelectedAction.Definition == ActionCatalog.Delay;
+
+    /// <summary>Raised when anything in the step changed.</summary>
+    public event Action? Edited;
+
+    public MacroStep ToStep() => new(SelectedAction.Definition!.Id, ParameterFactory.Collect(Parameters));
+
+    partial void OnSelectedActionChanged(ActionOption value)
+    {
+        if (loading)
+        {
+            return;
+        }
+
+        var previous = Parameters.ToDictionary(p => p.Name, p => p.Value, StringComparer.OrdinalIgnoreCase);
+        Build(name => previous.GetValueOrDefault(name));
+        OnPropertyChanged(nameof(IsDelay));
+        Edited?.Invoke();
+    }
+
+    private void Build(Func<string, string?> values)
+    {
+        foreach (var parameter in Parameters)
+        {
+            parameter.Edited -= OnParameterEdited;
+        }
+
+        Parameters.Clear();
+        // Labels only show up on keys and overlays, which a single step never does.
+        foreach (var parameter in factory.CreateAll(SelectedAction.Definition, values, includeLabel: false))
+        {
+            parameter.Edited += OnParameterEdited;
+            Parameters.Add(parameter);
+        }
+    }
+
+    private void OnParameterEdited() => Edited?.Invoke();
+}
+
+/// <summary>Edits what one input does in the active profile. Every change is saved right away.</summary>
+public sealed partial class BindingInspectorViewModel : ObservableObject, IFlushable
 {
     private static readonly TimeSpan SaveDelay = TimeSpan.FromMilliseconds(400);
 
     private readonly ConfigSession session;
     private readonly MakroPadRuntime runtime;
-    private readonly IFilePicker picker;
-    private readonly IShortcutRecorder recorder;
-    private readonly Func<IReadOnlyList<string>> listAudioSessions;
+    private readonly ParameterFactory factory;
     private readonly DispatcherTimer saveTimer;
     private bool loading;
 
@@ -44,18 +160,14 @@ public sealed partial class BindingInspectorViewModel : ObservableObject
         InputKinds kind,
         ConfigSession session,
         MakroPadRuntime runtime,
-        IFilePicker picker,
-        IShortcutRecorder recorder,
-        Func<IReadOnlyList<string>> listAudioSessions)
+        ParameterFactory factory)
     {
         Element = element;
-        this.recorder = recorder;
         Input = input;
         Kind = kind;
         this.session = session;
         this.runtime = runtime;
-        this.picker = picker;
-        this.listAudioSessions = listAudioSessions;
+        this.factory = factory;
         saveTimer = new DispatcherTimer { Interval = SaveDelay };
         saveTimer.Tick += (_, _) =>
         {
@@ -68,7 +180,12 @@ public sealed partial class BindingInspectorViewModel : ObservableObject
         loading = true;
         var binding = CurrentBinding;
         selectedAction = Actions.FirstOrDefault(a => string.Equals(a.Definition?.Id, binding?.Action, StringComparison.OrdinalIgnoreCase)) ?? Actions[0];
-        BuildParameters(binding);
+        BuildParameters(binding is null ? _ => null : binding.GetParameter);
+        foreach (var step in binding?.Steps ?? [])
+        {
+            AddStepViewModel(step);
+        }
+
         loading = false;
         RefreshIssues();
     }
@@ -81,11 +198,16 @@ public sealed partial class BindingInspectorViewModel : ObservableObject
 
     public string Title => Element.Title;
 
+    /// <summary>False when a surrounding inspector (keys with gesture tabs) shows the title itself.</summary>
+    public bool ShowTitle { get; init; } = true;
+
     public string ProfileName => runtime.Profiles.Active.Name;
 
     public IReadOnlyList<ActionOption> Actions { get; }
 
     public ObservableCollection<ParameterViewModel> Parameters { get; } = [];
+
+    public ObservableCollection<MacroStepViewModel> Steps { get; } = [];
 
     public ObservableCollection<string> Issues { get; } = [];
 
@@ -93,7 +215,11 @@ public sealed partial class BindingInspectorViewModel : ObservableObject
 
     public bool IsBound => SelectedAction.Definition is not null;
 
-    public bool CanTest => IsBound && (Kind == InputKinds.Button || Element is FaderViewModel);
+    public bool IsMacro => SelectedAction.Definition?.Id == "macro";
+
+    public bool CanAddStep => Steps.Count < ActionCatalog.MaxMacroSteps;
+
+    public bool CanTest => IsBound;
 
     private Binding? CurrentBinding => session.Config.FindProfile(ProfileName)?.Bindings
         .FirstOrDefault(b => string.Equals(b.Input, Input, StringComparison.OrdinalIgnoreCase));
@@ -107,14 +233,49 @@ public sealed partial class BindingInspectorViewModel : ObservableObject
 
         // Keep values the new action understands too, e.g. the display label.
         var previous = Parameters.ToDictionary(p => p.Name, p => p.Value, StringComparer.OrdinalIgnoreCase);
-        BuildParameters(null, previous);
+        BuildParameters(name => previous.GetValueOrDefault(name));
+        if (IsMacro && Steps.Count == 0)
+        {
+            AddStepViewModel(new MacroStep("keyboard.shortcut"));
+        }
+
         OnPropertyChanged(nameof(IsBound));
+        OnPropertyChanged(nameof(IsMacro));
         OnPropertyChanged(nameof(CanTest));
         ScheduleSave();
     }
 
     [RelayCommand]
     private void Remove() => SelectedAction = Actions[0];
+
+    [RelayCommand]
+    private void AddStep()
+    {
+        AddStepViewModel(new MacroStep("keyboard.shortcut"));
+        ScheduleSave();
+    }
+
+    [RelayCommand]
+    private void AddDelay()
+    {
+        AddStepViewModel(new MacroStep("delay", new Dictionary<string, string> { ["ms"] = "200" }));
+        ScheduleSave();
+    }
+
+    [RelayCommand]
+    private void RemoveStep(MacroStepViewModel step)
+    {
+        step.Edited -= ScheduleSave;
+        Steps.Remove(step);
+        Renumber();
+        ScheduleSave();
+    }
+
+    [RelayCommand]
+    private void MoveStepUp(MacroStepViewModel step) => MoveStep(step, -1);
+
+    [RelayCommand]
+    private void MoveStepDown(MacroStepViewModel step) => MoveStep(step, 1);
 
     [RelayCommand]
     private async Task TestAsync()
@@ -133,7 +294,7 @@ public sealed partial class BindingInspectorViewModel : ObservableObject
     /// <summary>Writes pending edits immediately (e.g. before the selection changes).</summary>
     public void Flush()
     {
-        recorder.Cancel();
+        factory.Recorder.Cancel();
         if (saveTimer.IsEnabled)
         {
             saveTimer.Stop();
@@ -141,7 +302,39 @@ public sealed partial class BindingInspectorViewModel : ObservableObject
         }
     }
 
-    private void BuildParameters(Binding? binding, IReadOnlyDictionary<string, string>? carryOver = null)
+    private void MoveStep(MacroStepViewModel step, int offset)
+    {
+        var index = Steps.IndexOf(step);
+        var target = index + offset;
+        if (index < 0 || target < 0 || target >= Steps.Count)
+        {
+            return;
+        }
+
+        Steps.Move(index, target);
+        Renumber();
+        ScheduleSave();
+    }
+
+    private void AddStepViewModel(MacroStep step)
+    {
+        var viewModel = new MacroStepViewModel(step, factory);
+        viewModel.Edited += ScheduleSave;
+        Steps.Add(viewModel);
+        Renumber();
+    }
+
+    private void Renumber()
+    {
+        for (var index = 0; index < Steps.Count; index++)
+        {
+            Steps[index].Number = index + 1;
+        }
+
+        OnPropertyChanged(nameof(CanAddStep));
+    }
+
+    private void BuildParameters(Func<string, string?> values)
     {
         foreach (var parameter in Parameters)
         {
@@ -149,18 +342,8 @@ public sealed partial class BindingInspectorViewModel : ObservableObject
         }
 
         Parameters.Clear();
-        foreach (var definition in SelectedAction.Definition?.Parameters ?? [])
+        foreach (var parameter in factory.CreateAll(SelectedAction.Definition, values))
         {
-            ParameterViewModel parameter = (SelectedAction.Definition!.Id, definition.Name) switch
-            {
-                ("keyboard.shortcut", "keys") => new ShortcutParameterViewModel(definition, recorder),
-                ("app.volume", "process") => new ProcessParameterViewModel(definition, listAudioSessions),
-                ("system.openApp", "path") => new PathParameterViewModel(definition, picker),
-                ("profile.set", "name") => new ProfileParameterViewModel(definition, [.. session.Config.Profiles.Select(p => p.Name)]),
-                _ => new TextParameterViewModel(definition)
-            };
-            parameter.Value = binding?.GetParameter(definition.Name)
-                ?? (carryOver is not null && carryOver.TryGetValue(definition.Name, out var kept) ? kept : "");
             parameter.Edited += ScheduleSave;
             Parameters.Add(parameter);
         }
@@ -187,10 +370,8 @@ public sealed partial class BindingInspectorViewModel : ObservableObject
         }
         else
         {
-            var parameters = Parameters
-                .Where(p => !string.IsNullOrWhiteSpace(p.Value))
-                .ToDictionary(p => p.Name, p => p.Value.Trim(), StringComparer.OrdinalIgnoreCase);
-            var binding = new Binding(Input, definition.Id, parameters.Count == 0 ? null : parameters);
+            var steps = IsMacro ? Steps.Select(s => s.ToStep()).ToList() : null;
+            var binding = new Binding(Input, definition.Id, ParameterFactory.Collect(Parameters), steps);
             error = session.Update(config => ConfigEditor.SetBinding(config, ProfileName, binding));
         }
 
@@ -211,6 +392,95 @@ public sealed partial class BindingInspectorViewModel : ObservableObject
 
         OnPropertyChanged(nameof(HasIssues));
     }
+}
+
+public sealed partial class GestureTabViewModel(Gesture gesture, string name) : ObservableObject
+{
+    public Gesture Gesture { get; } = gesture;
+
+    public string Name { get; } = name;
+
+    [ObservableProperty]
+    private bool isActive;
+
+    /// <summary>The gesture has an action in the active profile.</summary>
+    [ObservableProperty]
+    private bool isBound;
+}
+
+/// <summary>A key has three gestures (press, long, double); each tab edits one of them.</summary>
+public sealed partial class KeyInspectorViewModel : ObservableObject, IFlushable
+{
+    private readonly KeyViewModel key;
+    private readonly Func<string, BindingInspectorViewModel> createInspector;
+    private readonly Func<string, bool> isBound;
+
+    [ObservableProperty]
+    private BindingInspectorViewModel current;
+
+    public KeyInspectorViewModel(KeyViewModel key, Gesture gesture, Func<string, BindingInspectorViewModel> createInspector, Func<string, bool> isBound)
+    {
+        this.key = key;
+        this.createInspector = createInspector;
+        this.isBound = isBound;
+        Tabs =
+        [
+            new GestureTabViewModel(Gesture.Press, "Drücken"),
+            new GestureTabViewModel(Gesture.LongPress, "Lang"),
+            new GestureTabViewModel(Gesture.DoublePress, "Doppelt")
+        ];
+        current = createInspector(InputFor(gesture));
+        Mark(gesture);
+    }
+
+    public IReadOnlyList<GestureTabViewModel> Tabs { get; }
+
+    public Gesture Gesture => Tabs.First(t => t.IsActive).Gesture;
+
+    public string Title => key.Title;
+
+    public string ProfileName => Current.ProfileName;
+
+    /// <summary>Explains the delay a normal press gets once another gesture is bound.</summary>
+    public bool ShowsDelayHint => Tabs.Skip(1).Any(t => t.IsBound);
+
+    public void Flush() => Current.Flush();
+
+    [RelayCommand]
+    private void SelectTab(GestureTabViewModel tab)
+    {
+        if (tab.IsActive)
+        {
+            return;
+        }
+
+        Current.Flush();
+        Current = createInspector(InputFor(tab.Gesture));
+        Mark(tab.Gesture);
+    }
+
+    /// <summary>Refreshes the "bound" marks after a save.</summary>
+    public void RefreshMarks()
+    {
+        foreach (var tab in Tabs)
+        {
+            tab.IsBound = isBound(InputFor(tab.Gesture));
+        }
+
+        OnPropertyChanged(nameof(ShowsDelayHint));
+    }
+
+    private void Mark(Gesture gesture)
+    {
+        foreach (var tab in Tabs)
+        {
+            tab.IsActive = tab.Gesture == gesture;
+        }
+
+        RefreshMarks();
+    }
+
+    private string InputFor(Gesture gesture) => new GestureInput(key.Id, gesture).InputId;
 }
 
 /// <summary>Edits which OLED overlays appear; shown when the display is selected.</summary>

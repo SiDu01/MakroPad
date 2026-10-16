@@ -349,13 +349,22 @@ public partial class App : Application, IFilePicker
             };
             if (args.Select is { } select)
             {
-                PadElementViewModel? element = select == "display"
+                // button:9:long selects key 9 and its long-press tab.
+                var parts = select.Split(':');
+                var input = parts.Length > 2 ? $"{parts[0]}:{parts[1]}" : select;
+                PadElementViewModel? element = input == "display"
                     ? shell.Pad.Display
-                    : (PadElementViewModel?)shell.Pad.Keys.FirstOrDefault(k => k.Input == select)
-                      ?? shell.Pad.Faders.FirstOrDefault(f => f.Input == select);
+                    : (PadElementViewModel?)shell.Pad.Keys.FirstOrDefault(k => k.Input == input)
+                      ?? shell.Pad.Faders.FirstOrDefault(f => f.Input == input);
                 if (element is not null)
                 {
                     shell.Pad.SelectCommand.Execute(element);
+                }
+
+                if (parts.Length > 2 && shell.Pad.Inspector is KeyInspectorViewModel keyInspector)
+                {
+                    var gesture = parts[2] == "double" ? Gesture.DoublePress : Gesture.LongPress;
+                    keyInspector.SelectTabCommand.Execute(keyInspector.Tabs.First(t => t.Gesture == gesture));
                 }
             }
 

@@ -222,6 +222,11 @@ und Einstellungen. Gestaltung: [UI_DESIGN.md](UI_DESIGN.md).
 - Text eingeben, Befehl/Skript mit Argumenten, HTTP-Request.
 - Long-Press und Doppeldruck als eigene Inputs (`button:3:long`).
 
+**Status (2026-10-16): umgesetzt, Hardwaretest offen.** `GestureDetector`
+(`button:N`, `button:N:long`, `button:N:double`, Zeiten in den
+Einstellungen), Makros mit Pausen (`ActionRunner`, Editor im Inspector),
+`keyboard.text`, `system.run`, `http.request`. Inspector mit Gesten-Reitern.
+
 ### M6 – Erweiterter Offline-Betrieb (optional)
 
 - Bindings, die als HID abbildbar sind (Medien, Tastenkombinationen), ins

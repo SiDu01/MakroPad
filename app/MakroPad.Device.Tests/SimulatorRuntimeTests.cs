@@ -30,6 +30,13 @@ public sealed class SimulatorRuntimeTests : IAsyncLifetime
                 [
                     new Binding("button:1", "media.playPause"),
                     new Binding("button:16", "profile.next"),
+                    new Binding("button:2:long", "media.playPause"),
+                    new Binding("button:3", "macro", Steps:
+                    [
+                        new MacroStep("media.playPause"),
+                        new MacroStep("delay", new Dictionary<string, string> { ["ms"] = "50" }),
+                        new MacroStep("media.playPause")
+                    ]),
                     new Binding("slider:1", "system.volume", new Dictionary<string, string> { ["label"] = "Master" })
                 ]
             },
@@ -113,6 +120,28 @@ public sealed class SimulatorRuntimeTests : IAsyncLifetime
         media.Play(new NowPlaying("Digital Love", "Daft Punk", true, "Spotify"));
         await WaitUntil(() => linesFromApp.Count(line => line == "state;artist=Daft Punk;title=Digital Love") == 2);
         Assert.Single(linesFromApp, line => line.StartsWith("screen;type=media", StringComparison.Ordinal));
+    }
+
+    [Fact]
+    public async Task LongPressRunsItsOwnBindingOnly()
+    {
+        device.ButtonDown(2);
+        await Task.Delay(300);
+        Assert.Equal(0, playPause.Count);
+
+        await WaitUntil(() => playPause.Count == 1);
+        device.ButtonUp(2);
+        await Task.Delay(200);
+        Assert.Equal(1, playPause.Count);
+    }
+
+    [Fact]
+    public async Task MacroRunsAllStepsAndShowsOneOverlay()
+    {
+        device.PressButton(3);
+
+        await WaitUntil(() => linesFromApp.Contains("screen;type=action;text=Makro, 2 Aktionen;icon=ok"));
+        Assert.Equal(2, playPause.Count);
     }
 
     [Fact]

@@ -30,6 +30,12 @@ public sealed partial class SettingsViewModel : ObservableObject
     private bool debugMode;
 
     [ObservableProperty]
+    private int longPressMs;
+
+    [ObservableProperty]
+    private int doublePressMs;
+
+    [ObservableProperty]
     private string? status;
 
     public SettingsViewModel(ConfigSession session, AutoProfileViewModel autoProfile)
@@ -69,6 +75,10 @@ public sealed partial class SettingsViewModel : ObservableObject
 
     partial void OnDebugModeChanged(bool value) => Save();
 
+    partial void OnLongPressMsChanged(int value) => Save();
+
+    partial void OnDoublePressMsChanged(int value) => Save();
+
     partial void OnThemeChanged(ThemeOption value)
     {
         Save();
@@ -100,6 +110,8 @@ public sealed partial class SettingsViewModel : ObservableObject
         SliderDeadbandPercent = settings.SliderDeadbandPercent;
         Theme = Themes.FirstOrDefault(t => t.Value == settings.Theme) ?? Themes[0];
         DebugMode = settings.DebugMode;
+        LongPressMs = settings.LongPressMs;
+        DoublePressMs = settings.DoublePressMs;
         loading = false;
     }
 
@@ -118,7 +130,9 @@ public sealed partial class SettingsViewModel : ObservableObject
                 StartWithWindows = StartWithWindows,
                 SliderDeadbandPercent = Math.Clamp(SliderDeadbandPercent, 0, 25),
                 Theme = Theme.Value,
-                DebugMode = DebugMode
+                DebugMode = DebugMode,
+                LongPressMs = Math.Clamp(LongPressMs, 200, 3000),
+                DoublePressMs = Math.Clamp(DoublePressMs, 100, 1000)
             }
         });
     }

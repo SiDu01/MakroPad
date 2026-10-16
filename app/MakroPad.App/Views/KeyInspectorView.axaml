@@ -1,0 +1,42 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:MakroPad.App.ViewModels"
+             x:Class="MakroPad.App.Views.KeyInspectorView"
+             x:DataType="vm:KeyInspectorViewModel">
+    <StackPanel Spacing="22">
+        <StackPanel Spacing="2">
+            <TextBlock Classes="h1" Text="{Binding Title}" />
+            <TextBlock Classes="muted" Text="{Binding ProfileName, StringFormat='im Profil {0}'}" />
+        </StackPanel>
+
+        <!-- One segment per gesture; a dot marks gestures that already do something. -->
+        <StackPanel Spacing="8">
+            <Border BorderBrush="{DynamicResource LineBrush}" BorderThickness="1" CornerRadius="7" Padding="3">
+                <ItemsControl ItemsSource="{Binding Tabs}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Rows="1" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="vm:GestureTabViewModel">
+                            <Button Classes="gesture" Classes.active="{Binding IsActive}"
+                                    Command="{Binding $parent[ItemsControl].((vm:KeyInspectorViewModel)DataContext).SelectTabCommand}"
+                                    CommandParameter="{Binding}">
+                                <StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Center">
+                                    <TextBlock Text="{Binding Name}" />
+                                    <Ellipse Width="6" Height="6" VerticalAlignment="Center"
+                                             Fill="{DynamicResource SelectionBrush}" IsVisible="{Binding IsBound}" />
+                                </StackPanel>
+                            </Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Border>
+            <TextBlock Classes="muted" FontSize="12.5" IsVisible="{Binding ShowsDelayHint}"
+                       Text="Weil diese Taste auch lang oder doppelt gedrückt werden kann, löst „Drücken“ erst beim Loslassen bzw. kurz danach aus." />
+        </StackPanel>
+
+        <ContentControl Content="{Binding Current}" />
+    </StackPanel>
+</UserControl>
