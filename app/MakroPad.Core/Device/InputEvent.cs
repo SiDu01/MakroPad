@@ -12,6 +12,27 @@ public sealed record ButtonInput(int Id, bool Pressed) : InputEvent
     public override string InputId => $"button:{Id}";
 }
 
+public enum Gesture
+{
+    Press,
+    LongPress,
+    DoublePress
+}
+
+/// <summary>A recognised key gesture; <c>button:3</c>, <c>button:3:long</c> or <c>button:3:double</c>.</summary>
+public sealed record GestureInput(int Id, Gesture Gesture) : InputEvent
+{
+    public const string LongSuffix = ":long";
+    public const string DoubleSuffix = ":double";
+
+    public override string InputId => $"button:{Id}" + Gesture switch
+    {
+        Gesture.LongPress => LongSuffix,
+        Gesture.DoublePress => DoubleSuffix,
+        _ => ""
+    };
+}
+
 /// <summary>Slider position, normalized by the firmware to 0..1000.</summary>
 public sealed record SliderInput(int Id, int Value) : InputEvent
 {

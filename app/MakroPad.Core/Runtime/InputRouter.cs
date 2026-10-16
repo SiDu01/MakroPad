@@ -30,6 +30,18 @@ public sealed class InputRouter
         }
     }
 
+    /// <summary>Which gestures besides a normal press are bound for a key.</summary>
+    public (bool Long, bool Double) GesturesFor(int buttonId)
+    {
+        lock (gate)
+        {
+            var prefix = $"button:{buttonId}";
+            return (
+                bindings.Any(b => string.Equals(b.Input, prefix + GestureInput.LongSuffix, StringComparison.OrdinalIgnoreCase)),
+                bindings.Any(b => string.Equals(b.Input, prefix + GestureInput.DoubleSuffix, StringComparison.OrdinalIgnoreCase)));
+        }
+    }
+
     public Binding? Route(InputEvent input)
     {
         lock (gate)

@@ -159,6 +159,17 @@ public static class ConfigEditor
 
     private static Binding RetargetProfileSet(Binding binding, string oldName, string newName)
     {
+        if (binding.Steps is { Count: > 0 } steps)
+        {
+            binding = binding with
+            {
+                Steps = [.. steps.Select(step =>
+                    string.Equals(step.Action, "profile.set", StringComparison.OrdinalIgnoreCase) && SameName(step.GetParameter("name") ?? "", oldName)
+                        ? step with { Parameters = new Dictionary<string, string>(step.Parameters!, StringComparer.OrdinalIgnoreCase) { ["name"] = newName } }
+                        : step)]
+            };
+        }
+
         if (!string.Equals(binding.Action, "profile.set", StringComparison.OrdinalIgnoreCase)
             || !SameName(binding.GetParameter("name") ?? "", oldName))
         {

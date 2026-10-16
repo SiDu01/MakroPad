@@ -23,6 +23,8 @@ ersetzt.
     "startInTray": false,          // ohne Fenster im Infobereich starten
     "startWithWindows": false,     // Autostart für den aktuellen Benutzer
     "sliderDeadbandPercent": 2,    // Mindeständerung für Lautstärke-Slider (0–25)
+    "longPressMs": 500,            // ab so langem Halten zählt ein langer Druck (200–3000)
+    "doublePressMs": 300,          // zweiter Druck innerhalb dieser Zeit = Doppeldruck (100–1000)
     "theme": "system",             // system, light oder dark
     "debugMode": false,            // Testhilfen (Startoptionen, zusätzliche Diagnose)
     "feedback": {                  // kurze OLED-Einblendungen
@@ -69,7 +71,19 @@ Tasten zeilenweise von links oben (`·` = OLED), Slider von links nach rechts:
 ```
 
 `button:1` … `button:16`, `slider:1` … `slider:3`. Jede Eingabe darf pro Profil
-nur einmal belegt sein. Tasten lösen beim Drücken aus.
+nur einmal belegt sein.
+
+Jede Taste hat drei Gesten, die getrennt belegt werden:
+
+| Eingabe | Geste |
+| --- | --- |
+| `button:5` | Drücken |
+| `button:5:long` | Lang drücken (mindestens `longPressMs`) |
+| `button:5:double` | Doppelt drücken (zweiter Druck innerhalb `doublePressMs`) |
+
+Ohne lange oder doppelte Belegung löst eine Taste sofort beim Drücken aus. Ist
+eine davon belegt, muss die App erst unterscheiden: „Drücken“ kommt dann beim
+Loslassen bzw. nach Ablauf von `doublePressMs`.
 
 ## Aktionen
 
@@ -93,8 +107,29 @@ OLED-Einblendung.
 | `keyboard.shortcut` | Taste | `keys` (z. B. `Ctrl+Shift+Esc`) | Tastenkombination an das aktive Fenster |
 | `system.openUrl` | Taste | `url` (http/https) | Adresse im Standardbrowser öffnen |
 | `system.openApp` | Taste | `path`, optional `args` | Programm starten oder Datei öffnen; Umgebungsvariablen wie `%USERPROFILE%` werden aufgelöst |
+| `keyboard.text` | Taste | `text` | Tippt den Text in das aktive Fenster, unabhängig vom Tastaturlayout; `\n` wird zu Enter |
+| `system.run` | Taste | `command` | Führt eine Befehlszeile unsichtbar über `cmd.exe` aus. Endet sie innerhalb von 5 s mit einem Fehlercode, meldet das OLED den Fehler |
+| `http.request` | Taste | `url`, optional `method`, `body`, `contentType` | Sendet eine Webanfrage (z. B. Home Assistant, Webhooks). Ohne `method` GET bzw. mit `body` POST, Inhalt standardmäßig `application/json`, 10 s Zeitlimit |
+| `macro` | Taste | `steps` (siehe unten) | Führt mehrere Aktionen nacheinander aus |
 | `profile.next` | Taste | – | Nächstes Profil (in Listenreihenfolge, danach wieder das erste) |
 | `profile.set` | Taste | `name` | Bestimmtes Profil aktivieren |
+
+## Makros
+
+Ein Makro führt bis zu 50 Schritte nacheinander aus. Jeder Schritt ist eine
+Tasten-Aktion mit ihren Parametern oder eine Pause (`delay` mit `ms`, höchstens
+60000). Schlägt ein Schritt fehl, bricht das Makro ab und das OLED nennt den
+Schritt. Makros in Makros und Slider-Aktionen sind nicht möglich.
+
+```jsonc
+{ "input": "button:9:long", "action": "macro", "parameters": { "label": "Stream" },
+  "steps": [
+    { "action": "system.openApp", "parameters": { "path": "obs64.exe" } },
+    { "action": "delay", "parameters": { "ms": "3000" } },
+    { "action": "keyboard.shortcut", "parameters": { "keys": "Ctrl+F9" } },
+    { "action": "keyboard.text", "parameters": { "text": "Bin live!\n" } }
+  ] }
+```
 
 ## Automatischer Profilwechsel
 

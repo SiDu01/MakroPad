@@ -27,6 +27,7 @@ public sealed class MakroPadRuntime : IAsyncDisposable
     private readonly ActionRunner actionRunner;
     private readonly ProfileManager profiles;
     private readonly InputRouter router;
+    private readonly GestureDetector gestures;
     private readonly TimeProvider timeProvider;
     private readonly string appVersion;
     private readonly ConcurrentDictionary<string, LatestWinsQueue<(Binding, InputEvent)>> sliderQueues = new();
@@ -55,6 +56,8 @@ public sealed class MakroPadRuntime : IAsyncDisposable
         this.timeProvider = timeProvider;
         this.appVersion = appVersion;
         router = new InputRouter(profiles.Active.Bindings);
+        gestures = new GestureDetector(timeProvider, router.GesturesFor);
+        gestures.Detected += Dispatch;
         profiles.ActiveChanged += OnProfileChanged;
     }
 
@@ -66,6 +69,8 @@ public sealed class MakroPadRuntime : IAsyncDisposable
         {
             settings = value;
             router.SliderDeadbandPercent = value.SliderDeadbandPercent;
+            gestures.LongPress = TimeSpan.FromMilliseconds(value.LongPressMs);
+            gestures.DoublePress = TimeSpan.FromMilliseconds(value.DoublePressMs);
         }
     }
 
@@ -206,6 +211,18 @@ public sealed class MakroPadRuntime : IAsyncDisposable
     {
         InputReceived?.Invoke(input);
 
+        // Keys go through gesture detection (press, long press, double press) first.
+        if (input is ButtonInput button)
+        {
+            gestures.OnButton(button);
+            return;
+        }
+
+        Dispatch(input);
+    }
+
+    private void Dispatch(InputEvent input)
+    {
         var binding = router.Route(input);
         if (binding is null)
         {

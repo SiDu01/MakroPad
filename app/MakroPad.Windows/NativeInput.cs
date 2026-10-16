@@ -9,6 +9,7 @@ internal static class NativeInput
     private const uint InputKeyboard = 1;
     private const uint KeyEventExtendedKey = 0x0001;
     private const uint KeyEventKeyUp = 0x0002;
+    private const uint KeyEventUnicode = 0x0004;
 
     /// <summary>Presses and releases an extended key (media/volume keys).</summary>
     public static void TapExtendedKey(ushort virtualKey)
@@ -37,6 +38,49 @@ internal static class NativeInput
 
         Send([.. inputs]);
     }
+
+    /// <summary>
+    /// Types text as Unicode key events, independent of the keyboard layout. Line breaks become
+    /// Enter and tabs become Tab, because many programs ignore them as Unicode characters.
+    /// </summary>
+    public static void TypeText(string text)
+    {
+        const ushort enter = 0x0D;
+        const ushort tab = 0x09;
+        var inputs = new List<Input>(text.Length * 2);
+        foreach (var c in text.Replace("\r\n", "\n", StringComparison.Ordinal))
+        {
+            switch (c)
+            {
+                case '\r':
+                    break;
+                case '\n':
+                    inputs.Add(KeyInput(enter, 0));
+                    inputs.Add(KeyInput(enter, KeyEventKeyUp));
+                    break;
+                case '\t':
+                    inputs.Add(KeyInput(tab, 0));
+                    inputs.Add(KeyInput(tab, KeyEventKeyUp));
+                    break;
+                default:
+                    // Surrogate pairs (emoji) are sent as two Unicode units, which Windows recombines.
+                    inputs.Add(UnicodeInput(c, 0));
+                    inputs.Add(UnicodeInput(c, KeyEventKeyUp));
+                    break;
+            }
+        }
+
+        if (inputs.Count > 0)
+        {
+            Send([.. inputs]);
+        }
+    }
+
+    private static Input UnicodeInput(char c, uint flags) => new()
+    {
+        Type = InputKeyboard,
+        Data = new InputUnion { Keyboard = new KeyboardInput { ScanCode = c, Flags = KeyEventUnicode | flags } }
+    };
 
     private static Input KeyInput(ushort virtualKey, uint flags) => new()
     {

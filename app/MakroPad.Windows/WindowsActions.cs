@@ -16,6 +16,8 @@ public static class WindowsActions
         yield return new ForegroundVolumeAction();
         yield return new OtherAppsVolumeAction();
         yield return new KeyboardShortcutAction();
+        yield return new KeyboardTextAction();
+        yield return new RunCommandAction();
         yield return new OpenUrlAction();
         yield return new OpenAppAction();
     }

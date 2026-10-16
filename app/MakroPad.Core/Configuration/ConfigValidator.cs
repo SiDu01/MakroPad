@@ -25,6 +25,16 @@ public static partial class ConfigValidator
             issues.Add(new ConfigIssue("profiles", "Mindestens ein Profil ist nötig"));
         }
 
+        if (config.Settings.LongPressMs is < 200 or > 3000)
+        {
+            issues.Add(new ConfigIssue("settings.longPressMs", "Muss zwischen 200 und 3000 liegen"));
+        }
+
+        if (config.Settings.DoublePressMs is < 100 or > 1000)
+        {
+            issues.Add(new ConfigIssue("settings.doublePressMs", "Muss zwischen 100 und 1000 liegen"));
+        }
+
         if (config.Settings.SliderDeadbandPercent is < 0 or > 25)
         {
             issues.Add(new ConfigIssue("settings.sliderDeadbandPercent", "Muss zwischen 0 und 25 liegen"));
@@ -94,7 +104,7 @@ public static partial class ConfigValidator
         var kind = ParseInput(binding.Input, buttonCount, sliderCount);
         if (kind is null)
         {
-            yield return $"Unbekannte Eingabe (erlaubt: button:1..{buttonCount}, slider:1..{sliderCount})";
+            yield return $"Unbekannte Eingabe (erlaubt: button:1..{buttonCount}, mit :long oder :double, slider:1..{sliderCount})";
         }
 
         var definition = ActionCatalog.Find(binding.Action);
@@ -109,15 +119,76 @@ public static partial class ConfigValidator
             yield return $"{definition.Id} passt nicht zu {(inputKind == InputKinds.Slider ? "einem Slider" : "einer Taste")}";
         }
 
+        foreach (var message in ValidateParameters(definition, binding.Parameters, config))
+        {
+            yield return message;
+        }
+
+        if (definition.Id != "macro")
+        {
+            if (binding.Steps is { Count: > 0 })
+            {
+                yield return "steps gibt es nur bei der Aktion macro";
+            }
+
+            yield break;
+        }
+
+        var steps = binding.Steps ?? [];
+        if (steps.Count == 0)
+        {
+            yield return "Das Makro hat keine Schritte";
+        }
+        else if (steps.Count > ActionCatalog.MaxMacroSteps)
+        {
+            yield return $"Ein Makro hat höchstens {ActionCatalog.MaxMacroSteps} Schritte";
+        }
+
+        for (var index = 0; index < steps.Count; index++)
+        {
+            foreach (var message in ValidateStep(steps[index], config))
+            {
+                yield return $"Schritt {index + 1}: {message}";
+            }
+        }
+    }
+
+    private static IEnumerable<string> ValidateStep(MacroStep step, MakroPadConfig config)
+    {
+        var definition = ActionCatalog.MacroStepActions.FirstOrDefault(a => string.Equals(a.Id, step.Action, StringComparison.OrdinalIgnoreCase));
+        if (definition is null)
+        {
+            yield return ActionCatalog.Find(step.Action) is null
+                ? $"Unbekannte Aktion \"{step.Action}\""
+                : $"{step.Action} geht nicht in einem Makro";
+            yield break;
+        }
+
+        foreach (var message in ValidateParameters(definition, step.Parameters, config))
+        {
+            yield return message;
+        }
+
+        if (definition == ActionCatalog.Delay && step.GetParameter("ms") is { Length: > 0 } ms
+            && (!int.TryParse(ms, out var value) || value < 0 || value > ActionCatalog.MaxDelayMs))
+        {
+            yield return $"ms muss eine Zahl von 0 bis {ActionCatalog.MaxDelayMs} sein";
+        }
+    }
+
+    private static IEnumerable<string> ValidateParameters(ActionDefinition definition, IReadOnlyDictionary<string, string>? parameters, MakroPadConfig config)
+    {
+        string? Get(string key) => parameters is not null && parameters.TryGetValue(key, out var value) ? value : null;
+
         foreach (var parameter in definition.Parameters.Where(p => p.Required))
         {
-            if (string.IsNullOrWhiteSpace(binding.GetParameter(parameter.Name)))
+            if (string.IsNullOrWhiteSpace(Get(parameter.Name)))
             {
                 yield return $"Parameter \"{parameter.Name}\" fehlt (z. B. {parameter.Example})";
             }
         }
 
-        foreach (var key in binding.Parameters?.Keys ?? [])
+        foreach (var key in parameters?.Keys ?? [])
         {
             if (definition.FindParameter(key) is null)
             {
@@ -125,22 +196,30 @@ public static partial class ConfigValidator
             }
         }
 
-        if (definition.Id == "system.openUrl" && binding.GetParameter("url") is { Length: > 0 } url && !IsHttpUrl(url))
+        if (definition.Id is "system.openUrl" or "http.request" && Get("url") is { Length: > 0 } url && !IsHttpUrl(url))
         {
             yield return "url muss eine absolute http- oder https-Adresse sein";
         }
 
-        if (definition.Id == "keyboard.shortcut" && binding.GetParameter("keys") is { Length: > 0 } keys
+        if (definition.Id == "http.request" && Get("method") is { Length: > 0 } method
+            && !HttpMethods.Contains(method.Trim(), StringComparer.OrdinalIgnoreCase))
+        {
+            yield return "method muss GET, POST, PUT, PATCH oder DELETE sein";
+        }
+
+        if (definition.Id == "keyboard.shortcut" && Get("keys") is { Length: > 0 } keys
             && !ShortcutParser.TryParse(keys, out _, out var shortcutError))
         {
             yield return shortcutError;
         }
 
-        if (definition.Id == "profile.set" && binding.GetParameter("name") is { Length: > 0 } name && config.FindProfile(name) is null)
+        if (definition.Id == "profile.set" && Get("name") is { Length: > 0 } name && config.FindProfile(name) is null)
         {
             yield return $"Profil \"{name}\" existiert nicht";
         }
     }
+
+    public static readonly string[] HttpMethods = ["GET", "POST", "PUT", "PATCH", "DELETE"];
 
     public static bool IsHttpUrl(string value)
         => Uri.TryCreate(value, UriKind.Absolute, out var uri) && (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps);
@@ -153,14 +232,16 @@ public static partial class ConfigValidator
             return null;
         }
 
+        // Long and double press exist only for keys.
+        var isGesture = match.Groups[3].Success;
         return match.Groups[1].Value.ToLowerInvariant() switch
         {
             "button" when id <= buttonCount => InputKinds.Button,
-            "slider" when id <= sliderCount => InputKinds.Slider,
+            "slider" when id <= sliderCount && !isGesture => InputKinds.Slider,
             _ => null
         };
     }
 
-    [GeneratedRegex("^(button|slider):([0-9]{1,3})$", RegexOptions.IgnoreCase)]
+    [GeneratedRegex("^(button|slider):([0-9]{1,3})(:long|:double)?$", RegexOptions.IgnoreCase)]
     private static partial Regex InputPattern();
 }

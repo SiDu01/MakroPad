@@ -2,8 +2,22 @@ using MakroPad.Core.Device;
 
 namespace MakroPad.Core.Actions;
 
-/// <summary>Maps an input to an action id plus parameters.</summary>
-public sealed record Binding(string Input, string Action, IReadOnlyDictionary<string, string>? Parameters = null)
+/// <summary>
+/// Maps an input to an action id plus parameters. A <c>macro</c> binding carries its
+/// <see cref="Steps"/> instead of parameters (apart from an optional <c>label</c>).
+/// </summary>
+public sealed record Binding(
+    string Input,
+    string Action,
+    IReadOnlyDictionary<string, string>? Parameters = null,
+    IReadOnlyList<MacroStep>? Steps = null)
+{
+    public string? GetParameter(string key)
+        => Parameters is not null && Parameters.TryGetValue(key, out var value) ? value : null;
+}
+
+/// <summary>One step of a macro: an action with parameters, or <c>delay</c> with <c>ms</c>.</summary>
+public sealed record MacroStep(string Action, IReadOnlyDictionary<string, string>? Parameters = null)
 {
     public string? GetParameter(string key)
         => Parameters is not null && Parameters.TryGetValue(key, out var value) ? value : null;

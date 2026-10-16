@@ -56,6 +56,12 @@ public sealed record AppSettings
     /// <summary>Minimum slider change in percent before a volume action runs again (0/100 % always pass).</summary>
     public int SliderDeadbandPercent { get; init; } = 2;
 
+    /// <summary>Holding a key at least this long counts as a long press.</summary>
+    public int LongPressMs { get; init; } = 500;
+
+    /// <summary>A second press within this time after releasing counts as a double press.</summary>
+    public int DoublePressMs { get; init; } = 300;
+
     public FeedbackSettings Feedback { get; init; } = new();
 
     /// <summary><c>system</c>, <c>light</c> or <c>dark</c>.</summary>

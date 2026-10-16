@@ -58,7 +58,11 @@ public partial class App : Application, IFilePicker
         IDeviceConnector connector = simulator is not null ? simulator : serial!;
 
         var profiles = new ProfileManager();
-        var actions = new ActionRunner(WindowsActions.CreateAll().Concat(new ProfileActions(profiles).Create()));
+        var actions = new ActionRunner(
+            WindowsActions.CreateAll()
+                .Concat(new ProfileActions(profiles).Create())
+                .Append(new HttpRequestAction(Http)),
+            TimeProvider.System);
         runtime = new MakroPadRuntime(connector, actions, profiles, TimeProvider.System, AppVersion);
         profiles.Load(config.Config.Profiles, config.State.ActiveProfile);
         runtime.Settings = config.Config.Settings;
@@ -374,6 +378,8 @@ public partial class App : Application, IFilePicker
         config?.Dispose();
         runtime?.DisposeAsync().AsTask().GetAwaiter().GetResult();
     }
+
+    private static readonly HttpClient Http = new() { Timeout = HttpRequestAction.Timeout };
 
     private static string AppVersion =>
         Assembly.GetExecutingAssembly().GetName().Version?.ToString(3) ?? "0.0.0";

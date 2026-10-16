@@ -61,6 +61,30 @@ public static class ActionCatalog
             new("keys", true, "Tasten mit + verbunden: Ctrl, Shift, Alt, Win, A-Z, 0-9, F1-F24, Enter, Esc, Tab, Space, Pfeiltasten …", "Ctrl+Shift+Esc"),
             new("label", false, "Steht auf der Taste und in der Einblendung statt der Tastenkombination", "Task-Manager")
         ]),
+        new("keyboard.text", "Text eingeben", "Tastatur", InputKinds.Button, "Tippt einen Text in das aktive Fenster",
+        [
+            new("text", true, "Beliebiger Text, auch Umlaute und Emojis; \\n wird zu Enter", "Mit freundlichen Grüßen"),
+            new("label", false, "Steht auf der Taste und in der Einblendung statt des Texts", "Gruß")
+        ]),
+        new("system.run", "Befehl ausführen", "Öffnen", InputKinds.Button,
+            "Führt einen Befehl oder ein Skript unsichtbar aus und meldet, ob er fehlschlägt",
+        [
+            new("command", true, "Befehlszeile wie in der Eingabeaufforderung", "powershell -File C:\\Skripte\\backup.ps1"),
+            new("label", false, "Steht auf der Taste und in der Einblendung statt des Befehls", "Backup")
+        ]),
+        new("http.request", "Webanfrage senden", "Öffnen", InputKinds.Button,
+            "Sendet eine HTTP-Anfrage, z. B. an Home Assistant oder einen Webhook",
+        [
+            new("url", true, "Vollständige Adresse mit http:// oder https://", "http://homeassistant.local:8123/api/webhook/licht"),
+            new("method", false, "GET, POST, PUT, PATCH oder DELETE (Standard: GET, mit Inhalt POST)", "POST"),
+            new("body", false, "Inhalt der Anfrage", "{\"an\": true}"),
+            new("contentType", false, "Art des Inhalts (Standard: application/json)", "application/json"),
+            new("label", false, "Steht auf der Taste und in der Einblendung statt der Adresse", "Licht")
+        ]),
+        new("macro", "Makro", "Ablauf", InputKinds.Button, "Führt mehrere Aktionen nacheinander aus, mit Pausen dazwischen",
+        [
+            new("label", false, "Steht auf der Taste und in der Einblendung", "Stream starten")
+        ]),
         new("system.openUrl", "Webseite öffnen", "Öffnen", InputKinds.Button, "Öffnet eine http(s)-Adresse im Standardbrowser",
         [
             new("url", true, "Vollständige Adresse mit https://", "https://www.youtube.com"),
@@ -78,6 +102,18 @@ public static class ActionCatalog
             new("name", true, "Name des Profils", "Gaming")
         ])
     ];
+
+    /// <summary>Pause between macro steps; only valid inside a macro.</summary>
+    public static ActionDefinition Delay { get; } = new("delay", "Warten", "Ablauf", InputKinds.Button,
+        "Wartet, bevor der nächste Schritt startet",
+        [new ParameterDefinition("ms", true, "Millisekunden, höchstens 60000", "200")]);
+
+    public const int MaxDelayMs = 60000;
+    public const int MaxMacroSteps = 50;
+
+    /// <summary>Actions a macro step may use (button actions except macros), plus <see cref="Delay"/>.</summary>
+    public static IReadOnlyList<ActionDefinition> MacroStepActions { get; } =
+        [Delay, .. All.Where(a => a.Inputs.HasFlag(InputKinds.Button) && a.Id != "macro")];
 
     public static ActionDefinition? Find(string actionId)
         => All.FirstOrDefault(definition => string.Equals(definition.Id, actionId, StringComparison.OrdinalIgnoreCase));
