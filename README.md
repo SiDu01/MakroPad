@@ -9,12 +9,17 @@ Windows-Companion-App verbunden.
 
 ## Status
 
-Das Projekt wird neu aufgebaut (Branch `rewrite`). Plan und Meilensteine:
-[docs/REWRITE_PLAN.md](docs/REWRITE_PLAN.md), Bestandsaufnahme des alten
-Stands: [docs/REWRITE_NOTES.md](docs/REWRITE_NOTES.md).
+Version 0.3.0, neu aufgebaut. Funktioniert auf der Hardware:
 
-Der alte Stand (App/Firmware 0.2.0) liegt zum Nachschlagen in `legacy/` und ist
-als Git-Tag `legacy-v0.2.0` markiert.
+- 16 Tasten und 3 Slider mit Aktionen (Medien, System-/Programm-/Vordergrund-
+  Lautstärke, Tastenkombinationen, Webseiten, Programme, Profile)
+- OLED mit Uhr, Profil, laufendem Titel und kurzen Einblendungen
+- Profile mit automatischem Wechsel nach Programm im Vordergrund
+- Medientasten und Lautstärke auch ohne laufende App (USB-HID)
+- Windows-App mit Pad-Editor, Live-Spiegel des Displays, Tray und Autostart
+
+Plan und nächste Meilensteine: [docs/REWRITE_PLAN.md](docs/REWRITE_PLAN.md).
+Der alte Stand (0.2.0) ist über das Git-Tag `legacy-v0.2.0` erreichbar.
 
 ## Aufbau
 
@@ -22,8 +27,9 @@ als Git-Tag `legacy-v0.2.0` markiert.
 | --- | --- |
 | `firmware/` | PlatformIO-Projekt (Arduino-Framework) |
 | `app/` | .NET-10-/Avalonia-App für Windows |
-| `hardware/case/` | Parametrisches OpenSCAD-Gehäuse |
-| `docs/` | [Konfiguration](docs/CONFIG.md), [Protokoll v2](docs/PROTOCOL.md), [Hardware/Pinout](docs/HARDWARE.md) |
+| `hardware/case/` | Parametrisches OpenSCAD-Gehäuse mit STL-Exporten ([Anleitung](hardware/case/README.md)) |
+| `installer/` | Inno-Setup-Installer und Release-Skript |
+| `docs/` | [Konfiguration](docs/CONFIG.md), [Protokoll v2](docs/PROTOCOL.md), [Hardware/Pinout](docs/HARDWARE.md), [Gestaltung](docs/UI_DESIGN.md) |
 
 ## Bauen und testen
 
@@ -37,8 +43,11 @@ pio test -e native
 dotnet build app\MakroPad.sln
 dotnet test app\MakroPad.sln
 dotnet run --project app\MakroPad.App
-dotnet run --project app\MakroPad.App -- --simulator   # ohne Hardware
+dotnet run --project app\MakroPad.App -- --simulator   # ohne Hardware, nur mit debugMode
+
+# Release: Installer + Firmware-Image nach release/
+.\installer\build-release.ps1
 ```
 
 Voraussetzungen: PlatformIO Core, .NET SDK 10, für die nativen Firmware-Tests
-ein Host-gcc (z. B. WinLibs).
+ein Host-gcc (z. B. WinLibs), für den Installer Inno Setup 6.

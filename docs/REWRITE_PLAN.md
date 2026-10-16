@@ -64,7 +64,6 @@ MakroPad/
     MakroPad.App/          Avalonia-UI, Tray, Composition Root
     MakroPad.Core.Tests/
     MakroPad.Device.Tests/
-  legacy/                  alter Stand während des Neubaus (wird am Ende gelöscht)
 ```
 
 Laufzeitkern in `MakroPad.Core/Runtime`, von der UI getrennt:
@@ -212,7 +211,7 @@ und Einstellungen. Gestaltung: [UI_DESIGN.md](UI_DESIGN.md).
   Profil, Fallback-Profil).
 - Lautstärke-Ziele: Vordergrund-App, „alle außer Vordergrund-App“.
 
-**Status (2026-10-04): umgesetzt, Hardwaretest offen.** `MediaSessionWatcher`
+**Status (2026-10-16): erledigt, auf Hardware bestätigt.** `MediaSessionWatcher`
 (GSMTC) → `state;artist;title` plus Einblendung bei neuem Titel,
 `ForegroundWatcher` + `AutoProfileSwitcher` mit Regeln und Ausweichprofil
 (Einstellungen), Actions `app.volume.foreground` und `app.volume.others`.
@@ -229,17 +228,19 @@ und Einstellungen. Gestaltung: [UI_DESIGN.md](UI_DESIGN.md).
   Gerät übertragen und im NVS speichern; HID-Tastatur zusätzlich zu
   Consumer-Control.
 
-## Was aus `legacy` portiert wird
+## Was aus dem alten Stand portiert wurde
+
+Quellen im Tag `legacy-v0.2.0` (der Ordner `legacy/` wurde nach M4 gelöscht).
 
 | Ziel | Quelle |
 | --- | --- |
-| Slider-Filterkette, Entprellung, Uhr, Scrolling, Header/Icon/Balken-Zeichnung, HID-Fallback | `legacy/firmware/MakroPadFirmware/MakroPadFirmware.ino` |
-| `ProtocolCodec` (+ Tests) | `legacy/app/MakroPad.Core/Protocol` |
-| Port-Suche, Serial-Verbindung, Simulator | `legacy/app/MakroPad.Device` |
-| Audio/Lautstärke, Tastatur, Medien, Shell-Start | `legacy/app/MakroPad.Actions/Windows*.cs` |
-| Vordergrundfenster/Vollbild | `legacy/app/MakroPad.App/Services/WindowsForegroundWindowProbe.cs` |
-| Atomares Config-Speichern | `legacy/app/MakroPad.Core/Configuration/MakroPadConfigStore.cs` |
-| Theme (Grau-Teal, Dark/Light), Icons | `legacy/app/MakroPad.App/Themes` |
+| Slider-Filterkette, Entprellung, Uhr, Scrolling, Header/Icon/Balken-Zeichnung, HID-Fallback | `firmware/MakroPadFirmware/MakroPadFirmware.ino` |
+| `ProtocolCodec` (+ Tests) | `app/MakroPad.Core/Protocol` |
+| Port-Suche, Serial-Verbindung, Simulator | `app/MakroPad.Device` |
+| Audio/Lautstärke, Tastatur, Medien, Shell-Start | `app/MakroPad.Actions/Windows*.cs` |
+| Vordergrundfenster/Vollbild | `app/MakroPad.App/Services/WindowsForegroundWindowProbe.cs` |
+| Atomares Config-Speichern | `app/MakroPad.Core/Configuration/MakroPadConfigStore.cs` |
+| Theme (Grau-Teal, Dark/Light), Icons | `app/MakroPad.App/Themes` |
 
 Nicht portiert: Display-Trigger, Idle-Screen-Engine, HTML/Markdown-Renderer,
 Baukasten, Config-Migratoren (siehe REWRITE_NOTES Abschnitt 4).

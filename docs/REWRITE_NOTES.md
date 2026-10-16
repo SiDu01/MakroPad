@@ -49,7 +49,7 @@ größte Teil von Code und Doku steckt aber im **OLED-Subsystem**:
 | Liste aktiver Audio-Sessions (Prozess, Lautstärke, Mute, aktiv) | Auswahlhilfe im Editor statt Prozessnamen tippen | `GetAudioSessionsAsync()` |
 | Plattform-Interfaces + Factory + Noop-Implementierung (`IKeyboardController`, `ISystemVolumeController` …) | Saubere Trennung Windows/Linux, testbar | `MakroPad.Actions/*Factory.cs`, `Noop*.cs` |
 | `ActionExecutionResult` (ok/failed + Meldung) als Rückgabe jeder Action | Einheitliches Feedback für UI, Log und OLED | `ActionExecutionResult.cs` |
-| Action-Metadaten (Name, Parameter, Pflichtfelder, Beispiel, Hinweis) als eine Quelle für Liste, Editor, Validierung, Doku | Richtige Idee, im Neubau von Anfang an | `ActionDefinitionCatalog.cs`, `TODO.md` |
+| Action-Metadaten (Name, Parameter, Pflichtfelder, Beispiel, Hinweis) als eine Quelle für Liste, Editor, Validierung, Doku | Richtige Idee, im Neubau von Anfang an | `ActionDefinitionCatalog.cs`, `TODO.md` (alter Stand) |
 | Shortcut-Recorder und App/Datei-Picker im Editor | Spart Tipparbeit, vermeidet Fehler | `ActionEditorViewModel`, `PadView.axaml.cs` |
 | JSON-Config unter `%APPDATA%\MakroPad\config.json`, atomar schreiben (Temp-Datei + Move) | Kein kaputtes Config bei Absturz | `MakroPadConfigStore.SaveAsync()` |
 | Tray-Betrieb, Start im Tray, Fenster nur bei Bedarf | Gerät soll im Hintergrund laufen | `App.axaml.cs`, `AppSettingsConfig` |

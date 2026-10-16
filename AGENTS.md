@@ -1,6 +1,6 @@
 # MakroPad Agent Workflow
 
-Diese Datei beschreibt, wie Codex in diesem Repository arbeiten soll.
+Diese Datei beschreibt, wie KI-Assistenten (Codex, Claude Code) in diesem Repository arbeiten sollen.
 
 ## Sprache und Zusammenarbeit
 
@@ -9,7 +9,7 @@ Diese Datei beschreibt, wie Codex in diesem Repository arbeiten soll.
 - Frage nur nach, wenn eine Entscheidung nicht sinnvoll aus dem Projektkontext ableitbar ist.
 - Fasse abgeschlossene Arbeit knapp zusammen.
 - Schlage nach jedem abgeschlossenen Arbeitspaket direkt sinnvolle naechste Schritte vor.
-- Halte `docs/HANDOFF.md` nach groesseren Meilensteinen aktuell.
+- Halte den Status in `docs/REWRITE_PLAN.md` und die betroffenen Dokus in `docs/` nach groesseren Meilensteinen aktuell.
 
 ## Entwicklung
 
@@ -17,14 +17,14 @@ Diese Datei beschreibt, wie Codex in diesem Repository arbeiten soll.
 - Bestehende Projektstruktur und Patterns bevorzugen.
 - Aendere nur Dateien, die fuer die Aufgabe relevant sind.
 - Firmware, App und Doku zusammenhalten, wenn ein Feature das Protokoll oder OLED-Verhalten betrifft.
-- Fuer manuelle Datei-Edits `apply_patch` verwenden.
 
 ## Tests und Verifikation
 
-Neubau-Stand: siehe `docs/REWRITE_PLAN.md`. Der alte Code liegt nur zum
-Nachschlagen in `legacy/` und wird nicht mehr gebaut.
+Stand und Meilensteine: `docs/REWRITE_PLAN.md`. Der alte Stand (0.2.0) ist nur
+noch ueber das Git-Tag `legacy-v0.2.0` erreichbar.
 
-- Nach App-Aenderungen:
+- Nach App-Aenderungen (vor dem Start der App fuer einen Test immer die ganze
+  Solution bauen, `dotnet test` baut `MakroPad.App` nicht mit):
 
 ```powershell
 dotnet build app\MakroPad.sln
@@ -39,6 +39,8 @@ pio test -e native
 ```
 
 - Hardware-Verhalten (Flash, OLED, Slider) muss am Geraet getestet werden; im Abschluss klar sagen, wenn das noch offen ist.
+- Testhilfen der App (`--simulator`, `--screenshot`, `--selftest-recorder`, `--config-dir`) wirken nur mit `"debugMode": true` in der verwendeten Config.
+- Release: `installer\build-release.ps1` (Installer + Firmware-Image nach `release/`).
 - Bei UI-Aenderungen auf kompilierte Avalonia-Bindings achten; ein erfolgreicher Build ist Pflicht.
 
 ## Git
@@ -66,7 +68,7 @@ Am Ende eines erledigten Arbeitspakets:
 - Nenne Build-/Testergebnis.
 - Nenne den Commit-Hash, falls committed wurde.
 - Schlage 2-5 konkrete naechste Schritte vor, mit einer Empfehlung.
-- Erwaehne, wenn `docs/HANDOFF.md` oder andere Dokus aktualisiert wurden.
+- Erwaehne, wenn Dokus in `docs/` aktualisiert wurden.
 
 ## graphify
 
