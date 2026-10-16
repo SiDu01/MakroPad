@@ -60,6 +60,9 @@ public sealed record AppSettings
 
     /// <summary><c>system</c>, <c>light</c> or <c>dark</c>.</summary>
     public string Theme { get; init; } = "system";
+
+    /// <summary>Unlocks developer aids: command-line test options and extra diagnostics.</summary>
+    public bool DebugMode { get; init; }
 }
 
 /// <summary>Which events show a short overlay on the OLED.</summary>

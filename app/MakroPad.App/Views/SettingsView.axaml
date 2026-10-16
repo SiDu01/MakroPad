@@ -66,7 +66,7 @@
                     </ItemsControl>
 
                     <Grid ColumnDefinitions="*,Auto,180,Auto" Margin="0,8,0,0">
-                        <TextBox Text="{Binding NewProcess}" Watermark="Programm, z. B. Discord" />
+                        <TextBox Text="{Binding NewProcess}" PlaceholderText="Programm, z. B. Discord" />
                         <TextBlock Grid.Column="1" Text="aktiviert" VerticalAlignment="Center" Margin="10,0"
                                    Foreground="{DynamicResource InkMutedBrush}" />
                         <ComboBox Grid.Column="2" ItemsSource="{Binding ProfileNames}" SelectedItem="{Binding NewProfile}"
@@ -129,6 +129,16 @@
                 </DockPanel>
                 <TextBlock Classes="muted"
                            Text="Kleinere Bewegungen werden ignoriert, damit die Lautstärke nicht zittert. 0 % und 100 % werden immer erreicht. Bei 0 % reagiert der Slider auf jede Änderung." />
+            </StackPanel>
+
+            <StackPanel Spacing="8">
+                <TextBlock Classes="h2" Text="Entwicklermodus" />
+                <DockPanel Classes="row">
+                    <ToggleSwitch DockPanel.Dock="Right" IsChecked="{Binding DebugMode}" />
+                    <TextBlock Text="Testhilfen einschalten" />
+                </DockPanel>
+                <TextBlock Classes="muted"
+                           Text="Schaltet Startoptionen für Tests frei (Simulator ohne Hardware, Screenshots, Selbsttest der Tastenaufnahme) und zeigt zusätzliche Meldungen in der Diagnose. Die Startoptionen gelten ab dem nächsten Start der App; welche es gibt, steht dann auf der Diagnose-Seite." />
             </StackPanel>
 
             <StackPanel Spacing="8">

@@ -27,8 +27,8 @@ static_assert(ButtonCount == 16, "MakroPad has 16 buttons");
 
 constexpr uint8_t SliderPins[] = { 1, 2, 3 };
 constexpr size_t SliderCount = sizeof(SliderPins) / sizeof(SliderPins[0]);
-// Unwired ADC pins float and spam events. Raise to 3 once sliders 2 and 3 are wired.
-constexpr size_t ActiveSliderCount = 1;
+// Unwired ADC pins float and spam events; lower this if a slider is not connected.
+constexpr size_t ActiveSliderCount = 3;
 static_assert(ActiveSliderCount <= SliderCount, "Too many active sliders");
 constexpr uint8_t SliderSampleCount = 9;
 constexpr uint32_t SliderPollIntervalMs = 5;

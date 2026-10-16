@@ -45,10 +45,12 @@ public partial class App : Application, IFilePicker
 
     private void Compose(IClassicDesktopStyleApplicationLifetime desktop)
     {
-        var args = new AppArguments(desktop.Args ?? []);
+        var allArgs = new AppArguments(desktop.Args ?? []);
+        config = LoadConfig(allArgs);
 
-        config = new ConfigService(args.ConfigDirectory ?? ConfigService.DefaultDirectory);
-        config.Load();
+        // Test options (simulator, screenshots, self-tests) only work in debug mode.
+        var debug = config.Config.Settings.DebugMode;
+        var args = debug ? allArgs : allArgs.WithoutDeveloperOptions();
         ApplyTheme(config.Config.Settings.Theme);
 
         var simulator = args.Simulator ? new SimulatedDevice() : null;
@@ -77,7 +79,13 @@ public partial class App : Application, IFilePicker
         Func<IReadOnlyList<string>> audioSessions = AppVolumeAction.ListSessionProcesses;
         var recorder = new RecorderAdapter();
         var diagnostics = new DiagnosticsViewModel(runtime, session, simulator, audioSessions);
-        recorder.Trace += diagnostics.Info;
+        recorder.Trace += line =>
+        {
+            if (config.Config.Settings.DebugMode)
+            {
+                diagnostics.Info(line);
+            }
+        };
         var pad = new PadViewModel(session, runtime, oled, this, recorder, audioSessions);
         // Context: foreground program for automatic profiles, media sessions for the idle screen.
         foreground = new ForegroundWatcher();
@@ -143,6 +151,29 @@ public partial class App : Application, IFilePicker
         {
             _ = RecorderSelfTestAsync(recorder, resultPath, desktop);
         }
+    }
+
+    /// <summary>
+    /// <c>--config-dir</c> is a developer option: it is only honoured when the config found there
+    /// has debug mode on; otherwise the normal config folder is used.
+    /// </summary>
+    private static ConfigService LoadConfig(AppArguments args)
+    {
+        if (args.ConfigDirectory is { } directory)
+        {
+            var custom = new ConfigService(directory);
+            custom.Load();
+            if (custom.Config.Settings.DebugMode)
+            {
+                return custom;
+            }
+
+            custom.Dispose();
+        }
+
+        var service = new ConfigService(ConfigService.DefaultDirectory);
+        service.Load();
+        return service;
     }
 
     /// <summary>
@@ -378,6 +409,31 @@ public partial class App : Application, IFilePicker
 
     private sealed class AppArguments(string[] args)
     {
+        private static readonly string[] DeveloperOptions = ["--simulator", "--screenshot", "--page", "--select", "--selftest-recorder", "--config-dir"];
+
+        /// <summary>Keeps only the options a normal user needs (currently <c>--tray</c>).</summary>
+        public AppArguments WithoutDeveloperOptions()
+        {
+            var kept = new List<string>();
+            for (var index = 0; index < args.Length; index++)
+            {
+                if (DeveloperOptions.Contains(args[index], StringComparer.OrdinalIgnoreCase))
+                {
+                    // Options with a value also drop the value.
+                    if (!string.Equals(args[index], "--simulator", StringComparison.OrdinalIgnoreCase))
+                    {
+                        index++;
+                    }
+
+                    continue;
+                }
+
+                kept.Add(args[index]);
+            }
+
+            return new AppArguments([.. kept]);
+        }
+
         public bool Simulator => Has("--simulator");
 
         public bool Tray => Has("--tray");

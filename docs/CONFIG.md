@@ -24,6 +24,7 @@ ersetzt.
     "startWithWindows": false,     // Autostart für den aktuellen Benutzer
     "sliderDeadbandPercent": 2,    // Mindeständerung für Lautstärke-Slider (0–25)
     "theme": "system",             // system, light oder dark
+    "debugMode": false,            // Testhilfen (Startoptionen, zusätzliche Diagnose)
     "feedback": {                  // kurze OLED-Einblendungen
       "actions": true,
       "volume": true,

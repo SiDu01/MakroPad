@@ -109,6 +109,11 @@ public sealed class MakroPadRuntime : IAsyncDisposable
     {
         await stopping.CancelAsync();
         clockTimer?.Dispose();
+        lock (mediaGate)
+        {
+            pauseTimer?.Dispose();
+            pauseTimer = null;
+        }
         if (loop is not null)
         {
             try

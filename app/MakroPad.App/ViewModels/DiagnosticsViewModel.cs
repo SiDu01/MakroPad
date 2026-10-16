@@ -75,6 +75,7 @@ public sealed partial class DiagnosticsViewModel : ObservableObject
             }
 
             RefreshProblems();
+            OnPropertyChanged(nameof(IsDebugMode));
         };
 
         foreach (var notice in session.Service.Notices)
@@ -98,6 +99,8 @@ public sealed partial class DiagnosticsViewModel : ObservableObject
     public bool HasAudioSessions => AudioSessions.Count > 0;
 
     public bool IsSimulator => simulator is not null;
+
+    public bool IsDebugMode => session.Config.Settings.DebugMode;
 
     public IReadOnlyList<int> SimulatorButtons { get; } = Enumerable.Range(1, SimulatedDevice.Buttons).ToArray();
 

@@ -27,6 +27,9 @@ public sealed partial class SettingsViewModel : ObservableObject
     private ThemeOption theme;
 
     [ObservableProperty]
+    private bool debugMode;
+
+    [ObservableProperty]
     private string? status;
 
     public SettingsViewModel(ConfigSession session, AutoProfileViewModel autoProfile)
@@ -64,6 +67,8 @@ public sealed partial class SettingsViewModel : ObservableObject
 
     partial void OnSliderDeadbandPercentChanged(int value) => Save();
 
+    partial void OnDebugModeChanged(bool value) => Save();
+
     partial void OnThemeChanged(ThemeOption value)
     {
         Save();
@@ -94,6 +99,7 @@ public sealed partial class SettingsViewModel : ObservableObject
         StartWithWindows = settings.StartWithWindows;
         SliderDeadbandPercent = settings.SliderDeadbandPercent;
         Theme = Themes.FirstOrDefault(t => t.Value == settings.Theme) ?? Themes[0];
+        DebugMode = settings.DebugMode;
         loading = false;
     }
 
@@ -111,7 +117,8 @@ public sealed partial class SettingsViewModel : ObservableObject
                 StartInTray = StartInTray,
                 StartWithWindows = StartWithWindows,
                 SliderDeadbandPercent = Math.Clamp(SliderDeadbandPercent, 0, 25),
-                Theme = Theme.Value
+                Theme = Theme.Value,
+                DebugMode = DebugMode
             }
         });
     }

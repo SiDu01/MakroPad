@@ -44,6 +44,9 @@ Cascadia Mono, weil sie echter Protokolltext sind.
 
 ## Screenshots für die Gestaltungsprüfung
 
+Nur mit `"debugMode": true` in der verwendeten `config.json` (Einstellungen →
+Entwicklermodus); ohne ihn ignoriert die App diese Startoptionen.
+
 ```powershell
 MakroPad.App.exe --simulator --config-dir <Ordner mit Beispiel-config.json> `
   --screenshot pad.png [--page diagnose|einstellungen] [--select button:5|slider:2|display]

@@ -39,7 +39,7 @@
                         <DockPanel>
                             <ToggleButton DockPanel.Dock="Right" Margin="8,0,0,0" MinWidth="112"
                                           Content="{Binding RecordText}" IsChecked="{Binding IsRecording}" />
-                            <TextBox Text="{Binding Value}" Watermark="{Binding Placeholder}" IsEnabled="{Binding !IsRecording}" />
+                            <TextBox Text="{Binding Value}" PlaceholderText="{Binding Placeholder}" IsEnabled="{Binding !IsRecording}" />
                         </DockPanel>
                         <TextBlock Classes="muted" Margin="0,6,0,0" FontSize="12.5" IsVisible="{Binding IsRecording}"
                                    Text="Auch Kombinationen mit der Windows-Taste werden aufgenommen, ohne dass sie etwas auslösen. Esc bricht ab." />
@@ -51,7 +51,7 @@
                 <DataTemplate DataType="vm:ProcessParameterViewModel">
                     <StackPanel>
                         <TextBlock Classes="label" Text="{Binding Label}" />
-                        <TextBox Text="{Binding Value}" Watermark="{Binding Placeholder}" />
+                        <TextBox Text="{Binding Value}" PlaceholderText="{Binding Placeholder}" />
                         <TextBlock Classes="muted" Margin="0,10,0,4" FontSize="12.5"
                                    Text="Spielt gerade Audio ab:" IsVisible="{Binding HasSessions}" />
                         <TextBlock Classes="muted" Margin="0,10,0,4" FontSize="12.5"
@@ -81,7 +81,7 @@
                         <TextBlock Classes="label" Text="{Binding Label}" />
                         <DockPanel>
                             <Button DockPanel.Dock="Right" Margin="8,0,0,0" Content="Durchsuchen …" Command="{Binding BrowseCommand}" />
-                            <TextBox Text="{Binding Value}" Watermark="{Binding Placeholder}" />
+                            <TextBox Text="{Binding Value}" PlaceholderText="{Binding Placeholder}" />
                         </DockPanel>
                         <TextBlock Classes="muted" Text="{Binding Hint}" Margin="0,6,0,0" FontSize="12.5" />
                     </StackPanel>
@@ -95,7 +95,7 @@
                 <DataTemplate DataType="vm:TextParameterViewModel">
                     <StackPanel>
                         <TextBlock Classes="label" Text="{Binding Label}" />
-                        <TextBox Text="{Binding Value}" Watermark="{Binding Placeholder}" />
+                        <TextBox Text="{Binding Value}" PlaceholderText="{Binding Placeholder}" />
                         <TextBlock Classes="muted" Text="{Binding Hint}" Margin="0,6,0,0" FontSize="12.5" />
                     </StackPanel>
                 </DataTemplate>

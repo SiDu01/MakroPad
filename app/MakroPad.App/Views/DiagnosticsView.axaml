@@ -57,6 +57,13 @@
                     <Button Classes="quiet" Content="Aktualisieren" Command="{Binding RefreshAudioCommand}" Margin="-10,0,0,0" />
                 </StackPanel>
 
+                <StackPanel Spacing="10" IsVisible="{Binding IsDebugMode}">
+                    <TextBlock Classes="h2" Text="Entwicklermodus" />
+                    <TextBlock Classes="muted" Text="Startoptionen für MakroPad.App.exe:" />
+                    <SelectableTextBlock FontFamily="{StaticResource LogFont}" FontSize="12.5" TextWrapping="Wrap"
+                                         Text="--simulator&#10;   ohne Hardware, mit virtuellen Tasten&#10;--config-dir ORDNER&#10;   andere config.json (dort muss debugMode an sein)&#10;--screenshot DATEI.png [--page diagnose|einstellungen] [--select button:5|slider:2|display]&#10;   Fenster abbilden und beenden&#10;--selftest-recorder DATEI.txt&#10;   Tastenaufnahme mit Win+E prüfen und beenden" />
+                </StackPanel>
+
                 <StackPanel Spacing="10" IsVisible="{Binding IsSimulator}">
                     <TextBlock Classes="h2" Text="Simulator" />
                     <TextBlock Classes="muted" Text="Die App läuft ohne Hardware. Diese Knöpfe ersetzen das MakroPad." />
