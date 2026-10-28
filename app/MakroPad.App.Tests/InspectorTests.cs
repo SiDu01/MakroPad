@@ -16,6 +16,7 @@ public sealed class InspectorTests
         var editor = new MacroStepViewModel(step, Factory);
 
         Assert.Same(step, editor.ToStep());
+        Assert.Contains("keyboard.shortcutt", editor.UnknownHint, StringComparison.Ordinal);
     }
 
     [Fact]
@@ -26,6 +27,7 @@ public sealed class InspectorTests
         editor.Parameters[0].Value = "300";
 
         Assert.Equal("delay", editor.ToStep().Action);
+        Assert.Null(editor.UnknownHint);
     }
 
     [Fact]

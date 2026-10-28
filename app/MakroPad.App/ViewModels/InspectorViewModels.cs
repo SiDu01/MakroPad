@@ -86,6 +86,8 @@ public sealed partial class MacroStepViewModel : ObservableObject
     private bool loading;
 
     /// <summary>A hand-written step whose action the editor does not know; saved unchanged until the user edits it.</summary>
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(UnknownHint))]
     private MacroStep? unknown;
 
     [ObservableProperty]
@@ -99,7 +101,7 @@ public sealed partial class MacroStepViewModel : ObservableObject
         this.factory = factory;
         loading = true;
         var known = Options.FirstOrDefault(o => string.Equals(o.Definition?.Id, step.Action, StringComparison.OrdinalIgnoreCase));
-        unknown = known is null ? step : null;
+        Unknown = known is null ? step : null;
         selectedAction = known ?? Options[0];
         Build(step.GetParameter);
         loading = false;
@@ -111,11 +113,15 @@ public sealed partial class MacroStepViewModel : ObservableObject
 
     public bool IsDelay => SelectedAction.Definition == ActionCatalog.Delay;
 
+    public string? UnknownHint => Unknown is { } step
+        ? $"Unbekannte Aktion „{step.Action}“ aus config.json, wird unverändert gespeichert. Wähle eine Aktion, um den Schritt zu ersetzen."
+        : null;
+
     /// <summary>Raised when anything in the step changed.</summary>
     public event Action? Edited;
 
     // Options are built from ActionCatalog.MacroStepActions, so every step option has a definition.
-    public MacroStep ToStep() => unknown ?? new(SelectedAction.Definition!.Id, ParameterFactory.Collect(Parameters));
+    public MacroStep ToStep() => Unknown ?? new(SelectedAction.Definition!.Id, ParameterFactory.Collect(Parameters));
 
     partial void OnSelectedActionChanged(ActionOption value)
     {
@@ -124,7 +130,7 @@ public sealed partial class MacroStepViewModel : ObservableObject
             return;
         }
 
-        unknown = null;
+        Unknown = null;
         var previous = Parameters.ToDictionary(p => p.Name, p => p.Value, StringComparer.OrdinalIgnoreCase);
         Build(name => previous.GetValueOrDefault(name));
         OnPropertyChanged(nameof(IsDelay));
@@ -149,7 +155,7 @@ public sealed partial class MacroStepViewModel : ObservableObject
 
     private void OnParameterEdited()
     {
-        unknown = null;
+        Unknown = null;
         Edited?.Invoke();
     }
 }

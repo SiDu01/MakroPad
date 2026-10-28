@@ -142,6 +142,8 @@
                                         </ComboBox.ItemTemplate>
                                     </ComboBox>
                                 </DockPanel>
+                                <TextBlock Classes="caution" Text="{Binding UnknownHint}" IsVisible="{Binding UnknownHint, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                           Margin="22,0,0,0" TextWrapping="Wrap" />
                                 <ItemsControl ItemsSource="{Binding Parameters}" Margin="22,0,0,0">
                                     <ItemsControl.ItemsPanel>
                                         <ItemsPanelTemplate>
