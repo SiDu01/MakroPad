@@ -1,16 +1,16 @@
 # Graph Report - MakroPad  (2026-10-28)
 
 ## Corpus Check
-- 120 files · ~56,356 words
+- 120 files · ~56,622 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 3342 nodes · 4757 edges · 323 communities (234 shown, 89 thin omitted)
+- 3346 nodes · 4763 edges · 336 communities (241 shown, 95 thin omitted)
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 87 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `cbc0a7cd`
+- Built from commit: `cfe5dd13`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -145,6 +145,7 @@
 - [[_COMMUNITY_Community 188|Community 188]]
 - [[_COMMUNITY_Community 189|Community 189]]
 - [[_COMMUNITY_Community 190|Community 190]]
+- [[_COMMUNITY_Community 191|Community 191]]
 - [[_COMMUNITY_Community 192|Community 192]]
 - [[_COMMUNITY_Community 194|Community 194]]
 - [[_COMMUNITY_Community 195|Community 195]]
@@ -166,10 +167,12 @@
 - [[_COMMUNITY_Community 244|Community 244]]
 - [[_COMMUNITY_Community 245|Community 245]]
 - [[_COMMUNITY_Community 247|Community 247]]
+- [[_COMMUNITY_Community 248|Community 248]]
 - [[_COMMUNITY_Community 249|Community 249]]
 - [[_COMMUNITY_Community 250|Community 250]]
 - [[_COMMUNITY_Community 251|Community 251]]
 - [[_COMMUNITY_Community 252|Community 252]]
+- [[_COMMUNITY_Community 253|Community 253]]
 - [[_COMMUNITY_Community 254|Community 254]]
 - [[_COMMUNITY_Community 255|Community 255]]
 - [[_COMMUNITY_Community 256|Community 256]]
@@ -189,18 +192,22 @@
 - [[_COMMUNITY_Community 271|Community 271]]
 - [[_COMMUNITY_Community 274|Community 274]]
 - [[_COMMUNITY_Community 275|Community 275]]
+- [[_COMMUNITY_Community 276|Community 276]]
 - [[_COMMUNITY_Community 277|Community 277]]
 - [[_COMMUNITY_Community 278|Community 278]]
 - [[_COMMUNITY_Community 279|Community 279]]
 - [[_COMMUNITY_Community 280|Community 280]]
 - [[_COMMUNITY_Community 282|Community 282]]
 - [[_COMMUNITY_Community 283|Community 283]]
+- [[_COMMUNITY_Community 285|Community 285]]
+- [[_COMMUNITY_Community 286|Community 286]]
 - [[_COMMUNITY_Community 287|Community 287]]
 - [[_COMMUNITY_Community 288|Community 288]]
 - [[_COMMUNITY_Community 289|Community 289]]
 - [[_COMMUNITY_Community 290|Community 290]]
 - [[_COMMUNITY_Community 291|Community 291]]
 - [[_COMMUNITY_Community 292|Community 292]]
+- [[_COMMUNITY_Community 293|Community 293]]
 - [[_COMMUNITY_Community 294|Community 294]]
 - [[_COMMUNITY_Community 295|Community 295]]
 - [[_COMMUNITY_Community 296|Community 296]]
@@ -208,6 +215,7 @@
 - [[_COMMUNITY_Community 298|Community 298]]
 - [[_COMMUNITY_Community 299|Community 299]]
 - [[_COMMUNITY_Community 300|Community 300]]
+- [[_COMMUNITY_Community 301|Community 301]]
 - [[_COMMUNITY_Community 302|Community 302]]
 - [[_COMMUNITY_Community 303|Community 303]]
 - [[_COMMUNITY_Community 304|Community 304]]
@@ -223,6 +231,7 @@
 - [[_COMMUNITY_Community 314|Community 314]]
 - [[_COMMUNITY_Community 315|Community 315]]
 - [[_COMMUNITY_Community 316|Community 316]]
+- [[_COMMUNITY_Community 317|Community 317]]
 - [[_COMMUNITY_Community 318|Community 318]]
 - [[_COMMUNITY_Community 319|Community 319]]
 - [[_COMMUNITY_Community 320|Community 320]]
@@ -234,6 +243,9 @@
 - [[_COMMUNITY_Community 328|Community 328]]
 - [[_COMMUNITY_Community 329|Community 329]]
 - [[_COMMUNITY_Community 330|Community 330]]
+- [[_COMMUNITY_Community 331|Community 331]]
+- [[_COMMUNITY_Community 334|Community 334]]
+- [[_COMMUNITY_Community 335|Community 335]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `MainWindowViewModel` - 205 edges
@@ -264,7 +276,7 @@
 - **Input to Action Flow** — hardware_buttons_gpio_pullup, hardware_sliders_adc1, protocol_button_message, protocol_slider_message, app_readme_action_pipeline [EXTRACTED 1.00]
 - **OLED Display Configuration Flow** — hardware_oled_i2c_ssd1306, protocol_display_message, protocol_config_message, protocol_action_result_message, app_readme_oled_default_screen [EXTRACTED 1.00]
 
-## Communities (323 total, 89 thin omitted)
+## Communities (336 total, 95 thin omitted)
 
 ### Community 0 - "Community 0"
 Cohesion: 0.18
@@ -275,12 +287,12 @@ Cohesion: 0.03
 Nodes (36): ActionPipeline, ActionDefinitionCatalog, ActionPipeline, BindingEditorService, bool, CancellationTokenSource, DeviceDisplaySyncService, DeviceSessionService (+28 more)
 
 ### Community 3 - "Community 3"
-Cohesion: 0.09
-Nodes (19): CancellationTokenSource, DeviceConnectionState, int, object, TimeSpan, CancellationTokenSource, DateTimeOffset, DeviceConnectionState (+11 more)
+Cohesion: 0.08
+Nodes (20): CancellationTokenSource, DeviceConnectionState, int, object, TimeSpan, DateTimeOffset, CancellationTokenSource, DateTimeOffset (+12 more)
 
 ### Community 4 - "Community 4"
-Cohesion: 0.17
-Nodes (15): Build and Test Workflow, German Collaboration Rules, Git Commit Workflow, MakroPad Agent Workflow, Repository Editing Rules, Firmware and Desktop App Architecture, Avalonia UI Technology Choice, Hardware Layout Configuration (+7 more)
+Cohesion: 0.25
+Nodes (11): Build and Test Workflow, Firmware and Desktop App Architecture, Avalonia UI Technology Choice, Hardware Layout Configuration, USB HID Role, User Profile Configuration, Desktop Companion App, ESP32-S3 Firmware (+3 more)
 
 ### Community 6 - "Community 6"
 Cohesion: 0.18
@@ -303,20 +315,20 @@ Cohesion: 0.21
 Nodes (3): ProfileConfigService, ProfileConfigServiceTests, ProfileConfigService
 
 ### Community 11 - "Community 11"
-Cohesion: 0.05
-Nodes (11): IApplicationVolumeController, ISystemLauncher, NoopApplicationVolumeController, SystemLauncher, ActionExecutorTests, FakeApplicationVolumeController, FakeKeyboardController, FakeMediaController (+3 more)
+Cohesion: 0.19
+Nodes (5): IKeyboardController, FakeApplicationVolumeController, FakeKeyboardController, FakeSystemLauncher, FakeVolumeController
 
 ### Community 12 - "Community 12"
-Cohesion: 0.10
-Nodes (12): Dictionary, uint, ushort, IKeyboardController, Dictionary, uint, ushort, NoopKeyboardController (+4 more)
+Cohesion: 0.13
+Nodes (10): Dictionary, uint, ushort, Dictionary, uint, ushort, Dictionary, uint (+2 more)
 
 ### Community 14 - "Community 14"
 Cohesion: 0.06
 Nodes (26): bool, ConfigService, App, MakroPadRuntime, string, TrayIcon, Application, ForegroundWatcher (+18 more)
 
 ### Community 18 - "Community 18"
-Cohesion: 0.05
-Nodes (29): bool, DateTime, Func, int, IProcessPresenceProbe, ISystemStateProvider, bool, DateTime (+21 more)
+Cohesion: 0.09
+Nodes (17): bool, DateTime, Func, int, IProcessPresenceProbe, ISystemStateProvider, DispatcherTimer, IdleScreenConfig (+9 more)
 
 ### Community 19 - "Community 19"
 Cohesion: 0.14
@@ -327,8 +339,8 @@ Cohesion: 0.13
 Nodes (14): BindingEditorService, bool, MakroPadConfig, ProfileConfigService, string, BindingViewModel, EventArgs, BindingEditorService (+6 more)
 
 ### Community 22 - "Community 22"
-Cohesion: 0.06
-Nodes (15): DeviceDisplaySyncService, Func, object, DisplayTriggerRuntimeState, Func, IDisplayTriggerSink, DeviceDisplaySyncService, Func (+7 more)
+Cohesion: 0.05
+Nodes (17): DeviceDisplaySyncService, Func, object, DisplayTriggerRuntimeState, Func, IDisplayTriggerSink, ISystemLauncher, DeviceDisplaySyncService (+9 more)
 
 ### Community 23 - "Community 23"
 Cohesion: 0.24
@@ -395,8 +407,8 @@ Cohesion: 0.33
 Nodes (6): Aufbau, Bauen und testen, code:powershell (# Firmware (im Ordner firmware/)), Current Status, MakroPad, Status
 
 ### Community 88 - "Community 88"
-Cohesion: 0.09
-Nodes (8): int, string, string, DisplayTriggerRenderer, DisplayTriggerRenderer, ListContext, int, string
+Cohesion: 0.15
+Nodes (4): int, string, DisplayTriggerRenderer, int
 
 ### Community 90 - "Community 90"
 Cohesion: 0.09
@@ -404,7 +416,7 @@ Nodes (9): uint, ushort, ISystemMediaController, uint, ushort, NoopSystemMediaCo
 
 ### Community 92 - "Community 92"
 Cohesion: 0.06
-Nodes (14): IApplicationVolumeController, string, bool, DeviceDisplaySyncService, int, NowPlayingTrack, string, IApplicationVolumeController (+6 more)
+Nodes (15): IApplicationVolumeController, string, bool, DeviceDisplaySyncService, int, NowPlayingTrack, string, IApplicationVolumeController (+7 more)
 
 ### Community 98 - "Community 98"
 Cohesion: 0.22
@@ -479,8 +491,8 @@ Cohesion: 0.13
 Nodes (7): bool, Func, int, TimeSpan, PadViewModel, PadSlotViewModel, ProfilesEditorViewModel
 
 ### Community 145 - "Community 145"
-Cohesion: 0.12
-Nodes (10): bool, int, MakroPadRuntime, ShellViewModel, AppPage, AppSection, bool, int (+2 more)
+Cohesion: 0.15
+Nodes (7): bool, int, AppSection, bool, int, ShellViewModel, ShellViewModel
 
 ### Community 147 - "Community 147"
 Cohesion: 0.14
@@ -491,12 +503,12 @@ Cohesion: 0.11
 Nodes (9): Action, bool, int, string, Action, bool, int, string (+1 more)
 
 ### Community 155 - "Community 155"
-Cohesion: 0.05
-Nodes (21): bool, DateTime, double, uint, uint, IForegroundWindowProbe, ISystemMetricsSampler, bool (+13 more)
+Cohesion: 0.10
+Nodes (8): uint, IForegroundWindowProbe, ISystemMetricsSampler, uint, FakeForegroundProbe, FakeMetricsSampler, SystemStateProviderTests, WindowsForegroundWindowProbe
 
 ### Community 158 - "Community 158"
 Cohesion: 0.09
-Nodes (13): bool, DisplayBlockViewModel, int, NowPlayingTrack, OledDefaultScreenRenderer, string, IdleScreenItemViewModel, bool (+5 more)
+Nodes (12): bool, DisplayBlockViewModel, int, NowPlayingTrack, OledDefaultScreenRenderer, string, IdleScreenItemViewModel, bool (+4 more)
 
 ### Community 159 - "Community 159"
 Cohesion: 0.08
@@ -535,8 +547,8 @@ Cohesion: 0.33
 Nodes (7): bool, string, bool, string, KeyViewModel, PadSlotViewModel, SliderViewModel
 
 ### Community 188 - "Community 188"
-Cohesion: 0.07
-Nodes (20): ActionOption, bool, ConfigSession, DispatcherTimer, Func, IFilePicker, int, IShortcutRecorder (+12 more)
+Cohesion: 0.19
+Nodes (7): DispatcherTimer, IFilePicker, IShortcutRecorder, MakroPadRuntime, string, TimeSpan, BindingInspectorViewModel
 
 ### Community 189 - "Community 189"
 Cohesion: 0.15
@@ -545,6 +557,10 @@ Nodes (14): App → Gerät, code:text (type;key=value;key=value), code:text (hel
 ### Community 190 - "Community 190"
 Cohesion: 0.18
 Nodes (11): Beispielablauf, code:text (error;code=unsupported_protocol;message=Expected%20proto%3D1), code:text (ESP -> App: hello;proto=1;fw=0.1.0;device=makropad-s3;button), code:text (ping;id=42), Fehlerbehandlung, Heartbeat, Offene Entscheidungen, Serial Protocol (+3 more)
+
+### Community 191 - "Community 191"
+Cohesion: 0.06
+Nodes (25): bool, DateTime, double, uint, bool, DateTime, int, long (+17 more)
 
 ### Community 192 - "Community 192"
 Cohesion: 0.20
@@ -610,6 +626,10 @@ Nodes (9): string, ConfigValidator, feed(), get(), getInt(), hexValue(), parse()
 Cohesion: 0.15
 Nodes (8): object, string, Timer, TimeSpan, ConfigService, FileSystemWatcher, JsonFileStore, Timer
 
+### Community 248 - "Community 248"
+Cohesion: 0.15
+Nodes (8): ActionOption, bool, int, MacroStep, GestureTabViewModel, IFlushable, MacroStepViewModel, ParameterFactory
+
 ### Community 249 - "Community 249"
 Cohesion: 0.25
 Nodes (7): active(), FallbackKey, label, usage, onButton(), onSlider(), press()
@@ -619,12 +639,16 @@ Cohesion: 0.22
 Nodes (3): int, string, DeviceMessages
 
 ### Community 251 - "Community 251"
-Cohesion: 0.16
-Nodes (11): DateTimeOffset, ILineTransport, int, ITimer, object, string, TimeProvider, TimeSpan (+3 more)
+Cohesion: 0.17
+Nodes (10): DateTimeOffset, ILineTransport, int, ITimer, object, string, TimeProvider, TimeSpan (+2 more)
 
 ### Community 252 - "Community 252"
 Cohesion: 0.09
 Nodes (15): bool, DisplayBlockViewModel, HashSet, int, IReadOnlyList, string, DisplayBlockViewModel, HashSet (+7 more)
+
+### Community 253 - "Community 253"
+Cohesion: 0.26
+Nodes (4): string, DisplayTriggerRenderer, ListContext, string
 
 ### Community 254 - "Community 254"
 Cohesion: 0.09
@@ -695,7 +719,7 @@ Cohesion: 0.23
 Nodes (6): Dictionary, Func, object, TimeProvider, GestureDetector, KeyState
 
 ### Community 282 - "Community 282"
-Cohesion: 0.17
+Cohesion: 0.27
 Nodes (3): ShortcutParser, Dictionary, ushort
 
 ### Community 283 - "Community 283"
@@ -737,6 +761,10 @@ Nodes (3): bool, int, OledCanvas
 ### Community 299 - "Community 299"
 Cohesion: 0.27
 Nodes (3): FakeTimeProvider, OledMirrorTests, OledMirror
+
+### Community 301 - "Community 301"
+Cohesion: 0.43
+Nodes (3): Func, KeyViewModel, KeyInspectorViewModel
 
 ### Community 303 - "Community 303"
 Cohesion: 0.25
@@ -786,25 +814,33 @@ Nodes (3): StyledProperty, Control, FaderView
 Cohesion: 0.50
 Nodes (3): antislop audit 001 (2026-10-28), Code (CLAUDE.md / ponytail), not antislop, Findings
 
+### Community 331 - "Community 331"
+Cohesion: 0.29
+Nodes (3): MakroPadRuntime, ShellViewModel, AppPage
+
+### Community 335 - "Community 335"
+Cohesion: 0.50
+Nodes (4): German Collaboration Rules, Git Commit Workflow, MakroPad Agent Workflow, Repository Editing Rules
+
 ## Knowledge Gaps
 - **674 isolated node(s):** `PreToolUse`, `allow`, `PreToolUse`, `version`, `rollForward` (+669 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **89 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **95 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `MainWindowViewModel` connect `Community 1` to `Community 2`, `Community 100`, `Community 132`, `Community 102`, `Community 167`, `Community 137`, `Community 107`, `Community 108`, `Community 13`, `Community 16`, `Community 21`, `Community 62`, `Community 92`, `Community 158`?**
-  _High betweenness centrality (0.209) - this node is a cross-community bridge._
+- **Why does `MainWindowViewModel` connect `Community 1` to `Community 2`, `Community 100`, `Community 132`, `Community 102`, `Community 167`, `Community 137`, `Community 107`, `Community 108`, `Community 13`, `Community 16`, `Community 21`, `Community 92`, `Community 62`?**
+  _High betweenness centrality (0.214) - this node is a cross-community bridge._
 - **Why does `DisplayTriggerOrchestrator` connect `Community 137` to `Community 291`?**
-  _High betweenness centrality (0.168) - this node is a cross-community bridge._
+  _High betweenness centrality (0.174) - this node is a cross-community bridge._
 - **Why does `DisplayTriggerInputTracker` connect `Community 137` to `Community 1`?**
-  _High betweenness centrality (0.166) - this node is a cross-community bridge._
+  _High betweenness centrality (0.172) - this node is a cross-community bridge._
 - **What connects `PreToolUse`, `allow`, `PreToolUse` to the rest of the system?**
   _674 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 1` be split into smaller, more focused modules?**
   _Cohesion score 0.03207698476343224 - nodes in this community are weakly interconnected._
 - **Should `Community 2` be split into smaller, more focused modules?**
-  _Cohesion score 0.1226890756302521 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.14408602150537633 - nodes in this community are weakly interconnected._
 - **Should `Community 3` be split into smaller, more focused modules?**
-  _Cohesion score 0.08695652173913043 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.08333333333333333 - nodes in this community are weakly interconnected._
