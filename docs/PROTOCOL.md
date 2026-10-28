@@ -72,7 +72,7 @@ slider;id=1;value=734
 | --- | --- | --- |
 | `hello-ack` | `proto=2`, `app` | Handshake bestätigen |
 | `ping` | `id` | Heartbeat |
-| `state` | `profile`, `time` (`HH:mm:ss`), `date` (`dd.MM.yyyy`), `artist`, `title`, `volume` (0–100) | Dauerhafter Zustand für den Idle-Screen. Alle Felder optional; fehlende Felder bleiben unverändert, ein leerer Wert löscht. |
+| `state` | `profile`, `time` (`HH:mm:ss`), `date` (`dd.MM.yyyy`), `artist`, `title` | Dauerhafter Zustand für den Idle-Screen. Alle Felder optional; fehlende Felder bleiben unverändert, ein leerer Wert löscht. |
 | `screen` | `type`, `title`, `text`, `value`, `icon`, `ms` | Temporäres Overlay, danach zurück zum Idle-Screen |
 | `clear` | – | Overlay sofort beenden |
 
@@ -96,7 +96,7 @@ Beispiel:
 
 ```text
 hello-ack;proto=2;app=0.3.0
-state;profile=Default;time=18:42:05;date=04.10.2026;volume=40
+state;profile=Default;time=18:42:05;date=04.10.2026
 screen;type=volume;title=Lautstärke;text=System;value=72;ms=1200
 screen;type=action;title=Aktion;text=Play%2FPause;icon=ok
 ```

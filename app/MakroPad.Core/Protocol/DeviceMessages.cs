@@ -34,8 +34,7 @@ public static class DeviceMessages
         ["time"] = state.Now?.ToString("HH:mm:ss", CultureInfo.InvariantCulture),
         ["date"] = state.Now?.ToString("dd.MM.yyyy", CultureInfo.InvariantCulture),
         ["artist"] = state.Artist,
-        ["title"] = state.Title,
-        ["volume"] = state.Volume?.ToString(CultureInfo.InvariantCulture)
+        ["title"] = state.Title
     }, "artist", "title");
 
     public static string Screen(ScreenRequest screen) => Fit("screen", new Dictionary<string, string?>
@@ -72,8 +71,7 @@ public sealed record DeviceState(
     string? Profile = null,
     DateTime? Now = null,
     string? Artist = null,
-    string? Title = null,
-    int? Volume = null);
+    string? Title = null);
 
 public enum ScreenType
 {
