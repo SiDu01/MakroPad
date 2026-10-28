@@ -19,7 +19,8 @@
             <SolidColorBrush x:Key="KeycapPressedBrush" Color="#CCC6B7" />
             <SolidColorBrush x:Key="KeycapSkirtBrush" Color="#AEA897" />
             <SolidColorBrush x:Key="KeycapInkBrush" Color="#28312F" />
-            <SolidColorBrush x:Key="KeycapNumberBrush" Color="#8A8679" />
+            <SolidColorBrush x:Key="KeycapSkirtHoverBrush" Color="#8A8679" />
+            <SolidColorBrush x:Key="KeycapNumberBrush" Color="#57544A" />
             <SolidColorBrush x:Key="FaderCapBrush" Color="#E0662B" />
             <SolidColorBrush x:Key="FaderShadeBrush" Color="#A3461A" />
             <SolidColorBrush x:Key="SlotBrush" Color="#3A4E4A" />
@@ -29,7 +30,7 @@
             <SolidColorBrush x:Key="SelectionBrush" Color="#E0662B" />
             <SolidColorBrush x:Key="CautionBrush" Color="#9C4413" />
             <SolidColorBrush x:Key="OnlineBrush" Color="#2F7A68" />
-            <SolidColorBrush x:Key="OfflineBrush" Color="#8E9895" />
+            <SolidColorBrush x:Key="OfflineBrush" Color="#7C8784" />
             <SolidColorBrush x:Key="LogBrush" Color="#FBFCFB" />
         </ResourceDictionary>
         <ResourceDictionary x:Key="Dark">
@@ -46,7 +47,8 @@
             <SolidColorBrush x:Key="KeycapPressedBrush" Color="#C2BCAD" />
             <SolidColorBrush x:Key="KeycapSkirtBrush" Color="#9F998A" />
             <SolidColorBrush x:Key="KeycapInkBrush" Color="#28312F" />
-            <SolidColorBrush x:Key="KeycapNumberBrush" Color="#878377" />
+            <SolidColorBrush x:Key="KeycapSkirtHoverBrush" Color="#878377" />
+            <SolidColorBrush x:Key="KeycapNumberBrush" Color="#57544A" />
             <SolidColorBrush x:Key="FaderCapBrush" Color="#E86F33" />
             <SolidColorBrush x:Key="FaderShadeBrush" Color="#9A4119" />
             <SolidColorBrush x:Key="SlotBrush" Color="#263532" />

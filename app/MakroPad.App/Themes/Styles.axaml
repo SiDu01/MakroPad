@@ -121,8 +121,12 @@
         <Setter Property="Template">
             <ControlTemplate>
                 <Panel Background="Transparent">
-                    <Border x:Name="ring" CornerRadius="14" BorderThickness="3"
-                            BorderBrush="{DynamicResource SelectionBrush}" IsVisible="False" />
+                    <!-- Orange alone is too close in brightness to the lid; the dark edge keeps the ring at 3:1. -->
+                    <Border x:Name="ring" CornerRadius="14" BorderThickness="1"
+                            BorderBrush="{DynamicResource LidInkBrush}" IsVisible="False">
+                        <Border x:Name="ringFill" CornerRadius="13" BorderThickness="3"
+                                BorderBrush="{DynamicResource SelectionBrush}" />
+                    </Border>
                     <Border x:Name="skirt" Margin="6" CornerRadius="10" Background="{DynamicResource KeycapSkirtBrush}" />
                     <Border x:Name="face" CornerRadius="8" Margin="13,10,13,19"
                             Background="{DynamicResource KeycapBrush}">
@@ -138,7 +142,7 @@
         </Setter>
     </Style>
     <Style Selector="Button.keycap:pointerover /template/ Border#skirt">
-        <Setter Property="Background" Value="{DynamicResource KeycapNumberBrush}" />
+        <Setter Property="Background" Value="{DynamicResource KeycapSkirtHoverBrush}" />
     </Style>
     <Style Selector="Button.keycap.selected /template/ Border#ring">
         <Setter Property="IsVisible" Value="True" />
@@ -149,7 +153,9 @@
     </Style>
     <Style Selector="Button.keycap:focus-visible /template/ Border#ring">
         <Setter Property="IsVisible" Value="True" />
-        <Setter Property="BorderBrush" Value="{DynamicResource InkBrush}" />
+    </Style>
+    <Style Selector="Button.keycap:focus-visible /template/ Border#ringFill">
+        <Setter Property="BorderBrush" Value="{DynamicResource LidInkBrush}" />
     </Style>
 
     <!-- Plain hit area for the OLED and the faders, with the same selection ring as the keys. -->
@@ -159,8 +165,11 @@
         <Setter Property="Template">
             <ControlTemplate>
                 <Panel Background="Transparent">
-                    <Border x:Name="ring" CornerRadius="14" BorderThickness="3"
-                            BorderBrush="{DynamicResource SelectionBrush}" IsVisible="False" />
+                    <Border x:Name="ring" CornerRadius="14" BorderThickness="1"
+                            BorderBrush="{DynamicResource LidInkBrush}" IsVisible="False">
+                        <Border x:Name="ringFill" CornerRadius="13" BorderThickness="3"
+                                BorderBrush="{DynamicResource SelectionBrush}" />
+                    </Border>
                     <ContentPresenter Content="{TemplateBinding Content}" Margin="6" />
                 </Panel>
             </ControlTemplate>
@@ -171,6 +180,8 @@
     </Style>
     <Style Selector="Button.part:focus-visible /template/ Border#ring">
         <Setter Property="IsVisible" Value="True" />
-        <Setter Property="BorderBrush" Value="{DynamicResource InkBrush}" />
+    </Style>
+    <Style Selector="Button.part:focus-visible /template/ Border#ringFill">
+        <Setter Property="BorderBrush" Value="{DynamicResource LidInkBrush}" />
     </Style>
 </Styles>
