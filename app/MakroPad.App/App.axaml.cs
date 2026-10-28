@@ -53,9 +53,11 @@ public partial class App : Application, IFilePicker
         var args = debug ? allArgs : allArgs.WithoutDeveloperOptions();
         ApplyTheme(config.Config.Settings.Theme);
 
-        var simulator = args.Simulator ? new SimulatedDevice() : null;
-        var serial = args.Simulator ? null : new SerialDeviceConnector { PreferredPort = config.State.LastPort };
-        IDeviceConnector connector = simulator is not null ? simulator : serial!;
+        IDeviceConnector connector = args.Simulator
+            ? new SimulatedDevice()
+            : new SerialDeviceConnector { PreferredPort = config.State.LastPort };
+        var simulator = connector as SimulatedDevice;
+        var serial = connector as SerialDeviceConnector;
 
         var profiles = new ProfileManager();
         var actions = new ActionRunner(
@@ -137,7 +139,15 @@ public partial class App : Application, IFilePicker
             }
         };
         trayIcon = CreateTrayIcon(desktop);
-        desktop.ShutdownRequested += (_, _) => Shutdown();
+        // Windows ending the session: hold it until the device and hooks are released.
+        desktop.ShutdownRequested += (_, e) =>
+        {
+            if (!exitRequested)
+            {
+                e.Cancel = true;
+                _ = ExitAsync(desktop);
+            }
+        };
 
         if (!args.Tray && !config.Config.Settings.StartInTray || args.Screenshot is not null)
         {
@@ -178,43 +188,6 @@ public partial class App : Application, IFilePicker
         var service = new ConfigService(ConfigService.DefaultDirectory);
         service.Load();
         return service;
-    }
-
-    /// <summary>
-    /// Development aid: selects key 5, starts recording through its inspector field like the
-    /// "Aufnehmen" button, sends Win+E, then writes the trace and the saved binding to a file.
-    /// </summary>
-    private async Task RecorderSelfTestAsync(RecorderAdapter recorder, string resultPath, IClassicDesktopStyleApplicationLifetime desktop)
-    {
-        var lines = new List<string>();
-        recorder.Trace += line => { lock (lines) { lines.Add(line); } };
-        await Task.Delay(1500);
-        await Dispatcher.UIThread.InvokeAsync(async () =>
-        {
-            var key = shell!.Pad.Keys.First(k => k.Id == 5);
-            shell.Pad.SelectCommand.Execute(key);
-            var inspector = (BindingInspectorViewModel)shell.Pad.Inspector!;
-            var field = inspector.Parameters.OfType<ShortcutParameterViewModel>().First();
-            field.IsRecording = true;
-            lines.Add($"recording={field.IsRecording} text={field.RecordText}");
-            _ = Task.Run(async () =>
-            {
-                await Task.Delay(400);
-                SelfTestKeys.WinE();
-            });
-            await Task.Delay(1500);
-            lines.Add($"after: recording={field.IsRecording} value={field.Value} error={field.RecordError}");
-            await Task.Delay(800);
-            var saved = config!.Config.FindProfile(runtime!.Profiles.Active.Name)!.Bindings.First(b => b.Input == "button:5");
-            lines.Add($"saved={saved.GetParameter("keys")} status={inspector.Status}");
-        });
-        lock (lines)
-        {
-            File.WriteAllLines(resultPath, lines);
-        }
-
-        exitRequested = true;
-        desktop.Shutdown();
     }
 
     private async Task AttachMediaAsync(MakroPadRuntime target, DiagnosticsViewModel diagnostics)
@@ -270,11 +243,7 @@ public partial class App : Application, IFilePicker
         profileMenu = new NativeMenuItem("Profil") { Menu = new NativeMenu() };
 
         var exit = new NativeMenuItem("Beenden");
-        exit.Click += (_, _) =>
-        {
-            exitRequested = true;
-            desktop.Shutdown();
-        };
+        exit.Click += (_, _) => _ = ExitAsync(desktop);
 
         var icon = new TrayIcon
         {
@@ -330,82 +299,40 @@ public partial class App : Application, IFilePicker
         window.Activate();
     }
 
-    /// <summary>Development aid: <c>--screenshot file.png [--page diagnose|einstellungen] [--select button:5]</c>.</summary>
-    private async Task TakeScreenshotAsync(AppArguments args, string path, IClassicDesktopStyleApplicationLifetime desktop)
+    /// <summary>Releases the device, hooks and tray icon, then quits.</summary>
+    private async Task ExitAsync(IClassicDesktopStyleApplicationLifetime desktop)
     {
-        await Task.Delay(TimeSpan.FromSeconds(2.5));
-        await Dispatcher.UIThread.InvokeAsync(async () =>
+        if (exitRequested)
         {
-            if (shell is null || window is null)
-            {
-                return;
-            }
+            return;
+        }
 
-            shell.Page = args.Page switch
-            {
-                "diagnose" => AppPage.Diagnostics,
-                "einstellungen" => AppPage.Settings,
-                _ => AppPage.Pad
-            };
-            if (args.Select is { } select)
-            {
-                // button:9:long selects key 9 and its long-press tab.
-                var parts = select.Split(':');
-                var input = parts.Length > 2 ? $"{parts[0]}:{parts[1]}" : select;
-                PadElementViewModel? element = input == "display"
-                    ? shell.Pad.Display
-                    : (PadElementViewModel?)shell.Pad.Keys.FirstOrDefault(k => k.Input == input)
-                      ?? shell.Pad.Faders.FirstOrDefault(f => f.Input == input);
-                if (element is not null)
-                {
-                    shell.Pad.SelectCommand.Execute(element);
-                }
-
-                if (parts.Length > 2 && shell.Pad.Inspector is KeyInspectorViewModel keyInspector)
-                {
-                    var gesture = parts[2] == "double" ? Gesture.DoublePress : Gesture.LongPress;
-                    keyInspector.SelectTabCommand.Execute(keyInspector.Tabs.First(t => t.Gesture == gesture));
-                }
-            }
-
-            await Task.Delay(600);
-            var size = new PixelSize((int)window.Bounds.Width, (int)window.Bounds.Height);
-            using var bitmap = new RenderTargetBitmap(size);
-            bitmap.Render(window);
-            bitmap.Save(path);
-            exitRequested = true;
-            desktop.Shutdown();
-        });
-    }
-
-    private void Shutdown()
-    {
         exitRequested = true;
-        trayIcon?.Dispose();
-        foreground?.Dispose();
-        media?.Dispose();
-        config?.Dispose();
-        runtime?.DisposeAsync().AsTask().GetAwaiter().GetResult();
+        try
+        {
+            trayIcon?.Dispose();
+            foreground?.Dispose();
+            media?.Dispose();
+            config?.Dispose();
+            if (runtime is not null)
+            {
+                // A device read that ignores cancellation must not keep the app alive.
+                await runtime.DisposeAsync().AsTask().WaitAsync(TimeSpan.FromSeconds(2));
+            }
+        }
+        catch (TimeoutException)
+        {
+        }
+        finally
+        {
+            desktop.Shutdown();
+        }
     }
 
     private static readonly HttpClient Http = new() { Timeout = HttpRequestAction.Timeout };
 
     private static string AppVersion =>
         Assembly.GetExecutingAssembly().GetName().Version?.ToString(3) ?? "0.0.0";
-
-    private static class SelfTestKeys
-    {
-        [System.Runtime.InteropServices.DllImport("user32.dll")]
-        private static extern void keybd_event(byte vk, byte scan, uint flags, nint extra);
-
-        public static void WinE()
-        {
-            keybd_event(0x5B, 0, 1, 0);
-            keybd_event(0x45, 0, 0, 0);
-            keybd_event(0x45, 0, 2, 0);
-            keybd_event(0x5B, 0, 3, 0);
-        }
-    }
 
     private sealed class RecorderAdapter : IShortcutRecorder
     {
