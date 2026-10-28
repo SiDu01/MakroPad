@@ -48,12 +48,31 @@ public sealed class ConfigService : IDisposable
     public void Load()
     {
         var notices = new List<string>();
-        if (ArchiveLegacyConfig() is { } archived)
+        string? archiveError = null;
+        try
         {
-            notices.Add($"Alte Konfiguration (v0.2) nach {Path.GetFileName(archived)} verschoben, neue Standard-Konfiguration angelegt");
+            if (ArchiveLegacyConfig() is { } archived)
+            {
+                notices.Add($"Alte Konfiguration (v0.2) nach {Path.GetFileName(archived)} verschoben, neue Standard-Konfiguration angelegt");
+            }
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            archiveError = $"Alte Konfiguration (v0.2) konnte nicht verschoben werden: {ex.Message}";
         }
 
         LoadConfig();
+        if (archiveError is not null)
+        {
+            // Treated like a broken file, so the old config is neither read as new nor overwritten.
+            lock (gate)
+            {
+                Config = MakroPadConfig.CreateDefault();
+                LoadError = archiveError;
+                Issues = [];
+            }
+        }
+
         State = stateStore.Load().Value;
         Notices = notices;
     }

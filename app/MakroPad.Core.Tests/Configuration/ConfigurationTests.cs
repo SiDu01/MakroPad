@@ -222,6 +222,23 @@ public sealed class ConfigServiceTests : IDisposable
     }
 
     [Fact]
+    public void LockedLegacyConfigIsKeptAndNotOverwritten()
+    {
+        var path = Path.Combine(directory, "config.json");
+        const string legacy = "{ \"version\": 1, \"activeProfile\": \"Default\" }";
+        File.WriteAllText(path, legacy);
+        using var service = new ConfigService(directory);
+        using (new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read))
+        {
+            service.Load();
+        }
+
+        Assert.NotNull(service.LoadError);
+        Assert.Throws<InvalidOperationException>(() => service.Save(service.Config));
+        Assert.Equal(legacy, File.ReadAllText(path));
+    }
+
+    [Fact]
     public void StateIsStoredSeparately()
     {
         using (var service = new ConfigService(directory))
