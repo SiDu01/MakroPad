@@ -27,7 +27,7 @@ void sendHello() {
            .add("fw", config::FirmwareVersion)
            .add("device", config::DeviceName)
            .add("buttons", static_cast<long>(config::ButtonCount))
-           .add("sliders", static_cast<long>(config::SliderCount))
+           .add("sliders", static_cast<long>(config::ActiveSliderCount))
            .add("display", "ssd1306-128x64")
            .str());
 }

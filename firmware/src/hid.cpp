@@ -32,15 +32,21 @@ constexpr size_t ButtonKeyCount = sizeof(ButtonKeys) / sizeof(ButtonKeys[0]);
 USBHIDConsumerControl consumerControl;
 makropad::VolumeNudger volumeNudger(config::HidVolumeThresholdPermille, config::HidVolumeIntervalMs);
 bool hostConnected = false;
+bool keyDown = false;
+uint32_t keyDownMs = 0;
 
 bool active(uint32_t nowMs) {
   return !hostConnected && nowMs >= config::HidStartupGraceMs;
 }
 
-void press(uint16_t usage) {
+// Released in poll(), so a tap does not stall button and serial handling.
+void press(uint16_t usage, uint32_t nowMs) {
+  if (keyDown) {
+    consumerControl.release();
+  }
   consumerControl.press(usage);
-  delay(config::HidPressMs);
-  consumerControl.release();
+  keyDown = true;
+  keyDownMs = nowMs;
 }
 
 }  // namespace
@@ -50,7 +56,12 @@ void setup() {
   USB.begin();
 }
 
-void poll(uint32_t) {}
+void poll(uint32_t nowMs) {
+  if (keyDown && nowMs - keyDownMs >= config::HidPressMs) {
+    consumerControl.release();
+    keyDown = false;
+  }
+}
 
 void setHostConnected(bool connected) {
   hostConnected = connected;
@@ -63,7 +74,7 @@ void onButton(uint8_t id, bool pressed, uint32_t nowMs) {
     return;
   }
   const FallbackKey& key = ButtonKeys[id - 1];
-  press(key.usage);
+  press(key.usage, nowMs);
   display::showStatus("Ohne App", key.label, display::Icon::Ok, nowMs);
 }
 
@@ -75,7 +86,7 @@ void onSlider(uint8_t id, int value, uint32_t nowMs) {
   if (step == 0) {
     return;
   }
-  press(step > 0 ? CONSUMER_CONTROL_VOLUME_INCREMENT : CONSUMER_CONTROL_VOLUME_DECREMENT);
+  press(step > 0 ? CONSUMER_CONTROL_VOLUME_INCREMENT : CONSUMER_CONTROL_VOLUME_DECREMENT, nowMs);
   display::showStatus("Ohne App", step > 0 ? "Lauter" : "Leiser", display::Icon::None, nowMs);
 }
 
