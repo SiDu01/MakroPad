@@ -65,9 +65,11 @@ public sealed class ParameterFactory(
 
     public static Dictionary<string, string>? Collect(IEnumerable<ParameterViewModel> parameters)
     {
+        // Multi-line text is typed or sent as written, so its spaces and line breaks count.
+        static string Clean(ParameterViewModel p) => p is TextParameterViewModel { IsMultiline: true } ? p.Value : p.Value.Trim();
         var values = parameters
-            .Where(p => !string.IsNullOrWhiteSpace(p.Value))
-            .ToDictionary(p => p.Name, p => p.Value.Trim('\r', '\n', ' '), StringComparer.OrdinalIgnoreCase);
+            .Where(p => Clean(p).Length > 0)
+            .ToDictionary(p => p.Name, Clean, StringComparer.OrdinalIgnoreCase);
         return values.Count == 0 ? null : values;
     }
 }
@@ -77,6 +79,9 @@ public sealed partial class MacroStepViewModel : ObservableObject
 {
     private readonly ParameterFactory factory;
     private bool loading;
+
+    /// <summary>A hand-written step whose action the editor does not know; saved unchanged until the user edits it.</summary>
+    private MacroStep? unknown;
 
     [ObservableProperty]
     private ActionOption selectedAction;
@@ -88,8 +93,9 @@ public sealed partial class MacroStepViewModel : ObservableObject
     {
         this.factory = factory;
         loading = true;
-        selectedAction = Options.FirstOrDefault(o => string.Equals(o.Definition!.Id, step.Action, StringComparison.OrdinalIgnoreCase))
-                         ?? Options[0];
+        var known = Options.FirstOrDefault(o => string.Equals(o.Definition!.Id, step.Action, StringComparison.OrdinalIgnoreCase));
+        unknown = known is null ? step : null;
+        selectedAction = known ?? Options[0];
         Build(step.GetParameter);
         loading = false;
     }
@@ -103,7 +109,7 @@ public sealed partial class MacroStepViewModel : ObservableObject
     /// <summary>Raised when anything in the step changed.</summary>
     public event Action? Edited;
 
-    public MacroStep ToStep() => new(SelectedAction.Definition!.Id, ParameterFactory.Collect(Parameters));
+    public MacroStep ToStep() => unknown ?? new(SelectedAction.Definition!.Id, ParameterFactory.Collect(Parameters));
 
     partial void OnSelectedActionChanged(ActionOption value)
     {
@@ -112,6 +118,7 @@ public sealed partial class MacroStepViewModel : ObservableObject
             return;
         }
 
+        unknown = null;
         var previous = Parameters.ToDictionary(p => p.Name, p => p.Value, StringComparer.OrdinalIgnoreCase);
         Build(name => previous.GetValueOrDefault(name));
         OnPropertyChanged(nameof(IsDelay));
@@ -134,7 +141,11 @@ public sealed partial class MacroStepViewModel : ObservableObject
         }
     }
 
-    private void OnParameterEdited() => Edited?.Invoke();
+    private void OnParameterEdited()
+    {
+        unknown = null;
+        Edited?.Invoke();
+    }
 }
 
 /// <summary>Edits what one input does in the active profile. Every change is saved right away.</summary>
