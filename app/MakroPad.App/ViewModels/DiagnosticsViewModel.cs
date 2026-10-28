@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.Input;
 using MakroPad.App.Services;
 using MakroPad.Core.Actions;
 using MakroPad.Core.Device;
+using MakroPad.Core.Protocol;
 using MakroPad.Core.Runtime;
 using MakroPad.Device;
 
@@ -63,7 +64,14 @@ public sealed partial class DiagnosticsViewModel : ObservableObject
         this.simulator = simulator;
         this.listAudioSessions = listAudioSessions;
 
-        runtime.LineLogged += (direction, line) => Post(() => Add(direction == LineDirection.FromDevice ? LogKind.FromDevice : LogKind.ToDevice, line));
+        runtime.LineLogged += (direction, line) => Post(() =>
+        {
+            Add(direction == LineDirection.FromDevice ? LogKind.FromDevice : LogKind.ToDevice, line);
+            if (direction == LineDirection.FromDevice && DeviceError(line) is { } error)
+            {
+                Add(LogKind.Warning, error);
+            }
+        });
         runtime.ActionCompleted += (binding, result) => Post(() =>
             Add(result.Success ? LogKind.Action : LogKind.Warning, $"{binding.Input} {binding.Action}: {result.Message}"));
         runtime.StatusChanged += _ => Post(RefreshConnection);
@@ -141,6 +149,27 @@ public sealed partial class DiagnosticsViewModel : ObservableObject
 
     /// <summary>Adds a warning that stays visible whatever the filters (any thread).</summary>
     public void Warning(string text) => Post(() => Add(LogKind.Warning, text));
+
+    /// <summary>Readable text for an <c>error</c> line from the device, e.g. a missing display; null for other lines.</summary>
+    public static string? DeviceError(string line)
+    {
+        if (!line.StartsWith("error", StringComparison.OrdinalIgnoreCase))
+        {
+            return null;
+        }
+
+        try
+        {
+            var message = ProtocolCodec.Parse(line);
+            return message.Type.Equals("error", StringComparison.OrdinalIgnoreCase)
+                ? $"Gerät meldet Fehler: {message.GetValue("message") ?? message.GetValue("code") ?? "unbekannt"}"
+                : null;
+        }
+        catch (FormatException)
+        {
+            return null;
+        }
+    }
 
     [RelayCommand]
     private void Clear()

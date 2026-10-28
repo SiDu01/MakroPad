@@ -45,6 +45,16 @@ public sealed class InspectorTests
         Assert.False(values.ContainsKey("label"));
     }
 
+    [Theory]
+    [InlineData("error;code=display_init_failed;message=OLED not found", "Gerät meldet Fehler: OLED not found")]
+    [InlineData("error;code=line_too_long", "Gerät meldet Fehler: line_too_long")]
+    [InlineData("errors;code=x", null)]
+    [InlineData("button;id=1;state=down", null)]
+    public void DeviceErrorLinesBecomeReadable(string line, string? expected)
+    {
+        Assert.Equal(expected, DiagnosticsViewModel.DeviceError(line));
+    }
+
     private sealed class NoPicker : IFilePicker
     {
         public Task<string?> PickProgramAsync() => Task.FromResult<string?>(null);
