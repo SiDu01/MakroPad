@@ -38,7 +38,7 @@ public sealed class ConfigSession
         {
             return ex.Message;
         }
-        catch (IOException ex)
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
             return $"Konfiguration konnte nicht gespeichert werden: {ex.Message}";
         }

@@ -254,6 +254,26 @@ public sealed class ConfigServiceTests : IDisposable
     }
 
     [Fact]
+    public void ReadOnlyStateIsReportedNotThrown()
+    {
+        using var service = new ConfigService(directory);
+        service.Load();
+        var path = Path.Combine(directory, "state.json");
+        File.SetAttributes(path, FileAttributes.ReadOnly);
+        try
+        {
+            var error = service.SaveState(new AppState { ActiveProfile = "Gaming" });
+
+            Assert.Contains("state.json", error, StringComparison.Ordinal);
+            Assert.Equal("Gaming", service.State.ActiveProfile);
+        }
+        finally
+        {
+            File.SetAttributes(path, FileAttributes.Normal);
+        }
+    }
+
+    [Fact]
     public async Task ExternalEditsAreReloaded()
     {
         using var service = new ConfigService(directory);

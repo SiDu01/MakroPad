@@ -99,12 +99,21 @@ public sealed class ConfigService : IDisposable
         }
     }
 
-    public void SaveState(AppState state)
+    /// <summary>Keeps <paramref name="state"/> and writes it; returns the reason when the file could not be written.</summary>
+    public string? SaveState(AppState state)
     {
         lock (gate)
         {
             State = state;
-            stateStore.Save(state);
+            try
+            {
+                stateStore.Save(state);
+                return null;
+            }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+            {
+                return $"state.json konnte nicht gespeichert werden: {ex.Message}";
+            }
         }
     }
 

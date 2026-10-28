@@ -109,14 +109,20 @@ public partial class App : Application, IFilePicker
 
         profiles.ActiveChanged += (profile, _) =>
         {
-            config.SaveState(config.State with { ActiveProfile = profile.Name });
+            if (config.SaveState(config.State with { ActiveProfile = profile.Name }) is { } error)
+            {
+                diagnostics.Warning(error);
+            }
             Dispatcher.UIThread.Post(RebuildProfileMenu);
         };
         runtime.StatusChanged += status =>
         {
             if (status == ConnectionStatus.Connected && serial is not null && runtime.Endpoint is { } port && port != config.State.LastPort)
             {
-                config.SaveState(config.State with { LastPort = port });
+                if (config.SaveState(config.State with { LastPort = port }) is { } error)
+                {
+                    diagnostics.Warning(error);
+                }
             }
         };
         session.Changed += _ =>

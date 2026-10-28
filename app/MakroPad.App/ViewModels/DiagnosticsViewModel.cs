@@ -139,6 +139,9 @@ public sealed partial class DiagnosticsViewModel : ObservableObject
     /// <summary>Adds an informational line, e.g. from the shortcut recorder (any thread).</summary>
     public void Info(string text) => Post(() => Add(LogKind.Info, text));
 
+    /// <summary>Adds a warning that stays visible whatever the filters (any thread).</summary>
+    public void Warning(string text) => Post(() => Add(LogKind.Warning, text));
+
     [RelayCommand]
     private void Clear()
     {
