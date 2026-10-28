@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Text;
 
 namespace MakroPad.Core.Protocol;
 
@@ -7,6 +8,9 @@ public static class DeviceMessages
 {
     public const int ProtocolVersion = 2;
     public const string DeviceName = "makropad";
+
+    /// <summary>The firmware drops longer lines (bytes, without the line break).</summary>
+    public const int MaxLineBytes = 256;
 
     public static string HelloAck(string appVersion) => ProtocolCodec.Format("hello-ack", new Dictionary<string, string?>
     {
@@ -24,7 +28,7 @@ public static class DeviceMessages
         ["id"] = id
     });
 
-    public static string State(DeviceState state) => ProtocolCodec.Format("state", new Dictionary<string, string?>
+    public static string State(DeviceState state) => Fit("state", new Dictionary<string, string?>
     {
         ["profile"] = state.Profile,
         ["time"] = state.Now?.ToString("HH:mm:ss", CultureInfo.InvariantCulture),
@@ -32,9 +36,9 @@ public static class DeviceMessages
         ["artist"] = state.Artist,
         ["title"] = state.Title,
         ["volume"] = state.Volume?.ToString(CultureInfo.InvariantCulture)
-    });
+    }, "artist", "title");
 
-    public static string Screen(ScreenRequest screen) => ProtocolCodec.Format("screen", new Dictionary<string, string?>
+    public static string Screen(ScreenRequest screen) => Fit("screen", new Dictionary<string, string?>
     {
         ["type"] = screen.Type.ToString().ToLowerInvariant(),
         ["title"] = screen.Title,
@@ -42,9 +46,25 @@ public static class DeviceMessages
         ["value"] = screen.Value?.ToString(CultureInfo.InvariantCulture),
         ["icon"] = screen.Icon == ScreenIcon.None ? null : screen.Icon.ToString().ToLowerInvariant(),
         ["ms"] = screen.DurationMs?.ToString(CultureInfo.InvariantCulture)
-    });
+    }, "title", "text");
 
     public static string Clear() => "clear";
+
+    /// <summary>Shortens the longest of <paramref name="shortenable"/> until the line fits the firmware's limit.</summary>
+    private static string Fit(string type, Dictionary<string, string?> values, params string[] shortenable)
+    {
+        var line = ProtocolCodec.Format(type, values);
+        while (Encoding.UTF8.GetByteCount(line) > MaxLineBytes
+               && shortenable.MaxBy(key => values[key]?.Length ?? 0) is { } key
+               && values[key] is { Length: > 0 } value)
+        {
+            // Never split a surrogate pair.
+            values[key] = value[..^(value.Length > 1 && char.IsLowSurrogate(value[^1]) ? 2 : 1)];
+            line = ProtocolCodec.Format(type, values);
+        }
+
+        return line;
+    }
 }
 
 /// <summary>Idle-screen state. Null fields are not sent (device keeps its value); empty strings clear.</summary>
