@@ -35,15 +35,15 @@ public sealed class JsonFileStore<T> where T : class
     /// </summary>
     public LoadResult<T> Load()
     {
-        if (!File.Exists(Path))
-        {
-            var created = createDefault();
-            Save(created);
-            return new LoadResult<T>(created, null);
-        }
-
         try
         {
+            if (!File.Exists(Path))
+            {
+                var created = createDefault();
+                Save(created);
+                return new LoadResult<T>(created, null);
+            }
+
             var json = File.ReadAllText(Path);
             var value = JsonSerializer.Deserialize<T>(json, JsonOptions);
             return value is null
@@ -56,7 +56,7 @@ public sealed class JsonFileStore<T> where T : class
             var path = string.IsNullOrEmpty(ex.Path) || ex.Path == "$" ? "" : $" (bei {ex.Path})";
             return new LoadResult<T>(createDefault(), $"Fehler im JSON{where}{path}. Häufige Ursachen: fehlendes Komma, fehlendes Anführungszeichen oder ein einzelner \\ in einem Pfad (schreibe \\\\ oder /).");
         }
-        catch (IOException ex)
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
             return new LoadResult<T>(createDefault(), ex.Message);
         }

@@ -254,6 +254,18 @@ public sealed class ConfigServiceTests : IDisposable
     }
 
     [Fact]
+    public void UnusableConfigPathIsReportedNotThrown()
+    {
+        Directory.CreateDirectory(Path.Combine(directory, "config.json"));
+        using var service = new ConfigService(directory);
+
+        service.Load();
+
+        Assert.NotNull(service.LoadError);
+        Assert.Single(service.Config.Profiles);
+    }
+
+    [Fact]
     public void ReadOnlyStateIsReportedNotThrown()
     {
         using var service = new ConfigService(directory);
