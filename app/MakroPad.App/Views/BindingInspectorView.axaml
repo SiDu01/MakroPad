@@ -121,13 +121,13 @@
                             <StackPanel Spacing="12">
                                 <DockPanel>
                                     <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Margin="6,0,0,0">
-                                        <Button Classes="quiet" Content="↑" Padding="8,4" ToolTip.Tip="Nach oben"
+                                        <Button Classes="quiet" Content="↑" Padding="8,4" ToolTip.Tip="Nach oben" AutomationProperties.Name="Nach oben"
                                                 Command="{Binding $parent[ItemsControl].((vm:BindingInspectorViewModel)DataContext).MoveStepUpCommand}"
                                                 CommandParameter="{Binding}" />
-                                        <Button Classes="quiet" Content="↓" Padding="8,4" ToolTip.Tip="Nach unten"
+                                        <Button Classes="quiet" Content="↓" Padding="8,4" ToolTip.Tip="Nach unten" AutomationProperties.Name="Nach unten"
                                                 Command="{Binding $parent[ItemsControl].((vm:BindingInspectorViewModel)DataContext).MoveStepDownCommand}"
                                                 CommandParameter="{Binding}" />
-                                        <Button Classes="quiet" Content="✕" Padding="8,4" ToolTip.Tip="Schritt entfernen"
+                                        <Button Classes="quiet" Content="✕" Padding="8,4" ToolTip.Tip="Schritt entfernen" AutomationProperties.Name="Schritt entfernen"
                                                 Command="{Binding $parent[ItemsControl].((vm:BindingInspectorViewModel)DataContext).RemoveStepCommand}"
                                                 CommandParameter="{Binding}" />
                                     </StackPanel>

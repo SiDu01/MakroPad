@@ -22,7 +22,8 @@
                         <DataTemplate x:DataType="vm:GestureTabViewModel">
                             <Button Classes="gesture" Classes.active="{Binding IsActive}"
                                     Command="{Binding $parent[ItemsControl].((vm:KeyInspectorViewModel)DataContext).SelectTabCommand}"
-                                    CommandParameter="{Binding}">
+                                    CommandParameter="{Binding}"
+                                    AutomationProperties.Name="{Binding AccessibleName}">
                                 <StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Center">
                                     <TextBlock Text="{Binding Name}" />
                                     <Ellipse Width="6" Height="6" VerticalAlignment="Center"

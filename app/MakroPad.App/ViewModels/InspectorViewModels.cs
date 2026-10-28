@@ -416,7 +416,11 @@ public sealed partial class GestureTabViewModel(Gesture gesture, string name) : 
 
     /// <summary>The gesture has an action in the active profile.</summary>
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(AccessibleName))]
     private bool isBound;
+
+    /// <summary>Screen readers cannot see the dot that marks a bound gesture.</summary>
+    public string AccessibleName => IsBound ? $"{Name}, belegt" : Name;
 }
 
 /// <summary>A key has three gestures (press, long, double); each tab edits one of them.</summary>
