@@ -61,6 +61,7 @@ public sealed class LatestWinsQueue<T>
                     return;
                 }
 
+                // hasPending means Submit stored a real item here.
                 current = pending!;
                 pending = default;
                 hasPending = false;

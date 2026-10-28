@@ -164,19 +164,20 @@ public static class ConfigEditor
             binding = binding with
             {
                 Steps = [.. steps.Select(step =>
-                    string.Equals(step.Action, "profile.set", StringComparison.OrdinalIgnoreCase) && SameName(step.GetParameter("name") ?? "", oldName)
-                        ? step with { Parameters = new Dictionary<string, string>(step.Parameters!, StringComparer.OrdinalIgnoreCase) { ["name"] = newName } }
+                    string.Equals(step.Action, "profile.set", StringComparison.OrdinalIgnoreCase) && step.Parameters is { } stepParameters && SameName(step.GetParameter("name") ?? "", oldName)
+                        ? step with { Parameters = new Dictionary<string, string>(stepParameters, StringComparer.OrdinalIgnoreCase) { ["name"] = newName } }
                         : step)]
             };
         }
 
         if (!string.Equals(binding.Action, "profile.set", StringComparison.OrdinalIgnoreCase)
+            || binding.Parameters is not { } bindingParameters
             || !SameName(binding.GetParameter("name") ?? "", oldName))
         {
             return binding;
         }
 
-        var parameters = new Dictionary<string, string>(binding.Parameters!, StringComparer.OrdinalIgnoreCase) { ["name"] = newName };
+        var parameters = new Dictionary<string, string>(bindingParameters, StringComparer.OrdinalIgnoreCase) { ["name"] = newName };
         return binding with { Parameters = parameters };
     }
 

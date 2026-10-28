@@ -48,14 +48,19 @@ public sealed class ParameterFactory(
     public List<ParameterViewModel> CreateAll(ActionDefinition? action, Func<string, string?> values, bool includeLabel = true)
     {
         var result = new List<ParameterViewModel>();
-        foreach (var definition in action?.Parameters ?? [])
+        if (action is null)
+        {
+            return result;
+        }
+
+        foreach (var definition in action.Parameters)
         {
             if (!includeLabel && definition.Name == "label")
             {
                 continue;
             }
 
-            var parameter = Create(action!.Id, definition);
+            var parameter = Create(action.Id, definition);
             parameter.Value = values(definition.Name) ?? "";
             result.Add(parameter);
         }
@@ -93,7 +98,7 @@ public sealed partial class MacroStepViewModel : ObservableObject
     {
         this.factory = factory;
         loading = true;
-        var known = Options.FirstOrDefault(o => string.Equals(o.Definition!.Id, step.Action, StringComparison.OrdinalIgnoreCase));
+        var known = Options.FirstOrDefault(o => string.Equals(o.Definition?.Id, step.Action, StringComparison.OrdinalIgnoreCase));
         unknown = known is null ? step : null;
         selectedAction = known ?? Options[0];
         Build(step.GetParameter);
@@ -109,6 +114,7 @@ public sealed partial class MacroStepViewModel : ObservableObject
     /// <summary>Raised when anything in the step changed.</summary>
     public event Action? Edited;
 
+    // Options are built from ActionCatalog.MacroStepActions, so every step option has a definition.
     public MacroStep ToStep() => unknown ?? new(SelectedAction.Definition!.Id, ParameterFactory.Collect(Parameters));
 
     partial void OnSelectedActionChanged(ActionOption value)
