@@ -72,6 +72,8 @@ void handleLine(const std::string& raw, uint32_t nowMs) {
     display::showScreen(line, nowMs);
   } else if (type == "clear") {
     display::clearOverlay(nowMs);
+  } else if (type == "display") {
+    display::setEnabled(line.get("on") != "0");
   } else {
     return;  // unknown types do not count as a heartbeat
   }

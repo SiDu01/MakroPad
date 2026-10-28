@@ -79,9 +79,10 @@
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate x:DataType="vm:KeyViewModel">
                                         <Button Classes="keycap" Classes.selected="{Binding IsSelected}" Classes.held="{Binding IsPressed}"
+                                                Classes.off="{Binding IsDisabled}"
                                                 Command="{Binding $parent[v:PadView].((vm:PadViewModel)DataContext).SelectCommand}"
                                                 CommandParameter="{Binding}"
-                                                AutomationProperties.Name="{Binding Title}">
+                                                AutomationProperties.Name="{Binding AccessibleName}">
                                             <Grid RowDefinitions="Auto,*">
                                                 <DockPanel>
                                                     <TextBlock DockPanel.Dock="Right" Text="{Binding GestureHint}" FontSize="11"
@@ -99,10 +100,10 @@
                             </ItemsControl>
 
                             <!-- OLED in its silver frame, filling the 2x2 block -->
-                            <Button Classes="part" Classes.selected="{Binding Display.IsSelected}"
+                            <Button Classes="part" Classes.selected="{Binding Display.IsSelected}" Classes.off="{Binding Display.IsDisabled}"
                                     Canvas.Left="366" Canvas.Top="-6" Width="248" Height="248"
                                     Command="{Binding SelectCommand}" CommandParameter="{Binding Display}"
-                                    AutomationProperties.Name="Display">
+                                    AutomationProperties.Name="{Binding Display.AccessibleName}">
                                 <Border CornerRadius="12" Background="{DynamicResource OledFrameBrush}" Padding="12,0">
                                     <Border CornerRadius="3" Background="{DynamicResource OledGlassBrush}" Padding="5"
                                             VerticalAlignment="Center" Margin="0,0,0,18">
@@ -122,10 +123,10 @@
                                 </ItemsControl.ItemsPanel>
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate x:DataType="vm:FaderViewModel">
-                                        <Button Classes="part" Classes.selected="{Binding IsSelected}" Width="96"
+                                        <Button Classes="part" Classes.selected="{Binding IsSelected}" Classes.off="{Binding IsDisabled}" Width="96"
                                                 Command="{Binding $parent[v:PadView].((vm:PadViewModel)DataContext).SelectCommand}"
                                                 CommandParameter="{Binding}"
-                                                AutomationProperties.Name="{Binding Title}">
+                                                AutomationProperties.Name="{Binding AccessibleName}">
                                             <StackPanel Spacing="12">
                                                 <c:FaderView Value="{Binding Value}" Height="420" Width="54" CapHeight="78"
                                                              HorizontalAlignment="Center"

@@ -64,6 +64,12 @@ public sealed record AppSettings
 
     public FeedbackSettings Feedback { get; init; } = new();
 
+    /// <summary>Keys and sliders whose events are ignored, e.g. <c>button:3</c> or <c>slider:2</c>.</summary>
+    public IReadOnlyList<string> DisabledInputs { get; init; } = [];
+
+    /// <summary>False switches the OLED off while the app is connected.</summary>
+    public bool DisplayEnabled { get; init; } = true;
+
     /// <summary><c>system</c>, <c>light</c> or <c>dark</c>.</summary>
     public string Theme { get; init; } = "system";
 

@@ -21,6 +21,7 @@ public sealed class OledMirror
     private readonly OledCanvas canvas = new();
 
     private bool hostConnected;
+    private bool displayOn = true;
     private string profile = "";
     private string artist = "";
     private string title = "";
@@ -47,6 +48,7 @@ public sealed class OledMirror
             if (!connected)
             {
                 overlay = null;
+                displayOn = true;
             }
 
             ResetScroll();
@@ -80,6 +82,9 @@ public sealed class OledMirror
                     overlay = null;
                     ResetScroll();
                     break;
+                case "display":
+                    displayOn = message.GetValue("on") != "0";
+                    break;
             }
         }
     }
@@ -108,6 +113,11 @@ public sealed class OledMirror
 
             scrolling = false;
             canvas.Clear();
+            if (!displayOn)
+            {
+                return canvas;
+            }
+
             if (overlay is not null)
             {
                 DrawOverlay(overlay);

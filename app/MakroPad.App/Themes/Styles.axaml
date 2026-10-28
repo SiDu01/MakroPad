@@ -113,6 +113,11 @@
     </Style>
 
     <!-- Keycap: cream face on a darker skirt; it sinks while the physical key is held. -->
+    <!-- Keys, sliders and the display switched off in the settings. -->
+    <Style Selector="Button.off > :is(Control)">
+        <Setter Property="Opacity" Value="0.35" />
+    </Style>
+
     <Style Selector="Button.keycap">
         <Setter Property="Width" Value="124" />
         <Setter Property="Height" Value="124" />

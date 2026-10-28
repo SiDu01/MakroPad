@@ -288,10 +288,17 @@ void poll(uint32_t nowMs) {
   }
 }
 
+void setEnabled(bool enabled) {
+  if (available) {
+    oled.ssd1306_command(enabled ? SSD1306_DISPLAYON : SSD1306_DISPLAYOFF);
+  }
+}
+
 void setHostConnected(bool connected, uint32_t nowMs) {
   hostConnected = connected;
   if (!connected) {
     overlay.active = false;
+    setEnabled(true);
   }
   contentChanged(nowMs);
 }

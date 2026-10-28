@@ -39,6 +39,19 @@ public sealed class OledMirrorTests
     }
 
     [Fact]
+    public void DisplayOffIsDarkUntilTheAppDisconnects()
+    {
+        mirror.SetHostConnected(true);
+        mirror.Apply("state;profile=Default;time=12:00:00;date=04.10.2026");
+
+        mirror.Apply("display;on=0");
+        Assert.DoesNotContain(true, mirror.Render().Pixels.ToArray());
+
+        mirror.SetHostConnected(false);
+        Assert.Contains(true, mirror.Render().Pixels.ToArray());
+    }
+
+    [Fact]
     public void OverlayExpiresBackToIdle()
     {
         mirror.SetHostConnected(true);

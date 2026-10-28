@@ -10,6 +10,15 @@
                        Text="Hier siehst du live, was das Display am MakroPad gerade zeigt. Im Ruhezustand stehen dort Profil und Uhrzeit, darunter der laufende Titel oder das Datum." />
         </StackPanel>
 
+        <DockPanel>
+            <ToggleSwitch DockPanel.Dock="Right" OnContent="" OffContent="" MinWidth="0" VerticalAlignment="Center"
+                          IsChecked="{Binding DisplayEnabled}" AutomationProperties.Name="Display eingeschaltet" />
+            <StackPanel Spacing="2">
+                <TextBlock Text="Display eingeschaltet" FontSize="15" />
+                <TextBlock Classes="muted" FontSize="12.5" TextWrapping="Wrap" Text="Ausgeschaltet bleibt es dunkel, solange die App verbunden ist. Ohne App geht es wieder an." />
+            </StackPanel>
+        </DockPanel>
+
         <StackPanel Spacing="6">
             <StackPanel.Styles>
                 <Style Selector="ToggleSwitch">

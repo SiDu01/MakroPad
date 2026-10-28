@@ -49,6 +49,20 @@ public sealed class ConfigValidatorTests
     }
 
     [Fact]
+    public void DisabledInputsMustBeWholeKeysOrSliders()
+    {
+        var config = MakroPadConfig.CreateDefault() with
+        {
+            Settings = new AppSettings { DisabledInputs = ["button:3", "SLIDER:2", "button:4:long", "slider:9", "knob:1"] }
+        };
+
+        var issues = ConfigValidator.Validate(config);
+
+        Assert.Equal(3, issues.Count);
+        Assert.All(issues, i => Assert.Equal("settings.disabledInputs", i.Location));
+    }
+
+    [Fact]
     public void DuplicateProfilesAndInputsAreReported()
     {
         var config = new MakroPadConfig
@@ -165,7 +179,7 @@ public sealed class ConfigServiceTests : IDisposable
             {
               // comments are allowed
               "schemaVersion": 1,
-              "settings": { "startInTray": true, "feedback": { "volume": false } },
+              "settings": { "startInTray": true, "feedback": { "volume": false }, "disabledInputs": [ "button:3" ], "displayEnabled": false },
               "profiles": [
                 { "name": "Musik", "bindings": [
                   { "input": "slider:2", "action": "app.volume", "parameters": { "process": "Spotify" } },
@@ -181,6 +195,8 @@ public sealed class ConfigServiceTests : IDisposable
         Assert.True(service.Config.Settings.StartInTray);
         Assert.False(service.Config.Settings.Feedback.Volume);
         Assert.True(service.Config.Settings.Feedback.Actions);
+        Assert.Equal(["button:3"], service.Config.Settings.DisabledInputs);
+        Assert.False(service.Config.Settings.DisplayEnabled);
         Assert.Equal("Spotify", service.Config.Profiles[0].Bindings[0].GetParameter("process"));
     }
 

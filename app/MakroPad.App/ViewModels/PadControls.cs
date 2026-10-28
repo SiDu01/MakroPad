@@ -24,7 +24,15 @@ public abstract partial class PadElementViewModel : ObservableObject
     [ObservableProperty]
     private string legend = "";
 
+    /// <summary>Switched off in the settings; drawn dimmed.</summary>
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(AccessibleName))]
+    private bool isDisabled;
+
     public abstract string Title { get; }
+
+    /// <summary>The dimming is not visible to screen readers.</summary>
+    public string AccessibleName => IsDisabled ? $"{Title}, deaktiviert" : Title;
 
     public bool IsBound => Legend.Length > 0;
 

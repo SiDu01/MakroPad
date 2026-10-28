@@ -224,6 +224,9 @@ public sealed partial class BindingInspectorViewModel : ObservableObject, IFlush
     /// <summary>False when a surrounding inspector (keys with gesture tabs) shows the title itself.</summary>
     public bool ShowTitle { get; init; } = true;
 
+    /// <summary>On/off switch for a slider; keys have theirs above the gesture tabs.</summary>
+    public InputSwitchViewModel? Switch { get; init; }
+
     public string ProfileName => runtime.Profiles.Active.Name;
 
     public IReadOnlyList<ActionOption> Actions { get; }
@@ -445,9 +448,10 @@ public sealed partial class KeyInspectorViewModel : ObservableObject, IFlushable
     [ObservableProperty]
     private BindingInspectorViewModel current;
 
-    public KeyInspectorViewModel(KeyViewModel key, Gesture gesture, Func<string, BindingInspectorViewModel> createInspector, Func<string, bool> isBound)
+    public KeyInspectorViewModel(KeyViewModel key, Gesture gesture, Func<string, BindingInspectorViewModel> createInspector, Func<string, bool> isBound, InputSwitchViewModel inputSwitch)
     {
         this.key = key;
+        Switch = inputSwitch;
         this.createInspector = createInspector;
         this.isBound = isBound;
         Tabs =
@@ -461,6 +465,8 @@ public sealed partial class KeyInspectorViewModel : ObservableObject, IFlushable
     }
 
     public IReadOnlyList<GestureTabViewModel> Tabs { get; }
+
+    public InputSwitchViewModel Switch { get; }
 
     public Gesture Gesture => Tabs.First(t => t.IsActive).Gesture;
 
@@ -510,6 +516,32 @@ public sealed partial class KeyInspectorViewModel : ObservableObject, IFlushable
     private string InputFor(Gesture gesture) => new GestureInput(key.Id, gesture).InputId;
 }
 
+/// <summary>Turns one key or slider on or off in all profiles (<c>settings.disabledInputs</c>).</summary>
+public sealed partial class InputSwitchViewModel : ObservableObject
+{
+    private readonly string input;
+    private readonly ConfigSession session;
+
+    [ObservableProperty]
+    private bool isActive;
+
+    public InputSwitchViewModel(string input, ConfigSession session)
+    {
+        this.input = input;
+        this.session = session;
+        isActive = !session.Config.Settings.DisabledInputs.Contains(input, StringComparer.OrdinalIgnoreCase);
+    }
+
+    partial void OnIsActiveChanged(bool value)
+    {
+        session.Update(config =>
+        {
+            var others = config.Settings.DisabledInputs.Where(i => !string.Equals(i, input, StringComparison.OrdinalIgnoreCase));
+            return config with { Settings = config.Settings with { DisabledInputs = value ? [.. others] : [.. others, input] } };
+        });
+    }
+}
+
 /// <summary>Edits which OLED overlays appear; shown when the display is selected.</summary>
 public sealed partial class DisplayInspectorViewModel : ObservableObject
 {
@@ -531,6 +563,9 @@ public sealed partial class DisplayInspectorViewModel : ObservableObject
     [ObservableProperty]
     private bool trackChange;
 
+    [ObservableProperty]
+    private bool displayEnabled;
+
     public DisplayInspectorViewModel(DisplayElementViewModel element, ConfigSession session)
     {
         Element = element;
@@ -541,6 +576,7 @@ public sealed partial class DisplayInspectorViewModel : ObservableObject
         errors = feedback.Errors;
         profileChange = feedback.ProfileChange;
         trackChange = feedback.TrackChange;
+        displayEnabled = session.Config.Settings.DisplayEnabled;
         loading = false;
     }
 
@@ -556,6 +592,8 @@ public sealed partial class DisplayInspectorViewModel : ObservableObject
 
     partial void OnTrackChangeChanged(bool value) => Save();
 
+    partial void OnDisplayEnabledChanged(bool value) => Save();
+
     private void Save()
     {
         if (loading)
@@ -567,6 +605,7 @@ public sealed partial class DisplayInspectorViewModel : ObservableObject
         {
             Settings = config.Settings with
             {
+                DisplayEnabled = DisplayEnabled,
                 Feedback = new FeedbackSettings { Actions = Actions, Volume = Volume, Errors = Errors, ProfileChange = ProfileChange, TrackChange = TrackChange }
             }
         });

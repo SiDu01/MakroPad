@@ -45,6 +45,15 @@ public static partial class ConfigValidator
             issues.Add(new ConfigIssue("settings.theme", "Erlaubt sind system, light oder dark"));
         }
 
+        foreach (var input in config.Settings.DisabledInputs)
+        {
+            // Whole keys only: a disabled key has no long or double press either.
+            if (ParseInput(input, buttonCount, sliderCount) is null || input.Count(c => c == ':') != 1)
+            {
+                issues.Add(new ConfigIssue("settings.disabledInputs", $"Unbekannte Eingabe \"{input}\" (erlaubt: button:1..{buttonCount}, slider:1..{sliderCount})"));
+            }
+        }
+
         var ruleProcesses = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         foreach (var rule in config.AutoProfile.Rules)
         {

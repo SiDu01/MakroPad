@@ -27,6 +27,8 @@ ersetzt.
     "doublePressMs": 300,          // zweiter Druck innerhalb dieser Zeit = Doppeldruck (100–1000)
     "theme": "system",             // system, light oder dark
     "debugMode": false,            // Testhilfen (Startoptionen, zusätzliche Diagnose)
+    "disabledInputs": [],          // ignorierte Tasten und Slider, z. B. ["button:3", "slider:2"]
+    "displayEnabled": true,        // false = Display aus, solange die App verbunden ist
     "feedback": {                  // kurze OLED-Einblendungen
       "actions": true,
       "volume": true,

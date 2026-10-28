@@ -67,10 +67,15 @@ public sealed class MakroPadRuntime : IAsyncDisposable
         get => settings;
         set
         {
+            var displayChanged = value.DisplayEnabled != settings.DisplayEnabled;
             settings = value;
             router.SliderDeadbandPercent = value.SliderDeadbandPercent;
             gestures.LongPress = TimeSpan.FromMilliseconds(value.LongPressMs);
             gestures.DoublePress = TimeSpan.FromMilliseconds(value.DoublePressMs);
+            if (displayChanged)
+            {
+                session?.TrySend(DeviceMessages.Display(value.DisplayEnabled));
+            }
         }
     }
 
@@ -171,7 +176,15 @@ public sealed class MakroPadRuntime : IAsyncDisposable
         using var current = new DeviceSession(transport, timeProvider, appVersion);
         current.LineLogged += (direction, line) => LineLogged?.Invoke(direction, line);
         current.InputReceived += OnInput;
-        current.HandshakeCompleted += _ => SendState();
+        current.HandshakeCompleted += _ =>
+        {
+            SendState();
+            // The firmware switches the display back on whenever the app goes away.
+            if (!Settings.DisplayEnabled)
+            {
+                current.TrySend(DeviceMessages.Display(false));
+            }
+        };
         current.StateChanged += state =>
         {
             switch (state)
@@ -209,6 +222,11 @@ public sealed class MakroPadRuntime : IAsyncDisposable
 
     private void OnInput(InputEvent input)
     {
+        if (Settings.DisabledInputs.Contains(input.InputId, StringComparer.OrdinalIgnoreCase))
+        {
+            return;
+        }
+
         InputReceived?.Invoke(input);
 
         // Keys go through gesture detection (press, long press, double press) first.

@@ -81,6 +81,15 @@
             <TextBlock Classes="muted" Text="{Binding ProfileName, StringFormat='im Profil {0}'}" />
         </StackPanel>
 
+        <DockPanel IsVisible="{Binding Switch, Converter={x:Static ObjectConverters.IsNotNull}}">
+            <ToggleSwitch DockPanel.Dock="Right" OnContent="" OffContent="" MinWidth="0" VerticalAlignment="Center"
+                          IsChecked="{Binding Switch.IsActive}" AutomationProperties.Name="Slider aktiv" />
+            <StackPanel Spacing="2">
+                <TextBlock Text="Slider aktiv" FontSize="15" />
+                <TextBlock Classes="muted" FontSize="12.5" TextWrapping="Wrap" Text="Gilt für alle Profile. Ein deaktivierter Slider löst nichts aus." />
+            </StackPanel>
+        </DockPanel>
+
         <StackPanel>
             <TextBlock Classes="label" Text="Was soll passieren?" />
             <ComboBox ItemsSource="{Binding Actions}" SelectedItem="{Binding SelectedAction}"

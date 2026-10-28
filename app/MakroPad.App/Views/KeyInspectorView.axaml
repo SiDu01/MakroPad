@@ -9,6 +9,15 @@
             <TextBlock Classes="muted" Text="{Binding ProfileName, StringFormat='im Profil {0}'}" />
         </StackPanel>
 
+        <DockPanel>
+            <ToggleSwitch DockPanel.Dock="Right" OnContent="" OffContent="" MinWidth="0" VerticalAlignment="Center"
+                          IsChecked="{Binding Switch.IsActive}" AutomationProperties.Name="Taste aktiv" />
+            <StackPanel Spacing="2">
+                <TextBlock Text="Taste aktiv" FontSize="15" />
+                <TextBlock Classes="muted" FontSize="12.5" TextWrapping="Wrap" Text="Gilt für alle Profile. Eine deaktivierte Taste löst nichts aus." />
+            </StackPanel>
+        </DockPanel>
+
         <!-- One segment per gesture; a dot marks gestures that already do something. -->
         <StackPanel Spacing="8">
             <Border BorderBrush="{DynamicResource LineBrush}" BorderThickness="1" CornerRadius="7" Padding="3">

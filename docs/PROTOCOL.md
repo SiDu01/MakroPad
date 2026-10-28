@@ -75,6 +75,7 @@ slider;id=1;value=734
 | `state` | `profile`, `time` (`HH:mm:ss`), `date` (`dd.MM.yyyy`), `artist`, `title` | Dauerhafter Zustand für den Idle-Screen. Alle Felder optional; fehlende Felder bleiben unverändert, ein leerer Wert löscht. |
 | `screen` | `type`, `title`, `text`, `value`, `icon`, `ms` | Temporäres Overlay, danach zurück zum Idle-Screen |
 | `clear` | – | Overlay sofort beenden |
+| `display` | `on=1\|0` | Display ein- oder ausschalten. Trennt sich die App, schaltet die Firmware es wieder ein; die App sendet `on=0` deshalb nach jedem Handshake erneut. |
 
 ### `screen`-Typen
 

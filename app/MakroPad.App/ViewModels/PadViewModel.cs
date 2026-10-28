@@ -205,8 +205,12 @@ public sealed partial class PadViewModel : ObservableObject
             key,
             (Inspector as KeyInspectorViewModel) is { } previous && ReferenceEquals(Selected, key) ? previous.Gesture : Gesture.Press,
             input => new BindingInspectorViewModel(key, input, InputKinds.Button, session, runtime, factory) { ShowTitle = false },
-            input => Find(session.Config.FindProfile(ActiveProfile) ?? runtime.Profiles.Active, input) is not null),
-        FaderViewModel fader => new BindingInspectorViewModel(fader, fader.Input, InputKinds.Slider, session, runtime, factory),
+            input => Find(session.Config.FindProfile(ActiveProfile) ?? runtime.Profiles.Active, input) is not null,
+            new InputSwitchViewModel(key.Input, session)),
+        FaderViewModel fader => new BindingInspectorViewModel(fader, fader.Input, InputKinds.Slider, session, runtime, factory)
+        {
+            Switch = new InputSwitchViewModel(fader.Input, session)
+        },
         DisplayElementViewModel display => new DisplayInspectorViewModel(display, session),
         _ => throw new ArgumentOutOfRangeException(nameof(element))
     };
@@ -226,6 +230,20 @@ public sealed partial class PadViewModel : ObservableObject
         {
             fader.Legend = BindingText.Legend(Find(profile, fader.Input));
         }
+
+        var settings = session.Config.Settings;
+        bool Off(string input) => settings.DisabledInputs.Contains(input, StringComparer.OrdinalIgnoreCase);
+        foreach (var key in Keys)
+        {
+            key.IsDisabled = Off(key.Input);
+        }
+
+        foreach (var fader in Faders)
+        {
+            fader.IsDisabled = Off(fader.Input);
+        }
+
+        Display.IsDisabled = !settings.DisplayEnabled;
 
         Profiles.Clear();
         foreach (var candidate in session.Config.Profiles)

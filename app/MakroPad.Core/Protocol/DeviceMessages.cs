@@ -49,6 +49,8 @@ public static class DeviceMessages
 
     public static string Clear() => "clear";
 
+    public static string Display(bool on) => on ? "display;on=1" : "display;on=0";
+
     /// <summary>Shortens the longest of <paramref name="shortenable"/> until the line fits the firmware's limit.</summary>
     private static string Fit(string type, Dictionary<string, string?> values, params string[] shortenable)
     {

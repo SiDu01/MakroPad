@@ -71,6 +71,20 @@ public sealed class SimulatorRuntimeTests : IAsyncLifetime
     }
 
     [Fact]
+    public async Task DisabledInputIsIgnoredAndDisplaySwitchesOff()
+    {
+        runtime.Settings = runtime.Settings with { DisabledInputs = ["button:1"], DisplayEnabled = false };
+        await WaitUntil(() => linesFromApp.Contains("display;on=0"));
+
+        device.PressButton(1);
+        device.MoveSlider(1, 420);
+
+        await WaitUntil(() => linesFromApp.Contains("screen;type=volume;text=Master;value=42;ms=1200"));
+        await Task.Delay(200);
+        Assert.Equal(0, playPause.Count);
+    }
+
+    [Fact]
     public async Task SliderRunsVolumeActionWithPercent()
     {
         device.MoveSlider(1, 420);
