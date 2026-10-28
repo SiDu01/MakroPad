@@ -61,11 +61,17 @@ public sealed class ConfigService : IDisposable
     /// <summary>
     /// Saves a config edited in the app and makes it current. The file watcher ignores this write,
     /// so <see cref="ConfigChanged"/> is only raised for edits made outside the app.
+    /// While config.json cannot be read, <see cref="Config"/> holds defaults; saving would replace the user's file with them.
     /// </summary>
     public void Save(MakroPadConfig config)
     {
         lock (gate)
         {
+            if (LoadError is not null)
+            {
+                throw new InvalidOperationException("config.json enthält einen Fehler und wird nicht überschrieben. Repariere die Datei (Details unter Diagnose).");
+            }
+
             configStore.Save(config);
             lastWrittenJson = SafeRead(ConfigPath);
             Config = config;

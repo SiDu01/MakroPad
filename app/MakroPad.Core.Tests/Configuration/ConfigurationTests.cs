@@ -198,6 +198,18 @@ public sealed class ConfigServiceTests : IDisposable
     }
 
     [Fact]
+    public void BrokenConfigIsNotOverwrittenBySave()
+    {
+        var path = Path.Combine(directory, "config.json");
+        File.WriteAllText(path, "{ \"schemaVersion\": 1, \"profiles\": [ ");
+        using var service = new ConfigService(directory);
+        service.Load();
+
+        Assert.Throws<InvalidOperationException>(() => service.Save(service.Config));
+        Assert.Equal("{ \"schemaVersion\": 1, \"profiles\": [ ", File.ReadAllText(path));
+    }
+
+    [Fact]
     public void LegacyConfigIsArchived()
     {
         File.WriteAllText(Path.Combine(directory, "config.json"), "{ \"version\": 1, \"activeProfile\": \"Default\" }");

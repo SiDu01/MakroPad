@@ -30,19 +30,13 @@ public sealed class ConfigSession
     /// <summary>Applies an edit, saves it and returns null, or returns the reason it was rejected.</summary>
     public string? Update(Func<MakroPadConfig, MakroPadConfig> edit)
     {
-        MakroPadConfig next;
         try
         {
-            next = edit(service.Config);
+            service.Save(edit(service.Config));
         }
         catch (InvalidOperationException ex)
         {
             return ex.Message;
-        }
-
-        try
-        {
-            service.Save(next);
         }
         catch (IOException ex)
         {
