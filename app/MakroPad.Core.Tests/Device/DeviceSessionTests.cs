@@ -95,6 +95,20 @@ public sealed class DeviceSessionTests
     }
 
     [Fact]
+    public void BusyDeviceStillGetsPingedWhenAppIsQuiet()
+    {
+        transport.Receive(Hello);
+
+        for (var i = 0; i < 6; i++)
+        {
+            time.Advance(TimeSpan.FromMilliseconds(500));
+            transport.Receive("slider;id=1;value=500");
+        }
+
+        Assert.StartsWith("ping;id=", transport.Sent.Last(), StringComparison.Ordinal);
+    }
+
+    [Fact]
     public void TransportCloseEndsSession()
     {
         transport.Receive(Hello);

@@ -36,6 +36,7 @@ public sealed class DeviceSession : IDisposable
     private readonly object gate = new();
     private ITimer? heartbeatTimer;
     private DateTimeOffset lastDeviceSeen;
+    private DateTimeOffset lastSent;
     private DateTimeOffset lastPingSent = DateTimeOffset.MinValue;
     private int nextPingId;
 
@@ -64,7 +65,7 @@ public sealed class DeviceSession : IDisposable
 
     public void Start()
     {
-        lastDeviceSeen = timeProvider.GetUtcNow();
+        lastDeviceSeen = lastSent = timeProvider.GetUtcNow();
         transport.LineReceived += OnLineReceived;
         transport.Closed += OnTransportClosed;
         heartbeatTimer = timeProvider.CreateTimer(_ => OnHeartbeatTick(), null, TickInterval, TickInterval);
@@ -96,6 +97,11 @@ public sealed class DeviceSession : IDisposable
         try
         {
             transport.SendLine(line);
+            lock (gate)
+            {
+                lastSent = timeProvider.GetUtcNow();
+            }
+
             LineLogged?.Invoke(LineDirection.ToDevice, line);
             return true;
         }
@@ -182,7 +188,8 @@ public sealed class DeviceSession : IDisposable
         lock (gate)
         {
             silence = now - lastDeviceSeen;
-            shouldPing = silence >= PingAfter && now - lastPingSent >= PingAfter;
+            // The firmware times out on silence from the app, which can happen while the device keeps talking.
+            shouldPing = (silence >= PingAfter || now - lastSent >= PingAfter) && now - lastPingSent >= PingAfter;
             if (shouldPing)
             {
                 lastPingSent = now;
