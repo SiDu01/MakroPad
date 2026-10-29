@@ -2,6 +2,9 @@
 # Run with KiCad's Python:
 #   & "D:\Program Files\KiCad\10.0\bin\python.exe" makropad_switch_pcb.py
 #
+# Design rules: Wuerth Elektronik BASIC design rules v2.0 (04/2023), STANDARD category,
+# outer layers up to 1 oz starting foil.
+#
 # Coordinates below are in the lid system of ../case/makropad_case.scad
 # (x to the right, y towards the back, mm). Keep them in sync with the case.
 import os
@@ -16,7 +19,7 @@ COLS, ROWS = 5, 4    # OLED replaces the top right 2x2 block (cols 3-4, rows 2-3
 # for the connector. The back edge stays short of the plate's back screw (x 42.6, y 101.1),
 # the tab stays east of the ESP32 (x < 78.2 incl. its end stop).
 OUTLINE = [(14, 19.4), (109.25, 19.4), (109.25, 57.5), (77, 57.5), (77, 83),
-           (104.5, 83), (104.5, 101.5), (77, 101.5), (77, 98), (14, 98)]
+           (104.5, 83), (104.5, 103.5), (77, 103.5), (77, 98), (14, 98)]
 
 TRACK_W = 0.25
 LANE = 0.5           # track pitch in the routing channels
@@ -52,6 +55,16 @@ board = pcbnew.BOARD()
 ds = board.GetDesignSettings()
 ds.SetCopperLayerCount(2)
 ds.m_TrackMinWidth = pcbnew.FromMM(0.2)
+ds.m_MinClearance = pcbnew.FromMM(0.18)             # copper spacing, 1 oz starting foil
+ds.m_HoleToHoleMin = pcbnew.FromMM(0.5)             # holes on different potential (same: 0.3, NPTH: 0.35)
+ds.m_SolderMaskExpansion = pcbnew.FromMM(0.05)      # mask clearance >= 50 um
+ds.m_SolderMaskMinWidth = pcbnew.FromMM(0.07)       # mask web >= 70 um
+ds.m_SolderMaskToCopperClearance = pcbnew.FromMM(0.05)  # mask coverage >= 50 um
+ds.m_SilkClearance = pcbnew.FromMM(0.2)             # between markings
+ds.m_MinSilkTextHeight = pcbnew.FromMM(1.5)         # legend print on solder mask
+ds.m_MinSilkTextThickness = pcbnew.FromMM(0.15)
+SILK_W = 0.15             # minimum legend line width
+SILK_TO_COPPER = 0.3      # legend to exposed copper and NPTH edges
 
 nets = {}
 
@@ -74,13 +87,14 @@ for (x0, y0), (x1, y1) in zip(OUTLINE, OUTLINE[1:] + OUTLINE[:1]):
     board.Add(s)
 
 
-def text(s, x, y, layer, size=0.8):
+def text(s, x, y, layer, size=1.5, angle=0):
     t = pcbnew.PCB_TEXT(board)
     t.SetText(s)
     t.SetLayer(layer)
     t.SetPosition(P(x, y))
     t.SetTextSize(pcbnew.VECTOR2I(pcbnew.FromMM(size), pcbnew.FromMM(size)))
-    t.SetTextThickness(pcbnew.FromMM(0.15))
+    t.SetTextThickness(pcbnew.FromMM(0.2))
+    t.SetTextAngleDegrees(angle)
     if layer == pcbnew.B_SilkS:
         t.SetMirrored(True)
     board.Add(t)
@@ -97,6 +111,8 @@ for r in range(ROWS):
         fp = pcbnew.FootprintLoad(os.path.join(FP_LIB, "Button_Switch_Keyboard.pretty"), "SW_Cherry_MX_1.00u_PCB")
         fp.SetReference(f"K{n}")
         fp.SetValue("MX")
+        fp.Reference().SetTextSize(pcbnew.VECTOR2I(pcbnew.FromMM(1.5), pcbnew.FromMM(1.5)))
+        fp.Reference().SetTextThickness(pcbnew.FromMM(0.2))
         board.Add(fp)
         fp.SetPosition(P(cx + 2.54, cy + 5.08))  # footprint origin is pad 1
         for pad in fp.Pads():
@@ -104,7 +120,7 @@ for r in range(ROWS):
                 pad.SetNet(net("GND"))
             elif pad.GetNumber() == "2":
                 pad.SetNet(net(f"K{n}"))
-        text(f"K{n}", cx, cy - 6.5, pcbnew.B_SilkS, 1.2)
+        text(f"K{n}", cx, cy - 6.5, pcbnew.B_SilkS)
         switches[(c, r)] = (n, cx, cy)
 
 # --- Connector: 2x9 header on the back, 9 columns along x ---
@@ -142,6 +158,25 @@ def track(points, n):
         board.Add(t)
 
 
+def teardrop(pad, toward, pad_d, n):
+    # Teardrops are recommended at every pad connection; KiCad's generator is GUI-only.
+    dx, dy = toward[0] - pad[0], toward[1] - pad[1]
+    seg = (dx * dx + dy * dy) ** 0.5
+    ux, uy = dx / seg, dy / seg
+    length, w = min(pad_d / 2 + 0.8, seg), 0.4 * pad_d
+    tip = (pad[0] + ux * length, pad[1] + uy * length)
+    pts = [(pad[0] - uy * w, pad[1] + ux * w), (tip[0] - uy * TRACK_W / 2, tip[1] + ux * TRACK_W / 2),
+           (tip[0] + uy * TRACK_W / 2, tip[1] - ux * TRACK_W / 2), (pad[0] + uy * w, pad[1] - ux * w)]
+    sh = pcbnew.PCB_SHAPE(board)
+    sh.SetShape(pcbnew.SHAPE_T_POLY)
+    sh.SetPolyPoints([P(*q) for q in pts])
+    sh.SetFilled(True)
+    sh.SetWidth(0)
+    sh.SetLayer(pcbnew.F_Cu)
+    sh.SetNet(n)
+    board.Add(sh)
+
+
 for (c, r), (n, cx, cy) in switches.items():
     s = (cx - 3.81, cy + 2.54)
     if r == ROWS - 1:
@@ -161,18 +196,20 @@ for (c, r), (n, cx, cy) in switches.items():
     if i % 2 == 0:
         row_a[x_pin].SetNet(net(f"K{n}"))
         path += [(x_pin, y_h), (x_pin, HDR_YA)]
-        text(str(n), x_pin, HDR_YA - 2.4, pcbnew.B_SilkS)
+        text(str(n), x_pin, HDR_YA - 3.0, pcbnew.B_SilkS, angle=90)
     else:
         row_b[x_pin].SetNet(net(f"K{n}"))
         path += [(x_pin + 1.27, y_h), (x_pin + 1.27, YB), (x_pin, YB)]
-        text(str(n), x_pin, YB + 2.4, pcbnew.B_SilkS)
+        text(str(n), x_pin, YB + 3.0, pcbnew.B_SilkS, angle=90)
     track(path, net(f"K{n}"))
+    teardrop(path[0], path[1], 2.2, net(f"K{n}"))
+    teardrop(path[-1], path[-2], 1.7, net(f"K{n}"))
 
 row_a[cols[8]].SetNet(net("GND"))
 row_b[cols[8]].SetNet(net("GND"))
-text("G", cols[8], HDR_YA - 2.4, pcbnew.B_SilkS)
-text("G", cols[8], YB + 2.4, pcbnew.B_SilkS)
-text("MakroPad switch PCB", 40, 96.0, pcbnew.B_SilkS, 1.2)
+text("G", cols[8], HDR_YA - 3.0, pcbnew.B_SilkS, angle=90)
+text("G", cols[8], YB + 3.0, pcbnew.B_SilkS, angle=90)
+text("MakroPad switch PCB", 40, 96.0, pcbnew.B_SilkS)
 
 for layer in (pcbnew.F_Cu, pcbnew.B_Cu):
     z = pcbnew.ZONE(board)
@@ -187,6 +224,23 @@ for layer in (pcbnew.F_Cu, pcbnew.B_Cu):
         p = P(x, y)
         ol.Append(p.x, p.y)
     board.Add(z)
+
+# Library footprints draw silk at 0.12 mm; the legend minimum is 0.15 mm.
+for fp in board.GetFootprints():
+    for g in fp.GraphicalItems():
+        if g.GetLayer() in (pcbnew.F_SilkS, pcbnew.B_SilkS) and g.GetClass() == "PCB_SHAPE":
+            g.SetWidth(max(g.GetWidth(), pcbnew.FromMM(SILK_W)))
+
+# KiCad's DRC only checks silk against mask openings; check the legend-to-copper rule here.
+silk = [t for t in board.GetDrawings() if t.GetLayer() in (pcbnew.F_SilkS, pcbnew.B_SilkS)]
+for fp in board.GetFootprints():
+    silk += [g for g in fp.GraphicalItems() if g.GetLayer() in (pcbnew.F_SilkS, pcbnew.B_SilkS)]
+    silk += [fp.Reference()] if fp.Reference().GetLayer() in (pcbnew.F_SilkS, pcbnew.B_SilkS) else []
+gap = pcbnew.FromMM(SILK_TO_COPPER) + ds.m_SolderMaskExpansion
+bad = [(item.GetLayerName(), mm(item.GetPosition()), pad.GetParentFootprint().GetReference())
+       for item in silk for pad in board.GetPads()
+       if item.GetEffectiveShape(item.GetLayer()).Collide(pad.GetEffectiveShape(item.GetLayer()), gap)]
+assert not bad, bad
 
 board.BuildConnectivity()
 pcbnew.ZONE_FILLER(board).Fill(board.Zones())

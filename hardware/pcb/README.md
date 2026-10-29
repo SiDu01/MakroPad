@@ -21,7 +21,31 @@ Compress-Archive -Force -Path export\gerber\* -DestinationPath export\makropad_s
 ## Bestellen (JLCPCB)
 
 `export/makropad_switch_jlcpcb.zip` hochladen. 2 Lagen, 1.6 mm, sonst Standard. Keine Bestückung nötig
-(nur THT). Die Platine ist ca. 95 × 82 mm.
+(nur THT). Die Platine ist ca. 95 × 84 mm.
+
+## Design Rules
+
+Ausgelegt nach den [Würth Elektronik BASIC Design Rules](https://www.we-online.com/files/pdf1/basic-design-rules-0423-cbt-en.pdf)
+v2.0 (04/2023), Kategorie STANDARD, Außenlagen bis 1 oz Startfolie. Die Werte stehen als
+Board-Regeln in der Datei, der KiCad-DRC prüft sie:
+
+| Regel | Würth | Platine |
+| --- | --- | --- |
+| Kupferabstand (1 oz Startfolie) | ≥ 180 µm | ≥ 0.2 mm (DRC) |
+| Leiterbreite | ≥ 120 µm | 250 µm |
+| Kupfer zur gefrästen Kante | ≥ 0.23 mm | ≥ 0.5 mm |
+| Loch zu Loch (verschiedenes Potenzial) | ≥ 500 µm | ≥ 0.5 mm für alle Löcher |
+| Restring PTH (0.6 mm Pad bei 0.25 mm Loch) | ≥ 0.175 mm | 0.35 mm |
+| Lötstopp-Freistellung / Steg / Überdeckung | ≥ 50 / 70 / 50 µm | 50 / 70 / 50 µm |
+| Teardrops an Pad-Anschlüssen | empfohlen | an allen 32 Anschlüssen |
+| Bestückungsdruck: Schrifthöhe auf Lötstopp | ≥ 1.5 mm | 1.5 mm |
+| Bestückungsdruck: Linienbreite | ≥ 150 µm | ≥ 150 µm |
+| Bestückungsdruck zu Kupfer / NPTH-Kante | ≥ 300 µm | ≥ 300 µm zu Pads (Skript-Check) |
+| Abstand zwischen Beschriftungen | ≥ 200 µm | ≥ 200 µm |
+
+Den Abstand zwischen Bestückungsdruck und Kupfer prüft das Skript selbst, weil KiCad den Druck
+nur gegen Lötstopp-Öffnungen prüft. Geprüft wird gegen freiliegendes Kupfer (Pads und NPTH).
+Leiterbahnen und Masseflächen unter Lötstopp sind bedruckbar.
 
 ## Stecker J1 → ESP32-S3-DevKitC-1
 
