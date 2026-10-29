@@ -23,6 +23,7 @@ OUTLINE = [(14, 19.4), (109.25, 19.4), (109.25, 57.5), (77, 57.5), (77, 83),
 
 TRACK_W = 0.25
 LANE = 0.5           # track pitch in the routing channels
+CHAMFER = 0.5        # 45 degree corners: length cut off each leg
 HDR_X0 = 82.0        # first header column (pins point down, east of the ESP32 end stop)
 HDR_YA = 95.6        # front header row; row B is 2.54 further back
 
@@ -147,6 +148,23 @@ YB = HDR_YA + 2.54
 # corridor between column 2 and 3 (lanes ordered so nothing crosses), then east into the tab.
 # The back row runs straight east behind its switches. Trace i (counted from the north)
 # ends on vertical v_i: even i -> row A pin, odd i -> between row A pins to row B.
+def chamfer(points):
+    out = [points[0]]
+    for a, b, d in zip(points, points[1:], points[2:]):
+        k = min(CHAMFER, dist(a, b) / 2, dist(b, d) / 2)
+        out += [toward(b, a, k), toward(b, d, k)]
+    return out + [points[-1]]
+
+
+def dist(a, b):
+    return ((b[0] - a[0]) ** 2 + (b[1] - a[1]) ** 2) ** 0.5
+
+
+def toward(a, b, k):
+    f = k / dist(a, b)
+    return (a[0] + (b[0] - a[0]) * f, a[1] + (b[1] - a[1]) * f)
+
+
 def track(points, n):
     for a, b in zip(points, points[1:]):
         t = pcbnew.PCB_TRACK(board)
@@ -201,6 +219,7 @@ for (c, r), (n, cx, cy) in switches.items():
         row_b[x_pin].SetNet(net(f"K{n}"))
         path += [(x_pin + 1.27, y_h), (x_pin + 1.27, YB), (x_pin, YB)]
         text(str(n), x_pin, YB + 3.0, pcbnew.B_SilkS, angle=90)
+    path = chamfer(path)
     track(path, net(f"K{n}"))
     teardrop(path[0], path[1], 2.2, net(f"K{n}"))
     teardrop(path[-1], path[-2], 1.7, net(f"K{n}"))
