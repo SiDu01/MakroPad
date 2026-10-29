@@ -1,6 +1,6 @@
 # MakroPad – Neubau-Plan
 
-Stand: 2026-10-04. Grundlage: [REWRITE_NOTES.md](REWRITE_NOTES.md).
+Stand: 2026-10-29 (v0.4.0). Grundlage: [REWRITE_NOTES.md](REWRITE_NOTES.md).
 
 ## Leitlinie
 
@@ -16,7 +16,7 @@ Jeder Meilenstein endet mit einem Test auf echter Hardware.
 | --- | --- |
 | Hardware | 16 MX-Tasten (5×4-Raster, oben rechts 2×2 durch OLED ersetzt), 3 Slider (B103), SSD1306 128×64 I2C, ESP32-S3-DevKitC-1 |
 | Firmware | PlatformIO, Arduino-Framework, modular, native Unit-Tests |
-| App | C#/.NET + Avalonia, nur Windows (TFM `net10.0-windows10.0.19041.0`; lokal ist bisher nur SDK 9.0.302 installiert → SDK 10 installieren oder auf `net9.0-windows…` bleiben) |
+| App | C#/.NET 10 + Avalonia, nur Windows (TFM `net10.0-windows10.0.19041.0`) |
 | Display | Feste Screens in der Firmware, die App sendet nur semantische Felder |
 | Offline | Medien-Fallback per HID wie bisher; erweiterter Offline-Betrieb (Bindings im Flash) ist vorbereitet, aber nicht geplant |
 | Linux | nicht vorgesehen |
@@ -41,21 +41,20 @@ meldet `buttons=16;sliders=3`.
 **Vor M1 gegen die tatsächliche Verdrahtung abgleichen** und in
 `docs/HARDWARE.md` festhalten.
 
-## Repository-Struktur (Ziel)
+## Repository-Struktur
 
 ```text
 MakroPad/
-  docs/                    PROTOCOL.md (v2), HARDWARE.md, REWRITE_*.md
-  hardware/case/           OpenSCAD-Gehäuse (unverändert)
+  docs/                    PROTOCOL.md (v2), HARDWARE.md, CONFIG.md, REWRITE_*.md
+  hardware/case/           OpenSCAD-Gehäuse
+  installer/               Inno-Setup-Installer, build-release.ps1
   firmware/                PlatformIO-Projekt
     platformio.ini
     include/config.h       Pins, Zeiten, Filterkonstanten an einer Stelle
     src/main.cpp           nur setup()/loop(), verdrahtet die Module
-    src/input/             Buttons (Entprellung), Slider (Filterkette)
-    src/protocol/          Zeilen-Parser/Formatter, Nachrichten-Handler
-    src/display/           feste Screens + Idle-Screen, Scrolling, Uhr
-    src/hid/               Consumer-Control-Fallback
-    test/                  native Tests: Slider-Filter, Protokoll-Parser
+    src/input, hostlink, display, hid   Geräte-Module (Arduino)
+    lib/makropad_core/     reine Logik: Entprellung, Slider-Filter, Protokoll, Uhr, Display-Text
+    test/                  native Tests für lib/makropad_core
   app/
     MakroPad.sln
     MakroPad.Core/         Modelle, Protokoll, Config, Runtime (ohne OS-Aufrufe)
@@ -64,6 +63,7 @@ MakroPad/
     MakroPad.App/          Avalonia-UI, Tray, Composition Root
     MakroPad.Core.Tests/
     MakroPad.Device.Tests/
+    MakroPad.App.Tests/
 ```
 
 Laufzeitkern in `MakroPad.Core/Runtime`, von der UI getrennt:
@@ -79,7 +79,7 @@ Die UI liest/schreibt nur die Config über einen `ConfigService` und beobachtet
 den Kern (Events für Verbindung, Inputs, Ergebnisse). Kein ViewModel
 orchestriert Geräte-Logik.
 
-## Protokoll v2 (Entwurf)
+## Protokoll v2 (Entwurf; gültig ist [PROTOCOL.md](PROTOCOL.md))
 
 Format bleibt `type;key=value`, Percent-Encoding wie v1, Zeilenende `\n`.
 
@@ -100,13 +100,15 @@ App → Gerät:
 | --- | --- | --- |
 | `hello-ack` | `proto=2`, `app` | Handshake |
 | `ping` | `id` | Heartbeat |
-| `state` | `profile`, `time`, `date`, `artist`, `title`, `volume` (alle optional) | Dauerhafter Zustand für den Idle-Screen; nur geänderte Felder senden |
+| `state` | `profile`, `time`, `date`, `artist`, `title` (alle optional) | Dauerhafter Zustand für den Idle-Screen; nur geänderte Felder senden |
 | `screen` | `type=volume\|action\|media\|profile\|status`, `title`, `text`, `value`, `icon=ok\|fail\|warn\|sync`, `ms` | Temporäres Overlay, danach zurück zum Idle-Screen |
-| `clear` | – | Display leeren |
+| `clear` | – | Overlay beenden |
+| `display` | `on=1\|0` | Display ein/aus (seit v0.4.0) |
 
 Regeln: Unbekannte Typen/Keys ignorieren. Platzhalter gibt es nicht mehr – die
-Firmware zeichnet den Idle-Screen aus `state` (Profil, laufende Uhr, Track,
-Lautstärke) mit festem Layout. Firmware-Uhr läuft ohne App weiter.
+Firmware zeichnet den Idle-Screen aus `state` (Profil, laufende Uhr, Track) mit
+festem Layout. Firmware-Uhr läuft ohne App weiter. Eine Lautstärkeanzeige im
+Idle-Screen ist bewusst entfallen.
 
 Der Slider-Wert wird in der Firmware auf 0–1000 normiert, damit die App keine
 ADC-Details kennen muss.
@@ -222,7 +224,7 @@ und Einstellungen. Gestaltung: [UI_DESIGN.md](UI_DESIGN.md).
 - Text eingeben, Befehl/Skript mit Argumenten, HTTP-Request.
 - Long-Press und Doppeldruck als eigene Inputs (`button:3:long`).
 
-**Status (2026-10-16): umgesetzt, Hardwaretest offen.** `GestureDetector`
+**Status (2026-10-29): erledigt, auf Hardware bestätigt.** `GestureDetector`
 (`button:N`, `button:N:long`, `button:N:double`, Zeiten in den
 Einstellungen), Makros mit Pausen (`ActionRunner`, Editor im Inspector),
 `keyboard.text`, `system.run`, `http.request`. Inspector mit Gesten-Reitern.
@@ -232,6 +234,19 @@ Einstellungen), Makros mit Pausen (`ActionRunner`, Editor im Inspector),
 - Bindings, die als HID abbildbar sind (Medien, Tastenkombinationen), ins
   Gerät übertragen und im NVS speichern; HID-Tastatur zusätzlich zu
   Consumer-Control.
+
+**Status (2026-10-29): zurückgestellt.** Der bestehende HID-Fallback (Tasten
+1–7 Medien, Slider 1 Lautstärke) deckt den Betrieb ohne App ab.
+
+### Nach M5 (v0.4.0)
+
+- Aktion `toggle` („Abwechselnd“): jeder Druck führt den nächsten Schritt aus.
+- Aktion `binding.assign` („Taste belegen“): die nächste gedrückte Taste im
+  Schnell-Fenster belegen, gespeichert erst mit „Speichern“.
+- Tasten, Slider und Display einzeln abschaltbar (`settings.disabledInputs`,
+  `settings.displayEnabled`, Protokoll `display;on`).
+
+Alles auf Hardware bestätigt.
 
 ## Was aus dem alten Stand portiert wurde
 
