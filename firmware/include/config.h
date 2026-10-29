@@ -7,7 +7,7 @@
 
 namespace config {
 
-constexpr const char* FirmwareVersion = "0.3.0";
+constexpr const char* FirmwareVersion = "0.4.0";
 constexpr const char* DeviceName = "makropad";
 constexpr uint8_t ProtocolVersion = 2;
 
