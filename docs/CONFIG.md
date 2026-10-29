@@ -113,6 +113,7 @@ OLED-Einblendung.
 | `system.run` | Taste | `command` | Führt eine Befehlszeile unsichtbar über `cmd.exe` aus. Endet sie innerhalb von 5 s mit einem Fehlercode, meldet das OLED den Fehler |
 | `http.request` | Taste | `url`, optional `method`, `body`, `contentType` | Sendet eine Webanfrage (z. B. Home Assistant, Webhooks). Ohne `method` GET bzw. mit `body` POST, Inhalt standardmäßig `application/json`, 10 s Zeitlimit |
 | `macro` | Taste | `steps` (siehe unten) | Führt mehrere Aktionen nacheinander aus |
+| `toggle` | Taste | `steps` (siehe unten) | Jeder Druck führt den nächsten Schritt aus, nach dem letzten wieder den ersten |
 | `profile.next` | Taste | – | Nächstes Profil (in Listenreihenfolge, danach wieder das erste) |
 | `profile.set` | Taste | `name` | Bestimmtes Profil aktivieren |
 
@@ -130,6 +131,22 @@ Schritt. Makros in Makros und Slider-Aktionen sind nicht möglich.
     { "action": "delay", "parameters": { "ms": "3000" } },
     { "action": "keyboard.shortcut", "parameters": { "keys": "Ctrl+F9" } },
     { "action": "keyboard.text", "parameters": { "text": "Bin live!\n" } }
+  ] }
+```
+
+## Abwechselnd
+
+`toggle` braucht mindestens zwei Schritte, aufgebaut wie bei Makros. Der erste
+Druck führt Schritt 1 aus, der nächste Schritt 2 und so weiter, nach dem letzten
+wieder Schritt 1. Schlägt ein Schritt fehl, ist beim nächsten Druck derselbe
+Schritt wieder dran. Nach einem Neustart der App oder einer Änderung an der
+Konfiguration beginnt es wieder bei Schritt 1.
+
+```jsonc
+{ "input": "button:4", "action": "toggle", "parameters": { "label": "Kamera" },
+  "steps": [
+    { "action": "keyboard.shortcut", "parameters": { "keys": "Ctrl+Alt+1" } },
+    { "action": "keyboard.shortcut", "parameters": { "keys": "Ctrl+Alt+2" } }
   ] }
 ```
 

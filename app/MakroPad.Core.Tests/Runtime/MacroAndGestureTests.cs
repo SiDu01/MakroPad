@@ -152,6 +152,24 @@ public sealed class MacroRunnerTests
         Assert.False((await runner.RunAsync(new ActionContext(Macro(), new ButtonInput(1, true)))).Success);
     }
 
+    [Fact]
+    public async Task ToggleRunsOneStepPerPressAndRetriesAFailedOne()
+    {
+        var toggle = new Binding("button:1", "toggle", Steps: [Step("a"), Step("fail"), Step("b")]);
+        async Task<ActionResult> Press() => await runner.RunAsync(new ActionContext(toggle, new ButtonInput(1, true)));
+
+        Assert.Equal("a", (await Press()).Message);
+        Assert.Equal("Schritt 2: kaputt", (await Press()).Message);
+        Assert.Equal("Schritt 2: kaputt", (await Press()).Message);
+        Assert.Equal(["a"], calls);
+
+        var other = new Binding("button:2", "toggle", Steps: [Step("b"), Step("a")]);
+        await runner.RunAsync(new ActionContext(other, new ButtonInput(2, true)));
+        await runner.RunAsync(new ActionContext(other, new ButtonInput(2, true)));
+        await runner.RunAsync(new ActionContext(other, new ButtonInput(2, true)));
+        Assert.Equal(["a", "b", "a", "b"], calls);
+    }
+
     private sealed class Recorder(string id, List<string> calls) : IActionHandler
     {
         public string ActionId => id;
@@ -265,7 +283,11 @@ public sealed class MacroAndGestureValidationTests
     {
         Assert.Contains(Validate(new Binding("button:1", "macro")), i => i.Message.Contains("keine Schritte", StringComparison.Ordinal));
         Assert.Contains(Validate(new Binding("button:1", "media.stop", Steps: [new MacroStep("media.stop")])),
-            i => i.Message.Contains("nur bei der Aktion macro", StringComparison.Ordinal));
+            i => i.Message.Contains("nur bei den Aktionen macro und toggle", StringComparison.Ordinal));
+        Assert.Contains(Validate(new Binding("button:1", "toggle", Steps: [new MacroStep("media.stop")])),
+            i => i.Message.Contains("mindestens zwei Schritte", StringComparison.Ordinal));
+        Assert.Contains(Validate(new Binding("button:1", "macro", Steps: [new MacroStep("toggle"), new MacroStep("media.stop")])),
+            i => i.Message.StartsWith("Schritt 1: toggle geht nicht", StringComparison.Ordinal));
     }
 
     [Fact]

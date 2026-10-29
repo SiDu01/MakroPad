@@ -133,11 +133,11 @@ public static partial class ConfigValidator
             yield return message;
         }
 
-        if (definition.Id != "macro")
+        if (!ActionCatalog.HasSteps(definition.Id))
         {
             if (binding.Steps is { Count: > 0 })
             {
-                yield return "steps gibt es nur bei der Aktion macro";
+                yield return "steps gibt es nur bei den Aktionen macro und toggle";
             }
 
             yield break;
@@ -147,6 +147,10 @@ public static partial class ConfigValidator
         if (steps.Count == 0)
         {
             yield return "Das Makro hat keine Schritte";
+        }
+        else if (definition.Id == "toggle" && steps.Count < 2)
+        {
+            yield return "Abwechselnd braucht mindestens zwei Schritte";
         }
         else if (steps.Count > ActionCatalog.MaxMacroSteps)
         {

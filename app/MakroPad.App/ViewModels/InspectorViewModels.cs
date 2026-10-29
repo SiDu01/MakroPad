@@ -241,7 +241,11 @@ public sealed partial class BindingInspectorViewModel : ObservableObject, IFlush
 
     public bool IsBound => SelectedAction.Definition is not null;
 
-    public bool IsMacro => SelectedAction.Definition?.Id == "macro";
+    /// <summary>Macro and toggle both edit a step list.</summary>
+    public bool IsMacro => SelectedAction.Definition is { } definition && ActionCatalog.HasSteps(definition.Id);
+
+    /// <summary>A toggle runs one step per press, so a pause step makes no sense there.</summary>
+    public bool CanAddDelay => SelectedAction.Definition?.Id != "toggle";
 
     public bool CanAddStep => Steps.Count < ActionCatalog.MaxMacroSteps;
 
@@ -260,13 +264,16 @@ public sealed partial class BindingInspectorViewModel : ObservableObject, IFlush
         // Keep values the new action understands too, e.g. the display label.
         var previous = Parameters.ToDictionary(p => p.Name, p => p.Value, StringComparer.OrdinalIgnoreCase);
         BuildParameters(name => previous.GetValueOrDefault(name));
-        if (IsMacro && Steps.Count == 0)
+        // A toggle needs two sides to switch between.
+        var minimumSteps = CanAddDelay ? 1 : 2;
+        while (IsMacro && Steps.Count < minimumSteps)
         {
             AddStepViewModel(new MacroStep("keyboard.shortcut"));
         }
 
         OnPropertyChanged(nameof(IsBound));
         OnPropertyChanged(nameof(IsMacro));
+        OnPropertyChanged(nameof(CanAddDelay));
         OnPropertyChanged(nameof(CanTest));
         ScheduleSave();
     }

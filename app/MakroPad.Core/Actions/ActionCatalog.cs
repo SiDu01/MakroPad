@@ -85,6 +85,10 @@ public static class ActionCatalog
         [
             new("label", false, "Steht auf der Taste und in der Einblendung", "Stream starten")
         ]),
+        new("toggle", "Abwechselnd", "Ablauf", InputKinds.Button, "Jeder Druck führt den nächsten Schritt aus, nach dem letzten wieder den ersten",
+        [
+            new("label", false, "Steht auf der Taste und in der Einblendung", "Kamera")
+        ]),
         new("system.openUrl", "Webseite öffnen", "Öffnen", InputKinds.Button, "Öffnet eine http(s)-Adresse im Standardbrowser",
         [
             new("url", true, "Vollständige Adresse mit https://", "https://www.youtube.com"),
@@ -111,9 +115,13 @@ public static class ActionCatalog
     public const int MaxDelayMs = 60000;
     public const int MaxMacroSteps = 50;
 
-    /// <summary>Actions a macro step may use (button actions except macros), plus <see cref="Delay"/>.</summary>
+    /// <summary>Actions a step may use (button actions except macro and toggle), plus <see cref="Delay"/>.</summary>
     public static IReadOnlyList<ActionDefinition> MacroStepActions { get; } =
-        [Delay, .. All.Where(a => a.Inputs.HasFlag(InputKinds.Button) && a.Id != "macro")];
+        [Delay, .. All.Where(a => a.Inputs.HasFlag(InputKinds.Button) && !HasSteps(a.Id))];
+
+    /// <summary><c>macro</c> and <c>toggle</c> run a list of steps.</summary>
+    public static bool HasSteps(string actionId)
+        => string.Equals(actionId, "macro", StringComparison.OrdinalIgnoreCase) || string.Equals(actionId, "toggle", StringComparison.OrdinalIgnoreCase);
 
     public static ActionDefinition? Find(string actionId)
         => All.FirstOrDefault(definition => string.Equals(definition.Id, actionId, StringComparison.OrdinalIgnoreCase));
