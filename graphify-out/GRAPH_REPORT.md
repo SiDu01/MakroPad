@@ -1,16 +1,16 @@
 # Graph Report - MakroPad  (2026-10-29)
 
 ## Corpus Check
-- 122 files · ~58,657 words
+- 122 files · ~58,655 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 3383 nodes · 4825 edges · 325 communities (236 shown, 89 thin omitted)
+- 3383 nodes · 4825 edges · 324 communities (235 shown, 89 thin omitted)
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 88 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `22c8c50e`
+- Built from commit: `34703c12`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -265,7 +265,7 @@
 - **Input to Action Flow** — hardware_buttons_gpio_pullup, hardware_sliders_adc1, protocol_button_message, protocol_slider_message, app_readme_action_pipeline [EXTRACTED 1.00]
 - **OLED Display Configuration Flow** — hardware_oled_i2c_ssd1306, protocol_display_message, protocol_config_message, protocol_action_result_message, app_readme_oled_default_screen [EXTRACTED 1.00]
 
-## Communities (325 total, 89 thin omitted)
+## Communities (324 total, 89 thin omitted)
 
 ### Community 0 - "Community 0"
 Cohesion: 0.06
@@ -545,7 +545,7 @@ Nodes (6): DispatcherTimer, IFilePicker, IShortcutRecorder, MakroPadRuntime, Tim
 
 ### Community 189 - "Community 189"
 Cohesion: 0.15
-Nodes (14): App → Gerät, code:text (type;key=value;key=value), code:text (hello;proto=2;fw=0.3.0;device=makropad;buttons=16;sliders=3;), code:text (hello-ack;proto=2;app=0.3.0), code:text (Volume=50%), Format, Gerät → App, Grundsätze (+6 more)
+Nodes (14): App → Gerät, code:text (type;key=value;key=value), code:text (hello;proto=2;fw=0.4.0;device=makropad;buttons=16;sliders=3;), code:text (hello-ack;proto=2;app=0.4.0), code:text (Volume=50%), Format, Gerät → App, Grundsätze (+6 more)
 
 ### Community 190 - "Community 190"
 Cohesion: 0.18
