@@ -114,6 +114,7 @@ OLED-Einblendung.
 | `http.request` | Taste | `url`, optional `method`, `body`, `contentType` | Sendet eine Webanfrage (z. B. Home Assistant, Webhooks). Ohne `method` GET bzw. mit `body` POST, Inhalt standardmäßig `application/json`, 10 s Zeitlimit |
 | `macro` | Taste | `steps` (siehe unten) | Führt mehrere Aktionen nacheinander aus |
 | `toggle` | Taste | `steps` (siehe unten) | Jeder Druck führt den nächsten Schritt aus, nach dem letzten wieder den ersten |
+| `binding.assign` | Taste | – | Die danach gedrückte Taste in einem kleinen Fenster belegen (siehe unten) |
 | `profile.next` | Taste | – | Nächstes Profil (in Listenreihenfolge, danach wieder das erste) |
 | `profile.set` | Taste | `name` | Bestimmtes Profil aktivieren |
 
@@ -149,6 +150,15 @@ Konfiguration beginnt es wieder bei Schritt 1.
     { "action": "keyboard.shortcut", "parameters": { "keys": "Ctrl+Alt+2" } }
   ] }
 ```
+
+## Taste belegen
+
+Nach `binding.assign` zeigt das OLED „Zieltaste drücken“. Die nächste gedrückte
+Taste löst nichts aus, sondern öffnet ein kleines Fenster, in dem du sie für das
+aktive Profil belegst, auch wenn die App nur im Infobereich läuft. Erst
+„Speichern“ schreibt die Änderung, „Abbrechen“ oder Esc verwirft sie. Ein
+zweiter Druck auf die Belegen-Taste oder 10 s ohne Druck brechen ab.
+Deaktivierte Tasten lassen sich so nicht wählen.
 
 ## Automatischer Profilwechsel
 

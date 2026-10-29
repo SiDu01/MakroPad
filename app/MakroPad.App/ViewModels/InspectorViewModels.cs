@@ -160,7 +160,7 @@ public sealed partial class MacroStepViewModel : ObservableObject
     }
 }
 
-/// <summary>Edits what one input does in the active profile. Every change is saved right away.</summary>
+/// <summary>Edits what one input does in the active profile. Every change is saved right away unless <see cref="Deferred"/>.</summary>
 public sealed partial class BindingInspectorViewModel : ObservableObject, IFlushable
 {
     private static readonly TimeSpan SaveDelay = TimeSpan.FromMilliseconds(400);
@@ -227,6 +227,9 @@ public sealed partial class BindingInspectorViewModel : ObservableObject, IFlush
     /// <summary>On/off switch for a slider; keys have theirs above the gesture tabs.</summary>
     public InputSwitchViewModel? Switch { get; init; }
 
+    /// <summary>Keeps edits as a draft; the owner writes them with <see cref="Apply"/> (quick editor window).</summary>
+    public bool Deferred { get; init; }
+
     public string ProfileName => runtime.Profiles.Active.Name;
 
     public IReadOnlyList<ActionOption> Actions { get; }
@@ -253,6 +256,16 @@ public sealed partial class BindingInspectorViewModel : ObservableObject, IFlush
 
     private Binding? CurrentBinding => session.Config.FindProfile(ProfileName)?.Bindings
         .FirstOrDefault(b => string.Equals(b.Input, Input, StringComparison.OrdinalIgnoreCase));
+
+    /// <summary>The binding as currently edited; null for "Nichts".</summary>
+    private Binding? Draft => SelectedAction.Definition is { } definition
+        ? new Binding(Input, definition.Id, ParameterFactory.Collect(Parameters), IsMacro ? Steps.Select(s => s.ToStep()).ToList() : null)
+        : null;
+
+    /// <summary>Applies this inspector's edit to <paramref name="config"/>.</summary>
+    public MakroPadConfig Apply(MakroPadConfig config) => Draft is { } binding
+        ? ConfigEditor.SetBinding(config, ProfileName, binding)
+        : ConfigEditor.RemoveBinding(config, ProfileName, Input);
 
     partial void OnSelectedActionChanged(ActionOption value)
     {
@@ -313,9 +326,14 @@ public sealed partial class BindingInspectorViewModel : ObservableObject, IFlush
     [RelayCommand]
     private async Task TestAsync()
     {
-        saveTimer.Stop();
-        Save();
-        if (CurrentBinding is not { } binding)
+        if (!Deferred)
+        {
+            saveTimer.Stop();
+            Save();
+        }
+
+        // A draft is tried out without saving it.
+        if ((Deferred ? Draft : CurrentBinding) is not { } binding)
         {
             return;
         }
@@ -384,7 +402,7 @@ public sealed partial class BindingInspectorViewModel : ObservableObject, IFlush
 
     private void ScheduleSave()
     {
-        if (loading)
+        if (loading || Deferred)
         {
             return;
         }
@@ -396,18 +414,7 @@ public sealed partial class BindingInspectorViewModel : ObservableObject, IFlush
 
     private void Save()
     {
-        string? error;
-        if (SelectedAction.Definition is not { } definition)
-        {
-            error = session.Update(config => ConfigEditor.RemoveBinding(config, ProfileName, Input));
-        }
-        else
-        {
-            var steps = IsMacro ? Steps.Select(s => s.ToStep()).ToList() : null;
-            var binding = new Binding(Input, definition.Id, ParameterFactory.Collect(Parameters), steps);
-            error = session.Update(config => ConfigEditor.SetBinding(config, ProfileName, binding));
-        }
-
+        var error = session.Update(Apply);
         Status = error ?? "Gespeichert";
         RefreshIssues();
     }
@@ -455,7 +462,7 @@ public sealed partial class KeyInspectorViewModel : ObservableObject, IFlushable
     [ObservableProperty]
     private BindingInspectorViewModel current;
 
-    public KeyInspectorViewModel(KeyViewModel key, Gesture gesture, Func<string, BindingInspectorViewModel> createInspector, Func<string, bool> isBound, InputSwitchViewModel inputSwitch)
+    public KeyInspectorViewModel(KeyViewModel key, Gesture gesture, Func<string, BindingInspectorViewModel> createInspector, Func<string, bool> isBound, InputSwitchViewModel? inputSwitch)
     {
         this.key = key;
         Switch = inputSwitch;
@@ -473,7 +480,8 @@ public sealed partial class KeyInspectorViewModel : ObservableObject, IFlushable
 
     public IReadOnlyList<GestureTabViewModel> Tabs { get; }
 
-    public InputSwitchViewModel Switch { get; }
+    /// <summary>Null in the quick editor: a key that can be pressed there is active anyway.</summary>
+    public InputSwitchViewModel? Switch { get; }
 
     public Gesture Gesture => Tabs.First(t => t.IsActive).Gesture;
 

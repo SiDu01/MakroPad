@@ -25,6 +25,7 @@ public partial class App : Application, IFilePicker
     private MakroPadRuntime? runtime;
     private ShellViewModel? shell;
     private MainWindow? window;
+    private AssignWindow? assignWindow;
     private TrayIcon? trayIcon;
     private ForegroundWatcher? foreground;
     private MediaSessionWatcher? media;
@@ -93,6 +94,7 @@ public partial class App : Application, IFilePicker
             }
         };
         var pad = new PadViewModel(session, runtime, oled, this, recorder, audioSessions);
+        runtime.AssignRequested += key => Dispatcher.UIThread.Post(() => ShowAssignWindow(pad, key));
         // Context: foreground program for automatic profiles, media sessions for the idle screen.
         foreground = new ForegroundWatcher();
         var switcher = new AutoProfileSwitcher(profiles, [Path.GetFileNameWithoutExtension(Environment.ProcessPath ?? "MakroPad.App")]);
@@ -205,7 +207,8 @@ public partial class App : Application, IFilePicker
 
     public async Task<string?> PickProgramAsync()
     {
-        if (window?.StorageProvider is not { } storage)
+        // The quick editor may be open while the main window is hidden in the tray.
+        if (((Window?)assignWindow ?? window)?.StorageProvider is not { } storage)
         {
             return null;
         }
@@ -282,6 +285,31 @@ public partial class App : Application, IFilePicker
             item.Click += (_, _) => runtime.Profiles.Set(name);
             menu.Items.Add(item);
         }
+    }
+
+    /// <summary>Opens the quick editor for <paramref name="key"/>; a second request replaces an open one.</summary>
+    private void ShowAssignWindow(PadViewModel pad, int key)
+    {
+        if (pad.CreateAssignDialog(key) is not { } dialog)
+        {
+            return;
+        }
+
+        assignWindow?.Close();
+        var opened = new AssignWindow { DataContext = dialog };
+        dialog.Closed += opened.Close;
+        opened.Closed += (_, _) =>
+        {
+            // Stops a running shortcut recording, which holds a keyboard hook.
+            dialog.Editor.Flush();
+            if (assignWindow == opened)
+            {
+                assignWindow = null;
+            }
+        };
+        assignWindow = opened;
+        opened.Show();
+        opened.Activate();
     }
 
     private void ShowWindow()

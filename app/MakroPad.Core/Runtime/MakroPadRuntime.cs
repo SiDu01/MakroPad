@@ -38,6 +38,13 @@ public sealed class MakroPadRuntime : IAsyncDisposable
     private AppSettings settings = new();
     private static readonly TimeSpan PauseGrace = TimeSpan.FromSeconds(2);
 
+    public static readonly TimeSpan AssignTimeout = TimeSpan.FromSeconds(10);
+
+    private readonly object assignGate = new();
+    private int? assignFrom;
+    private int? swallowRelease;
+    private ITimer? assignTimer;
+
     private readonly object mediaGate = new();
     private NowPlaying nowPlaying = NowPlaying.None;
     private NowPlaying lastAnnounced = NowPlaying.None;
@@ -108,6 +115,9 @@ public sealed class MakroPadRuntime : IAsyncDisposable
     public event Action<InputEvent>? InputReceived;
 
     public event Action<Binding, ActionResult>? ActionCompleted;
+
+    /// <summary>After <c>binding.assign</c>, the key pressed next (any thread); the UI opens the quick editor for it.</summary>
+    public event Action<int>? AssignRequested;
 
     public void Start()
     {
@@ -227,6 +237,11 @@ public sealed class MakroPadRuntime : IAsyncDisposable
             return;
         }
 
+        if (input is ButtonInput pressed && CaptureForAssign(pressed))
+        {
+            return;
+        }
+
         InputReceived?.Invoke(input);
 
         // Keys go through gesture detection (press, long press, double press) first.
@@ -259,11 +274,88 @@ public sealed class MakroPadRuntime : IAsyncDisposable
 
     private async Task ExecuteAsync(Binding binding, InputEvent input)
     {
+        if (string.Equals(binding.Action, ActionCatalog.AssignActionId, StringComparison.OrdinalIgnoreCase))
+        {
+            StartAssign(input switch { ButtonInput b => b.Id, GestureInput g => g.Id, _ => 0 });
+            return;
+        }
+
         var result = await actionRunner.RunAsync(new ActionContext(binding, input), stopping.Token);
         ActionCompleted?.Invoke(binding, result);
         if (FeedbackBuilder.IsEnabled(Settings.Feedback, result))
         {
             ShowScreen(FeedbackBuilder.ForResult(binding, result));
+        }
+    }
+
+    private void StartAssign(int fromKey)
+    {
+        lock (assignGate)
+        {
+            assignFrom = fromKey;
+            assignTimer?.Dispose();
+            assignTimer = timeProvider.CreateTimer(_ => EndAssign(null), null, AssignTimeout, Timeout.InfiniteTimeSpan);
+        }
+
+        ShowScreen(new ScreenRequest(ScreenType.Status, "Taste belegen", "Zieltaste drücken", Icon: ScreenIcon.Sync, DurationMs: 0));
+    }
+
+    /// <summary>
+    /// While waiting for the target key, its press is taken here instead of running an action;
+    /// pressing the assign key again cancels. The matching release is swallowed too, so gesture detection never sees half a press.
+    /// </summary>
+    private bool CaptureForAssign(ButtonInput button)
+    {
+        int from;
+        lock (assignGate)
+        {
+            if (!button.Pressed)
+            {
+                if (swallowRelease != button.Id)
+                {
+                    return false;
+                }
+
+                swallowRelease = null;
+                return true;
+            }
+
+            if (assignFrom is not { } waiting)
+            {
+                return false;
+            }
+
+            from = waiting;
+            swallowRelease = button.Id;
+        }
+
+        EndAssign(button.Id == from ? null : button.Id);
+        return true;
+    }
+
+    /// <summary>Leaves the waiting state; <paramref name="target"/> is null when cancelled or timed out.</summary>
+    private void EndAssign(int? target)
+    {
+        lock (assignGate)
+        {
+            if (assignFrom is null)
+            {
+                return;
+            }
+
+            assignFrom = null;
+            assignTimer?.Dispose();
+            assignTimer = null;
+        }
+
+        if (target is { } key)
+        {
+            ShowScreen(new ScreenRequest(ScreenType.Status, "Taste belegen", $"Taste {key} am PC einstellen", Icon: ScreenIcon.Ok, DurationMs: 3000));
+            AssignRequested?.Invoke(key);
+        }
+        else
+        {
+            ShowScreen(new ScreenRequest(ScreenType.Status, "Taste belegen", "Abgebrochen", DurationMs: 1500));
         }
     }
 

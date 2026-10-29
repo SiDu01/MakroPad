@@ -199,6 +199,20 @@ public sealed partial class PadViewModel : ObservableObject
         }
     }
 
+    /// <summary>Quick editor for the key pressed after <c>binding.assign</c>; null for keys the pad does not have.</summary>
+    public AssignDialogViewModel? CreateAssignDialog(int keyId)
+    {
+        if (Keys.FirstOrDefault(k => k.Id == keyId) is not { } key)
+        {
+            return null;
+        }
+
+        var dialog = new AssignDialogViewModel(key, session, runtime, factory);
+        // The inspector here may show the same key with the values from before.
+        dialog.Saved += () => Refresh(rebuildInspector: true);
+        return dialog;
+    }
+
     private object CreateInspector(PadElementViewModel element) => element switch
     {
         KeyViewModel key => new KeyInspectorViewModel(

@@ -30,6 +30,7 @@ public sealed class SimulatorRuntimeTests : IAsyncLifetime
                 [
                     new Binding("button:1", "media.playPause"),
                     new Binding("button:16", "profile.next"),
+                    new Binding("button:4", "binding.assign"),
                     new Binding("button:2:long", "media.playPause"),
                     new Binding("button:3", "macro", Steps:
                     [
@@ -82,6 +83,36 @@ public sealed class SimulatorRuntimeTests : IAsyncLifetime
         await WaitUntil(() => linesFromApp.Contains("screen;type=volume;text=Master;value=42;ms=1200"));
         await Task.Delay(200);
         Assert.Equal(0, playPause.Count);
+    }
+
+    [Fact]
+    public async Task AssignKeyCapturesTheNextKeyInsteadOfRunningIt()
+    {
+        var requested = new ConcurrentQueue<int>();
+        runtime.AssignRequested += requested.Enqueue;
+
+        device.PressButton(4);
+        await WaitUntil(() => linesFromApp.Contains("screen;type=status;title=Taste belegen;text=Zieltaste drücken;icon=sync;ms=0"));
+        device.PressButton(1);
+
+        await WaitUntil(() => requested.Contains(1));
+        device.PressButton(1);
+        await WaitUntil(() => playPause.Count == 1);
+        Assert.Single(requested);
+    }
+
+    [Fact]
+    public async Task PressingTheAssignKeyAgainCancels()
+    {
+        var requested = new ConcurrentQueue<int>();
+        runtime.AssignRequested += requested.Enqueue;
+
+        device.PressButton(4);
+        await WaitUntil(() => linesFromApp.Any(line => line.Contains("Zieltaste", StringComparison.Ordinal)));
+        device.PressButton(4);
+
+        await WaitUntil(() => linesFromApp.Contains("screen;type=status;title=Taste belegen;text=Abgebrochen;ms=1500"));
+        Assert.Empty(requested);
     }
 
     [Fact]

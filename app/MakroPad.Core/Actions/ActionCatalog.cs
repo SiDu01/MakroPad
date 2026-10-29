@@ -89,6 +89,8 @@ public static class ActionCatalog
         [
             new("label", false, "Steht auf der Taste und in der Einblendung", "Kamera")
         ]),
+        new(AssignActionId, "Taste belegen", "Ablauf", InputKinds.Button,
+            "Danach gedrückte Taste in einem kleinen Fenster belegen, ohne die App zu öffnen", None),
         new("system.openUrl", "Webseite öffnen", "Öffnen", InputKinds.Button, "Öffnet eine http(s)-Adresse im Standardbrowser",
         [
             new("url", true, "Vollständige Adresse mit https://", "https://www.youtube.com"),
@@ -115,9 +117,12 @@ public static class ActionCatalog
     public const int MaxDelayMs = 60000;
     public const int MaxMacroSteps = 50;
 
-    /// <summary>Actions a step may use (button actions except macro and toggle), plus <see cref="Delay"/>.</summary>
+    /// <summary>Handled by the runtime: the next key pressed opens the quick editor.</summary>
+    public const string AssignActionId = "binding.assign";
+
+    /// <summary>Actions a step may use (button actions except macro, toggle and assign), plus <see cref="Delay"/>.</summary>
     public static IReadOnlyList<ActionDefinition> MacroStepActions { get; } =
-        [Delay, .. All.Where(a => a.Inputs.HasFlag(InputKinds.Button) && !HasSteps(a.Id))];
+        [Delay, .. All.Where(a => a.Inputs.HasFlag(InputKinds.Button) && !HasSteps(a.Id) && a.Id != AssignActionId)];
 
     /// <summary><c>macro</c> and <c>toggle</c> run a list of steps.</summary>
     public static bool HasSteps(string actionId)
