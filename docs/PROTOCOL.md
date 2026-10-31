@@ -60,7 +60,7 @@ Heartbeat:
 Beispiel:
 
 ```text
-hello;proto=2;fw=0.4.0;device=makropad;buttons=16;sliders=3;display=ssd1306-128x64
+hello;proto=2;fw=0.4.1;device=makropad;buttons=16;sliders=3;display=ssd1306-128x64
 button;id=1;state=down
 button;id=1;state=up
 slider;id=1;value=734
@@ -96,7 +96,7 @@ slider;id=1;value=734
 Beispiel:
 
 ```text
-hello-ack;proto=2;app=0.4.0
+hello-ack;proto=2;app=0.4.1
 state;profile=Default;time=18:42:05;date=04.10.2026
 screen;type=volume;title=Lautstärke;text=System;value=72;ms=1200
 screen;type=action;title=Aktion;text=Play%2FPause;icon=ok
