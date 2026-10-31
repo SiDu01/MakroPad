@@ -22,7 +22,7 @@
 // Masse mit "NACHMESSEN" sind Annahmen und sollten am echten Bauteil geprueft werden.
 
 /* [Ausgabe] */
-part = "assembly"; // [assembly, exploded, lid, switch_plate, tray, oled_frame, esp_adapter]
+part = "assembly"; // [assembly, exploded, lid, switch_plate, tray, oled_frame]
 show_dummies = true; // Tastenkappen/Slider/OLED/ESP32 in der Vorschau anzeigen
 
 /* [Gehaeuse] */
@@ -46,7 +46,7 @@ taper = 4;            // weiterer Einzug bis zur Bodenflaeche (je Seite)
 bottom_corner = 6;    // Eckenabschnitt der Bodenflaeche (Achteck)
 
 /* [Schrauben (Deckel <-> Schale)] */
-// 4x M2x10 Zylinderkopf: von unten durch Saeulen der Schale in kurze Dome am Deckel.
+// 5x M2x10 Zylinderkopf: von unten durch Saeulen der Schale in kurze Dome am Deckel.
 // Wo fuer Saeulen kein Platz ist (rechts neben den Slidern, hinten), halten Schnapphaken.
 boss_d = 5;          // Dom-Durchmesser am Deckel
 boss_h = 5;          // Domlaenge unter dem Deckel
@@ -128,12 +128,11 @@ oled_frame_fit = 0.15;             // Spiel Rahmen <-> Tasche
 esp_l = 64;           // Gesamtlaenge (gemessen)
 esp_w = 28;           // Breite am USB-Ende (gemessen)
 esp_tip = [6, 18];    // schmales Ende gegenueber USB: [Laenge, Breite] (gemessen)
-esp_adapter_old_l = 74; // Boardlaenge, fuer die eine bereits gedruckte Schale gebaut ist (Adapter)
 esp_pcb_t = 1.6;
-esp_pins = 8.5;       // Stiftleisten unter der Platine
-esp_x0 = 14;          // USB-Ende der Platine (Abstand zur linken Deckelkante)
-esp_y0 = 76.5;        // Vorderkante der Platine (Weltkoordinate)
-usb_slot = [27, 8];   // Ausschnitt in der linken Seitenwand (deckt beide USB-C-Buchsen ab)
+esp_solder = 1.5;     // Loetstellen unter der Platine (keine Stiftleisten, Kabel direkt angeloetet)
+esp_comp_h = 3.2;     // Bauteile auf der Oberseite (Modul, USB-Buchsen)
+esp_back = 102;       // hintere Platinenkante (Weltkoordinate); mehr geht wegen der Bodenecke nicht
+usb_slot = [27, 8];   // Ausschnitt in der rechten Seitenwand (deckt beide USB-C-Buchsen ab)
 usb_conn_h = 3.2;
 
 /* [Fuesse] */
@@ -177,23 +176,24 @@ oled_frame_size = oled_frame_max - oled_frame_min;
 oled_frame_c = (oled_frame_min + oled_frame_max) / 2;
 oled_c = oled_frame_c;                           // Platinenmitte = Rahmenmitte
 
-// ESP32 liegt waagerecht hinten links auf Stuetzen, USB-Ende zur linken Seitenwand
-esp_zb = floor_t + esp_pins + 0.5;   // Platinen-Unterseite (Welt)
-esp_x1 = esp_x0 + esp_l;
-esp_y1 = esp_y0 + esp_w;
-esp_cy = (esp_y0 + esp_y1) / 2;
+// ESP32 liegt quer unter den Slidern an der Rueckwand, flach ueber dem Boden, USB-Ende rechts
+esp_zb = floor_t + esp_solder;       // Platinen-Unterseite (Welt)
+esp_x1 = W - tray_offset[0] - taper - wall - 0.5;   // USB-Ende kurz vor der Innenwand am Boden
+esp_x0 = esp_x1 - esp_l;
+esp_cy = esp_back - esp_w / 2;
 usb_z = esp_zb + esp_pcb_t + usb_conn_h / 2;
 
 // Schraubsaeulen in den Innenecken der Schale
 // Innenkanten der Schale im Bandbereich (Welt)
 tray_in_x = [tray_offset[0] + wall, W - tray_offset[0] - wall];
 tray_in_y = [lid_ys + tray_offset[1] + wall, lid_ys + Dw - tray_offset[1] - wall];
-pillar_y = [tray_in_y[0] + fit + pillar_d / 2, tray_in_y[1] - fit - pillar_d / 2];
+// Schraubkanal bleibt mit 1 mm Rand innerhalb der Bodenflaeche, damit er die Facetten nicht anschneidet
+pillar_y = [lid_ys + tray_offset[1] + taper + 1 + screw_head_d / 2, lid_ys + Dw - tray_offset[1] - taper - 1 - screw_head_d / 2];
 gap_x = (keys_x0 + keys_w + well_gap + well_wall + sl_x0) / 2;   // Mitte der Luecke Tasten/Slider
 boss_pos = [[keys_x0 + key_pitch, pillar_y[0]], [gap_x, pillar_y[0]],
-            [gap_x, pillar_y[1]], [keys_x0 + 4.4 * key_pitch, pillar_y[1]]];
+            [keys_x0 + key_pitch, pillar_y[1]], [keys_x0 + 3 * key_pitch, pillar_y[1]], [gap_x, pillar_y[1]]];
 // Schnapphaken: [Punkt auf der Innenwand der Schale, Richtung nach aussen]
-hooks = [[[tray_in_x[1], lid_ys + 30], [1, 0]], [[tray_in_x[1], lid_ys + Dw - 30], [1, 0]],
+hooks = [[[tray_in_x[1], lid_ys + 30], [1, 0]], [[tray_in_x[1], lid_ys + Dw / 2], [1, 0]],   // hinten rechts sitzt der USB-Ausschnitt
          [[keys_x0 + 1.5 * key_pitch, tray_in_y[1]], [0, 1]], [[sl_x0 + sl_w / 2, tray_in_y[1]], [0, 1]]];
 feet_pos = [[feet_inset[0], lid_ys + feet_inset[1]], [W - feet_inset[0], lid_ys + feet_inset[1]],
             [feet_inset[0], lid_ys + Dw - feet_inset[1]], [W - feet_inset[0], lid_ys + Dw - feet_inset[1]]];
@@ -481,58 +481,28 @@ module oled_frame() {
 }
 
 // ---------- Unterschale ----------
-module esp_cradle() {
-    support_w = 16;   // am USB-Ende nur zwischen den Stiftleisten abstuetzen
-    tip_x0 = esp_x1 - esp_tip[0];
+// ESP-System: Platine laengs y (schmales Ende y = 0, USB-Ende y = esp_l), mittig auf x = 0 -> Welt
+module esp_place() translate([esp_x0, esp_cy, 0]) rotate(-90) children();
+
+module esp_cradle() esp_place() {
+    support_w = 16;   // am USB-Ende nur zwischen den Loetaugen abstuetzen
     // Auflage am USB-Ende
-    translate([esp_x0 + 0.5, esp_cy - support_w / 2, 0]) cube([3, support_w, esp_zb]);
+    translate([-support_w / 2, esp_l - 3.5, 0]) cube([support_w, 3, esp_zb]);
     // Auflage unter dem schmalen Ende + Anschlag
-    translate([tip_x0 + 0.5, esp_cy - esp_tip[1] / 2 + 1, 0]) cube([esp_tip[0] - 0.5, esp_tip[1] - 2, esp_zb]);
-    translate([esp_x1 + fit, esp_cy - esp_tip[1] / 2 + 1, 0]) cube([2.3 - fit, esp_tip[1] - 2, esp_zb + 3]);
+    translate([-esp_tip[1] / 2 + 1, 0.5, 0]) cube([esp_tip[1] - 2, esp_tip[0] - 0.5, esp_zb]);
+    translate([-esp_tip[1] / 2 + 1, -2.3, 0]) cube([esp_tip[1] - 2, 2.3 - fit, esp_zb + 3]);
     // seitliche Fuehrungen: am USB-Ende (volle Breite) und am schmalen Ende
-    for (sy = [-1, 1]) {
-        translate([esp_x0 + 4, esp_cy + sy * (esp_w / 2 + fit) + (sy < 0 ? -1.6 : 0), 0])
-            cube([6, 1.6, esp_zb + esp_pcb_t + 2]);
-        translate([tip_x0 + 0.5, esp_cy + sy * (esp_tip[1] / 2 + fit) + (sy < 0 ? -1.6 : 0), 0])
-            cube([esp_tip[0] - 0.5, 1.6, esp_zb + esp_pcb_t + 2]);
+    for (sx = [-1, 1]) {
+        esp_guide(sx, esp_w / 2 + fit, esp_l - 10, 6);
+        esp_guide(sx, esp_tip[1] / 2 + fit, 0.5, esp_tip[0] - 0.5);
     }
 }
 
-// Adapter fuer eine Schale, die fuer ein laengeres Board (esp_adapter_old_l) gedruckt wurde
-// (Welt, eingebaute Lage). Er steht auf dem Boden, liegt mit einer Bruecke auf der alten
-// Auflage, greift mit zwei Zapfen in die Spalten neben ihr und hakt hinter dem alten Anschlag ein.
-module esp_adapter() {
-    old_x1 = esp_x0 + esp_adapter_old_l;
-    old_sup_x0 = old_x1 - esp_tip[0] + 0.5;                  // alte Auflage: old_sup_x0 .. old_x1
-    old_stop = [old_x1 + fit, old_x1 + 2.3];                  // alter Anschlag (x)
-    tip_x0 = esp_x1 - esp_tip[0];
-    half_sup = esp_tip[1] / 2 - 1;                            // halbe Breite von Auflage und Anschlag
-    half_gd = esp_tip[1] / 2 + fit;                           // Innenkante der alten Fuehrungen
-    half_out = half_gd + 1.6;                                 // Aussenkante der Fuehrungen
-    h = esp_zb - floor_t;                                     // Auflagehoehe ueber dem Boden
-    stop_top = h + 3;                                         // Oberkante des alten Anschlags
-    top = stop_top + 1.6;                                     // Oberkante von Bruecke und Haken
-    finger_t = half_gd - half_sup - 0.2;
-    translate([0, esp_cy, floor_t]) {
-        // Sockel unter dem schmalen Ende des neuen Boards
-        translate([tip_x0 + 0.5, -half_out, 0]) cube([old_sup_x0 - 0.2 - tip_x0 - 0.5, 2 * half_out, h]);
-        // Seitenfuehrungen am schmalen Ende
-        for (sy = [-1, 1])
-            translate([tip_x0 + 0.5, sy > 0 ? half_gd : -half_out, 0])
-                cube([esp_tip[0] - 0.5, 1.6, h + esp_pcb_t + 2]);
-        // Bruecke: Anschlag fuer das neue Board, liegt auf der alten Auflage (zwischen den alten Fuehrungen)
-        translate([esp_x1 + fit, -(half_gd - 0.2), h]) cube([old_x1 - 0.1 - esp_x1 - fit, 2 * (half_gd - 0.2), top - h]);
-        // Haken ueber den alten Anschlag, Lippe mit Fase (druckbar)
-        translate([old_x1 - 0.11, -half_sup, stop_top + 0.1]) cube([old_stop[1] - old_x1 + 0.31 + 1.5, 2 * half_sup, top - stop_top - 0.1]);
-        hull() {
-            translate([old_stop[1] + 0.2, -half_sup, stop_top - 0.5]) cube([1.5, 2 * half_sup, top - stop_top + 0.5]);
-            translate([old_stop[1] + 0.2, -half_sup, stop_top - 2]) cube([0.4, 2 * half_sup, 0.01]);
-        }
-        // Zapfen in die Spalten zwischen alter Auflage und alten Fuehrungen
-        for (sy = [-1, 1])
-            translate([old_sup_x0 - 0.21, sy > 0 ? half_sup + 0.1 : -half_sup - 0.1 - finger_t, 0])
-                cube([old_x1 - 0.1 - old_sup_x0 + 0.21, finger_t, h + 0.01]);
-    }
+// Seitenfuehrung: innen senkrecht an der Platinenkante, nach unten auf 4 mm verbreitert (bruchfest)
+module esp_guide(sx, xi, y, len) {
+    h = esp_zb + esp_pcb_t + 2;
+    hull() for (t = [[1.6, h - 0.01], [4, 0]])
+        translate([sx * xi + (sx < 0 ? -t[0] : 0), y, t[1]]) cube([t[0], len, 0.01]);
 }
 
 // Freiraum der Bauteile, der von den Saeulen frei bleiben muss
@@ -548,7 +518,9 @@ module component_clearance() {
 module pillars() {
     difference() {
         for (p = boss_pos) intersection() {
-            translate([p[0], p[1], 0]) cylinder(d = pillar_d, h = 300);
+            // Saeule mit Steg zur naechsten Wand (vorne/hinten), wird an der Schalenaussenseite gekappt
+            hull() for (dy = [0, p[1] < lid_ys + Dw / 2 ? -10 : 10])
+                translate([p[0], p[1] + dy, 0]) cylinder(d = pillar_d, h = 300);
             tilted() translate([-50, -50, pillar_top_zt - 300]) cube([W + 100, D + 100, 300]);
         }
         component_clearance();
@@ -580,8 +552,8 @@ module tray() {
         // Rasttaschen fuer die Schnapphaken
         for (h = hooks) hook_recess(h);
 
-        // USB-Ausschnitt in der linken Seitenwand
-        translate([esp_x0 + 2, esp_cy, usb_z]) rotate([0, -90, 0])
+        // USB-Ausschnitt in der rechten Seitenwand
+        translate([esp_x1 - 2, esp_cy, usb_z]) rotate([0, 90, 0])
             linear_extrude(40) slot2d(usb_slot[0], usb_slot[1]);
 
         // Gummifuesse
@@ -615,9 +587,9 @@ module dummies() {
 }
 
 module esp_dummy() {
-    color("#1d3b8a", 0.8) translate([esp_x0, esp_y0, esp_zb]) {
-        cube([esp_l - esp_tip[0], esp_w, esp_pcb_t]);
-        translate([esp_l - esp_tip[0], (esp_w - esp_tip[1]) / 2, 0]) cube([esp_tip[0], esp_tip[1], esp_pcb_t]);
+    color("#1d3b8a", 0.8) esp_place() translate([-esp_w / 2, 0, esp_zb]) {
+        translate([0, esp_tip[0], 0]) cube([esp_w, esp_l - esp_tip[0], esp_pcb_t]);
+        translate([(esp_w - esp_tip[1]) / 2, 0, 0]) cube([esp_tip[1], esp_tip[0], esp_pcb_t]);
     }
 }
 
@@ -630,8 +602,6 @@ if (part == "lid") {
     translate([0, 0, -plate_bot]) switch_plate();
 } else if (part == "tray") {
     tray();
-} else if (part == "esp_adapter") {
-    translate([-esp_x0, -esp_cy, -floor_t]) esp_adapter();
 } else if (part == "oled_frame") {
     // aufrecht drucken (Zapfen auf dem Druckbett)
     translate([-oled_frame_c[0], -oled_frame_c[1], -oled_frame_bot]) oled_frame();
