@@ -1,16 +1,16 @@
-# Graph Report - MakroPad  (2026-10-30)
+# Graph Report - MakroPad  (2026-10-31)
 
 ## Corpus Check
-- 125 files · ~68,746 words
+- 125 files · ~66,730 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 3416 nodes · 4868 edges · 328 communities (234 shown, 94 thin omitted)
+- 3416 nodes · 4868 edges · 327 communities (233 shown, 94 thin omitted)
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 88 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `45b30b13`
+- Built from commit: `e081cf66`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -257,21 +257,21 @@
 ## Surprising Connections (you probably didn't know these)
 - `MakroPad Firmware` --semantically_similar_to--> `ESP32-S3 Firmware`  [INFERRED] [semantically similar]
   firmware/MakroPadFirmware/README.md → README.md
-- `IdleScreenOrchestrator` --references--> `DateTime`  [EXTRACTED]
-  legacy/app/MakroPad.App/Services/IdleScreenOrchestrator.cs → app/MakroPad.Core/Display/OledMirror.cs
-- `SerialMakroPadConnection` --references--> `SerialPort`  [EXTRACTED]
-  legacy/app/MakroPad.Device/SerialMakroPadConnection.cs → app/MakroPad.Device/SerialLineTransport.cs
-- `MainWindowViewModel` --references--> `IReadOnlyDictionary`  [EXTRACTED]
-  app/MakroPad.App/ViewModels/MainWindowViewModel.cs → legacy/app/MakroPad.App/Services/ActionDefinitionCatalog.cs
-- `MainWindowViewModel` --references--> `SimulatedMakroPadConnection`  [EXTRACTED]
-  app/MakroPad.App/ViewModels/MainWindowViewModel.cs → legacy/app/MakroPad.App/Services/DeviceSessionService.cs
+- `PadViewModel` --references--> `TimeSpan`  [EXTRACTED]
+  app/MakroPad.App/ViewModels/PadViewModel.cs → legacy/app/MakroPad.App/ViewModels/PadViewModel.cs
+- `PadViewModel` --references--> `ProfilesEditorViewModel`  [EXTRACTED]
+  app/MakroPad.App/ViewModels/PadViewModel.cs → legacy/app/MakroPad.App/ViewModels/PadViewModel.cs
+- `PadViewModel` --references--> `Func`  [EXTRACTED]
+  app/MakroPad.App/ViewModels/PadViewModel.cs → legacy/app/MakroPad.App/ViewModels/PadViewModel.cs
+- `PadViewModel` --references--> `int`  [EXTRACTED]
+  app/MakroPad.App/ViewModels/PadViewModel.cs → legacy/app/MakroPad.App/ViewModels/PadViewModel.cs
 
 ## Hyperedges (group relationships)
 - **Serial Handshake Flow** — protocol_hello_message, protocol_hello_ack_message, app_readme_serial_connection, firmware_readme_makropad_firmware [EXTRACTED 1.00]
 - **Input to Action Flow** — hardware_buttons_gpio_pullup, hardware_sliders_adc1, protocol_button_message, protocol_slider_message, app_readme_action_pipeline [EXTRACTED 1.00]
 - **OLED Display Configuration Flow** — hardware_oled_i2c_ssd1306, protocol_display_message, protocol_config_message, protocol_action_result_message, app_readme_oled_default_screen [EXTRACTED 1.00]
 
-## Communities (328 total, 94 thin omitted)
+## Communities (327 total, 94 thin omitted)
 
 ### Community 0 - "Community 0"
 Cohesion: 0.06
@@ -286,8 +286,8 @@ Cohesion: 0.08
 Nodes (21): CancellationTokenSource, DeviceConnectionState, int, object, TimeSpan, DateTimeOffset, CancellationTokenSource, DateTimeOffset (+13 more)
 
 ### Community 4 - "Community 4"
-Cohesion: 0.11
-Nodes (11): bool, ConfigSession, Func, IFilePicker, IShortcutRecorder, MakroPadRuntime, object, string (+3 more)
+Cohesion: 0.13
+Nodes (15): bool, ConfigSession, Func, IFilePicker, int, IShortcutRecorder, MakroPadRuntime, object (+7 more)
 
 ### Community 6 - "Community 6"
 Cohesion: 0.18
@@ -670,8 +670,8 @@ Cohesion: 0.47
 Nodes (3): daysInMonth(), read(), set()
 
 ### Community 263 - "Community 263"
-Cohesion: 0.17
-Nodes (11): int, ParameterFactory, bool, Func, int, TimeSpan, PadViewModel, PadSlotViewModel (+3 more)
+Cohesion: 0.13
+Nodes (7): bool, Func, int, TimeSpan, PadViewModel, PadSlotViewModel, ProfilesEditorViewModel
 
 ### Community 264 - "Community 264"
 Cohesion: 0.31

@@ -2018,7 +2018,7 @@
       "source_file": "app/MakroPad.App/ViewModels/PadViewModel.cs",
       "source_location": "L15",
       "id": "viewmodels_padviewmodel_padviewmodel",
-      "community": 263,
+      "community": 4,
       "norm_label": "padviewmodel"
     },
     {
@@ -2054,7 +2054,7 @@
       "source_file": "app/MakroPad.App/ViewModels/PadViewModel.cs",
       "source_location": "L21",
       "id": "app_makropad_app_viewmodels_padviewmodel_cs_parameterfactory",
-      "community": 263,
+      "community": 4,
       "norm_label": "parameterfactory"
     },
     {
@@ -2099,7 +2099,7 @@
       "source_file": "app/MakroPad.App/ViewModels/PadViewModel.cs",
       "source_location": "L95",
       "id": "viewmodels_padviewmodel_padviewmodel_select",
-      "community": 248,
+      "community": 4,
       "norm_label": ".select()"
     },
     {
@@ -2207,7 +2207,7 @@
       "source_file": "app/MakroPad.App/ViewModels/PadViewModel.cs",
       "source_location": "L203",
       "id": "viewmodels_padviewmodel_padviewmodel_createassigndialog",
-      "community": 248,
+      "community": 4,
       "norm_label": ".createassigndialog()"
     },
     {
@@ -2216,7 +2216,7 @@
       "source_file": "app/MakroPad.App/ViewModels/PadViewModel.cs",
       "source_location": "L216",
       "id": "viewmodels_padviewmodel_padviewmodel_createinspector",
-      "community": 248,
+      "community": 4,
       "norm_label": ".createinspector()"
     },
     {
@@ -2225,7 +2225,7 @@
       "source_file": "app/MakroPad.App/ViewModels/PadViewModel.cs",
       "source_location": "L232",
       "id": "viewmodels_padviewmodel_padviewmodel_refresh",
-      "community": 248,
+      "community": 4,
       "norm_label": ".refresh()"
     },
     {
@@ -2234,7 +2234,7 @@
       "source_file": "app/MakroPad.App/ViewModels/PadViewModel.cs",
       "source_location": "L283",
       "id": "viewmodels_padviewmodel_padviewmodel_find",
-      "community": 248,
+      "community": 4,
       "norm_label": ".find()"
     },
     {
@@ -9576,7 +9576,7 @@
       "label": "setup()",
       "file_type": "code",
       "source_file": "firmware/src/input.cpp",
-      "source_location": "L33",
+      "source_location": "L34",
       "id": "src_input_setup",
       "community": 202,
       "norm_label": "setup()"
@@ -9585,7 +9585,7 @@
       "label": "poll()",
       "file_type": "code",
       "source_file": "firmware/src/input.cpp",
-      "source_location": "L41",
+      "source_location": "L42",
       "id": "src_input_poll",
       "community": 202,
       "norm_label": "poll()"
@@ -11350,7 +11350,7 @@
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/PadViewModel.cs",
       "source_location": "L21",
-      "community": 263,
+      "community": 4,
       "norm_label": "parameterfactory",
       "id": "parameterfactory"
     },
@@ -25597,7 +25597,7 @@
       "file_type": "code",
       "source_file": "app/MakroPad.App/ViewModels/PadViewModel.cs",
       "source_location": "L34",
-      "community": 263,
+      "community": 4,
       "norm_label": "int",
       "id": "app_makropad_app_viewmodels_padviewmodel_cs_int"
     },
@@ -49476,9 +49476,9 @@
       "source_file": "hardware/schematic/makropad_schematic.py",
       "source_location": "L15",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "hardware_schematic_makropad_schematic_py",
-      "target": "schematic_makropad_schematic_uid",
-      "confidence_score": 1.0
+      "target": "schematic_makropad_schematic_uid"
     },
     {
       "relation": "contains",
@@ -49486,9 +49486,9 @@
       "source_file": "hardware/schematic/makropad_schematic.py",
       "source_location": "L41",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "hardware_schematic_makropad_schematic_py",
-      "target": "schematic_makropad_schematic_pin",
-      "confidence_score": 1.0
+      "target": "schematic_makropad_schematic_pin"
     },
     {
       "relation": "contains",
@@ -49496,9 +49496,9 @@
       "source_file": "hardware/schematic/makropad_schematic.py",
       "source_location": "L46",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "hardware_schematic_makropad_schematic_py",
-      "target": "schematic_makropad_schematic_rect",
-      "confidence_score": 1.0
+      "target": "schematic_makropad_schematic_rect"
     },
     {
       "relation": "contains",
@@ -49506,9 +49506,9 @@
       "source_file": "hardware/schematic/makropad_schematic.py",
       "source_location": "L51",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "hardware_schematic_makropad_schematic_py",
-      "target": "schematic_makropad_schematic_poly",
-      "confidence_score": 1.0
+      "target": "schematic_makropad_schematic_poly"
     },
     {
       "relation": "contains",
@@ -49516,9 +49516,9 @@
       "source_file": "hardware/schematic/makropad_schematic.py",
       "source_location": "L56",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "hardware_schematic_makropad_schematic_py",
-      "target": "schematic_makropad_schematic_libsym",
-      "confidence_score": 1.0
+      "target": "schematic_makropad_schematic_libsym"
     },
     {
       "relation": "contains",
@@ -49526,9 +49526,9 @@
       "source_file": "hardware/schematic/makropad_schematic.py",
       "source_location": "L89",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "hardware_schematic_makropad_schematic_py",
-      "target": "schematic_makropad_schematic_place",
-      "confidence_score": 1.0
+      "target": "schematic_makropad_schematic_place"
     },
     {
       "relation": "contains",
@@ -49536,9 +49536,9 @@
       "source_file": "hardware/schematic/makropad_schematic.py",
       "source_location": "L98",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "hardware_schematic_makropad_schematic_py",
-      "target": "schematic_makropad_schematic_stub",
-      "confidence_score": 1.0
+      "target": "schematic_makropad_schematic_stub"
     },
     {
       "relation": "contains",
@@ -49546,9 +49546,9 @@
       "source_file": "hardware/schematic/makropad_schematic.py",
       "source_location": "L111",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "hardware_schematic_makropad_schematic_py",
-      "target": "schematic_makropad_schematic_text",
-      "confidence_score": 1.0
+      "target": "schematic_makropad_schematic_text"
     },
     {
       "relation": "contains",
@@ -49556,9 +49556,9 @@
       "source_file": "hardware/schematic/makropad_schematic.py",
       "source_location": "L117",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "hardware_schematic_makropad_schematic_py",
-      "target": "schematic_makropad_schematic_frame",
-      "confidence_score": 1.0
+      "target": "schematic_makropad_schematic_frame"
     },
     {
       "relation": "calls",
@@ -49567,9 +49567,9 @@
       "source_file": "hardware/schematic/makropad_schematic.py",
       "source_location": "L92",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "schematic_makropad_schematic_place",
-      "target": "schematic_makropad_schematic_uid",
-      "confidence_score": 1.0
+      "target": "schematic_makropad_schematic_uid"
     },
     {
       "relation": "calls",
@@ -49578,9 +49578,9 @@
       "source_file": "hardware/schematic/makropad_schematic.py",
       "source_location": "L101",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "schematic_makropad_schematic_stub",
-      "target": "schematic_makropad_schematic_uid",
-      "confidence_score": 1.0
+      "target": "schematic_makropad_schematic_uid"
     },
     {
       "relation": "calls",
@@ -49589,9 +49589,9 @@
       "source_file": "hardware/schematic/makropad_schematic.py",
       "source_location": "L114",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "schematic_makropad_schematic_text",
-      "target": "schematic_makropad_schematic_uid",
-      "confidence_score": 1.0
+      "target": "schematic_makropad_schematic_uid"
     },
     {
       "relation": "calls",
@@ -49600,9 +49600,9 @@
       "source_file": "hardware/schematic/makropad_schematic.py",
       "source_location": "L119",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "schematic_makropad_schematic_frame",
-      "target": "schematic_makropad_schematic_uid",
-      "confidence_score": 1.0
+      "target": "schematic_makropad_schematic_uid"
     },
     {
       "relation": "contains",
@@ -81885,5 +81885,5 @@
       "source_file": "app/README.md"
     }
   ],
-  "built_at_commit": "45b30b13ab8a05d10685144e8adbe9749ebff385"
+  "built_at_commit": "e081cf66b0d234b198fac0c376285a4c18e492b3"
 }
