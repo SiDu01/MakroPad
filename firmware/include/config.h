@@ -18,9 +18,9 @@ constexpr uint8_t ProtocolVersion = 2;
 // 12 13 14 15 16
 constexpr uint8_t ButtonPins[] = {
   4, 5, 6,
-  7, 10, 11,
-  12, 13, 14, 15, 16,
-  17, 18, 21, 39, 40
+  18, 10, 11,
+  12, 13, 14, 17, 16,
+  15, 7, 21, 39, 40
 };
 constexpr size_t ButtonCount = sizeof(ButtonPins) / sizeof(ButtonPins[0]);
 static_assert(ButtonCount == 16, "MakroPad has 16 buttons");
