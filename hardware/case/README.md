@@ -20,6 +20,7 @@ Parametrisches OpenSCAD-Modell: [makropad_case.scad](makropad_case.scad).
 | `switch_plate` | Platte auf dem Bett |
 | `tray` | Boden auf dem Bett |
 | `oled_frame` | aufrecht, Zapfen auf dem Bett; z. B. Silk-Silber-PLA |
+| Keycap ([makropad_keycap.scad](makropad_keycap.scad), 16×) | FDM: aufrecht, offene Unterseite auf dem Bett. SLA: 30–45° gekippt, Oberseite zur Plattform, Stützen nur an Kante/Innenwand |
 
 ```powershell
 foreach ($p in "lid", "switch_plate", "tray", "oled_frame") {
@@ -28,6 +29,18 @@ foreach ($p in "lid", "switch_plate", "tray", "oled_frame") {
 ```
 
 `part` = `assembly` | `exploded` | `lid` | `switch_plate` | `tray` | `oled_frame`.
+Keycap (MX-Kreuz, blanko, flach mit leichter Mulde), `printer` = `fdm` | `sla` wählt das Spiel im Kreuz:
+
+```powershell
+foreach ($p in "fdm", "sla") {
+  & "D:\Program Files\OpenSCAD\openscad.exe" -D "printer=""$p""" -o "export\makropad_keycap_$p.stl" makropad_keycap.scad
+}
+```
+
+Sitzt die Kappe zu stramm oder zu locker, `cross_fdm` bzw. `cross_sla` anpassen.
+FDM zeigt auf der gewölbten Oberseite Schichtstufen; für eine glatte Oberfläche SLA nehmen
+(zähes oder ABS-ähnliches Resin, Kreuz vor dem Nachhärten freimachen).
+
 Alle Maße stehen oben in der Datei (im OpenSCAD-Customizer editierbar).
 Werte mit `NACHMESSEN` sind Annahmen.
 
