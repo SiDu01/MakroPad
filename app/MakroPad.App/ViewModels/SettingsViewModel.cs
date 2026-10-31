@@ -24,6 +24,9 @@ public sealed partial class SettingsViewModel : ObservableObject
     private int sliderDeadbandPercent;
 
     [ObservableProperty]
+    private bool invertSliders;
+
+    [ObservableProperty]
     private ThemeOption theme;
 
     [ObservableProperty]
@@ -73,6 +76,8 @@ public sealed partial class SettingsViewModel : ObservableObject
 
     partial void OnSliderDeadbandPercentChanged(int value) => Save();
 
+    partial void OnInvertSlidersChanged(bool value) => Save();
+
     partial void OnDebugModeChanged(bool value) => Save();
 
     partial void OnLongPressMsChanged(int value) => Save();
@@ -108,6 +113,7 @@ public sealed partial class SettingsViewModel : ObservableObject
         StartInTray = settings.StartInTray;
         StartWithWindows = settings.StartWithWindows;
         SliderDeadbandPercent = settings.SliderDeadbandPercent;
+        InvertSliders = settings.InvertSliders;
         Theme = Themes.FirstOrDefault(t => t.Value == settings.Theme) ?? Themes[0];
         DebugMode = settings.DebugMode;
         LongPressMs = settings.LongPressMs;
@@ -129,6 +135,7 @@ public sealed partial class SettingsViewModel : ObservableObject
                 StartInTray = StartInTray,
                 StartWithWindows = StartWithWindows,
                 SliderDeadbandPercent = Math.Clamp(SliderDeadbandPercent, 0, 25),
+                InvertSliders = InvertSliders,
                 Theme = Theme.Value,
                 DebugMode = DebugMode,
                 LongPressMs = Math.Clamp(LongPressMs, 200, 3000),

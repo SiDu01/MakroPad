@@ -23,6 +23,7 @@ ersetzt.
     "startInTray": false,          // ohne Fenster im Infobereich starten
     "startWithWindows": false,     // Autostart für den aktuellen Benutzer
     "sliderDeadbandPercent": 2,    // Mindeständerung für Lautstärke-Slider (0–25)
+    "invertSliders": false,        // alle Slider umdrehen (oben ↔ unten)
     "longPressMs": 500,            // ab so langem Halten zählt ein langer Druck (200–3000)
     "doublePressMs": 300,          // zweiter Druck innerhalb dieser Zeit = Doppeldruck (100–1000)
     "theme": "system",             // system, light oder dark

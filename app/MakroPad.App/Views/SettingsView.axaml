@@ -145,6 +145,12 @@
                 </DockPanel>
                 <TextBlock Classes="muted"
                            Text="Kleinere Bewegungen werden ignoriert, damit die Lautstärke nicht zittert. 0 % und 100 % werden immer erreicht. Bei 0 % reagiert der Slider auf jede Änderung." />
+                <DockPanel Classes="row">
+                    <ToggleSwitch DockPanel.Dock="Right" IsChecked="{Binding InvertSliders}" />
+                    <TextBlock Text="Slider invertieren" />
+                </DockPanel>
+                <TextBlock Classes="muted"
+                           Text="Für Slider, die andersherum verdrahtet sind: oben wird zu unten." />
             </StackPanel>
 
             <StackPanel Spacing="8">

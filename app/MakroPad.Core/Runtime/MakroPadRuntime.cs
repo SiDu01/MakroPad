@@ -242,6 +242,11 @@ public sealed class MakroPadRuntime : IAsyncDisposable
             return;
         }
 
+        if (input is SliderInput slider && Settings.InvertSliders)
+        {
+            input = slider with { Value = SliderInput.MaxValue - slider.Value };
+        }
+
         InputReceived?.Invoke(input);
 
         // Keys go through gesture detection (press, long press, double press) first.

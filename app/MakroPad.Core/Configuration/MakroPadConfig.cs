@@ -56,6 +56,9 @@ public sealed record AppSettings
     /// <summary>Minimum slider change in percent before a volume action runs again (0/100 % always pass).</summary>
     public int SliderDeadbandPercent { get; init; } = 2;
 
+    /// <summary>Flips every slider (0 ↔ 1000) for pots wired the other way round.</summary>
+    public bool InvertSliders { get; init; }
+
     /// <summary>Holding a key at least this long counts as a long press.</summary>
     public int LongPressMs { get; init; } = 500;
 

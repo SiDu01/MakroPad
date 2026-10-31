@@ -124,6 +124,15 @@ public sealed class SimulatorRuntimeTests : IAsyncLifetime
     }
 
     [Fact]
+    public async Task InvertedSliderReportsTheMirroredPercent()
+    {
+        runtime.Settings = runtime.Settings with { InvertSliders = true };
+        device.MoveSlider(1, 300);
+
+        await WaitUntil(() => linesFromApp.Contains("screen;type=volume;text=Master;value=70;ms=1200"));
+    }
+
+    [Fact]
     public async Task ProfileButtonSwitchesBindingsAndShowsProfile()
     {
         device.PressButton(16);
