@@ -25,7 +25,8 @@ int readSliderRaw(uint8_t pin) {
     samples[index] = analogRead(pin);
     delayMicroseconds(150);
   }
-  return makropad::trimmedMean(samples, config::SliderSampleCount, 5);
+  // The pots are wired so the top end reads 0; flip it so top means 1000.
+  return 4095 - makropad::trimmedMean(samples, config::SliderSampleCount, 5);
 }
 
 }  // namespace
