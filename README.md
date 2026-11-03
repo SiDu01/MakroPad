@@ -9,7 +9,7 @@ Bluetooth LE mit einer Windows-Companion-App verbunden.
 
 ## Status
 
-Version 0.4.1. Funktioniert auf der Hardware:
+Version 0.5.0. Funktioniert auf der Hardware:
 
 - 16 Tasten und 3 Slider mit Aktionen (Medien, System-/Programm-/Vordergrund-
   Lautstärke, Tastenkombinationen, Webseiten, Programme, Profile)
