@@ -30,6 +30,11 @@ nachlesbar.
   Verbindung, ein `hello-ack` über Bluetooth übernimmt eine USB-Verbindung nie.
   Die App auf Bluetooth meldet dann `Unresponsive` und verbindet sich wieder,
   sobald USB getrennt ist.
+- Manuell umschalten: Taste 12 halten und 11 drücken. Das Gerät legt sich auf
+  den anderen Kanal fest, ignoriert den bisherigen bis zum nächsten Umschalten
+  oder Neustart und zeigt den Kanal kurz auf dem OLED. Taste 12 sendet deshalb
+  `down` erst zusammen mit `up` beim Loslassen (kein Lang-Drücken); bei der
+  Kombination sendet weder 12 noch 11 etwas.
 - Eine Nachricht pro Zeile, Ende `\n` (`\r\n` wird toleriert).
 - Führende/abschließende Leerzeichen werden entfernt, leere Zeilen ignoriert.
 - Maximale Zeilenlänge: 256 Zeichen.

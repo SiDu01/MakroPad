@@ -2,6 +2,7 @@
 
 #include <Arduino.h>
 
+#include "button_combo.h"
 #include "config.h"
 #include "debouncer.h"
 #include "hid.h"
@@ -16,6 +17,7 @@ namespace input {
 namespace {
 
 makropad::Debouncer buttons[config::ButtonCount];
+makropad::ButtonCombo channelCombo(config::ChannelSwitchHoldButton, config::ChannelSwitchButton);
 makropad::SliderFilter sliders[config::ActiveSliderCount];
 uint32_t lastSliderPollMs = 0;
 
@@ -45,9 +47,17 @@ void poll(uint32_t nowMs) {
     if (!buttons[index].update(pressed, nowMs)) {
       continue;
     }
-    const uint8_t id = static_cast<uint8_t>(index + 1);
-    hostlink::send(LineBuilder("button").add("id", static_cast<long>(id)).add("state", pressed ? "down" : "up").str());
-    hid::onButton(id, pressed, nowMs);
+    makropad::ButtonCombo::Event events[2];
+    size_t count = 0;
+    if (channelCombo.update(static_cast<uint8_t>(index + 1), pressed, events, count)) {
+      hostlink::switchChannel(nowMs);
+    }
+    for (size_t event = 0; event < count; event++) {
+      const long id = events[event].id;
+      const bool down = events[event].pressed;
+      hostlink::send(LineBuilder("button").add("id", id).add("state", down ? "down" : "up").str());
+      hid::onButton(events[event].id, down, nowMs);
+    }
   }
 
   if (nowMs - lastSliderPollMs < config::SliderPollIntervalMs) {

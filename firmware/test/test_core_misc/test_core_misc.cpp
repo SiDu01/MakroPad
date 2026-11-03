@@ -1,5 +1,6 @@
 #include <unity.h>
 
+#include "button_combo.h"
 #include "debouncer.h"
 #include "display_text.h"
 #include "running_clock.h"
@@ -66,6 +67,38 @@ void test_volume_nudger_steps_and_throttles() {
   TEST_ASSERT_EQUAL_INT(-1, nudger.update(100, 400));
 }
 
+void test_button_combo_swallows_combo_and_delays_hold_button() {
+  ButtonCombo combo(12, 11);
+  ButtonCombo::Event out[2];
+  size_t count = 0;
+
+  // Hold alone: nothing on press, down + up on release.
+  TEST_ASSERT_FALSE(combo.update(12, true, out, count));
+  TEST_ASSERT_EQUAL_UINT(0, count);
+  TEST_ASSERT_FALSE(combo.update(12, false, out, count));
+  TEST_ASSERT_EQUAL_UINT(2, count);
+  TEST_ASSERT_EQUAL_UINT(12, out[0].id);
+  TEST_ASSERT_TRUE(out[0].pressed);
+  TEST_ASSERT_FALSE(out[1].pressed);
+
+  // Combo: fires once, sends nothing for either button, even if 11 is released last.
+  combo.update(12, true, out, count);
+  TEST_ASSERT_TRUE(combo.update(11, true, out, count));
+  TEST_ASSERT_EQUAL_UINT(0, count);
+  combo.update(12, false, out, count);
+  TEST_ASSERT_EQUAL_UINT(0, count);
+  TEST_ASSERT_FALSE(combo.update(11, false, out, count));
+  TEST_ASSERT_EQUAL_UINT(0, count);
+
+  // Trigger and other buttons alone pass straight through.
+  TEST_ASSERT_FALSE(combo.update(11, true, out, count));
+  TEST_ASSERT_EQUAL_UINT(1, count);
+  TEST_ASSERT_EQUAL_UINT(11, out[0].id);
+  combo.update(3, false, out, count);
+  TEST_ASSERT_EQUAL_UINT(1, count);
+  TEST_ASSERT_FALSE(out[0].pressed);
+}
+
 int main() {
   UNITY_BEGIN();
   RUN_TEST(test_debouncer_ignores_bounce);
@@ -74,5 +107,6 @@ int main() {
   RUN_TEST(test_utf8_umlauts_map_to_cp437);
   RUN_TEST(test_marquee_window);
   RUN_TEST(test_volume_nudger_steps_and_throttles);
+  RUN_TEST(test_button_combo_swallows_combo_and_delays_hold_button);
   return UNITY_END();
 }

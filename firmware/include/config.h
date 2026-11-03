@@ -52,6 +52,10 @@ constexpr const char* BleDeviceName = "MakroPad";
 constexpr uint16_t BleMtu = 247;
 constexpr size_t BleRxQueueBytes = 1024;
 constexpr uint32_t BlePasskeyShowMs = 30000;
+// Hold this button, then press the other to switch USB <-> Bluetooth. The hold button then
+// only reaches the app on release (no long press).
+constexpr uint8_t ChannelSwitchHoldButton = 12;
+constexpr uint8_t ChannelSwitchButton = 11;
 
 // Display
 constexpr uint32_t DefaultOverlayMs = 1500;

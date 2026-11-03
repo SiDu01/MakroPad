@@ -18,7 +18,8 @@ Version 0.5.0. Funktioniert auf der Hardware:
 - Medientasten und Lautstärke auch ohne laufende App (USB-HID)
 - Verbindung zur App auch per Bluetooth LE: einmal in den Windows-Einstellungen
   „MakroPad“ koppeln und den Code vom OLED eingeben. Ist USB verbunden, hat USB
-  Vorrang. Strom kommt weiterhin über USB (kein Akku).
+  Vorrang. Strom kommt weiterhin über USB (kein Akku). Taste 12 halten und 11
+  drücken schaltet manuell zwischen USB und Bluetooth um.
 - Windows-App mit Pad-Editor, Live-Spiegel des Displays, Tray und Autostart
 
 Plan und nächste Meilensteine: [docs/REWRITE_PLAN.md](docs/REWRITE_PLAN.md).
