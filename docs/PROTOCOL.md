@@ -25,6 +25,11 @@ nachlesbar.
 - Vor dem Handshake sendet das Gerät auf beiden Kanälen. Der Kanal, über den
   `hello-ack` kommt, ist danach der einzige; Nachrichten auf dem anderen werden
   ignoriert. Die App versucht zuerst USB, dann Bluetooth.
+- USB hat Vorrang: Ist die App über Bluetooth verbunden, sendet das Gerät auf
+  USB weiter jede Sekunde `hello`. Ein `hello-ack` über USB übernimmt die
+  Verbindung, ein `hello-ack` über Bluetooth übernimmt eine USB-Verbindung nie.
+  Die App auf Bluetooth meldet dann `Unresponsive` und verbindet sich wieder,
+  sobald USB getrennt ist.
 - Eine Nachricht pro Zeile, Ende `\n` (`\r\n` wird toleriert).
 - Führende/abschließende Leerzeichen werden entfernt, leere Zeilen ignoriert.
 - Maximale Zeilenlänge: 256 Zeichen.

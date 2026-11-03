@@ -27,15 +27,20 @@ uint32_t lastHostSeenMs = 0;
 uint32_t lastHelloMs = 0;
 bool helloSent = false;
 
-void sendHello() {
-  send(LineBuilder("hello")
-           .add("proto", static_cast<long>(config::ProtocolVersion))
-           .add("fw", config::FirmwareVersion)
-           .add("device", config::DeviceName)
-           .add("buttons", static_cast<long>(config::ButtonCount))
-           .add("sliders", static_cast<long>(config::ActiveSliderCount))
-           .add("display", "ssd1306-128x64")
-           .str());
+void writeUsb(const std::string& line) {
+  Serial.print(line.c_str());
+  Serial.print('\n');
+}
+
+std::string helloLine() {
+  return LineBuilder("hello")
+      .add("proto", static_cast<long>(config::ProtocolVersion))
+      .add("fw", config::FirmwareVersion)
+      .add("device", config::DeviceName)
+      .add("buttons", static_cast<long>(config::ButtonCount))
+      .add("sliders", static_cast<long>(config::ActiveSliderCount))
+      .add("display", "ssd1306-128x64")
+      .str();
 }
 
 void setConnected(bool value, uint32_t nowMs) {
@@ -54,6 +59,10 @@ void handleLine(const std::string& raw, Channel channel, uint32_t nowMs) {
   if (type == "hello-ack") {
     if (line.getInt("proto", 0) != config::ProtocolVersion) {
       send(LineBuilder("error").add("code", "unsupported_protocol").add("message", "Expected proto=2").str());
+      return;
+    }
+    // USB has priority: a late Bluetooth ack must not take over an app on USB.
+    if (channel == Channel::Ble && activeChannel == Channel::Usb) {
       return;
     }
     lastHostSeenMs = nowMs;
@@ -120,10 +129,16 @@ void poll(uint32_t nowMs) {
     setConnected(false, nowMs);
   }
 
-  if (!hostConnected && (!helloSent || nowMs - lastHelloMs >= config::HelloIntervalMs)) {
+  // Over Bluetooth the device keeps offering itself on USB, so an app there can take over.
+  const bool offerHello = !hostConnected || activeChannel == Channel::Ble;
+  if (offerHello && (!helloSent || nowMs - lastHelloMs >= config::HelloIntervalMs)) {
     helloSent = true;
     lastHelloMs = nowMs;
-    sendHello();
+    if (hostConnected) {
+      writeUsb(helloLine());
+    } else {
+      send(helloLine());
+    }
   }
 }
 
@@ -133,8 +148,7 @@ bool connected() {
 
 void send(const std::string& line) {
   if (activeChannel != Channel::Ble) {
-    Serial.print(line.c_str());
-    Serial.print('\n');
+    writeUsb(line);
   }
   if (activeChannel != Channel::Usb) {
     ble::write(line + '\n');
