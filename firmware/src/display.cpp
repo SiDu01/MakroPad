@@ -330,13 +330,13 @@ void clearOverlay(uint32_t nowMs) {
   contentChanged(nowMs);
 }
 
-void showStatus(const std::string& title, const std::string& text, Icon icon, uint32_t nowMs) {
+void showStatus(const std::string& title, const std::string& text, Icon icon, uint32_t nowMs, uint32_t durationMs) {
   overlay.type = ScreenType::Status;
   overlay.title = title;
   overlay.text = text;
   overlay.value = 0;
   overlay.icon = icon;
-  startOverlay(config::DefaultOverlayMs, nowMs);
+  startOverlay(durationMs, nowMs);
 }
 
 }  // namespace display

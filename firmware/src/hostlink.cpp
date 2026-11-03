@@ -2,6 +2,7 @@
 
 #include <Arduino.h>
 
+#include "ble.h"
 #include "config.h"
 #include "display.h"
 #include "hid.h"
@@ -15,7 +16,12 @@ namespace hostlink {
 
 namespace {
 
-LineBuffer lineBuffer(config::MaxLineLength);
+enum class Channel { None, Usb, Ble };
+
+LineBuffer usbBuffer(config::MaxLineLength);
+LineBuffer bleBuffer(config::MaxLineLength);
+// The channel the app acknowledged on; until then output goes to both.
+Channel activeChannel = Channel::None;
 bool hostConnected = false;
 uint32_t lastHostSeenMs = 0;
 uint32_t lastHelloMs = 0;
@@ -41,7 +47,7 @@ void setConnected(bool value, uint32_t nowMs) {
   hid::setHostConnected(value);
 }
 
-void handleLine(const std::string& raw, uint32_t nowMs) {
+void handleLine(const std::string& raw, Channel channel, uint32_t nowMs) {
   const ProtocolLine line = ProtocolLine::parse(raw);
   const std::string& type = line.type();
 
@@ -51,12 +57,13 @@ void handleLine(const std::string& raw, uint32_t nowMs) {
       return;
     }
     lastHostSeenMs = nowMs;
+    activeChannel = channel;
     setConnected(true, nowMs);
     return;
   }
 
-  // Everything below requires a completed handshake.
-  if (!hostConnected) {
+  // Everything below requires a completed handshake on this channel.
+  if (!hostConnected || channel != activeChannel) {
     return;
   }
 
@@ -85,20 +92,31 @@ void handleLine(const std::string& raw, uint32_t nowMs) {
 
 void setup() {
   Serial.begin(config::SerialBaud);
+  ble::setup();
 }
 
 void poll(uint32_t nowMs) {
+  ble::poll(nowMs);
+
   std::string line;
   while (Serial.available() > 0) {
-    if (lineBuffer.feed(static_cast<char>(Serial.read()), line)) {
-      handleLine(line, nowMs);
+    if (usbBuffer.feed(static_cast<char>(Serial.read()), line)) {
+      handleLine(line, Channel::Usb, nowMs);
     }
   }
-  if (lineBuffer.takeOverflow()) {
+  char c;
+  while (ble::read(c)) {
+    if (bleBuffer.feed(c, line)) {
+      handleLine(line, Channel::Ble, nowMs);
+    }
+  }
+  if (usbBuffer.takeOverflow() || bleBuffer.takeOverflow()) {
     send(LineBuilder("error").add("code", "line_too_long").str());
   }
 
-  if (hostConnected && nowMs - lastHostSeenMs >= config::HostTimeoutMs) {
+  const bool bleDropped = activeChannel == Channel::Ble && !ble::connected();
+  if (hostConnected && (bleDropped || nowMs - lastHostSeenMs >= config::HostTimeoutMs)) {
+    activeChannel = Channel::None;
     setConnected(false, nowMs);
   }
 
@@ -114,8 +132,13 @@ bool connected() {
 }
 
 void send(const std::string& line) {
-  Serial.print(line.c_str());
-  Serial.print('\n');
+  if (activeChannel != Channel::Ble) {
+    Serial.print(line.c_str());
+    Serial.print('\n');
+  }
+  if (activeChannel != Channel::Usb) {
+    ble::write(line + '\n');
+  }
 }
 
 }  // namespace hostlink

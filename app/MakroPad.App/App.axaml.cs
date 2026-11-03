@@ -54,11 +54,11 @@ public partial class App : Application, IFilePicker
         var args = debug ? allArgs : allArgs.WithoutDeveloperOptions();
         ApplyTheme(config.Config.Settings.Theme);
 
-        IDeviceConnector connector = args.Simulator
+        var serial = args.Simulator ? null : new SerialDeviceConnector { PreferredPort = config.State.LastPort };
+        IDeviceConnector connector = serial is null
             ? new SimulatedDevice()
-            : new SerialDeviceConnector { PreferredPort = config.State.LastPort };
+            : new FallbackDeviceConnector(serial, new BleDeviceConnector());
         var simulator = connector as SimulatedDevice;
-        var serial = connector as SerialDeviceConnector;
 
         var profiles = new ProfileManager();
         var actions = new ActionRunner(
@@ -119,7 +119,7 @@ public partial class App : Application, IFilePicker
         };
         runtime.StatusChanged += status =>
         {
-            if (status == ConnectionStatus.Connected && serial is not null && runtime.Endpoint is { } port && port != config.State.LastPort)
+            if (status == ConnectionStatus.Connected && runtime.Endpoint is { } port && port == serial?.PreferredPort && port != config.State.LastPort)
             {
                 if (config.SaveState(config.State with { LastPort = port }) is { } error)
                 {

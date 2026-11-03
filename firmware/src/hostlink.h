@@ -4,7 +4,7 @@
 
 #include <string>
 
-// Serial connection to the companion app: handshake, heartbeat, message dispatch.
+// Connection to the companion app over USB serial or Bluetooth LE: handshake, heartbeat, message dispatch.
 namespace hostlink {
 
 void setup();

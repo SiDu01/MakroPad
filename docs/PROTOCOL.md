@@ -1,6 +1,7 @@
 # Serial-Protokoll v2
 
-Kommunikation zwischen Firmware (ESP32-S3) und Companion-App über USB CDC.
+Kommunikation zwischen Firmware (ESP32-S3) und Companion-App über USB CDC
+oder Bluetooth LE.
 Version 1 (bis App/Firmware 0.2.0) ist über das Git-Tag `legacy-v0.2.0`
 nachlesbar.
 
@@ -14,6 +15,16 @@ nachlesbar.
 ## Transport und Format
 
 - USB CDC, 115200 Baud (bei CDC praktisch ohne Bedeutung).
+- Oder Bluetooth LE, Nordic UART Service (`6e400001-b5a3-f393-e0a9-e50e24dcca9e`):
+  Die App schreibt auf RX (`…0002…`), das Gerät sendet per Notification auf TX
+  (`…0003…`). Zeilen werden auf MTU − 3 Bytes zerteilt und beim Empfänger am
+  `
+` wieder zusammengesetzt. Zugriff nur über eine verschlüsselte, gebondete
+  Verbindung (LE Secure Connections mit Passkey; das Gerät zeigt den Code auf
+  dem OLED).
+- Vor dem Handshake sendet das Gerät auf beiden Kanälen. Der Kanal, über den
+  `hello-ack` kommt, ist danach der einzige; Nachrichten auf dem anderen werden
+  ignoriert. Die App versucht zuerst USB, dann Bluetooth.
 - Eine Nachricht pro Zeile, Ende `\n` (`\r\n` wird toleriert).
 - Führende/abschließende Leerzeichen werden entfernt, leere Zeilen ignoriert.
 - Maximale Zeilenlänge: 256 Zeichen.

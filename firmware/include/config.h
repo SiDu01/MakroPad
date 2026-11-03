@@ -47,6 +47,12 @@ constexpr uint32_t HostTimeoutMs = 6000;
 constexpr uint32_t DebounceMs = 25;
 constexpr size_t MaxLineLength = 256;
 
+// Bluetooth LE (Nordic UART Service, docs/PROTOCOL.md)
+constexpr const char* BleDeviceName = "MakroPad";
+constexpr uint16_t BleMtu = 247;
+constexpr size_t BleRxQueueBytes = 1024;
+constexpr uint32_t BlePasskeyShowMs = 30000;
+
 // Display
 constexpr uint32_t DefaultOverlayMs = 1500;
 constexpr uint32_t ScrollStepMs = 220;

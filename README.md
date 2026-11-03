@@ -1,8 +1,8 @@
 # MakroPad
 
 Selbstgebautes Makro- und Mediapad auf Basis eines ESP32-S3-DevKitC-1:
-16 mechanische Tasten, 3 analoge Slider und ein 128×64-OLED, per USB mit einer
-Windows-Companion-App verbunden.
+16 mechanische Tasten, 3 analoge Slider und ein 128×64-OLED, per USB oder
+Bluetooth LE mit einer Windows-Companion-App verbunden.
 
 > Taste oder Slider bedienen → am PC passiert zuverlässig etwas → das OLED
 > bestätigt es kurz.
@@ -16,6 +16,9 @@ Version 0.4.1. Funktioniert auf der Hardware:
 - OLED mit Uhr, Profil, laufendem Titel und kurzen Einblendungen
 - Profile mit automatischem Wechsel nach Programm im Vordergrund
 - Medientasten und Lautstärke auch ohne laufende App (USB-HID)
+- Verbindung zur App auch per Bluetooth LE: einmal in den Windows-Einstellungen
+  „MakroPad“ koppeln und den Code vom OLED eingeben. Ist USB verbunden, hat USB
+  Vorrang. Strom kommt weiterhin über USB (kein Akku).
 - Windows-App mit Pad-Editor, Live-Spiegel des Displays, Tray und Autostart
 
 Plan und nächste Meilensteine: [docs/REWRITE_PLAN.md](docs/REWRITE_PLAN.md).

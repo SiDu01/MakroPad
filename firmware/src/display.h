@@ -4,6 +4,7 @@
 
 #include <string>
 
+#include "config.h"
 #include "protocol.h"
 
 // SSD1306 output: a fixed idle screen built from `state` plus temporary
@@ -23,6 +24,7 @@ void clearOverlay(uint32_t nowMs);
 void setEnabled(bool enabled);
 
 // Local overlay (e.g. HID fallback feedback) using the same rendering as `screen`.
-void showStatus(const std::string& title, const std::string& text, Icon icon, uint32_t nowMs);
+void showStatus(const std::string& title, const std::string& text, Icon icon, uint32_t nowMs,
+                uint32_t durationMs = config::DefaultOverlayMs);
 
 }  // namespace display
